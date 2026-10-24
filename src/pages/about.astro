@@ -57,7 +57,7 @@ const priceCount = SYSTEMS.reduce((n, s) => n + s.prices.length, 0);
     </ul>
 
     <h2 id="data">What we store</h2>
-    <p>If you leave the box ticked, an anonymized copy of your audit is stored: the first three ZIP digits, system type, size, optional brand and model, quote, equipment value and grade. Second-opinion requests store the contact details you type, and are only readable by TonnageCheck staff. See <a href="/privacy/">privacy</a>.</p>
+    <p>If you leave the box ticked, an anonymized copy of your audit is stored: the first three ZIP digits, system type, size, optional brand and model, quote, equipment value and grade. Second-opinion requests, newsletter sign-ups and contractor applications store the details you type, and are only readable by TonnageCheck staff. See <a href="/privacy/">privacy</a>.</p>
 
     <h2 id="all-sources">All sources</h2>
     <ul>{Object.values(SOURCES).map((s) => <li><a href={s.url}>{s.title}</a> ({s.publisher})</li>)}</ul>

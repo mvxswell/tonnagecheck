@@ -37,11 +37,20 @@ Known limits, stated on the site:
 2. Copy `.env.example` to `.env` and set `PUBLIC_SUPABASE_URL` and `PUBLIC_SUPABASE_ANON_KEY`.
 3. Rebuild.
 
-Both tables have RLS on with no anon policies; the browser only calls `submit_quote_audit` (anonymized, 20/hour per caller) and `request_independent_quote` (write-only, 3/hour and 10/day per caller). Rate-limit keys are a daily-rotating SHA-256 of the caller IP; raw IPs are never stored. Read the data with the service role.
+All four tables have RLS on with no anon policies, and the anon role has no table grants. The browser only calls these SECURITY DEFINER RPCs:
+
+| RPC | Table | Limits per caller |
+|---|---|---|
+| `submit_quote_audit` | `quote_audits` (anonymized: 3-digit ZIP) | 20/hour |
+| `request_independent_quote` | `installer_match_requests` | 3/hour, 10/day |
+| `subscribe_newsletter` | `newsletter_subscribers` (unique on lower(email); repeats are silently accepted) | 5/hour |
+| `submit_partner_application` | `partner_applications` (ZIPs parsed into `text[]`) | 3/hour, 5/day |
+
+Each also has a global hourly cap. Rate-limit keys are a daily-rotating SHA-256 of the caller IP; raw IPs are never stored. Read the data with the service role. Without the env vars, the newsletter form uses `PUBLIC_NEWSLETTER_URL` or email, and partner and second-opinion forms open a prefilled email.
 
 ## Before launch
 
-- Set up `hello@tonnagecheck.com` and `partners@tonnagecheck.com` (`src/config.ts`); partner applications and no-backend fallbacks go there by email.
-- Set `PUBLIC_NEWSLETTER_URL` to your newsletter's subscribe page (e.g. beehiiv). Until then, the form offers an email sign-up.
-- Replace `public/og-image.svg` with a 1200×630 PNG; some social networks ignore SVG previews.
+- Set up `hello@tonnagecheck.com` and `partners@tonnagecheck.com` (`src/config.ts`); the no-backend fallbacks send email there.
+- Newsletter sign-ups land in `newsletter_subscribers`; export them to your sending tool (or set `PUBLIC_NEWSLETTER_URL` if you would rather use a hosted subscribe page when Supabase is off).
+- `public/og-image.png` (1200×630) is rendered from `public/og-image.svg` in headless Chrome; re-render it if you edit the SVG.
 - Re-run `npm run seed` before each deploy (or weekly) so prices stay current.

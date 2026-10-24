@@ -25,7 +25,7 @@ const ld = { '@context': 'https://schema.org', '@type': 'WebPage', name: 'Tonnag
 
   <section class="card apply" id="apply">
     <h2 class="h">Apply</h2>
-    <form id="pform" novalidate>
+    <form id="pform" data-to={SITE.partnersEmail} novalidate>
       <div class="pgrid">
         <div><label for="p-co">Company name</label><input id="p-co" name="company" required maxlength="120" autocomplete="organization" /></div>
         <div><label for="p-name">Your name</label><input id="p-name" name="name" required maxlength="120" autocomplete="name" /></div>
@@ -54,27 +54,55 @@ const ld = { '@context': 'https://schema.org', '@type': 'WebPage', name: 'Tonnag
 @media (max-width:560px){.pgrid{grid-template-columns:1fr}}
 </style>
 
-<script define:vars={{ to: SITE.partnersEmail }}>
-  const form = document.getElementById('pform');
-  form.addEventListener('submit', (e) => {
+<script>
+  import { rpc } from '../lib/supabase';
+  import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../config';
+
+  const form = document.getElementById('pform') as HTMLFormElement;
+  const to = form.dataset.to!;
+  const err = form.querySelector('.perr') as HTMLElement;
+  const done = form.querySelector('.pdone') as HTMLElement;
+  const btn = form.querySelector('button[type=submit]') as HTMLButtonElement;
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const f = new FormData(form);
-    const v = (k) => String(f.get(k) || '').trim();
-    const err = form.querySelector('.perr');
-    const problems = [];
+    const v = (k: string) => String(f.get(k) || '').trim();
+    const zips = [...new Set(v('zips').match(/(?<!\d)\d{5}(?!\d)/g) ?? [])];
+    const problems: string[] = [];
     if (!v('company') || !v('name')) problems.push('Add your company and name.');
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v('email'))) problems.push('Add a valid email.');
     if (!v('license')) problems.push('Add your license number.');
-    if (!v('zips')) problems.push('List the ZIP codes you serve.');
+    if (!zips.length) problems.push('List at least one 5-digit ZIP code you serve.');
     if (!f.has('independent')) problems.push('Confirm you are independently owned.');
     err.hidden = !problems.length;
     err.textContent = problems.join(' ');
     if (problems.length) return;
-    // Partner applications are reviewed by a person, so they go by email rather than into the homeowner database.
-    const body = ['Company: ' + v('company'), 'Name: ' + v('name'), 'Email: ' + v('email'), 'Phone: ' + v('phone'), 'License: ' + v('license'), 'Trucks: ' + v('trucks'), 'ZIPs: ' + v('zips'), '', v('about')].join('\n');
+
+    const body = ['Company: ' + v('company'), 'Name: ' + v('name'), 'Email: ' + v('email'), 'Phone: ' + v('phone'), 'License: ' + v('license'), 'Trucks: ' + v('trucks'), 'ZIPs: ' + zips.join(', '), '', v('about')].join('\n');
     const href = 'mailto:' + to + '?subject=' + encodeURIComponent('Partner application: ' + v('company')) + '&body=' + encodeURIComponent(body);
-    const done = form.querySelector('.pdone');
-    done.innerHTML = 'Almost done: your email app should open with the application filled in. Hit send. If it did not open, <a href="' + href + '">click here</a> or email ' + to + '.';
+
+    if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+      btn.disabled = true;
+      const res = await rpc(SUPABASE_URL, SUPABASE_ANON_KEY, 'submit_partner_application', {
+        p_company: v('company'), p_name: v('name'), p_email: v('email'), p_phone: v('phone') || null,
+        p_license: v('license'), p_trucks: parseInt(v('trucks'), 10), p_service_zips: zips.join(','),
+        p_about: v('about') || null, p_independent: true,
+      });
+      btn.disabled = false;
+      if (res.ok) {
+        done.innerHTML = '<b>Application received.</b> A person reviews every application; we will email you at the address you gave.';
+        done.hidden = false;
+        btn.hidden = true;
+        return;
+      }
+      done.innerHTML = `We couldn't save that just now (${String(res.error).replace(/[<>&"]/g, '')}). <a href="${href}">Send the same application by email</a> instead.`;
+      done.hidden = false;
+      return;
+    }
+
+    // No backend configured: hand the filled-in application to the user's mail app.
+    done.innerHTML = `Almost done: your email app should open with the application filled in. Hit send. If it did not open, <a href="${href}">click here</a> or email ${to}.`;
     done.hidden = false;
     window.location.href = href;
   });

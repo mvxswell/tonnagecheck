@@ -3,7 +3,9 @@ import { SITE } from '../config';
 interface Props { title: string; description: string; jsonld?: object | object[]; noindex?: boolean }
 const { title, description, jsonld, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL('/og-image.svg', Astro.site).href;
+// PNG, not SVG: X, iMessage and Facebook do not render SVG link previews. public/og-image.png is rendered from og-image.svg.
+const ogImage = new URL('/og-image.png', Astro.site).href;
+const ogAlt = 'TonnageCheck: Is your HVAC or heat pump quote fair? Real listed equipment prices, DOE-lab benchmarks, A–F grade';
 const path = Astro.url.pathname;
 const nav = [
   ['/auditor/', 'Quote auditor'],
@@ -39,7 +41,16 @@ const ld = [orgLd, ...(Array.isArray(jsonld) ? jsonld : jsonld ? [jsonld] : [])]
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={ogImage} />
+<meta property="og:image:secure_url" content={ogImage} />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={ogAlt} />
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:image:alt" content={ogAlt} />
 <link rel="sitemap" href="/sitemap-index.xml" />
 {ld.map((o) => <script type="application/ld+json" set:html={JSON.stringify(o)} />)}
 </head>

@@ -22,22 +22,46 @@ import { NEWSLETTER_URL, SITE } from '../config';
 </style>
 
 <script>
+  import { rpc } from '../lib/supabase';
+  import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../config';
+
+  // Order of preference: TonnageCheck's own Supabase list, then a hosted subscribe page, then email.
+  const hostedHref = (url: string, email: string) => `${url}${url.includes('?') ? '&' : '?'}email=${encodeURIComponent(email)}`;
+  const mailHref = (to: string, email: string) => `mailto:${to}?subject=${encodeURIComponent('Subscribe me to the Quote Red-Flag Report')}&body=${encodeURIComponent('Please add ' + email + ' to the weekly newsletter.')}`;
+  const escHtml = (s: string) => s.replace(/[<>&"]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' })[c]!);
+
   for (const form of document.querySelectorAll<HTMLFormElement>('form.nlform')) {
     const msg = form.parentElement!.querySelector('.nlmsg') as HTMLElement;
-    form.addEventListener('submit', (e) => {
+    const btn = form.querySelector('button') as HTMLButtonElement;
+    const show = (html: string) => { msg.innerHTML = html; msg.hidden = false; };
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = String(new FormData(form).get('email') || '').trim();
-      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { msg.textContent = 'Please enter a valid email.'; msg.hidden = false; return; }
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { show('Please enter a valid email.'); return; }
       const url = form.dataset.url;
-      if (url) {
-        // Hosted subscribe page (e.g. beehiiv) with the address pre-filled; nothing is stored by TonnageCheck itself.
-        window.open(`${url}${url.includes('?') ? '&' : '?'}email=${encodeURIComponent(email)}`, '_blank', 'noopener');
-        msg.textContent = 'Opening the subscribe page in a new tab. Confirm there and you are in.';
-      } else {
-        const href = `mailto:${form.dataset.contact}?subject=${encodeURIComponent('Subscribe me to the Quote Red-Flag Report')}&body=${encodeURIComponent('Please add ' + email + ' to the weekly newsletter.')}`;
-        msg.innerHTML = `The newsletter launches soon. <a href="${href}">Email us to get on the list</a>.`;
+      const contact = form.dataset.contact!;
+
+      if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+        btn.disabled = true;
+        const res = await rpc(SUPABASE_URL, SUPABASE_ANON_KEY, 'subscribe_newsletter', { p_email: email, p_source: location.pathname });
+        btn.disabled = false;
+        if (res.ok) {
+          form.reset();
+          show('<b>You\'re on the list.</b> Watch your inbox for the next Quote Red-Flag Report.');
+          return;
+        }
+        // Saving failed: offer the other routes as links (a popup opened after an await would be blocked).
+        const alt = url ? `<a href="${hostedHref(url, email)}" target="_blank" rel="noopener">subscribe on our newsletter page</a>` : `<a href="${mailHref(contact, email)}">email us to get on the list</a>`;
+        show(`We couldn't save that just now (${escHtml(String(res.error))}). You can ${alt} instead.`);
+        return;
       }
-      msg.hidden = false;
+      if (url) {
+        // Hosted subscribe page (e.g. beehiiv) with the address pre-filled.
+        window.open(hostedHref(url, email), '_blank', 'noopener');
+        show('Opening the subscribe page in a new tab. Confirm there and you are in.');
+      } else {
+        show(`The newsletter launches soon. <a href="${mailHref(contact, email)}">Email us to get on the list</a>.`);
+      }
     });
   }
 </script>
