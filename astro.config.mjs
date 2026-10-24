@@ -4,7 +4,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const SITE = 'https://tonnagecheck.com';
+const SITE = 'https://tonnagechecker.com';
 
 // After the build, fail on anything that would quietly hurt trust or SEO: duplicate titles/descriptions,
 // a missing or non-self canonical, JSON-LD that does not parse, or a dollar figure on an equipment page

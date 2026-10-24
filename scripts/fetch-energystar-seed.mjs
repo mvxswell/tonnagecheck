@@ -20,7 +20,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'src', 'data', 'seed');
-const UA = 'TonnageCheckSeed/1.0 (+https://tonnagecheck.com/about/)';
+const UA = 'TonnageCheckSeed/1.0 (+https://tonnagechecker.com/about/)';
 const ES = 'https://data.energystar.gov/resource';
 const ES_ASHP = 'w7cv-9xjt'; // ENERGY STAR Certified Air-Source Heat Pumps (split, mini/multi-split, package)
 const ES_CAC = 'tyr2-hhgu'; // ENERGY STAR Certified Central Air Conditioners

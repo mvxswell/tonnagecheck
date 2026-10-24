@@ -1,6 +1,6 @@
 # TonnageCheck v1
 
-HVAC & heat pump quote auditor, equipment price lookup, independent-installer concierge and newsletter capture for https://tonnagecheck.com. Static Astro 5 site; every number traces to a public source.
+HVAC & heat pump quote auditor, equipment price lookup, independent-installer concierge and newsletter capture for https://tonnagechecker.com. Static Astro 5 site; every number traces to a public source.
 
 ```bash
 npm install
@@ -50,7 +50,7 @@ Each also has a global hourly cap. Rate-limit keys are a daily-rotating SHA-256 
 
 ## Before launch
 
-- Set up `hello@tonnagecheck.com` and `partners@tonnagecheck.com` (`src/config.ts`); the no-backend fallbacks send email there.
+- Set up `hello@tonnagechecker.com` and `partners@tonnagechecker.com` (`src/config.ts`); the no-backend fallbacks send email there.
 - Newsletter sign-ups land in `newsletter_subscribers`; export them to your sending tool (or set `PUBLIC_NEWSLETTER_URL` if you would rather use a hosted subscribe page when Supabase is off).
 - `public/og-image.png` (1200×630) is rendered from `public/og-image.svg` in headless Chrome; re-render it if you edit the SVG.
 - Re-run `npm run seed` before each deploy (or weekly) so prices stay current.

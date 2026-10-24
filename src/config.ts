@@ -1,11 +1,11 @@
 export const SITE = {
   name: 'TonnageCheck',
-  url: 'https://tonnagecheck.com',
+  url: 'https://tonnagechecker.com',
   tagline: 'HVAC & heat pump quote auditor',
   description: 'Check an HVAC or heat pump quote against real listed equipment prices and DOE-lab installed-cost benchmarks. Every number links to its source.',
-  // Mailboxes on the tonnagecheck.com domain. Set these up before launch; partner applications go here.
-  contactEmail: 'hello@tonnagecheck.com',
-  partnersEmail: 'partners@tonnagecheck.com',
+  // Mailboxes on the tonnagechecker.com domain. Set these up before launch; partner applications go here.
+  contactEmail: 'hello@tonnagechecker.com',
+  partnersEmail: 'partners@tonnagechecker.com',
 };
 
 // Optional runtime services. Missing values are fine: the auditor and forms work in the browser and

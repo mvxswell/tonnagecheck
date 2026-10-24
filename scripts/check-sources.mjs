@@ -8,7 +8,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const UA = 'TonnageCheckSeed/1.0 (+https://tonnagecheck.com/about/)';
+const UA = 'TonnageCheckSeed/1.0 (+https://tonnagechecker.com/about/)';
 const seed = JSON.parse(readFileSync(join(ROOT, 'src', 'data', 'seed', 'equipment.seed.json'), 'utf8'));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
