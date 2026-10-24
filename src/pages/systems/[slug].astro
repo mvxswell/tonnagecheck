@@ -1,0 +1,107 @@
+---
+import Base from '../../layouts/Base.astro';
+import Auditor from '../../components/Auditor.astro';
+import { SYSTEMS, SYSTEM_TYPE_LABEL, TIER_LABEL, tonSlug, lowestPrice, belowEnergyStarMinimum, type System } from '../../data/equipment';
+import { fairRange, usd, fmtRange } from '../../lib/facts';
+import { SOURCES } from '../../data/sources';
+import { SITE } from '../../config';
+
+export function getStaticPaths() {
+  return SYSTEMS.map((s) => ({ params: { slug: s.slug }, props: { s } }));
+}
+const { s } = Astro.props as { s: System };
+const es = s.energyStar;
+const fair = fairRange(s.systemType, s.tons, s.tier);
+const low = lowestPrice(s);
+const kind = { 'central-heat-pump': 'heat pump system', 'mini-split': 'mini-split heat pump', 'ac-furnace': 'AC + gas furnace system', 'heat-pump-only': 'heat pump condenser' }[s.systemType];
+const name = `${s.brand} ${s.tons}-ton ${s.specs.seer2 ?? ''} SEER2 ${kind}`.replace(/\s+/g, ' ');
+const title = `${name} (${s.components[0]}): price & specs | TonnageCheck`;
+const description = `${name}, model ${s.components.join(' + ')}. Listed at ${usd(low)} online${es ? `; ENERGY STAR rated ${es.seer2} SEER2 / ${es.hspf2} HSPF2, AHRI #${es.ahriReferenceNumber}` : ''}. Installed benchmark ${fmtRange(fair)}.`;
+const fetched = new Date(s.prices[0].fetchedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
+const related = SYSTEMS.filter((x) => x.slug !== s.slug && x.tons === s.tons).slice(0, 6);
+const ld = {
+  '@context': 'https://schema.org', '@type': 'Product', name, brand: { '@type': 'Brand', name: s.brand }, mpn: s.components[0], model: s.components.join(' / '),
+  url: `${SITE.url}/systems/${s.slug}/`,
+  additionalProperty: [
+    s.specs.seer2 != null && { '@type': 'PropertyValue', name: 'SEER2', value: s.specs.seer2 },
+    s.specs.hspf2 != null && { '@type': 'PropertyValue', name: 'HSPF2', value: s.specs.hspf2 },
+    s.specs.eer2 != null && { '@type': 'PropertyValue', name: 'EER2', value: s.specs.eer2 },
+    { '@type': 'PropertyValue', name: 'Cooling capacity (tons)', value: s.tons },
+  ].filter(Boolean),
+  offers: {
+    '@type': 'AggregateOffer', priceCurrency: 'USD', lowPrice: Math.min(...s.prices.map((p) => p.price)), highPrice: Math.max(...s.prices.map((p) => p.price)), offerCount: s.prices.length,
+    offers: s.prices.map((p) => ({ '@type': 'Offer', price: p.price, priceCurrency: 'USD', url: p.url, seller: { '@type': 'Organization', name: p.retailer } })),
+  },
+};
+---
+<Base title={title} description={description} jsonld={ld}>
+  <p class="crumbs"><a href="/">Home</a> / <a href="/systems/">Equipment prices</a> / <a href={`/tonnage/${tonSlug(s.tons)}/`}>{s.tons} ton</a> / {s.components[0]}</p>
+  <h1>{name}</h1>
+  <p class="lead">{s.title}</p>
+  <p>
+    <span class="badge b-est">{SYSTEM_TYPE_LABEL[s.systemType]}</span>
+    <span class="badge b-est">{TIER_LABEL[s.tier]}</span>
+    {es && <span class="badge b-es">ENERGY STAR certified pairing</span>}
+    {es?.coldClimate && <span class="badge b-es">Cold climate</span>}
+    {es?.mostEfficient && <span class="badge b-es">ENERGY STAR Most Efficient</span>}
+  </p>
+
+  <div class="grid">
+    <div class="card">
+      <h2 class="h">Listed prices</h2>
+      <table>
+        <tbody>
+          {s.prices.map((p) => (
+            <tr><td><a href={p.url} rel="nofollow noopener" target="_blank">{p.retailer}</a></td><td class="r num"><b>{usd(p.price)}</b></td></tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="small muted">Captured {fetched}. Public online retail prices for the equipment only. Contractors typically buy through distributors at prices that are not published.</p>
+    </div>
+    <div class="card">
+      <h2 class="h">Installed benchmark <span class="badge b-est">estimate</span></h2>
+      <div class="big num">{fmtRange(fair)}</div>
+      <p class="small muted">Midpoint {usd(fair.mid)}. {s.systemType === 'heat-pump-only' ? 'Anchored on listed condenser prices using REMDB\'s installed-to-retail ratio.' : 'REMDB replacement-cost regression for this system type, size and efficiency, restated in today\'s dollars.'} <a href="/about/#benchmarks">Method</a></p>
+    </div>
+  </div>
+
+  <h2>Specifications</h2>
+  <div class="tablewrap">
+    <table>
+      <tbody>
+        <tr><th>Model numbers</th><td class="num">{s.components.join(' + ')}</td></tr>
+        <tr><th>Nominal capacity</th><td class="num">{s.tons} ton ({(s.tons * 12000).toLocaleString('en-US')} BTU/h)</td></tr>
+        <tr><th>SEER2</th><td class="num">{s.specs.seer2 ?? '—'}</td></tr>
+        <tr><th>EER2</th><td class="num">{s.specs.eer2 ?? '—'}</td></tr>
+        {s.systemType !== 'ac-furnace' && <tr><th>HSPF2</th><td class="num">{s.specs.hspf2 ?? '—'}</td></tr>}
+        {s.afue && <tr><th>Furnace</th><td class="num">{s.afue}% AFUE{s.furnaceBtu ? `, ${s.furnaceBtu.toLocaleString('en-US')} BTU/h` : ''}</td></tr>}
+        {es?.copAt5F != null && <tr><th>COP at 5°F</th><td class="num">{es.copAt5F}</td></tr>}
+        {es?.heatingCapacity5F != null && es?.heatingCapacity47F != null && <tr><th>Heating capacity 5°F / 47°F</th><td class="num">{es.heatingCapacity5F.toLocaleString('en-US')} / {es.heatingCapacity47F.toLocaleString('en-US')} BTU/h ({Math.round((es.heatingCapacity5F / es.heatingCapacity47F) * 100)}%)</td></tr>}
+        {(es?.compressorStaging || s.specs.stages) && <tr><th>Compressor</th><td>{es?.compressorStaging || s.specs.stages}</td></tr>}
+        {(es?.refrigerant || s.specs.refrigerant) && <tr><th>Refrigerant</th><td>{es?.refrigerant || s.specs.refrigerant}</td></tr>}
+        {es && <tr><th>AHRI reference #</th><td class="num"><a href={SOURCES.ahri.url} rel="noopener" target="_blank">{es.ahriReferenceNumber}</a></td></tr>}
+        {es?.dateCertified && <tr><th>ENERGY STAR certified</th><td class="num">{es.dateCertified}</td></tr>}
+        <tr><th>Rating source</th><td>{es ? <>EPA ENERGY STAR record for {es.outdoorModel}{es.indoorModel ? ` + ${es.indoorModel}` : ''} (<a href={es.apiUrl} rel="noopener" target="_blank">raw record</a>; matched on {es.matchedOn})</> : <>Retailer listing (<a href={s.prices[0].url} rel="nofollow noopener" target="_blank">{s.prices[0].retailer}</a>). {belowEnergyStarMinimum(s) ? 'At this SEER2 it is below the ENERGY STAR minimum of 15.2 for split systems.' : 'We did not find this exact pairing in the ENERGY STAR database; ask the contractor for the AHRI certificate.'}</>}</td></tr>
+      </tbody>
+    </table>
+  </div>
+  {s.ahriCertificateUrl && <p class="small"><a href={s.ahriCertificateUrl} rel="nofollow noopener" target="_blank">Retailer's AHRI certificate (PDF)</a></p>}
+  <p class="note">Quoted this exact system? The model numbers on your quote should match the outdoor unit <b class="num">{s.components[0]}</b>{s.components[1] && <> and indoor unit <b class="num">{s.components.slice(1).join(' / ')}</b></>}. A different indoor coil changes the certified rating. <a href="/guides/heat-pump-rebates-and-ahri-certificate-check/">How to check an AHRI certificate</a></p>
+
+  <Auditor systemType={s.systemType} tons={s.tons} tier={s.tier} heading={`Audit a quote for this ${s.tons}-ton system`} />
+
+  {related.length > 0 && (
+    <>
+      <h2>Other {s.tons}-ton systems</h2>
+      <ul class="rel">{related.map((r) => <li><a href={`/systems/${r.slug}/`}>{r.brand} {r.components[0]}</a> <span class="small muted">{SYSTEM_TYPE_LABEL[r.systemType]}, {r.specs.seer2 ?? '?'} SEER2, <span class="num">{usd(lowestPrice(r))}</span></span></li>)}</ul>
+    </>
+  )}
+</Base>
+
+<style>
+.h{margin:0 0 8px;font-size:1.08rem}
+.big{font-size:1.4rem;font-weight:700;margin:4px 0}
+.tablewrap th{width:220px;text-transform:none;font-size:.9rem;letter-spacing:0}
+.tablewrap td{white-space:normal}
+.rel li{margin:6px 0}
+</style>

@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config';
+---
+<Base title="Privacy | TonnageCheck" description="What TonnageCheck stores when you audit a quote or request an independent second opinion, who can see it, and how to have it deleted.">
+  <p class="crumbs"><a href="/">Home</a> / Privacy</p>
+  <article class="prose">
+    <h1>Privacy</h1>
+    <h2>Quote audits</h2>
+    <p>The auditor runs in your browser. If the "add this quote, anonymized" box is ticked, we store: the first three digits of your ZIP code, the system type and size, the brand and model if you typed them, the quote amount, the equipment value we matched and the grade. We do not store your name, email, full ZIP, or IP address. For abuse prevention we store a one-way hash of your connection address combined with the date, which changes every day and cannot be turned back into the address.</p>
+    <h2>Second-opinion requests</h2>
+    <p>When you request an independent quote, we store the details you type (name, email, optional phone, ZIP, quote amount, brand/model, timeline and notes) and share them with up to two independent installers serving your ZIP, as the consent box says. The public website cannot read these records back.</p>
+    <h2>Newsletter</h2>
+    <p>Newsletter sign-ups are handled by our email provider's subscribe page. You can unsubscribe from any email.</p>
+    <h2>Deletion</h2>
+    <p>Email <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a> and we will delete your second-opinion request and tell any installer we shared it with.</p>
+  </article>
+</Base>

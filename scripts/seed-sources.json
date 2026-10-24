@@ -1,0 +1,143 @@
+{
+  "_readme": "Curated list of public listings the seed script fetches. Every price and spec in src/data/seed/ comes from one of these URLs or from the ENERGY STAR / REMDB / FRED endpoints named in scripts/fetch-energystar-seed.mjs. Add a system by adding its listing URL here and re-running npm run seed. Never hand-edit prices in the seed JSON.",
+  "systems": [
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/2-ton-15-2-seer2-goodman-r32-heat-pump-split-system-multi-positional-182303.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/3-ton-15-2-seer2-goodman-r32-heat-pump-split-system-multi-positional-182393.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/3-ton-17-seer2-two-stage-goodman-heat-pump-air-conditioner-system-multi-positional-id173554.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/4-ton-15-2-seer2-goodman-r32-heat-pump-split-system-multi-positional-182330.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/4-ton-17-2-seer2-two-stage-goodman-heat-pump-air-conditioner-system-multi-positional-id173557.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/5-ton-16-seer2-goodman-r32-heat-pump-split-system-multi-positional-182435.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/2-5-ton-14-3-seer2-trane-heat-pump-split-system-multi-positional-192316.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/3-ton-16-seer2-variable-speed-trane-inverter-heat-pump-split-system-multi-positional-192308.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/4-ton-16-seer2-variable-speed-trane-inverter-heat-pump-split-system-multi-positional-192309.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/5-ton-16-seer2-variable-speed-trane-inverter-heat-pump-split-system-multi-positional-192310.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/lg-3-ton-16-seer2-heat-pump-split-system-r32-inverter-multi-positional-224462.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/lg-3-ton-19-seer2-high-efficiency-heat-pump-split-system-lgred-series-r32-inverter-multi-positional-231991.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/lg-4-ton-18-seer2-high-efficiency-heat-pump-split-system-r32-inverter-multi-positional-231999.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/bosch-ids-light-series-3-ton-20-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237614.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/48-000-btu-19-seer2-gree-flexx-ultra-r32-central-air-inverter-heat-pump-split-system-id198429.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/aciq-essentials-3-ton-17-seer2-high-efficiency-central-heat-pump-split-system-r32-inverter-219180.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/3-ton-17-4-seer2-mrcool-central-ducted-hyper-heat-2nd-gen-heat-pump-split-system-r454b-central-36-hp-c-230b00-o-mvp-36-hp-muah-230a00-o.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/aciq-5-ton-17-5-seer2-high-efficiency-central-heat-pump-system-inverter-extreme-series-r454b-197827.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/mitsubishi-3-ton-15-2-seer2-ducted-central-air-inverter-h2i-heat-pump-split-system-r454b-198648.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/mitsubishi-2-ton-18-6-seer2-ducted-central-air-inverter-h2i-heat-pump-split-system-r454b-198630.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/18-000-btu-daikin-oterra-21-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-194693.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/lg-24000-btu-mega-20-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-226356.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/24000-btu-carrier-infinity-21-2-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r454b-230v-213415.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/24-000-btu-daikin-atmosphera-22-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-194705.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/3-ton-16-seer2-96-afue-80-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-177038.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/4-ton-15-2-seer2-80-afue-80-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-190091.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/5-ton-14-3-seer2-80-afue-80-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-181121.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/3-5-ton-15-2-seer2-80-afue-80-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-184661.html"
+    },
+    {
+      "systemType": "heat-pump-only",
+      "url": "https://hvacdirect.com/3-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba3610.html",
+      "alpineUrl": "https://www.alpinehomeair.com/product/air-conditioning-cooling/split-system-central-air/heat-pumps-electric-heat-cool/goodman/glzs4ba3610"
+    },
+    {
+      "systemType": "heat-pump-only",
+      "url": "https://hvacdirect.com/3-ton-17-seer2-two-stage-goodman-heat-pump-glzt7ca3610.html",
+      "alpineUrl": "https://www.alpinehomeair.com/product/air-conditioning-cooling/split-system-central-air/heat-pumps-electric-heat-cool/goodman/glzt7ca3610"
+    },
+    {
+      "systemType": "heat-pump-only",
+      "url": "https://hvacdirect.com/4-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba4810-1.html",
+      "alpineUrl": "https://www.alpinehomeair.com/product/air-conditioning-cooling/split-system-central-air/heat-pumps-electric-heat-cool/goodman/glzs4ba4810"
+    },
+    {
+      "systemType": "heat-pump-only",
+      "url": "https://hvacdirect.com/5-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba6010.html",
+      "alpineUrl": "https://www.alpinehomeair.com/product/air-conditioning-cooling/split-system-central-air/heat-pumps-electric-heat-cool/goodman/glzs4ba6010"
+    }
+  ],
+  "lineSets": [
+    {
+      "label": "3/8 x 3/4 in. insulated line set, 30 ft",
+      "url": "https://hvacdirect.com/3-8-ll-x-3-4-sl-x-3-8-insulation-line-set-30-feet-ls38583830.html"
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+---
+import Base from '../layouts/Base.astro';
+import Auditor from '../components/Auditor.astro';
+import Newsletter from '../components/Newsletter.astro';
+import { SITE } from '../config';
+import { SYSTEMS, TONNAGES, tonSlug } from '../data/equipment';
+import { GUIDES } from '../data/guides';
+import { fairRange, equipmentStats, seedDateLabel, usd, fmtRange } from '../lib/facts';
+
+const esCount = SYSTEMS.filter((s) => s.energyStar).length;
+const three = equipmentStats('central-heat-pump', 3);
+const threeFair = fairRange('central-heat-pump', 3, 'standard');
+const ld = [
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url, description: SITE.description },
+  {
+    '@context': 'https://schema.org', '@type': 'WebApplication', name: 'TonnageCheck HVAC Quote Auditor', url: `${SITE.url}/auditor/`,
+    applicationCategory: 'FinanceApplication', operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: 'Grades an HVAC or heat pump installation quote A–F against listed equipment prices and DOE national-lab installed-cost benchmarks.',
+  },
+];
+---
+<Base title="TonnageCheck: Is your HVAC or heat pump quote fair? Free A–F quote audit" description="Grade your HVAC or heat pump quote in 30 seconds. We compare it to real listed equipment prices and DOE-lab installed-cost benchmarks, with a source link on every number." jsonld={ld}>
+  <section class="hero">
+    <p class="eyebrow">HVAC &amp; heat pump quote auditor</p>
+    <h1>Find out if your HVAC quote is fair before you sign.</h1>
+    <p class="lead">Enter the size, the efficiency and the price you were quoted. TonnageCheck shows what the equipment actually sells for online, what a DOE national-lab benchmark says installation should cost, and how much of your quote is markup.</p>
+    <ul class="proof">
+      <li><b class="num">{SYSTEMS.length}</b> real systems with listed prices, captured {seedDateLabel}</li>
+      <li><b class="num">{esCount}</b> matched to their EPA ENERGY STAR / AHRI record</li>
+      <li><b>0</b> made-up numbers. Every figure links to its source.</li>
+    </ul>
+  </section>
+
+  <Auditor heading="Grade my quote" />
+
+  <section>
+    <h2>What a 3-ton heat pump really costs</h2>
+    <div class="grid">
+      <div class="card"><div class="muted small">Listed equipment price, 3-ton ducted heat pump systems</div><div class="big num">{usd(three.min)}–{usd(three.max)}</div><p class="small muted">{three.count} systems in our data. <a href="/tonnage/3-ton/">See them all</a></p></div>
+      <div class="card"><div class="muted small">Installed benchmark, standard efficiency <span class="badge b-est">estimate</span></div><div class="big num">{fmtRange(threeFair)}</div><p class="small muted">REMDB midpoint {usd(threeFair.mid)}, restated in today's dollars. <a href="/about/#benchmarks">How</a></p></div>
+      <div class="card"><div class="muted small">Federal 25C tax credit for a 2026 install</div><div class="big num">$0</div><p class="small muted">Ended for systems placed in service after Dec. 31, 2025. <a href="/guides/heat-pump-rebates-and-ahri-certificate-check/">What's still available</a></p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>How the audit works</h2>
+    <ol class="steps">
+      <li><b>Equipment value.</b> We match your size, system type and efficiency tier to real systems listed at HVACDirect and Alpine Home Air, and take the median listed price. Contractors usually pay distributors less than these public prices, so this is a ceiling on what the boxes cost them.</li>
+      <li><b>Fair installed price.</b> We run the National Residential Efficiency Measures Database (REMDB) cost model from the National Laboratory of the Rockies (formerly NREL) for your system, then add panel, thermostat and line-set work if they are in your quote.</li>
+      <li><b>Grade.</b> A means at or below the benchmark midpoint. F means above the top of the benchmark range. We flag quotes that look suspiciously low too.</li>
+      <li><b>Second opinion.</b> If you are overcharged, request a quote from a vetted independent, owner-operated HVAC company near you.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Prices by system size</h2>
+    <div class="tons">
+      {TONNAGES.map((t) => <a class="card tonlink" href={`/tonnage/${tonSlug(t)}/`}><span class="num">{t}</span> ton<small>{(t * 12000).toLocaleString('en-US')} BTU/h</small></a>)}
+    </div>
+  </section>
+
+  <section>
+    <h2>Buyer guides</h2>
+    <div class="grid">
+      {GUIDES.map((g) => <a class="card glink" href={`/guides/${g.slug}/`}><b>{g.title}</b><span class="small muted">{g.description}</span></a>)}
+    </div>
+  </section>
+
+  <Newsletter />
+</Base>
+
+<style>
+.hero{padding:10px 0 4px}
+.eyebrow{color:var(--acc);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:.82rem;margin:20px 0 0}
+.proof{list-style:none;padding:0;margin:14px 0 0;display:flex;flex-wrap:wrap;gap:8px 22px;color:var(--mut);font-size:.94rem}
+.proof b{color:var(--ink)}
+.big{font-size:1.45rem;font-weight:700;margin:6px 0}
+.steps li{margin:8px 0;max-width:780px}
+.tons{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.tonlink{text-decoration:none;color:var(--ink);font-weight:600;font-size:1.1rem;display:flex;flex-direction:column;padding:14px}
+.tonlink small{color:var(--mut);font-weight:500;font-size:.8rem}
+.tonlink:hover,.glink:hover{border-color:var(--acc)}
+.glink{text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:6px}
+</style>

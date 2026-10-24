@@ -1,0 +1,336 @@
+{
+  "generatedAt": "2026-10-24T21:57:37.659Z",
+  "remdb": {
+    "source": "National Residential Efficiency Measures Database (REMDB), National Laboratory of the Rockies (formerly NREL)",
+    "url": "https://remdb.nlr.gov/",
+    "dataUrl": "https://remdb.nlr.gov/db.json",
+    "fetchedAt": "2026-10-24T21:57:37.659Z",
+    "dollarYear": 2023,
+    "formula": "installed cost = multiplier × (x1 × metric1 + x2 × metric2 + b) + adder (retrofit), evaluated at low / mid / high coefficients — the same calculation the REMDB web app performs",
+    "classes": {
+      "ashpDucted": {
+        "x1": {
+          "coefficient_low": 639.168,
+          "coefficient_mid": 1065.28,
+          "coefficient_high": 1491.3919999999998,
+          "metric": "Cooling Capacity",
+          "unit": "Tons",
+          "lower_bound": 1.5,
+          "upper_bound": 5
+        },
+        "x2": {
+          "coefficient_low": 356.844,
+          "coefficient_mid": 594.74,
+          "coefficient_high": 832.636,
+          "metric": "SEER1",
+          "unit": "Unitless",
+          "lower_bound": 13.8,
+          "upper_bound": 24
+        },
+        "b": {
+          "int_low": -1374.6,
+          "int_mid": -2291,
+          "int_high": -3207.3999999999996
+        },
+        "install": {
+          "new_construction": {
+            "multiplier": 1.5,
+            "adder": -191.5500000000011
+          },
+          "retrofit": {
+            "multiplier": 1.5,
+            "adder": -1384
+          }
+        },
+        "lifetime": 15.633333333333333,
+        "units": "2023$",
+        "dataSources": [
+          "LBNL Regressions, August 2024"
+        ],
+        "notes": "Total project costs derived from LBNL database compiled from incentive program data, include many datapoints from California (TECH) and Massachusetts. Costs were divided by locations multipliers to correct for higher or lower labor and material costs. Retail and installation split backed out using assumed 1.5 ratio between installation cost and retail cost (derived from industry insider conversations) although some Mass. program data suggests this ratio may be as high as 2 in some markets. Low and High ranges assumed to be +/-40% based on previous REMDB ranges, corroborated with typical RMSE values from LBNL regressions. Source data variability (e.g., 1.5 times interquartile range) typically exceeds this range in both directions. Subtracted $1384 from retrofit cost to represent cost of new 240v circuit(s), based on the average cost for ASHP projects involving fuel substitution, per LBNL database.  Installation subtractor for new construction derived from [2].",
+        "qualitativeRank": "Medium SS, High R2, High Source Diversity"
+      },
+      "ashpDuctedNewCircuit": {
+        "x1": {
+          "coefficient_low": 639.168,
+          "coefficient_mid": 1065.28,
+          "coefficient_high": 1491.3919999999998,
+          "metric": "Cooling Capacity",
+          "unit": "Tons",
+          "lower_bound": 1.5,
+          "upper_bound": 5
+        },
+        "x2": {
+          "coefficient_low": 356.844,
+          "coefficient_mid": 594.74,
+          "coefficient_high": 832.636,
+          "metric": "SEER1",
+          "unit": "Unitless",
+          "lower_bound": 13.8,
+          "upper_bound": 24
+        },
+        "b": {
+          "int_low": -1374.6,
+          "int_mid": -2291,
+          "int_high": -3207.3999999999996
+        },
+        "install": {
+          "new_construction": {
+            "multiplier": 1.5,
+            "adder": -191.55000000000018
+          },
+          "retrofit": {
+            "multiplier": 1.5,
+            "adder": 0
+          }
+        },
+        "lifetime": 15.633333333333333,
+        "units": "2023$",
+        "dataSources": [
+          "LBNL Regressions, August 2024"
+        ],
+        "notes": "Total project costs derived from LBNL database compiled from incentive program data, include many datapoints from California (TECH) and Massachusetts. Costs were divided by locations multipliers to correct for higher or lower labor and material costs. Retail and installation split backed out using assumed 1.5 ratio between installation cost and retail cost (derived from industry insider conversations) although some Mass. program data suggests this ratio may be as high as 2 in some markets. Low and High ranges assumed to be +/-40% based on previous REMDB ranges, corroborated with typical RMSE values from LBNL regressions. Source data variability (e.g., 1.5 times interquartile range) typically exceeds this range in both directions. Installation subtractor for new construction derived from [2].",
+        "qualitativeRank": "Medium SS, High R2, High Source Diversity"
+      },
+      "miniSplitSingle": {
+        "x1": {
+          "coefficient_low": 1878.0479999999998,
+          "coefficient_mid": 3130.08,
+          "coefficient_high": 4382.111999999999,
+          "metric": "Cooling Capacity",
+          "unit": "Tons",
+          "lower_bound": 0.5,
+          "upper_bound": 1.5
+        },
+        "x2": {
+          "coefficient_low": 96.24799999999999,
+          "coefficient_mid": 160.41333333333333,
+          "coefficient_high": 224.57866666666663,
+          "metric": "SEER1",
+          "unit": "Unitless",
+          "lower_bound": 13,
+          "upper_bound": 28.4
+        },
+        "b": {
+          "int_low": -805.9999999999999,
+          "int_mid": -1343.3333333333333,
+          "int_high": -1880.6666666666665
+        },
+        "install": {
+          "new_construction": {
+            "multiplier": 1.5,
+            "adder": -191.55
+          },
+          "retrofit": {
+            "multiplier": 1.5,
+            "adder": 0
+          }
+        },
+        "lifetime": 15.633333333333333,
+        "units": "2023$",
+        "dataSources": [
+          "LBNL Regressions, August 2024"
+        ],
+        "notes": "Total project costs derived from LBNL database compiled from incentive program data, include many datapoints from California (TECH) and Massachusetts. Costs were divided by locations multipliers to correct for higher or lower labor and material costs. Retail and installation split backed out using assumed 1.5 ratio between installation cost and retail cost (derived from industry insider conversations) although some Mass. program data suggests this ratio may be as high as 2 in some markets. Low and High ranges assumed to be +/-40% based on previous REMDB ranges, corroborated with typical RMSE values from LBNL regressions. Source data variability (e.g., 1.5 times interquartile range) typically exceeds this range in both directions. Subtracted $1384 from retrofit cost to represent cost of new 240v circuit(s), based on the average cost for ASHP projects involving fuel substitution, per LBNL database.  Installation subtractor for new construction derived from [2].",
+        "qualitativeRank": "High SS, Medium R2, Medium Source Diversity"
+      },
+      "miniSplitMulti": {
+        "x1": {
+          "coefficient_low": 1878.0479999999998,
+          "coefficient_mid": 3130.08,
+          "coefficient_high": 4382.111999999999,
+          "metric": "Cooling Capacity",
+          "unit": "Tons",
+          "lower_bound": 1.5,
+          "upper_bound": 5
+        },
+        "x2": {
+          "coefficient_low": 96.24799999999999,
+          "coefficient_mid": 160.41333333333333,
+          "coefficient_high": 224.57866666666663,
+          "metric": "SEER1",
+          "unit": "Unitless",
+          "lower_bound": 16,
+          "upper_bound": 23
+        },
+        "b": {
+          "int_low": -805.9999999999999,
+          "int_mid": -1343.3333333333333,
+          "int_high": -1880.6666666666665
+        },
+        "install": {
+          "new_construction": {
+            "multiplier": 1.5,
+            "adder": -383.1000000000031
+          },
+          "retrofit": {
+            "multiplier": 1.5,
+            "adder": 0
+          }
+        },
+        "lifetime": 15.633333333333333,
+        "units": "2023$",
+        "dataSources": [
+          "LBNL Regressions, August 2024"
+        ],
+        "notes": "Total project costs derived from LBNL database compiled from incentive program data, include many datapoints from California (TECH) and Massachusetts. Costs were divided by locations multipliers to correct for higher or lower labor and material costs. Retail and installation split backed out using assumed 1.5 ratio between installation cost and retail cost (derived from industry insider conversations) although some Mass. program data suggests this ratio may be as high as 2 in some markets. Low and High ranges assumed to be +/-40% based on previous REMDB ranges, corroborated with typical RMSE values from LBNL regressions. Source data variability (e.g., 1.5 times interquartile range) typically exceeds this range in both directions. Subtracted $1384 from retrofit cost to represent cost of new 240v circuit(s), based on the average cost for ASHP projects involving fuel substitution, per LBNL database.  Installation subtractor for new construction derived from [2].",
+        "qualitativeRank": "High SS, Medium R2, Medium Source Diversity"
+      },
+      "centralAc": {
+        "x1": {
+          "coefficient_low": 196.96609519999998,
+          "coefficient_mid": 328.2768253333333,
+          "coefficient_high": 459.5875554666666,
+          "metric": "Cooling Capacity",
+          "unit": "Tons",
+          "lower_bound": 1.5,
+          "upper_bound": 5
+        },
+        "x2": {
+          "coefficient_low": 356.844,
+          "coefficient_mid": 594.74,
+          "coefficient_high": 832.636,
+          "metric": "SEER1",
+          "unit": "Unitless",
+          "lower_bound": 13,
+          "upper_bound": 24
+        },
+        "b": {
+          "int_low": -3533.3616704148158,
+          "int_mid": -5888.936117358026,
+          "int_high": -8244.510564301236
+        },
+        "install": {
+          "new_construction": {
+            "multiplier": 1.5,
+            "adder": -327.4074074074074
+          },
+          "retrofit": {
+            "multiplier": 1.5,
+            "adder": 0
+          }
+        },
+        "lifetime": 22.333333333333332,
+        "units": "2023$",
+        "dataSources": [
+          "Retail/Distributor Websites",
+          "RS Means",
+          "DOE Rulemaking",
+          "Homewyse",
+          "LBNL Regressions, August 2024"
+        ],
+        "notes": "Uses SEER1 coefficient for ASHPs from [14] to have consistent relationship between cost and SEER for ASHPs and Central ACs. Spot checked with [17]. Retail and installation split backed out using assumed 1.5 ratio between installation cost and retail cost, derived from industry insider conversations. Low and High ranges assumed to be +/-30% based on previous REMDB ranges, corroborated with typical RMSE values from LBNL regressions.  Installation subtractor for new construction derived from [2].",
+        "qualitativeRank": "Low SS, Medium R2, High Source Diversity"
+      },
+      "gasFurnace": {
+        "x1": {
+          "coefficient_low": 0.004744,
+          "coefficient_mid": 0.00645,
+          "coefficient_high": 0.01105,
+          "metric": "Heating Capacity",
+          "unit": "BTU/Hr",
+          "lower_bound": 30000,
+          "upper_bound": 156250
+        },
+        "x2": {
+          "coefficient_low": 3309.827024,
+          "coefficient_mid": 4325.000025,
+          "coefficient_high": 4862.6875,
+          "metric": "AFUE",
+          "unit": "Unitless",
+          "lower_bound": 0.8,
+          "upper_bound": 0.97
+        },
+        "b": {
+          "int_low": -2009.224953,
+          "int_mid": -2780.000019,
+          "int_high": -2910.150001
+        },
+        "install": {
+          "new_construction": {
+            "multiplier": 1,
+            "adder": 2025.603
+          },
+          "retrofit": {
+            "multiplier": 1,
+            "adder": 2217.753
+          }
+        },
+        "lifetime": 21.4,
+        "units": "2023$",
+        "dataSources": [
+          "Retail/Distributor Websites",
+          "RS Means",
+          "Homewyse",
+          "LBNL Cost of Decarbonization"
+        ],
+        "notes": "Significant banding based on efficiency",
+        "qualitativeRank": "High SS, Medium R2, High Source Diversity"
+      },
+      "smartThermostat": {
+        "b": {
+          "int_low": 100,
+          "int_mid": 150,
+          "int_high": 252.39999999999998
+        },
+        "install": {
+          "new_construction": {
+            "multiplier": 2.209961685823755,
+            "adder": 0
+          },
+          "retrofit": {
+            "multiplier": 2.2329501915708816,
+            "adder": 0
+          }
+        },
+        "lifetime": 11,
+        "units": "2023$",
+        "dataSources": [
+          "Retail/Distributor Websites",
+          "Homewyse",
+          "Home Guide"
+        ],
+        "notes": "",
+        "qualitativeRank": "No regression ran. Low SS, Medium Source Diversity"
+      },
+      "panel200A": {
+        "b": {
+          "int_low": 152.20000000000002,
+          "int_mid": 225.08999999999997,
+          "int_high": 470.738
+        },
+        "install": {
+          "new_construction": {
+            "multiplier": 6.6290575025518885,
+            "adder": 0
+          },
+          "retrofit": {
+            "multiplier": 6.6290575025518885,
+            "adder": 0
+          }
+        },
+        "lifetime": 40,
+        "units": "2023$",
+        "dataSources": [
+          "Retail/Distributor Websites",
+          "RS Means",
+          "Homewyse",
+          "Contractor Interview"
+        ],
+        "notes": "",
+        "qualitativeRank": "Medium SS, Medium R2, No Clear Sources"
+      }
+    }
+  },
+  "cpi": {
+    "series": "CPIAUCSL (CPI-U, all items, seasonally adjusted)",
+    "source": "U.S. Bureau of Labor Statistics via FRED, Federal Reserve Bank of St. Louis",
+    "url": "https://fred.stlouisfed.org/series/CPIAUCSL",
+    "baseMonth": "2023-12-01",
+    "baseValue": 308.741,
+    "latestMonth": "2026-09-01",
+    "latestValue": 336.298,
+    "factor": 1.0893,
+    "fetchedAt": "2026-10-24T21:57:37.659Z"
+  }
+}

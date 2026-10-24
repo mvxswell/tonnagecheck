@@ -1,0 +1,310 @@
+---
+import { auditPayload, SYSTEM_TYPE_LABEL, TIER_LABEL, TONNAGES, type SystemType, type Tier } from '../data/equipment';
+import ConciergeForm from './ConciergeForm.astro';
+interface Props { systemType?: SystemType; tons?: number; tier?: Tier; heading?: string }
+const { systemType = 'central-heat-pump', tons = 3, tier = 'standard', heading = 'Audit your HVAC quote' } = Astro.props;
+const payload = auditPayload();
+---
+<section class="auditor" id="audit" aria-labelledby="audit-h">
+  <form class="card aform" id="tc-form" novalidate>
+    <h2 id="audit-h">{heading}</h2>
+    <div class="fgrid">
+      <div class="f2">
+        <label for="f-type">System type</label>
+        <select id="f-type" name="systemType">
+          {Object.entries(SYSTEM_TYPE_LABEL).map(([v, l]) => <option value={v} selected={v === systemType}>{l}</option>)}
+        </select>
+      </div>
+      <div>
+        <label for="f-tons">Size (tons)</label>
+        <select id="f-tons" name="tons">
+          {TONNAGES.map((t) => <option value={t} selected={t === tons}>{t} ton ({(t * 12000).toLocaleString('en-US')} BTU/h)</option>)}
+        </select>
+      </div>
+      <div>
+        <label for="f-sqft">Not sure? Home sq ft</label>
+        <input id="f-sqft" name="sqft" type="number" inputmode="numeric" min="400" max="6000" step="50" placeholder="e.g. 1,800" />
+        <p class="small muted hint" id="f-sqft-out" aria-live="polite"></p>
+      </div>
+      <div class="f2">
+        <label for="f-tier">Efficiency tier</label>
+        <select id="f-tier" name="tier">
+          {Object.entries(TIER_LABEL).map(([v, l]) => <option value={v} selected={v === tier}>{l}</option>)}
+        </select>
+      </div>
+      <div class="furnace-only">
+        <label for="f-btu">Furnace size</label>
+        <select id="f-btu" name="furnaceBtu">
+          {[40000, 60000, 80000, 100000, 120000].map((b) => <option value={b} selected={b === 80000}>{(b / 1000)}k BTU/h</option>)}
+        </select>
+      </div>
+      <div class="furnace-only">
+        <label for="f-afue">Furnace AFUE</label>
+        <select id="f-afue" name="afue">
+          <option value="80" selected>80% (standard)</option>
+          <option value="92">92%</option>
+          <option value="96">96% (condensing)</option>
+        </select>
+      </div>
+      <div>
+        <label for="f-quote">Total contractor quote</label>
+        <div class="money"><span>$</span><input id="f-quote" name="quote" type="text" inputmode="decimal" placeholder="16,500" required autocomplete="off" /></div>
+      </div>
+      <div>
+        <label for="f-zip">ZIP code</label>
+        <input id="f-zip" name="zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="30301" required autocomplete="postal-code" />
+      </div>
+      <fieldset class="f2 scope">
+        <legend>What's included in the quote?</legend>
+        <label class="check"><input type="checkbox" name="ductwork" id="f-duct" />New or modified ductwork</label>
+        <div class="duct-amt" hidden>
+          <label for="f-ductamt" class="small">Ductwork line amount, if itemized</label>
+          <div class="money"><span>$</span><input id="f-ductamt" name="ductworkAmount" type="text" inputmode="decimal" placeholder="optional" autocomplete="off" /></div>
+        </div>
+        <label class="check"><input type="checkbox" name="panel" />200A electrical panel upgrade</label>
+        <label class="check"><input type="checkbox" name="lineSet" />New refrigerant line set</label>
+        <label class="check"><input type="checkbox" name="thermostat" />Smart thermostat</label>
+      </fieldset>
+      <details class="f2 opt">
+        <summary>Optional: brand &amp; model on the quote</summary>
+        <div class="fgrid in">
+          <div><label for="f-brand">Brand</label><input id="f-brand" name="brand" maxlength="60" placeholder="e.g. Trane" /></div>
+          <div><label for="f-model">Outdoor model #</label><input id="f-model" name="model" maxlength="80" placeholder="e.g. 4TWR6036" /></div>
+        </div>
+      </details>
+    </div>
+    <label class="check small consent"><input type="checkbox" name="share" checked />Add this quote, anonymized (3-digit ZIP, system, price, grade; no name or contact info), to the TonnageCheck price dataset.</label>
+    <p class="err small" id="tc-err" role="alert" hidden></p>
+    <button class="btn big" type="submit">Get my scorecard</button>
+    <p class="small muted">Free and instant. No email required.</p>
+  </form>
+
+  <div id="tc-result" class="result" aria-live="polite" hidden></div>
+
+  <div id="tc-match" class="match card" hidden>
+    <ConciergeForm />
+  </div>
+</section>
+
+<script type="application/json" id="tc-payload" set:html={JSON.stringify(payload)} />
+
+<style>
+.auditor{margin:18px 0}
+.aform h2{margin:0 0 12px}
+.fgrid{display:grid;gap:14px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.fgrid .f2{grid-column:1/-1}
+.fgrid.in{margin-top:10px}
+.hint{margin:4px 0 0;min-height:1.2em}
+.money{display:flex;align-items:center;border:1px solid #c5cfd8;border-radius:9px;background:#fff;padding-left:12px}
+.money:focus-within{outline:2px solid var(--acc);outline-offset:1px}
+.money span{color:var(--mut);font-family:var(--mono)}
+.money input{border:0;font-family:var(--mono);font-size:1.05rem;outline:none!important;padding-left:6px}
+.scope{border:1px solid var(--line);border-radius:10px;padding:10px 14px 6px;margin:0}
+.scope legend{font-weight:600;font-size:.92rem;padding:0 6px}
+.scope .check{margin:6px 0}
+.duct-amt{margin:0 0 8px 26px;max-width:260px}
+.opt summary{cursor:pointer;font-weight:600;font-size:.92rem;color:var(--acc)}
+.consent{margin:16px 0 10px;align-items:flex-start;color:var(--mut)}
+.consent input{margin-top:4px}
+.err{color:var(--bad);font-weight:600}
+.btn.big{width:100%;padding:14px;font-size:1.08rem;margin-top:4px}
+.furnace-only{display:none}
+.aform[data-type="ac-furnace"] .furnace-only{display:block}
+.result{margin-top:18px}
+.match{margin-top:18px;border:2px solid var(--acc)}
+/* keep the sticky header (taller when the nav wraps on phones) off the scorecard after scrollIntoView */
+.result,.match{scroll-margin-top:76px}
+@media (max-width:640px){.result,.match{scroll-margin-top:112px}}
+@media (max-width:560px){.fgrid{grid-template-columns:1fr}}
+</style>
+
+<style is:global>
+/* scorecard (rendered by the script below) */
+.sc-head{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.sc-grade{width:84px;height:84px;border-radius:16px;display:grid;place-items:center;font:800 3rem/1 var(--mono);color:#fff}
+.g-A,.g-B{background:var(--ok)}.g-C,.g-D{background:#c77700}.g-F{background:var(--bad)}
+.sc-head h2{margin:.1em 0 .2em;font-size:1.3rem}
+.sc-head p{margin:0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:16px 0}
+.kpi{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fff}
+.kpi .k{font-size:.8rem;color:var(--mut);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.kpi .v{font:700 1.5rem/1.25 var(--mono);font-variant-numeric:tabular-nums;margin:4px 0 2px}
+.kpi .s{font-size:.84rem;color:var(--mut)}
+.kpi.hot{border-color:#f1b5ad;background:var(--badbg)}.kpi.hot .v{color:var(--bad)}
+.bar{position:relative;height:14px;border-radius:7px;background:linear-gradient(90deg,#cdeedd 0%,#cdeedd 40%,#fde7c2 70%,#f8cbc5 100%);margin:28px 0 30px}
+.bar .tick{position:absolute;top:-4px;width:3px;height:22px;background:var(--navy);border-radius:2px}
+.bar .tick span{position:absolute;top:24px;left:50%;transform:translateX(-50%);font:600 .75rem var(--mono);white-space:nowrap;color:var(--mut)}
+.bar .you{background:var(--bad)}.bar .you span{top:-22px;color:var(--bad)}
+.sc-sec{margin-top:20px}
+.sc-sec h3{margin:0 0 8px}
+.flags li{margin:6px 0}
+.rebates{display:grid;gap:10px}
+.rb{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:#fff}
+.rb .links a{margin-right:12px;font-size:.88rem}
+.cta{margin-top:22px;background:var(--navy);color:#fff;border-radius:14px;padding:20px}
+.cta h3{margin:0 0 6px;font-size:1.25rem;color:#fff}
+.cta p{color:#cfdbe5;margin:0 0 14px}
+.cta .btn{background:var(--acc2);color:var(--navy)}
+.method{font-size:.88rem;color:var(--mut)}
+.method summary{cursor:pointer;color:var(--acc);font-weight:600}
+</style>
+
+<script>
+  import { audit, roughTonnage, usd, type AuditInput } from '../lib/audit';
+  import { rebateCheck } from '../lib/rebates';
+  import { rpc } from '../lib/supabase';
+  import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../config';
+  import type { AuditPayload, SystemType, Tier } from '../data/equipment';
+
+  const data: AuditPayload = JSON.parse(document.getElementById('tc-payload')!.textContent!);
+  const form = document.getElementById('tc-form') as HTMLFormElement;
+  const out = document.getElementById('tc-result') as HTMLDivElement;
+  const err = document.getElementById('tc-err') as HTMLParagraphElement;
+  const match = document.getElementById('tc-match') as HTMLDivElement;
+  const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+  const money = (s: string) => { const n = parseFloat(String(s).replace(/[$,\s]/g, '')); return isFinite(n) ? n : NaN; };
+  const typeSel = form.elements.namedItem('systemType') as HTMLSelectElement;
+  const syncType = () => (form.dataset.type = typeSel.value);
+  typeSel.addEventListener('change', syncType);
+  syncType();
+
+  const duct = form.elements.namedItem('ductwork') as HTMLInputElement;
+  const ductBox = form.querySelector('.duct-amt') as HTMLElement;
+  duct.addEventListener('change', () => (ductBox.hidden = !duct.checked));
+
+  const sqft = form.elements.namedItem('sqft') as HTMLInputElement;
+  const sqftOut = document.getElementById('f-sqft-out')!;
+  sqft.addEventListener('input', () => {
+    const v = parseFloat(sqft.value);
+    if (!(v >= 400)) { sqftOut.textContent = ''; return; }
+    const { lo, hi } = roughTonnage(v);
+    sqftOut.textContent = lo === hi ? `Rule of thumb: about ${lo} ton. A Manual J load calc is the real answer.` : `Rule of thumb: ${lo}–${hi} ton. A Manual J load calc is the real answer.`;
+  });
+
+  // prefill from ?quote=&zip=&type=&tons= (shared links)
+  const qs = new URLSearchParams(location.search);
+  for (const [k, n] of [['type', 'systemType'], ['tons', 'tons'], ['tier', 'tier'], ['quote', 'quote'], ['zip', 'zip']] as const) {
+    const v = qs.get(k);
+    const el = form.elements.namedItem(n) as HTMLInputElement | HTMLSelectElement | null;
+    if (v && el) el.value = v;
+  }
+  syncType();
+
+  function render(input: AuditInput, brand: string, model: string) {
+    const r = audit(data, input);
+    const rebates = rebateCheck(input.systemType, input.zip, r.equipment.matched.some((m) => m.energyStar));
+    const badge = r.status === 'Fair' ? 'b-fair' : r.status === 'Overpriced' ? 'b-over' : 'b-red';
+    const min = Math.min(r.fair.low, r.gradedQuote) * 0.85;
+    const max = Math.max(r.fair.high, r.gradedQuote) * 1.08;
+    const pos = (v: number) => `${(((v - min) / (max - min)) * 100).toFixed(1)}%`;
+    const headline = r.overcharge > 0
+      ? `This quote is ${usd(r.overcharge)} above the benchmark midpoint.`
+      : r.gradedQuote < r.fair.low ? 'This quote is below the benchmark range. Read the flags below.' : `This quote is at or below the benchmark midpoint of ${usd(r.fair.mid)}.`;
+
+    out.innerHTML = `
+      <div class="card">
+        <div class="sc-head">
+          <div class="sc-grade g-${r.grade}" aria-label="Grade ${r.grade}">${r.grade}</div>
+          <div>
+            <span class="badge ${badge}">${r.status}</span>
+            <h2>${esc(headline)}</h2>
+            <p class="muted small">${esc(input.tons)}-ton ${esc(document.querySelector<HTMLOptionElement>('#f-type option:checked')!.text.toLowerCase())}, ${esc(input.tier)} tier, ZIP ${esc(input.zip)}. Graded amount: <span class="num">${usd(r.gradedQuote)}</span>.</p>
+          </div>
+        </div>
+
+        <div class="bar" role="img" aria-label="Your quote compared with the benchmark range">
+          <div class="tick" style="left:${pos(r.fair.low)}"><span>${usd(r.fair.low)}</span></div>
+          <div class="tick" style="left:${pos(r.fair.mid)}"><span>mid ${usd(r.fair.mid)}</span></div>
+          <div class="tick" style="left:${pos(r.fair.high)}"><span>${usd(r.fair.high)}</span></div>
+          <div class="tick you" style="left:${pos(r.gradedQuote)}"><span>you ${usd(r.gradedQuote)}</span></div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi"><div class="k">Wholesale equipment value</div><div class="v">${usd(r.equipment.value)}</div><div class="s">Median public online price of matching equipment${r.equipment.lineSet ? ' + line set' : ''}. Listed below with links.</div></div>
+          <div class="kpi"><div class="k">Fair installed price <span class="badge b-est">estimate</span></div><div class="v">${usd(r.fair.mid)}</div><div class="s">Range <span class="num">${usd(r.fair.low)}–${usd(r.fair.high)}</span> (DOE-lab REMDB benchmark, today's dollars)</div></div>
+          <div class="kpi"><div class="k">Labor, overhead &amp; profit in your quote</div><div class="v">${usd(r.impliedMarkup)}</div><div class="s">Benchmark: about <span class="num">${usd(r.benchmarkLaborOverhead)}</span> at the midpoint</div></div>
+          <div class="kpi ${r.overcharge > 0 ? 'hot' : ''}"><div class="k">"PE rollup tax"</div><div class="v">${usd(r.overcharge)}</div><div class="s">Amount above the benchmark midpoint</div></div>
+        </div>
+
+        ${r.flags.length ? `<div class="sc-sec warnbox"><h3>Red flags &amp; caveats</h3><ul class="flags">${r.flags.map((f) => `<li>${esc(f)}</li>`).join('')}</ul></div>` : ''}
+
+        <div class="sc-sec">
+          <h3>Equipment we compared against</h3>
+          <p class="small muted">${esc(r.equipment.matchNote)} Prices captured ${esc(data.seedDate.slice(0, 10))}; click through for today's price.</p>
+          <div class="tablewrap"><table>
+            <thead><tr><th>System</th><th class="r">SEER2</th><th class="r">Listed price</th><th>Source</th></tr></thead>
+            <tbody>${r.equipment.matched.map((m) => `<tr><td><a href="/systems/${esc(m.slug)}/">${esc(m.brand)} ${esc(m.tons)} ton</a>${m.energyStar ? ' <span class="badge b-es">ENERGY STAR</span>' : ''}</td><td class="r num">${m.seer2 ?? '—'}</td><td class="r num">${usd(m.price)}</td><td><a href="${esc(m.url)}" rel="nofollow noopener" target="_blank">${esc(m.retailer)}</a></td></tr>`).join('')}
+            ${r.equipment.lineSet ? `<tr><td>${esc(r.equipment.lineSet.label)}</td><td class="r">—</td><td class="r num">${usd(r.equipment.lineSet.price)}</td><td><a href="${esc(r.equipment.lineSet.url)}" rel="nofollow noopener" target="_blank">HVACDirect</a></td></tr>` : ''}</tbody>
+          </table></div>
+        </div>
+
+        <div class="sc-sec">
+          <h3>How the fair price is built</h3>
+          <div class="tablewrap"><table>
+            <thead><tr><th>Line</th><th class="r">Low</th><th class="r">Mid</th><th class="r">High</th></tr></thead>
+            <tbody>${r.lines.map((l) => `<tr><td>${esc(l.label)} ${l.estimate ? '<span class="badge b-est">estimate</span>' : ''}</td><td class="r num">${usd(l.range.low)}</td><td class="r num">${usd(l.range.mid)}</td><td class="r num">${usd(l.range.high)}</td></tr>`).join('')}
+            <tr><th>Total</th><th class="r num">${usd(r.fair.low)}</th><th class="r num">${usd(r.fair.mid)}</th><th class="r num">${usd(r.fair.high)}</th></tr></tbody>
+          </table></div>
+          <details class="method"><summary>Methodology for each line</summary><ul>${r.lines.map((l) => `<li><b>${esc(l.label)}:</b> ${esc(l.method)} <a href="${esc(l.sourceUrl)}" rel="noopener" target="_blank">Source</a></li>`).join('')}<li>Efficiency used: ${esc(r.seer2Used)} SEER2 (${esc(r.seer2Note)}).</li><li>Grades: A at or below the midpoint, B up to 15% over, C up to 30% over, D up to the top of the range, F above it. <a href="/about/#grading">More</a></li></ul></details>
+        </div>
+
+        <div class="sc-sec">
+          <h3>Rebate &amp; tax credit check</h3>
+          <div class="rebates">${rebates.map((b) => `<div class="rb"><b>${esc(b.name)}</b> <span class="badge ${b.status === 'not-available' ? 'b-red' : b.status === 'check' ? 'b-over' : 'b-fair'}">${b.status === 'not-available' ? 'Not available' : b.status === 'check' ? 'Check eligibility' : 'Worth checking'}</span><p class="small" style="margin:6px 0">${esc(b.detail)}</p><div class="links">${b.links.map((l) => `<a href="${esc(l.url)}" rel="noopener" target="_blank">${esc(l.label)}</a>`).join('')}</div></div>`).join('')}</div>
+        </div>
+
+        <div class="cta">
+          <h3>${r.overcharge >= 500 ? `Overcharged by ${usd(r.overcharge)}?` : 'Want a second opinion anyway?'}</h3>
+          <p>Get a second opinion from a vetted independent local HVAC master tech. No private-equity sales reps, no commission-driven "comfort advisors."</p>
+          <button type="button" class="btn" id="tc-open-match">Get an independent quote</button>
+        </div>
+      </div>`;
+    out.hidden = false;
+
+    (document.getElementById('tc-open-match') as HTMLButtonElement).addEventListener('click', () => {
+      match.hidden = false;
+      const mf = match.querySelector('form') as HTMLFormElement;
+      (mf.elements.namedItem('zip') as HTMLInputElement).value = input.zip;
+      (mf.elements.namedItem('quoted') as HTMLInputElement).value = String(input.quote);
+      (mf.elements.namedItem('brandModel') as HTMLInputElement).value = [brand, model].filter(Boolean).join(' ');
+      match.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      (mf.elements.namedItem('name') as HTMLInputElement).focus({ preventScroll: true });
+    });
+    return r;
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const f = new FormData(form);
+    const quote = money(String(f.get('quote')));
+    const zip = String(f.get('zip') || '').trim();
+    const problems = [];
+    if (!(quote >= 500 && quote <= 200000)) problems.push('Enter the total quote in dollars (between $500 and $200,000).');
+    if (!/^\d{5}$/.test(zip)) problems.push('Enter a 5-digit ZIP code.');
+    err.hidden = !problems.length;
+    err.textContent = problems.join(' ');
+    if (problems.length) return;
+
+    const input: AuditInput = {
+      systemType: f.get('systemType') as SystemType,
+      tons: parseFloat(String(f.get('tons'))),
+      tier: f.get('tier') as Tier,
+      quote, zip,
+      furnaceBtu: parseFloat(String(f.get('furnaceBtu'))),
+      afue: parseFloat(String(f.get('afue'))),
+      scope: { ductwork: f.has('ductwork'), ductworkAmount: money(String(f.get('ductworkAmount') || '')) || 0, panel: f.has('panel'), lineSet: f.has('lineSet'), thermostat: f.has('thermostat') },
+    };
+    const brand = String(f.get('brand') || '').trim();
+    const model = String(f.get('model') || '').trim();
+    const r = render(input, brand, model);
+    out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    if (f.has('share')) {
+      rpc(SUPABASE_URL, SUPABASE_ANON_KEY, 'submit_quote_audit', {
+        p_zip_prefix: zip.slice(0, 3), p_system_type: input.systemType, p_tonnage: input.tons,
+        p_brand: brand || null, p_model_number: model || null, p_quoted_total_usd: quote,
+        p_equipment_wholesale_usd: r.equipment.value, p_grade: r.grade,
+      });
+    }
+  });
+</script>

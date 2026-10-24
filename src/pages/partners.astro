@@ -1,0 +1,81 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config';
+const ld = { '@context': 'https://schema.org', '@type': 'WebPage', name: 'TonnageCheck for independent HVAC contractors', url: `${SITE.url}/partners/` };
+---
+<Base title="For independent HVAC techs: get pre-audited homeowner leads | TonnageCheck" description="Owner-operated HVAC companies with 1 to 5 trucks: apply to receive homeowners in your ZIP who already know their quote was overpriced and want an honest second opinion." jsonld={ld}>
+  <p class="crumbs"><a href="/">Home</a> / For independent techs</p>
+  <h1>Independent master techs: get homeowners who have already done the math</h1>
+  <p class="lead">TonnageCheck homeowners run their quote through our auditor before they call anyone. When a big-company quote grades poorly, they can ask for a second opinion from an independent, owner-operated company in their ZIP. We want that to be you.</p>
+
+  <div class="grid">
+    <div class="card"><h2 class="h">Pre-audited leads</h2><p>Each request comes with the quote they received, the system size and type, the brand and model if they gave it, and their timeline. No tire-kickers who have not seen a price.</p></div>
+    <div class="card"><h2 class="h">Exclusive in your ZIP</h2><p>We send each request to at most two independent companies serving that ZIP. No shared-lead auctions.</p></div>
+    <div class="card"><h2 class="h">Win on honesty</h2><p>Homeowners arrive expecting model numbers, a load calculation and an itemized price. If that is how you already work, you will close.</p></div>
+  </div>
+
+  <h2>Who we are looking for</h2>
+  <ul>
+    <li>Owner-operated, 1 to 5 trucks, not owned by a private-equity platform or national consolidator</li>
+    <li>State HVAC/mechanical license where required, and EPA Section 608 certification</li>
+    <li>General liability and workers' comp insurance</li>
+    <li>Does Manual J load calculations and pulls permits</li>
+    <li>Puts model numbers and an AHRI reference on every quote</li>
+  </ul>
+
+  <section class="card apply" id="apply">
+    <h2 class="h">Apply</h2>
+    <form id="pform" novalidate>
+      <div class="pgrid">
+        <div><label for="p-co">Company name</label><input id="p-co" name="company" required maxlength="120" autocomplete="organization" /></div>
+        <div><label for="p-name">Your name</label><input id="p-name" name="name" required maxlength="120" autocomplete="name" /></div>
+        <div><label for="p-email">Email</label><input id="p-email" name="email" type="email" required maxlength="254" autocomplete="email" /></div>
+        <div><label for="p-phone">Phone</label><input id="p-phone" name="phone" type="tel" maxlength="40" autocomplete="tel" /></div>
+        <div><label for="p-lic">License # and state</label><input id="p-lic" name="license" required maxlength="80" /></div>
+        <div><label for="p-trucks">Trucks</label><select id="p-trucks" name="trucks"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+        <div class="p2"><label for="p-zips">ZIP codes you serve</label><input id="p-zips" name="zips" required maxlength="400" placeholder="30301, 30302, 30303..." /></div>
+        <div class="p2"><label for="p-about">Anything else (years in business, brands you install, website)</label><textarea id="p-about" name="about" rows="3" maxlength="2000"></textarea></div>
+      </div>
+      <label class="check small"><input type="checkbox" name="independent" required />We are independently owned (not part of a private-equity or national consolidator platform).</label>
+      <p class="perr small" role="alert" hidden></p>
+      <button class="btn" type="submit">Send application</button>
+      <p class="pdone small" role="status" hidden></p>
+    </form>
+  </section>
+</Base>
+
+<style>
+.h{margin:0 0 6px;font-size:1.08rem}
+.apply{margin-top:24px;border:2px solid var(--acc)}
+.pgrid{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:12px}
+.pgrid .p2{grid-column:1/-1}
+.perr{color:var(--bad);font-weight:600}
+.pdone{background:var(--okbg);border-radius:10px;padding:12px 14px}
+@media (max-width:560px){.pgrid{grid-template-columns:1fr}}
+</style>
+
+<script define:vars={{ to: SITE.partnersEmail }}>
+  const form = document.getElementById('pform');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const f = new FormData(form);
+    const v = (k) => String(f.get(k) || '').trim();
+    const err = form.querySelector('.perr');
+    const problems = [];
+    if (!v('company') || !v('name')) problems.push('Add your company and name.');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v('email'))) problems.push('Add a valid email.');
+    if (!v('license')) problems.push('Add your license number.');
+    if (!v('zips')) problems.push('List the ZIP codes you serve.');
+    if (!f.has('independent')) problems.push('Confirm you are independently owned.');
+    err.hidden = !problems.length;
+    err.textContent = problems.join(' ');
+    if (problems.length) return;
+    // Partner applications are reviewed by a person, so they go by email rather than into the homeowner database.
+    const body = ['Company: ' + v('company'), 'Name: ' + v('name'), 'Email: ' + v('email'), 'Phone: ' + v('phone'), 'License: ' + v('license'), 'Trucks: ' + v('trucks'), 'ZIPs: ' + v('zips'), '', v('about')].join('\n');
+    const href = 'mailto:' + to + '?subject=' + encodeURIComponent('Partner application: ' + v('company')) + '&body=' + encodeURIComponent(body);
+    const done = form.querySelector('.pdone');
+    done.innerHTML = 'Almost done: your email app should open with the application filled in. Hit send. If it did not open, <a href="' + href + '">click here</a> or email ' + to + '.';
+    done.hidden = false;
+    window.location.href = href;
+  });
+</script>

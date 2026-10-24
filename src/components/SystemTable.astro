@@ -1,0 +1,31 @@
+---
+import { SYSTEM_TYPE_LABEL, lowestPrice, type System } from '../data/equipment';
+import { usd } from '../lib/audit';
+interface Props { systems: System[]; searchable?: boolean }
+const { systems, searchable = false } = Astro.props;
+const shortType: Record<string, string> = { 'central-heat-pump': 'Ducted heat pump', 'mini-split': 'Mini-split', 'ac-furnace': 'AC + furnace', 'heat-pump-only': 'Condenser only' };
+---
+<div class="tablewrap">
+  <table class="systable">
+    <thead>
+      <tr><th>System</th><th>Type</th><th class="r">Tons</th><th class="r">SEER2</th><th class="r">HSPF2</th><th>Rating source</th><th class="r">Lowest listed</th><th>Retailer</th></tr>
+    </thead>
+    <tbody>
+      {systems.map((s) => {
+        const best = s.prices.reduce((a, p) => (p.price < a.price ? p : a), s.prices[0]);
+        return (
+          <tr data-search={searchable ? `${s.brand} ${s.title} ${s.components.join(' ')} ${SYSTEM_TYPE_LABEL[s.systemType]} ${s.tons} ton`.toLowerCase() : undefined} data-type={s.systemType} data-tons={s.tons}>
+            <td><a href={`/systems/${s.slug}/`}><b>{s.brand}</b> {s.components[0]}</a></td>
+            <td>{shortType[s.systemType]}</td>
+            <td class="r num">{s.tons}</td>
+            <td class="r num">{s.specs.seer2 ?? '—'}</td>
+            <td class="r num">{s.specs.hspf2 ?? '—'}</td>
+            <td>{s.energyStar ? <span class="badge b-es">ENERGY STAR</span> : <span class="small muted">listing</span>}</td>
+            <td class="r num">{usd(lowestPrice(s))}</td>
+            <td><a href={best.url} rel="nofollow noopener" target="_blank">{best.retailer}</a>{s.prices.length > 1 && <span class="small muted"> +{s.prices.length - 1}</span>}</td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+</div>

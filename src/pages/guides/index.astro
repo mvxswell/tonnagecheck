@@ -1,0 +1,15 @@
+---
+import Base from '../../layouts/Base.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import { GUIDES } from '../../data/guides';
+---
+<Base title="HVAC buyer guides: quotes, sizing, rebates & contractors | TonnageCheck" description="Plain-English guides for homeowners buying a heat pump, AC or furnace: spotting rip-off quotes, sizing, equipment vs installed cost, choosing a contractor, rebates and AHRI certificates.">
+  <p class="crumbs"><a href="/">Home</a> / Guides</p>
+  <h1>Buyer guides</h1>
+  <p class="lead">Written from the buyer's side of the table. Every price in these guides comes from our sourced data, and every rule links to the agency that wrote it.</p>
+  <div class="grid">
+    {GUIDES.map((g) => <a class="card gl" href={`/guides/${g.slug}/`}><b>{g.h1}</b><span class="small muted">{g.description}</span></a>)}
+  </div>
+  <Newsletter />
+</Base>
+<style>.gl{text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:6px}.gl:hover{border-color:var(--acc)}</style>

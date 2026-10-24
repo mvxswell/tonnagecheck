@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import { SOURCES } from '../data/sources';
+import { SYSTEMS, LINE_SETS, BENCHMARKS } from '../data/equipment';
+import { seedDateLabel, cpi } from '../lib/facts';
+const esCount = SYSTEMS.filter((s) => s.energyStar).length;
+const retailers = [...new Set(SYSTEMS.flatMap((s) => s.prices.map((p) => p.retailer)))];
+const priceCount = SYSTEMS.reduce((n, s) => n + s.prices.length, 0);
+---
+<Base title="Methodology & sources: how TonnageCheck grades HVAC quotes | TonnageCheck" description="Exactly where every TonnageCheck number comes from: retailer listings, the EPA ENERGY STAR API, the DOE REMDB installed-cost model, CPI-U, IRS and statute text. And how grades are assigned.">
+  <p class="crumbs"><a href="/">Home</a> / Methodology</p>
+  <article class="prose">
+    <h1>Methodology &amp; sources</h1>
+    <p class="lead">Rule #1 at TonnageCheck: no fabricated prices or specs. Every equipment price, efficiency rating, tax credit statement and benchmark on this site comes from a public source we link to. Where a number is a modelled estimate rather than a listed price, it carries an <span class="badge b-est">estimate</span> badge and an explanation.</p>
+
+    <h2 id="prices">Equipment prices</h2>
+    <p>{SYSTEMS.length} systems and {LINE_SETS.length} line set, {priceCount} price points from {retailers.join(' and ')}, captured {seedDateLabel} by <code>scripts/fetch-energystar-seed.mjs</code>. The script reads each listing's published price, model numbers and spec table, identifies itself with an honest user agent, waits a second between requests, and only fetches pages the retailers' robots.txt allows. Listings it cannot parse are dropped and logged, never filled in by hand.</p>
+    <p>These are public online retail prices. Contractors usually buy from distributors at unpublished prices, typically lower. We label them "wholesale equipment value" on the scorecard because they are the closest verifiable public proxy for what the equipment costs, not because they are distributor prices.</p>
+
+    <h2 id="specs">Efficiency ratings</h2>
+    <p>For each system we query the {SOURCES.esApi.publisher} dataset (<a href={SOURCES.esApi.url}>{SOURCES.esApi.title}</a>) by outdoor model number, and accept a record only when its indoor model also matches the listing, or its SEER2 matches the listing exactly. {esCount} of {SYSTEMS.length} systems match; those pages show SEER2, EER2, HSPF2, COP at 5°F, capacity at 5°F and 47°F, and the AHRI reference number straight from the ENERGY STAR record, with a link to it. For the rest, ratings come from the retailer's spec table for that listing's own components and are labelled "listing". Systems below 15.2 SEER2 are below the <a href={SOURCES.esCriteria.url}>ENERGY STAR minimum</a> for split systems, which we note.</p>
+
+    <h2 id="benchmarks">Installed-cost benchmarks</h2>
+    <p>Fair installed ranges come from the <a href={SOURCES.remdb.url}>{SOURCES.remdb.title}</a>, published by the {SOURCES.remdb.publisher}. We download its data file (<code>{BENCHMARKS.remdb.dataUrl}</code>) and evaluate its regressions exactly as the REMDB web app does: <em>{BENCHMARKS.remdb.formula}</em>.</p>
+    <ul>
+      <li><b>Ducted heat pump:</b> "Air Source Heat Pump, Centrally ducted" (retrofit), by tons and SEER. REMDB's data source for this class is "LBNL Regressions, August 2024", built from incentive-program project costs, and its notes say low and high are about ±40%.</li>
+      <li><b>Mini-split:</b> "Air Source Heat Pump, Non-ducted" single-zone (up to 1.5 tons) or multi-zone.</li>
+      <li><b>AC + furnace:</b> "Air Conditioner, Centrally ducted" plus "Furnaces, Gas Furnace" at the furnace size and AFUE you select.</li>
+      <li><b>Heat pump only (outdoor unit):</b> REMDB has no class for this. We take the median listed condenser price and apply REMDB's stated installed-to-retail ratio of 1.5, and the "as high as 2" its notes mention for some markets, using 1.75 as the midpoint and ±40% around the ends. This line is always marked as an estimate.</li>
+      <li><b>Adders:</b> REMDB "Electric Panel, 200A" (REMDB rates its sources weakly, and we say so) and "Thermostat, Smart". A new line set adds its listed price. Ductwork has no public benchmark, so we ask you to enter the itemized ductwork amount and grade the rest.</li>
+    </ul>
+    <p>REMDB uses SEER (SEER1). We convert with SEER ≈ SEER2 ÷ 0.95, the usual approximation for ducted split systems after the 2023 test procedure change. When we have matching listings in your tier we use their median SEER2; otherwise the midpoint of the tier.</p>
+    <p>REMDB publishes 2023 dollars. We restate them with CPI-U (<a href={SOURCES.fredCpi.url}>{cpi.series}</a>): {cpi.baseMonth.slice(0, 7)} = {cpi.baseValue}, {cpi.latestMonth.slice(0, 7)} = {cpi.latestValue}, factor {cpi.factor}.</p>
+    <p>REMDB costs are national averages, divided by location multipliers in the underlying data. We do not apply a regional adjustment, because we do not have a public, citable one at ZIP level. Expect high-cost metros to run above the midpoint.</p>
+
+    <h2 id="grading">Grades</h2>
+    <p>We compare the graded quote (your total minus any itemized ductwork) with the benchmark midpoint:</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Grade</th><th>Quote vs. benchmark midpoint</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><b>A</b></td><td>At or below the midpoint</td><td><span class="badge b-fair">Fair</span></td></tr>
+        <tr><td><b>B</b></td><td>Up to 15% above</td><td><span class="badge b-fair">Fair</span></td></tr>
+        <tr><td><b>C</b></td><td>15–30% above</td><td><span class="badge b-over">Overpriced</span></td></tr>
+        <tr><td><b>D</b></td><td>More than 30% above, up to the top of the range</td><td><span class="badge b-over">Overpriced</span></td></tr>
+        <tr><td><b>F</b></td><td>Above the top of the benchmark range</td><td><span class="badge b-red">Red Flag</span></td></tr>
+      </tbody>
+    </table></div>
+    <p>A quote below the bottom of the range is also flagged as a Red Flag, because very low prices often mean missing scope.</p>
+
+    <h2 id="credits">Tax credits and rebates</h2>
+    <ul>
+      <li><a href={SOURCES.irsObbba.url}>IRS: One, Big, Beautiful Bill provisions</a>. 25C "Not allowed for any property placed in service after Dec. 31, 2025."</li>
+      <li><a href={SOURCES.irs25c.url}>IRS: Energy Efficient Home Improvement Credit</a></li>
+      <li><a href={SOURCES.hearStatute.url}>{SOURCES.hearStatute.title}</a>. {SOURCES.hearStatute.note}</li>
+      <li><a href={SOURCES.doeRebates.url}>{SOURCES.doeRebates.title}</a> ({SOURCES.doeRebates.publisher})</li>
+      <li><a href={SOURCES.esCriteria.url}>{SOURCES.esCriteria.title}</a>. {SOURCES.esCriteria.note}</li>
+    </ul>
+
+    <h2 id="data">What we store</h2>
+    <p>If you leave the box ticked, an anonymized copy of your audit is stored: the first three ZIP digits, system type, size, optional brand and model, quote, equipment value and grade. Second-opinion requests store the contact details you type, and are only readable by TonnageCheck staff. See <a href="/privacy/">privacy</a>.</p>
+
+    <h2 id="all-sources">All sources</h2>
+    <ul>{Object.values(SOURCES).map((s) => <li><a href={s.url}>{s.title}</a> ({s.publisher})</li>)}</ul>
+  </article>
+</Base>

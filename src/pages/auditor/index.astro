@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import Auditor from '../../components/Auditor.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import { SITE } from '../../config';
+import { seedDateLabel, cpi } from '../../lib/facts';
+
+const faq = [
+  ['Where do the equipment prices come from?', `Public online listings at HVACDirect and Alpine Home Air, captured ${seedDateLabel}. Each system page links to the listing. Contractor distributor pricing is not published and is usually lower.`],
+  ['Where does the "fair installed price" come from?', 'The National Residential Efficiency Measures Database (REMDB), published by the National Laboratory of the Rockies (formerly NREL) for the U.S. Department of Energy. Its heat pump and AC regressions are built from Lawrence Berkeley National Laboratory project-cost data. It is a national average, so high-cost metros can run above it.'],
+  ['Why do you adjust for inflation?', `REMDB publishes 2023 dollars. We multiply by ${cpi.factor} (CPI-U, ${cpi.baseMonth.slice(0, 7)} to ${cpi.latestMonth.slice(0, 7)}, from FRED) so the benchmark is in today's dollars.`],
+  ['Is the federal heat pump tax credit still available?', 'No. The IRS lists the 25C energy efficient home improvement credit as not allowed for property placed in service after December 31, 2025. Income-qualified HEAR rebates and utility rebates may still be available depending on your state.'],
+  ['Do you store my quote?', 'Only if you leave the box ticked, and only anonymized: the first three digits of your ZIP, system type, size, optional brand and model, the price and the grade. No name, email or full address.'],
+];
+const ld = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) };
+---
+<Base title="HVAC Quote Auditor: grade your AC, furnace or heat pump quote A–F | TonnageCheck" description="Free HVAC quote checker. Compare your contractor's price to listed equipment prices and the DOE REMDB installed-cost benchmark, see the implied markup, and check rebates." jsonld={ld}>
+  <p class="crumbs"><a href="/">Home</a> / Quote auditor</p>
+  <h1>HVAC &amp; heat pump quote auditor</h1>
+  <p class="lead">A grade, the equipment's real listed price, the benchmark installed cost and the markup in your quote. Takes about 30 seconds and needs no email. If you are overcharged, we can connect you with an independent master tech for a second quote.</p>
+  <Auditor />
+  <section class="prose">
+    <h2>Questions</h2>
+    {faq.map(([q, a]) => <><h3>{q}</h3><p>{a}</p></>)}
+    <p><a href="/about/">Full methodology and source list</a> · <a href="/guides/how-to-tell-if-hvac-quote-is-ripoff/">How to tell if an HVAC quote is a rip-off</a></p>
+  </section>
+  <Newsletter />
+</Base>

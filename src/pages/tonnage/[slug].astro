@@ -1,0 +1,85 @@
+---
+import Base from '../../layouts/Base.astro';
+import Auditor from '../../components/Auditor.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import SystemTable from '../../components/SystemTable.astro';
+import { TONNAGES, tonSlug, systemsFor, SYSTEM_TYPE_LABEL, TIER_LABEL, type SystemType, type Tier } from '../../data/equipment';
+import { fairRange, equipmentStats, usd, fmtRange, seedDateLabel } from '../../lib/facts';
+import { SITE } from '../../config';
+
+export function getStaticPaths() {
+  return TONNAGES.map((t) => ({ params: { slug: tonSlug(t) }, props: { tons: t } }));
+}
+const { tons } = Astro.props as { tons: number };
+const btu = tons * 12000;
+const systems = systemsFor(tons).sort((a, b) => a.systemType.localeCompare(b.systemType) || Math.min(...a.prices.map((p) => p.price)) - Math.min(...b.prices.map((p) => p.price)));
+const types: SystemType[] = tons <= 1.5 ? ['central-heat-pump', 'mini-split'] : ['central-heat-pump', 'mini-split', 'ac-furnace', 'heat-pump-only'];
+const tiers: Tier[] = ['standard', 'mid', 'high'];
+const rows = types.map((ty) => ({ ty, stats: equipmentStats(ty, tons), ranges: tiers.map((ti) => fairRange(ty, tons, ti)) }));
+const hp = rows[0];
+const idx = TONNAGES.indexOf(tons as (typeof TONNAGES)[number]);
+const prev = TONNAGES[idx - 1];
+const next = TONNAGES[idx + 1];
+const title = `${tons}-Ton Heat Pump & AC Cost: equipment prices vs installed (${new Date().getFullYear()}) | TonnageCheck`;
+const description = `What a ${tons}-ton (${btu.toLocaleString('en-US')} BTU/h) heat pump or AC system costs: ${systems.length} listed systems with sourced prices, plus DOE-lab installed-cost ranges by efficiency tier.`;
+const ld = {
+  '@context': 'https://schema.org', '@type': 'Dataset',
+  name: `${tons}-ton HVAC equipment prices and installed-cost benchmarks`,
+  description, url: `${SITE.url}/tonnage/${tonSlug(tons)}/`, dateModified: new Date().toISOString().slice(0, 10),
+  creator: { '@type': 'Organization', name: SITE.name },
+  isBasedOn: ['https://remdb.nlr.gov/', 'https://data.energystar.gov/', 'https://hvacdirect.com/'],
+};
+---
+<Base title={title} description={description} jsonld={ld}>
+  <p class="crumbs"><a href="/">Home</a> / <a href="/tonnage/">By tonnage</a> / {tons} ton</p>
+  <h1>{tons}-ton heat pump &amp; AC cost</h1>
+  <p class="lead">A {tons}-ton system moves {btu.toLocaleString('en-US')} BTU per hour. Below: what {tons}-ton equipment lists for online today, and what a DOE national-lab benchmark says it should cost installed.</p>
+
+  {hp.stats.count > 0 && (
+    <div class="grid kp">
+      <div class="card"><div class="small muted">Listed price, {tons}-ton ducted heat pump systems</div><div class="v num">{usd(hp.stats.min)}–{usd(hp.stats.max)}</div><div class="small muted">{hp.stats.count} systems, captured {seedDateLabel}</div></div>
+      <div class="card"><div class="small muted">Installed benchmark, standard efficiency <span class="badge b-est">estimate</span></div><div class="v num">{fmtRange(hp.ranges[0])}</div><div class="small muted">Midpoint {usd(hp.ranges[0].mid)}</div></div>
+      <div class="card"><div class="small muted">Installed benchmark, high efficiency <span class="badge b-est">estimate</span></div><div class="v num">{fmtRange(hp.ranges[2])}</div><div class="small muted">Midpoint {usd(hp.ranges[2].mid)}</div></div>
+    </div>
+  )}
+
+  <h2>Installed-cost benchmark by system type and efficiency</h2>
+  <p class="small muted">REMDB (National Laboratory of the Rockies, formerly NREL) replacement-cost regressions, restated from 2023 dollars with CPI-U. National averages: high-cost metros run above them. Ductwork, permits beyond the norm and panel work are not included. <a href="/about/#benchmarks">Method</a></p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>System type</th>{tiers.map((t) => <th class="r">{TIER_LABEL[t].split(' (')[0]}</th>)}<th class="r">Listed equipment</th></tr></thead>
+      <tbody>
+        {rows.map((r) => (
+          <tr>
+            <td>{SYSTEM_TYPE_LABEL[r.ty]}</td>
+            {r.ranges.map((x) => <td class="r num">{usd(x.mid)}<br /><span class="small muted">{fmtRange(x)}</span></td>)}
+            <td class="r num">{r.stats.count ? (r.stats.min === r.stats.max ? usd(r.stats.min) : `${usd(r.stats.min)}–${usd(r.stats.max)}`) : '—'}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="small muted">"Heat pump only" assumes the outdoor unit alone is replaced; its range is anchored on listed condenser prices, not REMDB, and is an estimate. AC + furnace assumes an 80,000 BTU/h, 80% AFUE furnace.</p>
+
+  <h2>{tons}-ton systems with listed prices</h2>
+  {systems.length ? <SystemTable systems={systems} /> : <p>No {tons}-ton listings in our data yet. The auditor uses the nearest size and says so.</p>}
+
+  <h2>Is {tons} tons the right size?</h2>
+  <div class="prose">
+    <p>Tonnage should come from a room-by-room load calculation (ACCA Manual J), not from square footage alone. Insulation, windows, air leakage, ceiling height and climate can move the answer by a ton or more. An oversized system short-cycles, dehumidifies poorly and costs more up front; an undersized one runs constantly on design days.</p>
+    <p>If your contractor matched the old unit's size without a load calculation, ask for one. If two contractors quote different tonnages for the same house, ask both to show their Manual J.</p>
+  </div>
+
+  <Auditor tons={tons} heading={`Audit a ${tons}-ton quote`} />
+
+  <p class="pager">
+    {prev && <a href={`/tonnage/${tonSlug(prev)}/`}>← {prev} ton</a>}
+    {next && <a href={`/tonnage/${tonSlug(next)}/`}>{next} ton →</a>}
+  </p>
+  <Newsletter />
+</Base>
+
+<style>
+.kp .v{font-size:1.35rem;font-weight:700;margin:6px 0 2px}
+.pager{display:flex;justify-content:space-between;margin-top:24px;font-weight:600}
+</style>

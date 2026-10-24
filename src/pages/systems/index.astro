@@ -1,0 +1,46 @@
+---
+import Base from '../../layouts/Base.astro';
+import SystemTable from '../../components/SystemTable.astro';
+import { SYSTEMS, SYSTEM_TYPE_LABEL, lowestPrice } from '../../data/equipment';
+import { seedDateLabel } from '../../lib/facts';
+const systems = [...SYSTEMS].sort((a, b) => a.tons - b.tons || lowestPrice(a) - lowestPrice(b));
+---
+<Base title="HVAC equipment price lookup: heat pumps, mini-splits & AC systems | TonnageCheck" description={`Search ${SYSTEMS.length} real heat pump, mini-split and AC + furnace systems by brand, model or size. Listed online prices with links, plus ENERGY STAR SEER2/HSPF2 ratings and AHRI numbers.`}>
+  <p class="crumbs"><a href="/">Home</a> / Equipment prices</p>
+  <h1>Equipment price lookup</h1>
+  <p class="lead">Every system below is a real listing with its price captured {seedDateLabel}. Ratings come from the EPA ENERGY STAR database where the exact outdoor + indoor pairing is certified, and from the listing otherwise.</p>
+  <div class="filters card">
+    <div><label for="q">Search brand, model or size</label><input id="q" type="search" placeholder="e.g. Goodman, GLZS, 3 ton" autocomplete="off" /></div>
+    <div><label for="ft">Type</label><select id="ft"><option value="">All types</option>{Object.entries(SYSTEM_TYPE_LABEL).map(([v, l]) => <option value={v}>{l}</option>)}</select></div>
+    <div><label for="fn">Size</label><select id="fn"><option value="">All sizes</option>{[...new Set(SYSTEMS.map((s) => s.tons))].sort((a, b) => a - b).map((t) => <option value={t}>{t} ton</option>)}</select></div>
+  </div>
+  <p class="small muted" id="count" aria-live="polite">{systems.length} systems</p>
+  <SystemTable systems={systems} searchable />
+  <p class="small muted">Prices are public online retail prices, not contractor distributor pricing. They change; click through for today's price. Missing a system you were quoted? <a href="/auditor/">The auditor</a> still works with the nearest match.</p>
+</Base>
+
+<style>
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin:16px 0 8px}
+@media (max-width:640px){.filters{grid-template-columns:1fr}}
+</style>
+
+<script>
+  const q = document.getElementById('q') as HTMLInputElement;
+  const ft = document.getElementById('ft') as HTMLSelectElement;
+  const fn = document.getElementById('fn') as HTMLSelectElement;
+  const count = document.getElementById('count')!;
+  const rows = [...document.querySelectorAll<HTMLTableRowElement>('.systable tbody tr')];
+  function apply() {
+    const terms = q.value.toLowerCase().split(/\s+/).filter(Boolean);
+    let n = 0;
+    for (const r of rows) {
+      const ok = terms.every((t) => r.dataset.search!.includes(t)) && (!ft.value || r.dataset.type === ft.value) && (!fn.value || r.dataset.tons === fn.value);
+      r.hidden = !ok;
+      if (ok) n++;
+    }
+    count.textContent = `${n} of ${rows.length} systems`;
+  }
+  q.addEventListener('input', apply);
+  ft.addEventListener('change', apply);
+  fn.addEventListener('change', apply);
+</script>

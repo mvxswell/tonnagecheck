@@ -1,0 +1,49 @@
+---
+import Base from '../../layouts/Base.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import { GUIDES, type Guide } from '../../data/guides';
+import { SITE } from '../../config';
+
+export function getStaticPaths() {
+  return GUIDES.map((g) => ({ params: { slug: g.slug }, props: { g } }));
+}
+const { g } = Astro.props as { g: Guide };
+const html = g.body();
+const words = html.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+const others = GUIDES.filter((x) => x.slug !== g.slug);
+const ld = [
+  {
+    '@context': 'https://schema.org', '@type': 'Article', headline: g.h1, description: g.description,
+    datePublished: g.updated, dateModified: g.updated, wordCount: words,
+    author: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+    publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+    mainEntityOfPage: `${SITE.url}/guides/${g.slug}/`,
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE.url}/` },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: `${SITE.url}/guides/` },
+      { '@type': 'ListItem', position: 3, name: g.h1, item: `${SITE.url}/guides/${g.slug}/` },
+    ],
+  },
+];
+---
+<Base title={g.title} description={g.description} jsonld={ld}>
+  <p class="crumbs"><a href="/">Home</a> / <a href="/guides/">Guides</a></p>
+  <article class="prose">
+    <h1>{g.h1}</h1>
+    <p class="small muted">Updated {g.updated} · {Math.max(1, Math.round(words / 230))} min read · Figures are computed from our sourced data at publish time.</p>
+    <Fragment set:html={html} />
+    <div class="cta-box card">
+      <b>Have a quote in hand?</b> <a href="/auditor/">Grade it in 30 seconds</a>, free, no email required.
+    </div>
+  </article>
+  <h2>More guides</h2>
+  <ul>{others.map((o) => <li><a href={`/guides/${o.slug}/`}>{o.h1}</a></li>)}</ul>
+  <Newsletter />
+</Base>
+
+<style>
+.cta-box{margin-top:28px;border-color:var(--acc)}
+article :global(.tablewrap){margin:12px 0}
+</style>

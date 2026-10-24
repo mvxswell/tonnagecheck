@@ -1,0 +1,27 @@
+---
+import Base from '../../layouts/Base.astro';
+import { TONNAGES, tonSlug } from '../../data/equipment';
+import { fairRange, equipmentStats, usd, fmtRange } from '../../lib/facts';
+const rows = TONNAGES.map((t) => ({ t, hp: equipmentStats('central-heat-pump', t), fair: fairRange('central-heat-pump', t, 'standard'), fairHi: fairRange('central-heat-pump', t, 'high') }));
+---
+<Base title="HVAC cost by tonnage: 1.5 to 5 ton heat pump & AC prices | TonnageCheck" description="Compare 1.5, 2, 2.5, 3, 3.5, 4 and 5-ton heat pump and AC costs: listed equipment prices with sources, and DOE-lab installed-cost benchmarks by efficiency tier.">
+  <p class="crumbs"><a href="/">Home</a> / By tonnage</p>
+  <h1>HVAC &amp; heat pump cost by tonnage</h1>
+  <p class="lead">One ton of cooling is 12,000 BTU per hour. Pick a size to see real listed systems and the installed-cost benchmark.</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Size</th><th class="r">Listed ducted heat pump systems</th><th class="r">Installed, standard <span class="badge b-est">est.</span></th><th class="r">Installed, high-eff. <span class="badge b-est">est.</span></th></tr></thead>
+      <tbody>
+        {rows.map((r) => (
+          <tr>
+            <td><a href={`/tonnage/${tonSlug(r.t)}/`}><b>{r.t} ton</b></a> <span class="small muted">{(r.t * 12000).toLocaleString('en-US')} BTU/h</span></td>
+            <td class="r num">{r.hp.count ? `${usd(r.hp.min)}–${usd(r.hp.max)}` : '—'} <span class="small muted">({r.hp.count})</span></td>
+            <td class="r num">{fmtRange(r.fair)}</td>
+            <td class="r num">{fmtRange(r.fairHi)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="small muted">Installed ranges: REMDB ducted air-source heat pump replacement regression, restated in today's dollars. <a href="/about/#benchmarks">Method</a>. Listed prices link to retailers on each size page.</p>
+</Base>
