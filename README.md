@@ -8,6 +8,7 @@ npm run build      # → dist/ (static; deploy anywhere)
 npm run dev        # local dev server
 npm run seed       # re-fetch prices, ENERGY STAR specs, REMDB benchmarks, CPI → src/data/seed/*.json
 npm run check:sources  # are the seeded listings still live and priced within 10%?
+npm run indexnow   # IndexNow dry run for live sitemap URLs (add -- --submit to send)
 ```
 
 Node 20+. No env vars are required: without Supabase the auditor and forms work entirely in the browser (forms fall back to a prefilled email).
@@ -16,13 +17,15 @@ Node 20+. No env vars are required: without Supabase the auditor and forms work 
 
 | Data | Source | How it gets in |
 |---|---|---|
-| Equipment prices | HVACDirect listings (32 systems, 1 line set) and Alpine Home Air (cross-check on condensers) | `scripts/seed-sources.json` lists the URLs; `scripts/fetch-energystar-seed.mjs` reads the price from each page (`product:price:amount` / JSON-LD `offers.price`) |
+| Equipment prices | HVACDirect listings (65 systems across 10 brands, 1 line set) and Alpine Home Air (cross-check on condensers) | `scripts/seed-sources.json` lists the URLs; `scripts/fetch-energystar-seed.mjs` reads the price from each page (`product:price:amount` / JSON-LD `offers.price`) |
 | SEER2 / EER2 / HSPF2 / COP@5°F / AHRI ref | EPA ENERGY STAR API, dataset `w7cv-9xjt` | Matched by outdoor model prefix and accepted only if the indoor model (or exact SEER2) also matches; otherwise the listing's own spec table, labelled "listing" |
 | Installed-cost ranges | REMDB, National Laboratory of the Rockies (formerly NREL), `https://remdb.nlr.gov/db.json` | Same formula as the REMDB web app; always shown with an **estimate** badge and methodology |
 | 2023$ → today | CPI-U `CPIAUCSL` via FRED | Factor stored in `benchmarks.seed.json` |
 | Tax credit / rebate rules | IRS (25C, OBBB provisions), 42 U.S.C. § 18795a, DOE, ENERGY STAR criteria | `src/data/sources.ts`, every URL checked live |
 
 Never hand-edit `src/data/seed/*.json`. To add a system, add its listing URL to `scripts/seed-sources.json` and run `npm run seed`. Failures are written to the seed's `failures` array and left out. The build fails if any `/systems/*` page lacks a retailer link, if titles or descriptions are duplicated, if a canonical is wrong, or if JSON-LD does not parse.
+
+Brand hubs (`/brands/`) are generated from whichever brands have live listings in the seed (`src/data/brands.ts`). Bryant and American Standard have no listings at HVACDirect or Alpine Home Air, so they have no pages; Carrier is ductless-only and Daikin is mini-split-only for the same reason. Guides live in `src/data/guides/` and compute every figure from the seed through `src/lib/facts.ts`.
 
 Known limits, stated on the site:
 - Retail online prices are not distributor (true wholesale) prices; the UI says so.
@@ -54,3 +57,4 @@ Each also has a global hourly cap. Rate-limit keys are a daily-rotating SHA-256 
 - Newsletter sign-ups land in `newsletter_subscribers`; export them to your sending tool (or set `PUBLIC_NEWSLETTER_URL` if you would rather use a hosted subscribe page when Supabase is off).
 - `public/og-image.png` (1200×630) is rendered from `public/og-image.svg` in headless Chrome; re-render it if you edit the SVG.
 - Re-run `npm run seed` before each deploy (or weekly) so prices stay current.
+- After each deploy, submit URLs to IndexNow: `npm run build && npm run indexnow -- --submit`. It only sends URLs that already return 200 on the live site (dry run without `--submit`).
