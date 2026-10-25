@@ -1,7 +1,7 @@
 ---
 import { SITE } from '../config';
-interface Props { standalone?: boolean }
-const { standalone = false } = Astro.props;
+interface Props { standalone?: boolean; brandModel?: string }
+const { standalone = false, brandModel = '' } = Astro.props;
 ---
 <form class="cform" data-standalone={standalone ? '1' : undefined} novalidate>
   <h2>Get a second opinion from an independent master tech</h2>
@@ -12,7 +12,7 @@ const { standalone = false } = Astro.props;
     <div><label for="c-phone">Phone <span class="muted small">(optional)</span></label><input id="c-phone" name="phone" type="tel" maxlength="40" autocomplete="tel" /></div>
     <div><label for="c-zip">ZIP code</label><input id="c-zip" name="zip" inputmode="numeric" maxlength="5" required autocomplete="postal-code" /></div>
     <div><label for="c-quoted">Quote you received ($)</label><input id="c-quoted" name="quoted" inputmode="decimal" maxlength="12" /></div>
-    <div><label for="c-bm">Brand / model quoted</label><input id="c-bm" name="brandModel" maxlength="160" placeholder="e.g. Carrier 3-ton 16 SEER2" /></div>
+    <div><label for="c-bm">Brand / model quoted</label><input id="c-bm" name="brandModel" maxlength="160" placeholder="e.g. Carrier 3-ton 16 SEER2" value={brandModel || undefined} /></div>
     <div class="c2">
       <label for="c-time">Timeline</label>
       <select id="c-time" name="timeline">

@@ -1,7 +1,11 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Auditor from '../../components/Auditor.astro';
 import Newsletter from '../../components/Newsletter.astro';
-import { GUIDES, type Guide } from '../../data/guides';
+import { GUIDES, type Guide } from '../../data/guides/index';
+import { brandByName } from '../../data/brands';
+import { tonSlug, lowestPrice } from '../../data/equipment';
+import { systemsWhere, usd } from '../../lib/facts';
 import { SITE } from '../../config';
 
 export function getStaticPaths() {
@@ -10,6 +14,10 @@ export function getStaticPaths() {
 const { g } = Astro.props as { g: Guide };
 const html = g.body();
 const words = html.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+const rel = g.related ?? {};
+const relSystems = systemsWhere(rel.systems ?? {}).slice(0, 6);
+const relTons = [...new Set([...(rel.tons ?? []), ...relSystems.map((s) => s.tons)])].sort((a, b) => a - b);
+const relBrands = [...new Set([...(rel.brands ?? []), ...relSystems.map((s) => s.brand)])].map((b) => brandByName(b)).filter((b) => !!b);
 const others = GUIDES.filter((x) => x.slug !== g.slug);
 const ld = [
   {
@@ -34,16 +42,32 @@ const ld = [
     <h1>{g.h1}</h1>
     <p class="small muted">Updated {g.updated} · {Math.max(1, Math.round(words / 230))} min read · Figures are computed from our sourced data at publish time.</p>
     <Fragment set:html={html} />
-    <div class="cta-box card">
-      <b>Have a quote in hand?</b> <a href="/auditor/">Grade it in 30 seconds</a>, free, no email required.
-    </div>
   </article>
+
+  <aside class="card related" aria-labelledby="rel-h">
+    <h2 id="rel-h">Related prices</h2>
+    {relTons.length > 0 && <p><b>By size:</b> {relTons.map((t, i) => <>{i > 0 && ' · '}<a href={`/tonnage/${tonSlug(t)}/`}>{t}-ton cost</a></>)}</p>}
+    {relBrands.length > 0 && <p><b>By brand:</b> {relBrands.map((b, i) => <>{i > 0 && ' · '}<a href={`/brands/${b!.slug}/`}>{b!.name}</a></>)}</p>}
+    {relSystems.length > 0 && (
+      <ul class="rs">{relSystems.map((s) => <li><a href={`/systems/${s.slug}/`}>{s.brand} {s.tons}-ton {s.components[0]}</a> <span class="small muted">{s.specs.seer2 ?? '?'} SEER2 · <span class="num">{usd(lowestPrice(s))}</span></span></li>)}</ul>
+    )}
+    <p class="small"><a href="/auditor/">Quote auditor</a> · <a href="/systems/">All equipment prices</a> · <a href="/brands/">All brands</a></p>
+  </aside>
+
+  <Auditor systemType={g.audit?.systemType} tons={g.audit?.tons} tier={g.audit?.tier} brand={g.audit?.brand} heading="Have a quote in hand? Grade it" />
+
   <h2>More guides</h2>
-  <ul>{others.map((o) => <li><a href={`/guides/${o.slug}/`}>{o.h1}</a></li>)}</ul>
+  <ul class="more">{others.map((o) => <li><a href={`/guides/${o.slug}/`}>{o.h1}</a></li>)}</ul>
   <Newsletter />
 </Base>
 
 <style>
-.cta-box{margin-top:28px;border-color:var(--acc)}
 article :global(.tablewrap){margin:12px 0}
+.related{margin-top:28px}
+.related h2{margin-top:0;font-size:1.1rem}
+.related p{margin:6px 0}
+.rs{margin:6px 0;padding-left:18px}
+.more{columns:2;column-gap:28px}
+.more li{break-inside:avoid;margin:4px 0}
+@media (max-width:640px){.more{columns:1}}
 </style>

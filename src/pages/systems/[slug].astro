@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Auditor from '../../components/Auditor.astro';
 import { SYSTEMS, SYSTEM_TYPE_LABEL, TIER_LABEL, tonSlug, lowestPrice, belowEnergyStarMinimum, type System } from '../../data/equipment';
+import { brandSlug } from '../../data/brands';
 import { fairRange, usd, fmtRange } from '../../lib/facts';
 import { SOURCES } from '../../data/sources';
 import { SITE } from '../../config';
@@ -35,7 +36,7 @@ const ld = {
 };
 ---
 <Base title={title} description={description} jsonld={ld}>
-  <p class="crumbs"><a href="/">Home</a> / <a href="/systems/">Equipment prices</a> / <a href={`/tonnage/${tonSlug(s.tons)}/`}>{s.tons} ton</a> / {s.components[0]}</p>
+  <p class="crumbs"><a href="/">Home</a> / <a href="/brands/">Brands</a> / <a href={`/brands/${brandSlug(s.brand)}/`}>{s.brand}</a> / <a href={`/tonnage/${tonSlug(s.tons)}/`}>{s.tons} ton</a> / {s.components[0]}</p>
   <h1>{name}</h1>
   <p class="lead">{s.title}</p>
   <p>
@@ -88,7 +89,8 @@ const ld = {
   {s.ahriCertificateUrl && <p class="small"><a href={s.ahriCertificateUrl} rel="nofollow noopener" target="_blank">Retailer's AHRI certificate (PDF)</a></p>}
   <p class="note">Quoted this exact system? The model numbers on your quote should match the outdoor unit <b class="num">{s.components[0]}</b>{s.components[1] && <> and indoor unit <b class="num">{s.components.slice(1).join(' / ')}</b></>}. A different indoor coil changes the certified rating. <a href="/guides/heat-pump-rebates-and-ahri-certificate-check/">How to check an AHRI certificate</a></p>
 
-  <Auditor systemType={s.systemType} tons={s.tons} tier={s.tier} heading={`Audit a quote for this ${s.tons}-ton system`} />
+  <Auditor systemType={s.systemType} tons={s.tons} tier={s.tier} brand={s.brand} heading={`Audit a quote for this ${s.tons}-ton system`} />
+  <p>More {s.brand}: <a href={`/brands/${brandSlug(s.brand)}/`}>all {s.brand} prices by size</a> · <a href={`/auditor/?brand=${encodeURIComponent(s.brand)}`}>audit a {s.brand} quote</a></p>
 
   {related.length > 0 && (
     <>

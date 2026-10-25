@@ -4,7 +4,8 @@ import Auditor from '../components/Auditor.astro';
 import Newsletter from '../components/Newsletter.astro';
 import { SITE } from '../config';
 import { SYSTEMS, TONNAGES, tonSlug } from '../data/equipment';
-import { GUIDES } from '../data/guides';
+import { GUIDES } from '../data/guides/index';
+import { BRANDS } from '../data/brands';
 import { fairRange, equipmentStats, seedDateLabel, usd, fmtRange } from '../lib/facts';
 
 const esCount = SYSTEMS.filter((s) => s.energyStar).length;
@@ -56,6 +57,13 @@ const ld = [
     <h2>Prices by system size</h2>
     <div class="tons">
       {TONNAGES.map((t) => <a class="card tonlink" href={`/tonnage/${tonSlug(t)}/`}><span class="num">{t}</span> ton<small>{(t * 12000).toLocaleString('en-US')} BTU/h</small></a>)}
+    </div>
+  </section>
+
+  <section>
+    <h2>Prices by brand</h2>
+    <div class="tons">
+      {BRANDS.map((b) => <a class="card tonlink" href={`/brands/${b.slug}/`}>{b.name}<small>{b.systems.length} systems · {usd(b.priceMin)}+</small></a>)}
     </div>
   </section>
 

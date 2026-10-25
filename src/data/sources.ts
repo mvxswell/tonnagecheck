@@ -88,6 +88,20 @@ export const SOURCES = {
     publisher: 'U.S. Bureau of Labor Statistics via FRED, Federal Reserve Bank of St. Louis',
     url: 'https://fred.stlouisfed.org/series/CPIAUCSL',
   },
+  homesStatute: {
+    id: 'homesStatute',
+    title: '42 U.S.C. § 18795: HOMES whole-house energy savings rebates (IRA § 50121)',
+    publisher: 'Legal Information Institute, Cornell Law School',
+    url: 'https://www.law.cornell.edu/uscode/text/42/18795',
+    note: 'Single-family: lesser of $2,000 or 50% of cost for 20–35% modeled savings, $4,000 or 50% for 35%+; under 80% AMI: $4,000 / $8,000 or 80% of cost. May not be combined with another federal rebate (including HEAR) for the same single upgrade.',
+  },
+  epaTechTransitions: {
+    id: 'epaTechTransitions',
+    title: 'Technology Transitions HFC restrictions by sector',
+    publisher: 'U.S. Environmental Protection Agency',
+    url: 'https://www.epa.gov/hfcs/technology-transitions-hfc-restrictions-sector',
+    note: 'Residential and light commercial AC and heat pumps: GWP limit 700, installation compliance date January 1, 2025; no installation date for systems whose specified components were all made or imported before January 1, 2025 (May 2026 reconsideration rule).',
+  },
   hvacdirect: {
     id: 'hvacdirect',
     title: 'HVACDirect.com product listings',

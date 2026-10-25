@@ -1,0 +1,45 @@
+---
+import SystemTable from './SystemTable.astro';
+import { SYSTEM_TYPE_LABEL, type System } from '../data/equipment';
+interface Props { systems: System[]; label?: string }
+const { systems, label = 'Search brand, model or size' } = Astro.props;
+const types = [...new Set(systems.map((s) => s.systemType))];
+const sizes = [...new Set(systems.map((s) => s.tons))].sort((a, b) => a - b);
+---
+<div class="fsys" data-fsys>
+  <div class="filters card">
+    <div><label for="fs-q">{label}</label><input id="fs-q" data-q type="search" placeholder="e.g. 3 ton, 18 SEER2, model #" autocomplete="off" /></div>
+    <div><label for="fs-t">Type</label><select id="fs-t" data-t><option value="">All types</option>{types.map((v) => <option value={v}>{SYSTEM_TYPE_LABEL[v]}</option>)}</select></div>
+    <div><label for="fs-n">Size</label><select id="fs-n" data-n><option value="">All sizes</option>{sizes.map((t) => <option value={t}>{t} ton</option>)}</select></div>
+  </div>
+  <p class="small muted" data-count aria-live="polite">{systems.length} systems</p>
+  <SystemTable systems={systems} searchable />
+</div>
+
+<style>
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin:16px 0 8px}
+@media (max-width:640px){.filters{grid-template-columns:1fr}}
+</style>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-fsys]')) {
+    const q = root.querySelector('[data-q]') as HTMLInputElement;
+    const t = root.querySelector('[data-t]') as HTMLSelectElement;
+    const n = root.querySelector('[data-n]') as HTMLSelectElement;
+    const count = root.querySelector('[data-count]')!;
+    const rows = [...root.querySelectorAll<HTMLTableRowElement>('.systable tbody tr')];
+    const apply = () => {
+      const terms = q.value.toLowerCase().split(/\s+/).filter(Boolean);
+      let shown = 0;
+      for (const r of rows) {
+        const ok = terms.every((x) => r.dataset.search!.includes(x)) && (!t.value || r.dataset.type === t.value) && (!n.value || r.dataset.tons === n.value);
+        r.hidden = !ok;
+        if (ok) shown++;
+      }
+      count.textContent = `${shown} of ${rows.length} systems`;
+    };
+    q.addEventListener('input', apply);
+    t.addEventListener('change', apply);
+    n.addEventListener('change', apply);
+  }
+</script>
