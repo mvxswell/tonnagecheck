@@ -1,8 +1,8 @@
 ---
 import { auditPayload, SYSTEM_TYPE_LABEL, TIER_LABEL, TONNAGES, type SystemType, type Tier } from '../data/equipment';
 import ConciergeForm from './ConciergeForm.astro';
-interface Props { systemType?: SystemType; tons?: number; tier?: Tier; heading?: string }
-const { systemType = 'central-heat-pump', tons = 3, tier = 'standard', heading = 'Audit your HVAC quote' } = Astro.props;
+interface Props { systemType?: SystemType; tons?: number; tier?: Tier; heading?: string; brand?: string }
+const { systemType = 'central-heat-pump', tons = 3, tier = 'standard', heading = 'Audit your HVAC quote', brand = '' } = Astro.props;
 const payload = auditPayload();
 ---
 <section class="auditor" id="audit" aria-labelledby="audit-h">
@@ -65,10 +65,11 @@ const payload = auditPayload();
         <label class="check"><input type="checkbox" name="lineSet" />New refrigerant line set</label>
         <label class="check"><input type="checkbox" name="thermostat" />Smart thermostat</label>
       </fieldset>
-      <details class="f2 opt">
+      <details class="f2 opt" open={brand ? true : undefined}>
         <summary>Optional: brand &amp; model on the quote</summary>
         <div class="fgrid in">
-          <div><label for="f-brand">Brand</label><input id="f-brand" name="brand" maxlength="60" placeholder="e.g. Trane" /></div>
+          <div><label for="f-brand">Brand</label><input id="f-brand" name="brand" maxlength="60" placeholder="e.g. Trane" value={brand || undefined} /></div>
+          <p class="small muted f2 bnote" id="f-brand-note" aria-live="polite"></p>
           <div><label for="f-model">Outdoor model #</label><input id="f-model" name="model" maxlength="80" placeholder="e.g. 4TWR6036" /></div>
         </div>
       </details>
@@ -76,7 +77,7 @@ const payload = auditPayload();
     <label class="check small consent"><input type="checkbox" name="share" checked />Add this quote, anonymized (3-digit ZIP, system, price, grade; no name or contact info), to the TonnageCheck price dataset.</label>
     <p class="err small" id="tc-err" role="alert" hidden></p>
     <button class="btn big" type="submit">Get my scorecard</button>
-    <p class="small muted">Free and instant. No email required.</p>
+    <p class="small muted">Free and instant. No email required. Already sure it's too high? <button type="button" class="linkbtn" id="tc-skip-match">Request an independent second quote</button></p>
   </form>
 
   <div id="tc-result" class="result" aria-live="polite" hidden></div>
@@ -104,9 +105,11 @@ const payload = auditPayload();
 .scope .check{margin:6px 0}
 .duct-amt{margin:0 0 8px 26px;max-width:260px}
 .opt summary{cursor:pointer;font-weight:600;font-size:.92rem;color:var(--acc)}
+.bnote{margin:0;min-height:1em}
 .consent{margin:16px 0 10px;align-items:flex-start;color:var(--mut)}
 .consent input{margin-top:4px}
 .err{color:var(--bad);font-weight:600}
+.linkbtn{background:none;border:0;padding:0;font:inherit;color:var(--acc);text-decoration:underline;cursor:pointer}
 .btn.big{width:100%;padding:14px;font-size:1.08rem;margin-top:4px}
 .furnace-only{display:none}
 .aform[data-type="ac-furnace"] .furnace-only{display:block}
@@ -146,6 +149,9 @@ const payload = auditPayload();
 .cta p{color:#cfdbe5;margin:0 0 14px}
 .cta .btn{background:var(--acc2);color:var(--navy)}
 .method{font-size:.88rem;color:var(--mut)}
+#tc-result tr.hl td{background:#eef6ff}
+#tc-result tr.hl td:first-child{box-shadow:inset 3px 0 0 var(--acc)}
+.brandline{margin:0 0 10px}
 .method summary{cursor:pointer;color:var(--acc);font-weight:600}
 </style>
 
@@ -183,15 +189,37 @@ const payload = auditPayload();
 
   // prefill from ?quote=&zip=&type=&tons= (shared links)
   const qs = new URLSearchParams(location.search);
-  for (const [k, n] of [['type', 'systemType'], ['tons', 'tons'], ['tier', 'tier'], ['quote', 'quote'], ['zip', 'zip']] as const) {
+  for (const [k, n] of [['type', 'systemType'], ['tons', 'tons'], ['tier', 'tier'], ['quote', 'quote'], ['zip', 'zip'], ['brand', 'brand'], ['model', 'model']] as const) {
     const v = qs.get(k);
     const el = form.elements.namedItem(n) as HTMLInputElement | HTMLSelectElement | null;
-    if (v && el) el.value = v;
+    if (v && el) el.value = v.slice(0, 80);
   }
   syncType();
 
+  // ?brand=Goodman (or a brand prop): open the brand field and say what we have for that brand.
+  const brandInput = form.elements.namedItem('brand') as HTMLInputElement;
+  const brandNote = document.getElementById('f-brand-note')!;
+  const knownBrand = (b: string) => data.systems.find((s) => s.brand.toLowerCase() === b.trim().toLowerCase())?.brand;
+  const syncBrand = () => {
+    const b = knownBrand(brandInput.value);
+    brandNote.textContent = b ? `We have ${data.systems.filter((s) => s.brand === b).length} listed ${b} systems and will highlight them in your scorecard.` : brandInput.value.trim() ? 'No listed systems for that brand yet; we will compare against all brands.' : '';
+  };
+  if (brandInput.value) (form.querySelector('details.opt') as HTMLDetailsElement).open = true;
+  brandInput.addEventListener('input', syncBrand);
+  syncBrand();
+
   function render(input: AuditInput, brand: string, model: string) {
     const r = audit(data, input);
+    const b = knownBrand(brand);
+    const own = b ? data.systems.filter((s) => s.brand === b && s.type === input.systemType).map((s) => ({ s, p: s.prices.reduce((a, x) => (x.p < a.p ? x : a), s.prices[0]) })) : [];
+    const ownAtSize = own.filter((o) => o.s.tons === input.tons).sort((x, y) => x.p.p - y.p.p);
+    // The brand's own same-size systems that the tier match left out: shown (highlighted) for reference only,
+    // never added to the equipment-value median.
+    const extra = ownAtSize.filter((o) => !r.equipment.matched.some((m) => m.slug === o.s.slug));
+    const extraRows = extra.map((o) => `<tr class="hl"><td><a href="/systems/${esc(o.s.slug)}/">${esc(o.s.brand)} ${esc(o.s.tons)} ton</a> <span class="small muted">(${esc(o.s.tier)} tier, not in the median)</span>${o.s.energyStar ? ' <span class="badge b-es">ENERGY STAR</span>' : ''}</td><td class="r num">${o.s.seer2 ?? '—'}</td><td class="r num">${usd(o.p.p)}</td><td><a href="${esc(o.p.u)}" rel="nofollow noopener" target="_blank">${esc(o.p.r)}</a></td></tr>`).join('');
+    const brandLine = !b ? '' : ownAtSize.length
+      ? `<p class="small brandline">Lowest listed <b>${esc(b)}</b> ${input.tons}-ton system of this type: <a href="/systems/${esc(ownAtSize[0].s.slug)}/">${usd(ownAtSize[0].p.p)}</a> (<a href="${esc(ownAtSize[0].p.u)}" rel="nofollow noopener" target="_blank">${esc(ownAtSize[0].p.r)}</a>). See all <a href="/brands/${esc(b.toLowerCase().replace(/[^a-z0-9]+/g, '-'))}/">${esc(b)} prices</a>.</p>`
+      : `<p class="small brandline">No ${input.tons}-ton ${esc(b)} listing of this type in our data yet. See the <a href="/brands/${esc(b.toLowerCase().replace(/[^a-z0-9]+/g, '-'))}/">${esc(b)} brand page</a> for the sizes we do have.</p>`;
     const rebates = rebateCheck(input.systemType, input.zip, r.equipment.matched.some((m) => m.energyStar));
     const badge = r.status === 'Fair' ? 'b-fair' : r.status === 'Overpriced' ? 'b-over' : 'b-red';
     const min = Math.min(r.fair.low, r.gradedQuote) * 0.85;
@@ -231,9 +259,10 @@ const payload = auditPayload();
         <div class="sc-sec">
           <h3>Equipment we compared against</h3>
           <p class="small muted">${esc(r.equipment.matchNote)} Prices captured ${esc(data.seedDate.slice(0, 10))}; click through for today's price.</p>
+          ${brandLine}
           <div class="tablewrap"><table>
             <thead><tr><th>System</th><th class="r">SEER2</th><th class="r">Listed price</th><th>Source</th></tr></thead>
-            <tbody>${r.equipment.matched.map((m) => `<tr><td><a href="/systems/${esc(m.slug)}/">${esc(m.brand)} ${esc(m.tons)} ton</a>${m.energyStar ? ' <span class="badge b-es">ENERGY STAR</span>' : ''}</td><td class="r num">${m.seer2 ?? '—'}</td><td class="r num">${usd(m.price)}</td><td><a href="${esc(m.url)}" rel="nofollow noopener" target="_blank">${esc(m.retailer)}</a></td></tr>`).join('')}
+            <tbody>${r.equipment.matched.map((m) => `<tr${b && m.brand === b ? ' class="hl"' : ''}><td><a href="/systems/${esc(m.slug)}/">${esc(m.brand)} ${esc(m.tons)} ton</a>${m.energyStar ? ' <span class="badge b-es">ENERGY STAR</span>' : ''}</td><td class="r num">${m.seer2 ?? '—'}</td><td class="r num">${usd(m.price)}</td><td><a href="${esc(m.url)}" rel="nofollow noopener" target="_blank">${esc(m.retailer)}</a></td></tr>`).join('')}${extraRows}
             ${r.equipment.lineSet ? `<tr><td>${esc(r.equipment.lineSet.label)}</td><td class="r">—</td><td class="r num">${usd(r.equipment.lineSet.price)}</td><td><a href="${esc(r.equipment.lineSet.url)}" rel="nofollow noopener" target="_blank">HVACDirect</a></td></tr>` : ''}</tbody>
           </table></div>
         </div>
@@ -272,6 +301,19 @@ const payload = auditPayload();
     });
     return r;
   }
+
+  // Skip the audit and go straight to the second-opinion form, carrying over whatever is filled in.
+  document.getElementById('tc-skip-match')!.addEventListener('click', () => {
+    match.hidden = false;
+    const mf = match.querySelector('form') as HTMLFormElement;
+    const f = new FormData(form);
+    const set = (n: string, v: string) => { const el = mf.elements.namedItem(n) as HTMLInputElement | null; if (el && v && !el.value) el.value = v; };
+    set('zip', String(f.get('zip') || '').trim());
+    set('quoted', String(f.get('quote') || '').replace(/[$,s]/g, ''));
+    set('brandModel', [f.get('brand'), f.get('model')].filter(Boolean).join(' '));
+    match.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    (mf.elements.namedItem('name') as HTMLInputElement).focus({ preventScroll: true });
+  });
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();

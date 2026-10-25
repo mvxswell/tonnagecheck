@@ -1,16 +1,16 @@
 // Buyer guides. Every dollar figure in the prose is computed from the seed at build time via lib/facts, and
 // every policy statement is limited to what the linked primary source says.
-import { fairRange, equipmentStats, usd, fmtRange, seedDateLabel, cpi } from '../lib/facts';
-import { SYSTEMS, lowestPrice } from './equipment';
-import { SOURCES } from './sources';
+import { fairRange, equipmentStats, usd, fmtRange, seedDateLabel, cpi } from '../../lib/facts';
+import { SYSTEMS, lowestPrice } from '../equipment';
+import { SOURCES } from '../sources';
+import type { Guide } from './types';
 
-export interface Guide { slug: string; title: string; h1: string; description: string; updated: string; body: () => string }
 
 const a = (url: string, text: string) => `<a href="${url}" rel="noopener" target="_blank">${text}</a>`;
 const auditLink = '<a href="/auditor/">TonnageCheck quote auditor</a>';
 const today = new Date().toISOString().slice(0, 10);
 
-export const GUIDES: Guide[] = [
+export const CORE_GUIDES: Guide[] = [
   {
     slug: 'how-to-tell-if-hvac-quote-is-ripoff',
     title: 'How to tell if an HVAC quote is a rip-off: 9 red flags | TonnageCheck',
@@ -321,7 +321,7 @@ ${ex ? `<p><b>Example from our data:</b> the <a href="/systems/${ex.slug}/">${ex
 </ul>
 
 <h2>Putting it together</h2>
-<p>For a heat pump installed now, assume no federal tax credit, check HEAR eligibility with your state energy office if your household income is under 150% of area median, look for utility rebates by ZIP, and make the contractor show the AHRI certificate for the exact pairing on the quote. Then run the price through the ${auditLink}, which also lists the rebate links for your ZIP.</p>`;
+<p>For a heat pump installed now, assume no federal tax credit, check HEAR eligibility with your state energy office if your household income is under 150% of area median and you are replacing existing electric heating or cooling (not a gas, oil or propane furnace), look for utility rebates by ZIP, and make the contractor show the AHRI certificate for the exact pairing on the quote. Then run the price through the ${auditLink}, which also lists the rebate links for your ZIP.</p>`;
     },
   },
 ];

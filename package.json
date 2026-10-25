@@ -13,7 +13,8 @@
     "preview": "astro preview",
     "seed": "node scripts/fetch-energystar-seed.mjs",
     "check:sources": "node scripts/check-sources.mjs",
-    "seed:states": "node scripts/fetch-state-seed.mjs"
+    "seed:states": "node scripts/fetch-state-seed.mjs",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

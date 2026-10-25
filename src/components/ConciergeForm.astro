@@ -1,8 +1,8 @@
 ---
 import { SITE } from '../config';
 // idp keeps element IDs unique when a page shows this form twice (inside the auditor and standalone).
-interface Props { standalone?: boolean; idp?: string }
-const { standalone = false, idp = 'c' } = Astro.props;
+interface Props { standalone?: boolean; idp?: string; brandModel?: string }
+const { standalone = false, idp = 'c', brandModel = '' } = Astro.props;
 ---
 <form class="cform" data-standalone={standalone ? '1' : undefined} novalidate>
   <h2>Get a second opinion from an independent master tech</h2>
@@ -13,7 +13,7 @@ const { standalone = false, idp = 'c' } = Astro.props;
     <div><label for={idp + '-phone'}>Phone <span class="muted small">(optional)</span></label><input id={idp + '-phone'} name="phone" type="tel" maxlength="40" autocomplete="tel" /></div>
     <div><label for={idp + '-zip'}>ZIP code</label><input id={idp + '-zip'} name="zip" inputmode="numeric" maxlength="5" required autocomplete="postal-code" /></div>
     <div><label for={idp + '-quoted'}>Quote you received ($)</label><input id={idp + '-quoted'} name="quoted" inputmode="decimal" maxlength="12" /></div>
-    <div><label for={idp + '-bm'}>Brand / model quoted</label><input id={idp + '-bm'} name="brandModel" maxlength="160" placeholder="e.g. Carrier 3-ton 16 SEER2" /></div>
+    <div><label for={idp + '-bm'}>Brand / model quoted</label><input id={idp + '-bm'} name="brandModel" maxlength="160" placeholder="e.g. Carrier 3-ton 16 SEER2" value={brandModel || undefined} /></div>
     <div class="c2">
       <label for={idp + '-time'}>Timeline</label>
       <select id={idp + '-time'} name="timeline">

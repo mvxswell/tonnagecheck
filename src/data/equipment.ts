@@ -44,6 +44,7 @@ export interface System {
   tons: number;
   tier: Tier;
   components: string[];
+  zones: number | null;
   afue: number | null;
   furnaceBtu: number | null;
   specs: {

@@ -1,0 +1,118 @@
+---
+import Base from '../../layouts/Base.astro';
+import FilterableSystems from '../../components/FilterableSystems.astro';
+import ConciergeForm from '../../components/ConciergeForm.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import { BRANDS, type Brand } from '../../data/brands';
+import { SYSTEM_TYPE_LABEL, tonSlug, lowestPrice } from '../../data/equipment';
+import { SOURCES } from '../../data/sources';
+import { usd, fmtRange, seedDateLabel } from '../../lib/facts';
+import { SITE } from '../../config';
+
+export function getStaticPaths() {
+  return BRANDS.map((b) => ({ params: { slug: b.slug }, props: { b } }));
+}
+const { b } = Astro.props as { b: Brand };
+const auditHref = `/auditor/?brand=${encodeURIComponent(b.name)}`;
+const shortType: Record<string, string> = { 'central-heat-pump': 'ducted heat pumps', 'mini-split': 'mini-splits', 'ac-furnace': 'AC + furnace systems', 'heat-pump-only': 'heat pump condensers' };
+const cold = b.systems.filter((s) => s.energyStar?.coldClimate);
+const others = BRANDS.filter((x) => x.slug !== b.slug);
+const title = `${b.name} HVAC prices: listed equipment vs installed cost | TonnageCheck`;
+const description = `${b.systems.length} ${b.name} systems with sourced prices from ${usd(b.priceMin)} to ${usd(b.priceMax)} (${b.tonnages[0]}–${b.tonnages[b.tonnages.length - 1]} tons), next to DOE-lab installed benchmarks. Audit a ${b.name} quote free.`;
+const ld = [
+  {
+    '@context': 'https://schema.org', '@type': 'CollectionPage', name: `${b.name} HVAC equipment prices`, url: `${SITE.url}/brands/${b.slug}/`, description,
+    about: { '@type': 'Brand', name: b.name },
+    mainEntity: { '@type': 'ItemList', numberOfItems: b.systems.length, itemListElement: b.systems.map((s, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE.url}/systems/${s.slug}/`, name: `${s.brand} ${s.tons}-ton ${s.components[0]}` })) },
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE.url}/` },
+      { '@type': 'ListItem', position: 2, name: 'Brands', item: `${SITE.url}/brands/` },
+      { '@type': 'ListItem', position: 3, name: b.name, item: `${SITE.url}/brands/${b.slug}/` },
+    ],
+  },
+];
+---
+<Base title={title} description={description} jsonld={ld}>
+  <p class="crumbs"><a href="/">Home</a> / <a href="/brands/">Brands</a> / {b.name}</p>
+  <h1>{b.name} HVAC prices: equipment vs installed</h1>
+  <p class="lead">{b.systems.length} real {b.name} listings ({b.types.map((t) => shortType[t]).join(', ')}) with prices captured {seedDateLabel}, compared with the DOE national-lab installed-cost benchmark for the same size and efficiency.</p>
+
+  <div class="grid kp">
+    <div class="card"><div class="small muted">Listed equipment price span</div><div class="v num">{usd(b.priceMin)}–{usd(b.priceMax)}</div><div class="small muted">Median {usd(b.priceMedian)} across {b.systems.length} systems</div></div>
+    <div class="card"><div class="small muted">Efficiency range</div><div class="v num">{b.seer2Min === b.seer2Max ? b.seer2Min : `${b.seer2Min}–${b.seer2Max}`} SEER2</div><div class="small muted">{b.hspf2Max ? `Up to ${b.hspf2Max} HSPF2` : 'Heating rating not listed'}</div></div>
+    <div class="card"><div class="small muted">ENERGY STAR matched pairings</div><div class="v num">{b.energyStarCount} of {b.systems.length}</div><div class="small muted">{b.coldClimateCount} cold-climate certified</div></div>
+  </div>
+  <p><a class="btn" href={auditHref}>Audit a {b.name} quote</a> <a class="btn ghost" href="#second-opinion">Get an independent second quote</a></p>
+
+  <h2>{b.name} listed price vs installed benchmark, by size</h2>
+  <p class="small muted">Listed = lowest to highest public online price for {b.name} equipment at that size. Installed benchmark = REMDB (National Laboratory of the Rockies, formerly NREL) replacement-cost range for those systems' type and efficiency, restated in today's dollars; an estimate and a national average. <a href="/about/#benchmarks">Method</a></p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Size &amp; type</th><th class="r">Listed equipment</th><th class="r">Installed benchmark <span class="badge b-est">est.</span></th><th class="r">Midpoint</th><th class="r">Non-equipment at mid</th></tr></thead>
+      <tbody>
+        {b.rows.map((r) => (
+          <tr>
+            <td><a href={`/tonnage/${tonSlug(r.tons)}/`}><b>{r.tons} ton</b></a> <span class="small muted">{shortType[r.type]}</span></td>
+            <td class="r num">{r.min === r.max ? usd(r.min) : `${usd(r.min)}–${usd(r.max)}`} <span class="small muted">({r.count})</span></td>
+            <td class="r num">{fmtRange(r.fair)}</td>
+            <td class="r num">{usd(r.fair.mid)}</td>
+            <td class="r num">{usd(r.fair.mid - r.min)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="small muted">"Non-equipment at midpoint" is the benchmark midpoint minus the lowest listed {b.name} price at that size: roughly what a fairly priced install spends on labor, materials, permits, overhead and margin.</p>
+
+  <h2>Specs: SEER2, HSPF2 and cold-climate performance</h2>
+  {cold.length > 0 ? (
+    <>
+      <p>{cold.length} {b.name} {cold.length === 1 ? 'pairing is' : 'pairings are'} certified by ENERGY STAR as cold climate, which requires at least 8.1 HSPF2 (ducted) or 8.5 HSPF2 (ductless), a COP of at least 1.75 at 5°F and at least 70% of rated heating capacity at 5°F (<a href={SOURCES.esCriteria.url}>ENERGY STAR criteria</a>).</p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>System</th><th class="r">SEER2</th><th class="r">HSPF2</th><th class="r">COP at 5°F</th><th class="r">Capacity 5°F / 47°F</th><th class="r">AHRI #</th></tr></thead>
+        <tbody>{cold.map((s) => (
+          <tr><td><a href={`/systems/${s.slug}/`}>{s.tons}-ton {s.components[0]}</a></td><td class="r num">{s.energyStar!.seer2}</td><td class="r num">{s.energyStar!.hspf2}</td><td class="r num">{s.energyStar!.copAt5F ?? '—'}</td><td class="r num">{s.energyStar!.heatingCapacity5F && s.energyStar!.heatingCapacity47F ? `${Math.round((s.energyStar!.heatingCapacity5F / s.energyStar!.heatingCapacity47F) * 100)}%` : '—'}</td><td class="r num">{s.energyStar!.ahriReferenceNumber}</td></tr>
+        ))}</tbody>
+      </table></div>
+    </>
+  ) : (
+    <p>None of the {b.name} listings in our data is matched to an ENERGY STAR cold-climate record. Ratings below come from the ENERGY STAR database where the exact pairing is certified ({b.energyStarCount} of {b.systems.length}) and from the retailer listing otherwise.</p>
+  )}
+
+  <h2>Tax credits and rebates for {b.name} equipment</h2>
+  <div class="rbx">
+    <div class="card"><b>Federal 25C tax credit</b> <span class="badge b-red">Not available</span><p class="small">The IRS lists the energy efficient home improvement credit as not allowed for property placed in service after Dec. 31, 2025, so no {b.name} system installed in 2026 qualifies, cold-climate or not. ({SOURCES.irs25c.note}) <a href={SOURCES.irsObbba.url}>IRS</a> · <a href={SOURCES.irs25c.url}>25C</a></p></div>
+    {b.types.some((t) => t !== 'ac-furnace') && <div class="card"><b>HEAR / HEEHR heat pump rebate</b> <span class="badge b-over">Check eligibility</span><p class="small">{SOURCES.hearStatute.note} Since DOE Program Notice 26-2 (May 2026) it no longer covers fuel switching: it pays to replace existing electric heating or cooling, not a gas, oil or propane furnace, and insulation and air sealing come first. Run by state energy offices. <a href={SOURCES.hearStatute.url}>Statute</a> · <a href={SOURCES.doePn262.url}>Program Notice 26-2</a> · <a href="/states/">Your state</a></p></div>}
+    <div class="card"><b>Utility and state programs</b> <span class="badge b-fair">Worth checking</span><p class="small">Some require ENERGY STAR or cold-climate certification for the exact pairing; ask for the AHRI certificate. <a href={SOURCES.esRebateFinder.url}>ENERGY STAR Rebate Finder</a> · <a href={SOURCES.dsire.url}>DSIRE</a></p></div>
+  </div>
+
+  <h2>All {b.name} systems</h2>
+  <FilterableSystems systems={b.systems} label={`Search ${b.name} systems`} />
+
+  <div class="cta card">
+    <h2>Got a {b.name} quote?</h2>
+    <p>Enter the size, efficiency and price, and we'll grade it A–F against these listings and the installed benchmark, highlighting {b.name} equipment.</p>
+    <a class="btn" href={auditHref}>Audit my {b.name} quote</a>
+  </div>
+
+  <section class="card second" id="second-opinion">
+    <ConciergeForm brandModel={b.name} />
+  </section>
+
+  <h2>Other brands</h2>
+  <p>{others.map((o, i) => <>{i > 0 && ' · '}<a href={`/brands/${o.slug}/`}>{o.name}</a> <span class="small muted">({o.systems.length})</span></>)}</p>
+  <p class="small muted">Sizes we list for {b.name}: {b.tonnages.map((t, i) => <>{i > 0 && ', '}<a href={`/tonnage/${tonSlug(t)}/`}>{t} ton</a></>)}. All systems: <a href="/systems/">equipment price lookup</a>. Lowest-priced {b.name} listing: <a href={`/systems/${[...b.systems].sort((x, y) => lowestPrice(x) - lowestPrice(y))[0].slug}/`}>{SYSTEM_TYPE_LABEL[[...b.systems].sort((x, y) => lowestPrice(x) - lowestPrice(y))[0].systemType].toLowerCase()}</a>.</p>
+  <Newsletter />
+</Base>
+
+<style>
+.kp .v{font-size:1.35rem;font-weight:700;margin:6px 0 2px}
+.rbx{display:grid;gap:10px}
+.rbx p{margin:6px 0 0}
+.cta{margin-top:28px;background:var(--navy);color:#fff;border:0}
+.cta h2{margin-top:0;color:#fff}.cta p{color:#cfdbe5}
+.cta .btn{background:var(--acc2);color:var(--navy)}
+.second{margin-top:20px;border:2px solid var(--acc);scroll-margin-top:80px}
+</style>

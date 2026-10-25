@@ -139,6 +139,13 @@ export const SOURCES = {
     publisher: 'U.S. Census Bureau',
     url: 'https://www2.census.gov/geo/docs/reference/codes2020/national_county2020.txt',
   },
+  epaTechTransitions: {
+    id: 'epaTechTransitions',
+    title: 'Technology Transitions HFC restrictions by sector',
+    publisher: 'U.S. Environmental Protection Agency',
+    url: 'https://www.epa.gov/hfcs/technology-transitions-hfc-restrictions-sector',
+    note: 'Residential and light commercial AC and heat pumps: GWP limit 700, installation compliance date January 1, 2025; no installation date for systems whose specified components were all made or imported before January 1, 2025 (May 2026 reconsideration rule).',
+  },
   hvacdirect: {
     id: 'hvacdirect',
     title: 'HVACDirect.com product listings',
