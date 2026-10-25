@@ -1,0 +1,41 @@
+---
+import Base from '../../layouts/Base.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import { STATES, EFFICIENCY, heatingCosts, climateSummary, STATE_SEED_DATE } from '../../data/states';
+import { SOURCES } from '../../data/sources';
+import { fairRange, usd } from '../../lib/facts';
+import { SITE } from '../../config';
+const f3 = fairRange('central-heat-pump', 3);
+const rows = STATES.map((s) => {
+  const c = heatingCosts(s);
+  return { s, clim: climateSummary(s), hp: c.find((x) => x.label.startsWith('Heat pump,')), gas: c.find((x) => x.label.startsWith(`Gas furnace, ${EFFICIENCY.afueLow}`)) };
+});
+const indexed = STATES.filter((s) => s.complete).length;
+const asOf = new Date(STATE_SEED_DATE).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+const ld = { '@context': 'https://schema.org', '@type': 'ItemList', name: 'Heat pump cost, energy prices and rebates by state', itemListElement: STATES.filter((s) => s.complete).map((s, i) => ({ '@type': 'ListItem', position: i + 1, name: s.name, url: `${SITE.url}/states/${s.slug}/` })) };
+---
+<Base title={`Heat Pump Cost & Rebates by State: ${usd(f3.low)}–${usd(f3.high)}`} description={`Heat pump cost by state: ${usd(f3.low)}–${usd(f3.high)} for a 3-ton install (US DOE-lab benchmark), plus EIA electricity and gas prices, IECC climate zones and 2026 rebate rules.`} jsonld={ld}>
+  <p class="crumbs"><a href="/">Home</a> / States</p>
+  <h1>Heat pump cost, energy prices &amp; rebates by state</h1>
+  <p class="lead">Pick your state for installed-cost benchmarks by size, what heat costs on your state's electricity and gas prices, your climate zones, and the 2026 rebate rules. Data refreshed {asOf} from EIA, PNNL, the Census Bureau and NASEO.</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>State</th><th class="r">Electricity ¢/kWh</th><th class="r">Gas $/Mcf</th><th class="r">Heat pump heat $/MMBtu <span class="badge b-est">est.</span></th><th class="r">{EFFICIENCY.afueLow}% gas furnace $/MMBtu <span class="badge b-est">est.</span></th><th>IECC zones</th></tr></thead>
+      <tbody>
+        {rows.map((r) => (
+          <tr>
+            <td><a href={`/states/${r.s.slug}/`}><b>{r.s.name}</b></a>{!r.s.complete && <span class="small muted"> (partial data)</span>}</td>
+            <td class="r num">{r.s.electricity?.centsPerKwh ?? '—'}</td>
+            <td class="r num">{r.s.gas?.dollarsPerMcf ?? '—'}</td>
+            <td class="r num">{r.hp ? usd(r.hp.dollarsPerMMBtu) : '—'}</td>
+            <td class="r num">{r.gas ? usd(r.gas.dollarsPerMMBtu) : '—'}</td>
+            <td class="num">{r.clim.zoneList || '—'}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="small muted">Electricity: <a href={SOURCES.eiaElectricity.url}>EIA Table 5.6.B</a> (residential, year to date). Gas: <a href={SOURCES.eiaGas.url}>EIA residential price</a> (annual). Heat cost per million Btu delivered uses each state's EIA gas heat content, a heat pump at the median HSPF2 of the systems we list ({EFFICIENCY.hspf2Median}), and a {EFFICIENCY.afueLow}% AFUE furnace. Climate zones: <a href={SOURCES.pnnlClimateZones.url}>PNNL-33270</a>. {indexed} of {STATES.length} state pages have every data point verified; the rest are marked partial and kept out of search.</p>
+  <p>Installed cost is a national benchmark in every state: {usd(f3.low)}–{usd(f3.high)} for a standard 3-ton heat pump (midpoint {usd(f3.mid)}). <a href="/auditor/">Grade your own quote</a>.</p>
+  <Newsletter />
+</Base>

@@ -8,6 +8,7 @@ npm run build      # → dist/ (static; deploy anywhere)
 npm run dev        # local dev server
 npm run seed       # re-fetch prices, ENERGY STAR specs, REMDB benchmarks, CPI → src/data/seed/*.json
 npm run check:sources  # are the seeded listings still live and priced within 10%?
+npm run seed:states    # re-fetch EIA prices, PNNL climate zones, Census counties, NASEO office links -> states.seed.json
 ```
 
 Node 20+. No env vars are required: without Supabase the auditor and forms work entirely in the browser (forms fall back to a prefilled email).
@@ -24,12 +25,16 @@ Node 20+. No env vars are required: without Supabase the auditor and forms work 
 
 Never hand-edit `src/data/seed/*.json`. To add a system, add its listing URL to `scripts/seed-sources.json` and run `npm run seed`. Failures are written to the seed's `failures` array and left out. The build fails if any `/systems/*` page lacks a retailer link, if titles or descriptions are duplicated, if a canonical is wrong, or if JSON-LD does not parse.
 
+State pages (`/states/`) come from `scripts/fetch-state-seed.mjs`: EIA residential electricity (Table 5.6.B, year to date), EIA residential gas price and heat content (annual), IECC 2021 county climate zones parsed from PNNL-33270, the Census 2020 county list (to measure PNNL coverage), and NASEO state energy office links checked live. The PNNL PDF has a few typos (a block of Iowa counties labelled "IN", duplicated rows); the script corrects them mechanically and logs every correction in `states.seed.json`. A state is indexed only if every data point is verified; otherwise its page is `noindex` and the build removes it from the sitemap. The build also fails if a state page's title is 60+ characters, its description 160+, or its title does not lead with a dollar range.
+
 Known limits, stated on the site:
 - Retail online prices are not distributor (true wholesale) prices; the UI says so.
 - REMDB is a national average with no ZIP-level adjustment; ZIP is used only to name the state for rebate links.
 - "Heat pump only" (outdoor-unit swap) and the 200A panel adder rest on weaker REMDB support; both are labelled.
 - Ductwork has no public benchmark, so users enter the itemized amount and the rest is graded.
 - The ENERGY STAR central-AC dataset (`tyr2-hhgu`) returned no rows during seeding, so AC + furnace specs come from listings.
+- State pages show the national REMDB benchmark; there is no public, citable state cost adjustment.
+- HEEHR (HEAR) copy reflects DOE Program Notice 26-2 (May 2026): no fuel switching, insulation and air sealing first.
 
 ## Supabase (optional)
 

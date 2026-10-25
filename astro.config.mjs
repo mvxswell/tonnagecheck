@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { readdirSync, readFileSync, writeFileSync, existsSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -20,6 +20,7 @@ function siteChecks() {
         const errors = [];
         const seenT = new Map();
         const seenD = new Map();
+        const noindex = [];
         for (const f of files) {
           const html = readFileSync(f, 'utf8');
           const path = '/' + relative(root, f).replace(/\\/g, '/').replace(/index\.html$/, '');
@@ -35,12 +36,27 @@ function siteChecks() {
           else if (seenD.has(desc)) errors.push(`duplicate description: ${seenD.get(desc)} and ${path}`);
           else seenD.set(desc, path);
           if (canonical !== `${SITE}${path}`) errors.push(`${path}: canonical ${canonical}`);
+          if (/<meta name="robots" content="[^"]*noindex/.test(html)) noindex.push(`${SITE}${path}`);
+          if (path.startsWith('/states/') && path !== '/states/') {
+            if (title && title.length >= 60) errors.push(`${path}: title is ${title.length} chars (must be < 60)`);
+            if (desc && desc.length >= 160) errors.push(`${path}: description is ${desc.length} chars (must be < 160)`);
+            if (!/\$[\d,]+–\$[\d,]+/.test(title || '')) errors.push(`${path}: title does not lead with a dollar range`);
+          }
           for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
             try { JSON.parse(m[1]); } catch { errors.push(`${path}: JSON-LD does not parse`); }
           }
           if (path.startsWith('/systems/') && path !== '/systems/' && !/hvacdirect\.com|alpinehomeair\.com/.test(html)) errors.push(`${path}: equipment page without a retailer source link`);
         }
-        console.log(`[tc] checked ${files.length} pages`);
+        // Keep noindex pages (e.g. states with incomplete data) out of the sitemap, then confirm it.
+        const sm = join(root, 'sitemap-0.xml');
+        let kept = 0;
+        if (existsSync(sm)) {
+          const drop = new Set(noindex);
+          const xml = readFileSync(sm, 'utf8').replace(/<url><loc>([^<]*)<\/loc><\/url>/g, (m, loc) => (drop.has(loc) ? '' : (kept++, m)));
+          writeFileSync(sm, xml);
+          for (const u of noindex) if (xml.includes(`<loc>${u}</loc>`)) errors.push(`noindex page still in sitemap: ${u}`);
+        }
+        console.log(`[tc] checked ${files.length} pages; sitemap URLs: ${kept}; noindex pages excluded: ${noindex.length}`);
         if (errors.length) throw new Error(`[tc] ${errors.length} build check(s) failed:\n - ${errors.join('\n - ')}`);
         console.log('[tc] build checks passed (titles, descriptions, canonicals, JSON-LD, source links)');
       },

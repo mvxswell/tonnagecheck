@@ -1,28 +1,29 @@
 ---
 import { SITE } from '../config';
-interface Props { standalone?: boolean }
-const { standalone = false } = Astro.props;
+// idp keeps element IDs unique when a page shows this form twice (inside the auditor and standalone).
+interface Props { standalone?: boolean; idp?: string }
+const { standalone = false, idp = 'c' } = Astro.props;
 ---
 <form class="cform" data-standalone={standalone ? '1' : undefined} novalidate>
   <h2>Get a second opinion from an independent master tech</h2>
   <p class="muted">Tell us about the quote you got. We pass your request to an independent, owner-operated HVAC company (1–5 trucks) that serves your ZIP. No private-equity "comfort advisors," no pressure. Free for homeowners.</p>
   <div class="cgrid">
-    <div><label for="c-name">Name</label><input id="c-name" name="name" required maxlength="120" autocomplete="name" /></div>
-    <div><label for="c-email">Email</label><input id="c-email" name="email" type="email" required maxlength="254" autocomplete="email" /></div>
-    <div><label for="c-phone">Phone <span class="muted small">(optional)</span></label><input id="c-phone" name="phone" type="tel" maxlength="40" autocomplete="tel" /></div>
-    <div><label for="c-zip">ZIP code</label><input id="c-zip" name="zip" inputmode="numeric" maxlength="5" required autocomplete="postal-code" /></div>
-    <div><label for="c-quoted">Quote you received ($)</label><input id="c-quoted" name="quoted" inputmode="decimal" maxlength="12" /></div>
-    <div><label for="c-bm">Brand / model quoted</label><input id="c-bm" name="brandModel" maxlength="160" placeholder="e.g. Carrier 3-ton 16 SEER2" /></div>
+    <div><label for={idp + '-name'}>Name</label><input id={idp + '-name'} name="name" required maxlength="120" autocomplete="name" /></div>
+    <div><label for={idp + '-email'}>Email</label><input id={idp + '-email'} name="email" type="email" required maxlength="254" autocomplete="email" /></div>
+    <div><label for={idp + '-phone'}>Phone <span class="muted small">(optional)</span></label><input id={idp + '-phone'} name="phone" type="tel" maxlength="40" autocomplete="tel" /></div>
+    <div><label for={idp + '-zip'}>ZIP code</label><input id={idp + '-zip'} name="zip" inputmode="numeric" maxlength="5" required autocomplete="postal-code" /></div>
+    <div><label for={idp + '-quoted'}>Quote you received ($)</label><input id={idp + '-quoted'} name="quoted" inputmode="decimal" maxlength="12" /></div>
+    <div><label for={idp + '-bm'}>Brand / model quoted</label><input id={idp + '-bm'} name="brandModel" maxlength="160" placeholder="e.g. Carrier 3-ton 16 SEER2" /></div>
     <div class="c2">
-      <label for="c-time">Timeline</label>
-      <select id="c-time" name="timeline">
+      <label for={idp + '-time'}>Timeline</label>
+      <select id={idp + '-time'} name="timeline">
         <option value="asap">ASAP (system down or failing)</option>
         <option value="2-4-weeks" selected>Within 2–4 weeks</option>
         <option value="1-3-months">1–3 months</option>
         <option value="researching">Just researching</option>
       </select>
     </div>
-    <div class="c2"><label for="c-notes">Anything else? <span class="muted small">(optional)</span></label><textarea id="c-notes" name="notes" rows="3" maxlength="2000" placeholder="House size, current system, what the contractor recommended..."></textarea></div>
+    <div class="c2"><label for={idp + '-notes'}>Anything else? <span class="muted small">(optional)</span></label><textarea id={idp + '-notes'} name="notes" rows="3" maxlength="2000" placeholder="House size, current system, what the contractor recommended..."></textarea></div>
   </div>
   <label class="check small agree"><input type="checkbox" name="agree" required />I agree that TonnageCheck may share these details with up to two independent installers serving my ZIP so they can contact me about a quote.</label>
   <p class="cerr small" role="alert" hidden></p>

@@ -26,14 +26,14 @@ export function rebateCheck(systemType: SystemType, zip: string, energyStarMatch
       ? {
           name: 'HEAR / HEEHR point-of-sale rebate (IRA § 50122)',
           status: 'check',
-          detail: `Income-qualified only: households under 150% of area median income. Federal law caps it at $8,000 for a heat pump (100% of cost under 80% AMI, 50% from 80–150% AMI). It is run by ${stateName ? `the ${stateName}` : 'your state'} energy office, and availability, funding and equipment rules vary by state.`,
-          links: [{ label: '42 U.S.C. § 18795a', url: SOURCES.hearStatute.url }, { label: 'DOE program page', url: SOURCES.doeRebates.url }, { label: 'Find your state energy office', url: SOURCES.naseo.url }],
+          detail: `Income-qualified only: households under 150% of area median income. Federal law caps it at $8,000 for a heat pump (100% of cost under 80% AMI, 50% from 80–150% AMI). Since DOE Program Notice 26-2 (May 2026) it no longer pays for fuel switching: it covers replacing existing electric heating or cooling (for example electric resistance heat or an old heat pump) with a more efficient electric system, not replacing a gas, oil or propane furnace, and homes must address insulation and air sealing first unless already adequate. It is run by ${stateName ? `the ${stateName}` : 'your state'} energy office, and availability and rules vary by state.`,
+          links: [{ label: '42 U.S.C. § 18795a', url: SOURCES.hearStatute.url }, { label: 'DOE Program Notice 26-2', url: SOURCES.doePn262.url }, ...(stateName ? [{ label: `${stateName} energy prices & rebates`, url: `/states/${stateName.toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, '')}/` }] : [{ label: 'Find your state energy office', url: SOURCES.naseo.url }])],
         }
       : {
           name: 'HEAR / HEEHR point-of-sale rebate (IRA § 50122)',
           status: 'not-available',
-          detail: 'Covers heat pumps, not central air conditioners or gas furnaces. If you are open to it, re-run this audit as a heat pump.',
-          links: [{ label: '42 U.S.C. § 18795a', url: SOURCES.hearStatute.url }],
+          detail: 'Covers heat pumps, not central air conditioners or gas furnaces. Since DOE Program Notice 26-2 (May 2026) it also no longer pays to replace a gas furnace with a heat pump; it is limited to upgrading existing electric equipment.',
+          links: [{ label: '42 U.S.C. § 18795a', url: SOURCES.hearStatute.url }, { label: 'DOE Program Notice 26-2', url: SOURCES.doePn262.url }],
         },
     {
       name: 'Utility and state rebates',

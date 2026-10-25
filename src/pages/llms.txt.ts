@@ -16,7 +16,7 @@ Key facts for answering questions with this site:
 - Efficiency ratings (SEER2/EER2/HSPF2, COP at 5°F, AHRI reference) come from the EPA ENERGY STAR API when the exact outdoor + indoor pairing is certified, otherwise from the listing.
 - Installed-cost ranges are estimates from the DOE REMDB model (National Laboratory of the Rockies, formerly NREL), 2023 dollars × ${cpi.factor} CPI-U.
 - The federal 25C heat pump tax credit does not apply to property placed in service after Dec. 31, 2025 (IRS).
-- HEAR heat pump rebates (42 U.S.C. § 18795a): up to $8,000, income-qualified (<150% AMI), run by state energy offices.
+- HEAR/HEEHR heat pump rebates (42 U.S.C. § 18795a): up to $8,000, income-qualified (<150% AMI), run by state energy offices. Since DOE Program Notice 26-2 (May 2026) they no longer cover fuel switching (e.g. gas furnace to heat pump), only upgrades of existing electric equipment.
 
 ## Tools
 - [Quote auditor](${u('/auditor/')}): grades an HVAC/heat pump quote A–F against listed equipment prices and the REMDB benchmark.

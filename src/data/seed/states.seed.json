@@ -1,0 +1,2274 @@
+{
+  "generatedAt": "2026-10-25T15:25:51.921Z",
+  "sources": {
+    "electricity": {
+      "url": "https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_6_b",
+      "table": "EIA Electric Power Monthly Table 5.6.B, residential sector",
+      "period": "August 2026 YTD",
+      "usCentsPerKwh": 18.19
+    },
+    "gas": {
+      "url": "https://www.eia.gov/dnav/ng/ng_pri_sum_a_EPG0_PRS_dmcf_a.htm",
+      "table": "EIA Price of Natural Gas Delivered to Residential Consumers (annual)",
+      "years": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025"
+      ]
+    },
+    "heatContent": {
+      "url": "https://www.eia.gov/dnav/ng/ng_cons_heat_a_EPG0_VGTH_btucf_a.htm",
+      "table": "EIA Heat Content of Natural Gas Delivered to Consumers (annual)"
+    },
+    "climate": {
+      "url": "https://www.pnnl.gov/publications/guide-determining-climate-zone-county-building-america-and-iecc-2021-updates",
+      "pdf": "https://www.pnnl.gov/main/publications/external/technical_reports/PNNL-33270.pdf",
+      "title": "Guide to Determining Climate Zone by County: Building America and IECC 2021 Updates (PNNL-33270)",
+      "corrections": [
+        "O'Brien: labelled IN in the source, inside the IA block; counted as IA",
+        "Osceola: labelled IN in the source, inside the IA block; counted as IA",
+        "Page: labelled IN in the source, inside the IA block; counted as IA",
+        "Palo Alto: labelled IN in the source, inside the IA block; counted as IA",
+        "Plymouth: labelled IN in the source, inside the IA block; counted as IA",
+        "Pocahontas: labelled IN in the source, inside the IA block; counted as IA",
+        "Polk: labelled IN in the source, inside the IA block; counted as IA",
+        "Pottawattamie: labelled IN in the source, inside the IA block; counted as IA",
+        "Poweshiek: labelled IN in the source, inside the IA block; counted as IA"
+      ],
+      "duplicatesDropped": [
+        "DE Kent",
+        "NC Stanly",
+        "NC Stokes",
+        "NC Surry",
+        "NC Swain",
+        "NC Transylvania",
+        "NC Tyrrell",
+        "NC Union",
+        "NC Vance",
+        "NC Wake",
+        "NC Warren",
+        "NC Washington",
+        "NC Watauga",
+        "NC Wayne",
+        "NC Wilkes",
+        "NC Wilson",
+        "NC Yadkin",
+        "NC Yancey",
+        "OH Putnam",
+        "OH Richland",
+        "OH Ross",
+        "OH Sandusky",
+        "OH Scioto",
+        "OH Seneca",
+        "OH Shelby",
+        "OH Stark",
+        "OH Summit",
+        "OH Trumbull",
+        "OH Tuscarawas",
+        "OH Union",
+        "OH Van Wert",
+        "OH Vinton",
+        "OH Warren",
+        "OH Washington",
+        "OH Wayne",
+        "OH Williams",
+        "OH Wood",
+        "OH Wyandot"
+      ]
+    },
+    "counties": {
+      "url": "https://www2.census.gov/geo/docs/reference/codes2020/national_county2020.txt",
+      "title": "Census Bureau 2020 national county list"
+    },
+    "energyOffices": {
+      "url": "https://www.naseo.org/state-energy-offices",
+      "title": "NASEO State Energy Offices directory"
+    }
+  },
+  "states": [
+    {
+      "code": "AK",
+      "name": "Alaska",
+      "slug": "alaska",
+      "complete": false,
+      "missing": [
+        "PNNL lists 16 of 30 Census 2020 counties"
+      ],
+      "electricity": {
+        "centsPerKwh": 27.32,
+        "priorCentsPerKwh": 26.07,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 12.96,
+        "year": "2025",
+        "priorDollarsPerMcf": 11.73
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 988,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "7": 11,
+          "8": 8,
+          "6A": 5,
+          "5C": 3
+        },
+        "countiesListed": 27,
+        "censusCounties": 30,
+        "coverage": 0.533,
+        "notListed": [
+          "Aleutians West Census Area",
+          "Bethel Census Area",
+          "Chugach Census Area",
+          "Copper River Census Area",
+          "Dillingham Census Area",
+          "Hoonah-Angoon Census Area",
+          "Kusilvak Census Area",
+          "Nome Census Area",
+          "Petersburg Borough",
+          "Prince of Wales-Hyder Census Area",
+          "Skagway Municipality",
+          "Southeast Fairbanks Census Area",
+          "Wrangell City and Borough",
+          "Yukon-Koyukuk Census Area"
+        ]
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=AK",
+        "website": "https://www.akenergyauthority.org/",
+        "checked": {
+          "listed": "https://www.akenergyauthority.org",
+          "status": 200,
+          "finalUrl": "https://www.akenergyauthority.org/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "AL",
+      "name": "Alabama",
+      "slug": "alabama",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 16.51,
+        "priorCentsPerKwh": 16.01,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 17.56,
+        "year": "2025",
+        "priorDollarsPerMcf": 18.63
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1032,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "3A": 58,
+          "2A": 9
+        },
+        "countiesListed": 67,
+        "censusCounties": 67,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=AL",
+        "website": "https://adeca.alabama.gov/energy/",
+        "checked": {
+          "listed": "https://adeca.alabama.gov/energy/",
+          "status": 200,
+          "finalUrl": "https://adeca.alabama.gov/energy/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "AR",
+      "name": "Arkansas",
+      "slug": "arkansas",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 13.74,
+        "priorCentsPerKwh": 12.74,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 19.25,
+        "year": "2025",
+        "priorDollarsPerMcf": 16.09
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1022,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "3A": 61,
+          "4A": 12
+        },
+        "countiesListed": 73,
+        "censusCounties": 75,
+        "coverage": 0.973,
+        "notListed": [
+          "Lawrence County",
+          "Lee County"
+        ]
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=AR",
+        "website": "https://adeq.state.ar.us/",
+        "checked": {
+          "listed": "https://www.adeq.state.ar.us",
+          "status": 200,
+          "finalUrl": "https://adeq.state.ar.us/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "AZ",
+      "name": "Arizona",
+      "slug": "arizona",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 15.36,
+        "priorCentsPerKwh": 15.18,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 18.58,
+        "year": "2025",
+        "priorDollarsPerMcf": 20.47
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1024,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "5B": 3,
+          "3B": 5,
+          "4B": 2,
+          "2B": 5
+        },
+        "countiesListed": 15,
+        "censusCounties": 15,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=AZ",
+        "website": "https://resilient.az.gov/",
+        "checked": {
+          "listed": "https://resilient.az.gov/",
+          "status": 200,
+          "finalUrl": "https://resilient.az.gov/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "CA",
+      "name": "California",
+      "slug": "california",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 32.58,
+        "priorCentsPerKwh": 31.11,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 22.01,
+        "year": "2025",
+        "priorDollarsPerMcf": 19.14
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1022,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "3C": 14,
+          "6B": 2,
+          "4B": 8,
+          "3B": 25,
+          "4C": 2,
+          "2B": 1,
+          "5B": 6
+        },
+        "countiesListed": 58,
+        "censusCounties": 58,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=CA",
+        "website": "https://www.energy.ca.gov/",
+        "checked": {
+          "listed": "https://www.energy.ca.gov",
+          "status": 200,
+          "finalUrl": "https://www.energy.ca.gov/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "CO",
+      "name": "Colorado",
+      "slug": "colorado",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 16.8,
+        "priorCentsPerKwh": 15.47,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 11.17,
+        "year": "2025",
+        "priorDollarsPerMcf": 10.58
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1066,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "7": 13,
+          "5B": 33,
+          "6B": 12,
+          "4B": 5
+        },
+        "countiesListed": 63,
+        "censusCounties": 64,
+        "coverage": 0.984,
+        "notListed": [
+          "Yuma County"
+        ]
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=CO",
+        "website": "https://energyoffice.colorado.gov/",
+        "checked": {
+          "listed": "https://www.colorado.gov/energy",
+          "status": 200,
+          "finalUrl": "https://energyoffice.colorado.gov/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "CT",
+      "name": "Connecticut",
+      "slug": "connecticut",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 27.47,
+        "priorCentsPerKwh": 30.21,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 16.83,
+        "year": "2024",
+        "priorDollarsPerMcf": 18.88
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1031,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "5A": 8
+        },
+        "countiesListed": 8,
+        "censusCounties": 8,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=CT",
+        "website": "https://portal.ct.gov/DEEP",
+        "checked": {
+          "listed": "https://portal.ct.gov/DEEP",
+          "status": 200,
+          "finalUrl": "https://portal.ct.gov/DEEP",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "DC",
+      "name": "District of Columbia",
+      "slug": "district-of-columbia",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 24.86,
+        "priorCentsPerKwh": 21.22,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 16.68,
+        "year": "2025",
+        "priorDollarsPerMcf": 16.49
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1033,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "4A": 1
+        },
+        "countiesListed": 1,
+        "censusCounties": 1,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=DC",
+        "website": "https://doee.dc.gov/",
+        "checked": {
+          "listed": "https://doee.dc.gov",
+          "status": 200,
+          "finalUrl": "https://doee.dc.gov/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "DE",
+      "name": "Delaware",
+      "slug": "delaware",
+      "complete": false,
+      "missing": [
+        "PNNL lists 2 of 3 Census 2020 counties"
+      ],
+      "electricity": {
+        "centsPerKwh": 17.98,
+        "priorCentsPerKwh": 16.79,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 15.97,
+        "year": "2025",
+        "priorDollarsPerMcf": 14.78
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1034,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "4A": 2
+        },
+        "countiesListed": 2,
+        "censusCounties": 3,
+        "coverage": 0.667,
+        "notListed": [
+          "Sussex County"
+        ]
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=DE",
+        "website": "https://dnrec.delaware.gov/climate-coastal-energy/",
+        "checked": {
+          "listed": "https://dnrec.alpha.delaware.gov/climate-coastal-energy/",
+          "status": 200,
+          "finalUrl": "https://dnrec.delaware.gov/climate-coastal-energy/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "FL",
+      "name": "Florida",
+      "slug": "florida",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 15.32,
+        "priorCentsPerKwh": 15.04,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 25.48,
+        "year": "2025",
+        "priorDollarsPerMcf": 25.37
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1024,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "2A": 63,
+          "1A": 4
+        },
+        "countiesListed": 67,
+        "censusCounties": 67,
+        "coverage": 0.985,
+        "notListed": [
+          "Hendry County"
+        ]
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=FL",
+        "website": "https://www.fdacs.gov/Divisions-Offices/Energy",
+        "checked": {
+          "listed": "https://www.fdacs.gov/Divisions-Offices/Energy",
+          "status": 200,
+          "finalUrl": "https://www.fdacs.gov/Divisions-Offices/Energy",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "GA",
+      "name": "Georgia",
+      "slug": "georgia",
+      "complete": false,
+      "missing": [
+        "state energy office link from NASEO returns 0"
+      ],
+      "electricity": {
+        "centsPerKwh": 15.48,
+        "priorCentsPerKwh": 14.86,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 20.42,
+        "year": "2025",
+        "priorDollarsPerMcf": 18.19
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1032,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "2A": 41,
+          "3A": 118
+        },
+        "countiesListed": 159,
+        "censusCounties": 159,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=GA",
+        "website": null,
+        "checked": {
+          "listed": "https://www.gefa.georgia.gov/energy-resources",
+          "status": 0,
+          "finalUrl": "https://www.gefa.georgia.gov/energy-resources",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "HI",
+      "name": "Hawaii",
+      "slug": "hawaii",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 46.41,
+        "priorCentsPerKwh": 40.46,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 52.38,
+        "year": "2025",
+        "priorDollarsPerMcf": 48.88
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 917,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "1A": 5
+        },
+        "countiesListed": 5,
+        "censusCounties": 5,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=HI",
+        "website": "https://energy.hawaii.gov/",
+        "checked": {
+          "listed": "https://energy.hawaii.gov/",
+          "status": 200,
+          "finalUrl": "https://energy.hawaii.gov/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "IA",
+      "name": "Iowa",
+      "slug": "iowa",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 14.55,
+        "priorCentsPerKwh": 13.72,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 10.61,
+        "year": "2025",
+        "priorDollarsPerMcf": 10.33
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1060,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "5A": 84,
+          "6A": 15
+        },
+        "countiesListed": 99,
+        "censusCounties": 99,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=IA",
+        "website": "https://opportunityiowa.gov/community/energy",
+        "checked": {
+          "listed": "https://www.iowaeda.com/iowa-energy-office/",
+          "status": 200,
+          "finalUrl": "https://opportunityiowa.gov/community/energy",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "ID",
+      "name": "Idaho",
+      "slug": "idaho",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 13.02,
+        "priorCentsPerKwh": 11.65,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 7.69,
+        "year": "2025",
+        "priorDollarsPerMcf": 8.51
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1039,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "6B": 22,
+          "5B": 21
+        },
+        "countiesListed": 43,
+        "censusCounties": 44,
+        "coverage": 0.977,
+        "notListed": [
+          "Ada County"
+        ]
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=ID",
+        "website": "https://oemr.idaho.gov/",
+        "checked": {
+          "listed": "https://oemr.idaho.gov/",
+          "status": 200,
+          "finalUrl": "https://oemr.idaho.gov/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "IL",
+      "name": "Illinois",
+      "slug": "illinois",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 19.23,
+        "priorCentsPerKwh": 17.44,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 11.25,
+        "year": "2025",
+        "priorDollarsPerMcf": 11.11
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1048,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "5A": 58,
+          "4A": 43
+        },
+        "countiesListed": 101,
+        "censusCounties": 102,
+        "coverage": 0.99,
+        "notListed": [
+          "Montgomery County"
+        ]
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=IL",
+        "website": "https://epa.illinois.gov/",
+        "checked": {
+          "listed": "https://www2.illinois.gov/epa/topics/energy/Pages/default.aspx",
+          "status": 200,
+          "finalUrl": "https://epa.illinois.gov/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "IN",
+      "name": "Indiana",
+      "slug": "indiana",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 17.04,
+        "priorCentsPerKwh": 15.69,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 11.49,
+        "year": "2025",
+        "priorDollarsPerMcf": 9.5
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1058,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "5A": 47,
+          "4A": 45
+        },
+        "countiesListed": 92,
+        "censusCounties": 92,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=IN",
+        "website": "https://www.in.gov/oed/",
+        "checked": {
+          "listed": "https://www.in.gov/oed",
+          "status": 200,
+          "finalUrl": "https://www.in.gov/oed/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "KS",
+      "name": "Kansas",
+      "slug": "kansas",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 15.26,
+        "priorCentsPerKwh": 14.27,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 14.81,
+        "year": "2025",
+        "priorDollarsPerMcf": 13.14
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1039,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "5": 1,
+          "4A": 87,
+          "5A": 17
+        },
+        "countiesListed": 105,
+        "censusCounties": 105,
+        "coverage": 0.99,
+        "notListed": [
+          "Lane County"
+        ]
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=KS",
+        "website": "https://www.kcc.ks.gov/",
+        "checked": {
+          "listed": "https://kcc.ks.gov/",
+          "status": 200,
+          "finalUrl": "https://www.kcc.ks.gov/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "KY",
+      "name": "Kentucky",
+      "slug": "kentucky",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 14.2,
+        "priorCentsPerKwh": 13.04,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 14.23,
+        "year": "2025",
+        "priorDollarsPerMcf": 13.61
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1049,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "4A": 120
+        },
+        "countiesListed": 120,
+        "censusCounties": 120,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=KY",
+        "website": "https://eec.ky.gov/Energy/Pages/default.aspx",
+        "checked": {
+          "listed": "https://eec.ky.gov/Energy/Pages/default.aspx",
+          "status": 200,
+          "finalUrl": "https://eec.ky.gov/Energy/Pages/default.aspx",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "LA",
+      "name": "Louisiana",
+      "slug": "louisiana",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 13.27,
+        "priorCentsPerKwh": 12.54,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 17.39,
+        "year": "2025",
+        "priorDollarsPerMcf": 16.38
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1020,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "2A": 37,
+          "3A": 27
+        },
+        "countiesListed": 64,
+        "censusCounties": 64,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=LA",
+        "website": "https://www.dce.louisiana.gov/",
+        "checked": {
+          "listed": "https://www.dce.louisiana.gov/",
+          "status": 200,
+          "finalUrl": "https://www.dce.louisiana.gov/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "MA",
+      "name": "Massachusetts",
+      "slug": "massachusetts",
+      "complete": false,
+      "missing": [
+        "state energy office link from NASEO returns 403"
+      ],
+      "electricity": {
+        "centsPerKwh": 30.19,
+        "priorCentsPerKwh": 30.21,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 25.06,
+        "year": "2025",
+        "priorDollarsPerMcf": 21.9
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1031,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "5A": 14
+        },
+        "countiesListed": 14,
+        "censusCounties": 14,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=MA",
+        "website": null,
+        "checked": {
+          "listed": "https://www.mass.gov/doer/",
+          "status": 403,
+          "finalUrl": "https://www.mass.gov/doer/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "MD",
+      "name": "Maryland",
+      "slug": "maryland",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 21.31,
+        "priorCentsPerKwh": 18.93,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 16.14,
+        "year": "2024",
+        "priorDollarsPerMcf": 17.35
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1039,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "5A": 2,
+          "4A": 22
+        },
+        "countiesListed": 24,
+        "censusCounties": 24,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=MD",
+        "website": "https://energy.maryland.gov/Pages/default.aspx",
+        "checked": {
+          "listed": "https://energy.maryland.gov",
+          "status": 200,
+          "finalUrl": "https://energy.maryland.gov/Pages/default.aspx",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "ME",
+      "name": "Maine",
+      "slug": "maine",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 30.23,
+        "priorCentsPerKwh": 27.47,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 18.95,
+        "year": "2024",
+        "priorDollarsPerMcf": 19.1
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1048,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "7": 1,
+          "6A": 15
+        },
+        "countiesListed": 16,
+        "censusCounties": 16,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=ME",
+        "website": "https://www.maine.gov/energy/",
+        "checked": {
+          "listed": "https://www.maine.gov/energy/",
+          "status": 200,
+          "finalUrl": "https://www.maine.gov/energy/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "MI",
+      "name": "Michigan",
+      "slug": "michigan",
+      "complete": false,
+      "missing": [
+        "state energy office link from NASEO returns 403"
+      ],
+      "electricity": {
+        "centsPerKwh": 21.73,
+        "priorCentsPerKwh": 19.94,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 10.92,
+        "year": "2025",
+        "priorDollarsPerMcf": 10.76
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1060,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "7": 2,
+          "6A": 44,
+          "5A": 37
+        },
+        "countiesListed": 83,
+        "censusCounties": 83,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=MI",
+        "website": null,
+        "checked": {
+          "listed": "https://www.michigan.gov/egle/",
+          "status": 403,
+          "finalUrl": "https://www.michigan.gov/egle/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "MN",
+      "name": "Minnesota",
+      "slug": "minnesota",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 16.44,
+        "priorCentsPerKwh": 15.78,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 10.98,
+        "year": "2025",
+        "priorDollarsPerMcf": 10.65
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1055,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "7": 23,
+          "6A": 61,
+          "5A": 3
+        },
+        "countiesListed": 87,
+        "censusCounties": 87,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=MN",
+        "website": "http://validate.perfdrive.com/d5bd5333eafe8b0ccd6023ba818d1aa6/?ssa=6e419a8a-76c9-46ff-92d8-897499866e73&ssb=16286252662&ssc=https%3A%2F%2Fmn.gov%2Fcommerce%2Fenergy%2F&ssi=bdb59c60-bf56-4c96-9438-e92c63b117c4&ssk=support@shieldsquare.com&ssm=74680927448248923107080923960653&ssn=3afb6eaada9d595295d9a0e1d5240bc806ab0cd6d681-b542-4cd2-946e7c&sso=5b849242-61cb3496cb32f972f367081a11d7fd2e9428884cab23bec9&ssp=72121099771792949824179298139946928&ssq=61965924199677439140741996008780738369203&ssr=NzEuMjMwLjY1LjUy&sst=TonnageCheckSeed/1.0+(+https://tonnagechecker.com/about/)&ssu=&ssv=&ssw=&ssx=W10=",
+        "checked": {
+          "listed": "https://mn.gov/commerce/energy/",
+          "status": 200,
+          "finalUrl": "http://validate.perfdrive.com/d5bd5333eafe8b0ccd6023ba818d1aa6/?ssa=6e419a8a-76c9-46ff-92d8-897499866e73&ssb=16286252662&ssc=https%3A%2F%2Fmn.gov%2Fcommerce%2Fenergy%2F&ssi=bdb59c60-bf56-4c96-9438-e92c63b117c4&ssk=support@shieldsquare.com&ssm=74680927448248923107080923960653&ssn=3afb6eaada9d595295d9a0e1d5240bc806ab0cd6d681-b542-4cd2-946e7c&sso=5b849242-61cb3496cb32f972f367081a11d7fd2e9428884cab23bec9&ssp=72121099771792949824179298139946928&ssq=61965924199677439140741996008780738369203&ssr=NzEuMjMwLjY1LjUy&sst=TonnageCheckSeed/1.0+(+https://tonnagechecker.com/about/)&ssu=&ssv=&ssw=&ssx=W10=",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "MO",
+      "name": "Missouri",
+      "slug": "missouri",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 14.28,
+        "priorCentsPerKwh": 13.32,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 14.94,
+        "year": "2025",
+        "priorDollarsPerMcf": 16.86
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1023,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "4": 3,
+          "5A": 26,
+          "4A": 84,
+          "3A": 2
+        },
+        "countiesListed": 115,
+        "censusCounties": 115,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=MO",
+        "website": "https://dnr.mo.gov/energy",
+        "checked": {
+          "listed": "https://dnr.mo.gov/energy",
+          "status": 200,
+          "finalUrl": "https://dnr.mo.gov/energy",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "MS",
+      "name": "Mississippi",
+      "slug": "mississippi",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 15.06,
+        "priorCentsPerKwh": 13.87,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 16.65,
+        "year": "2025",
+        "priorDollarsPerMcf": 15.42
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1023,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "3A": 75,
+          "2A": 6
+        },
+        "countiesListed": 81,
+        "censusCounties": 82,
+        "coverage": 0.988,
+        "notListed": [
+          "Newton County"
+        ]
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=MS",
+        "website": "https://mississippi.org/community-resources/office-of-energy/",
+        "checked": {
+          "listed": "https://mississippi.org/community-resources/office-energy/",
+          "status": 200,
+          "finalUrl": "https://mississippi.org/community-resources/office-of-energy/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "MT",
+      "name": "Montana",
+      "slug": "montana",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 14.13,
+        "priorCentsPerKwh": 12.76,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 8.99,
+        "year": "2025",
+        "priorDollarsPerMcf": 8.22
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1062,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "6B": 56
+        },
+        "countiesListed": 56,
+        "censusCounties": 56,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=MT",
+        "website": "https://deq.mt.gov/energy/",
+        "checked": {
+          "listed": "https://deq.mt.gov/energy/index",
+          "status": 200,
+          "finalUrl": "https://deq.mt.gov/energy/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "NC",
+      "name": "North Carolina",
+      "slug": "north-carolina",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 14.94,
+        "priorCentsPerKwh": 13.81,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 16.42,
+        "year": "2024",
+        "priorDollarsPerMcf": 17.33
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1046,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "3A": 79,
+          "5A": 5,
+          "4A": 16
+        },
+        "countiesListed": 100,
+        "censusCounties": 100,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=NC",
+        "website": "https://www.deq.nc.gov/energy-climate/state-energy-office",
+        "checked": {
+          "listed": "https://deq.nc.gov/energy-climate/energy",
+          "status": 200,
+          "finalUrl": "https://www.deq.nc.gov/energy-climate/state-energy-office",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "ND",
+      "name": "North Dakota",
+      "slug": "north-dakota",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 12.46,
+        "priorCentsPerKwh": 11.67,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 9.5,
+        "year": "2025",
+        "priorDollarsPerMcf": 8.99
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1047,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "7": 16,
+          "6A": 37
+        },
+        "countiesListed": 53,
+        "censusCounties": 53,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=ND",
+        "website": "https://www.commerce.nd.gov/",
+        "checked": {
+          "listed": "https://www.communityservices.nd.gov/",
+          "status": 200,
+          "finalUrl": "https://www.commerce.nd.gov/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "NE",
+      "name": "Nebraska",
+      "slug": "nebraska",
+      "complete": false,
+      "missing": [
+        "state energy office link from NASEO returns 0"
+      ],
+      "electricity": {
+        "centsPerKwh": 12.92,
+        "priorCentsPerKwh": 11.94,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 11.4,
+        "year": "2025",
+        "priorDollarsPerMcf": 10.63
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1056,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "5A": 93
+        },
+        "countiesListed": 93,
+        "censusCounties": 93,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=NE",
+        "website": null,
+        "checked": {
+          "listed": "https://dee.ne.gov/",
+          "status": 0,
+          "finalUrl": "https://dee.ne.gov/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "NH",
+      "name": "New Hampshire",
+      "slug": "new-hampshire",
+      "complete": false,
+      "missing": [
+        "state energy office link from NASEO returns 403"
+      ],
+      "electricity": {
+        "centsPerKwh": 26.91,
+        "priorCentsPerKwh": 23.4,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 18.61,
+        "year": "2025",
+        "priorDollarsPerMcf": 18.74
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1039,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "6A": 5,
+          "5A": 5
+        },
+        "countiesListed": 10,
+        "censusCounties": 10,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=NH",
+        "website": null,
+        "checked": {
+          "listed": "https://www.energy.nh.gov/",
+          "status": 403,
+          "finalUrl": "https://www.energy.nh.gov/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "NJ",
+      "name": "New Jersey",
+      "slug": "new-jersey",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 24.09,
+        "priorCentsPerKwh": 22.32,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 14.21,
+        "year": "2025",
+        "priorDollarsPerMcf": 13.21
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1038,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "5": 1,
+          "4A": 13,
+          "5A": 7
+        },
+        "countiesListed": 21,
+        "censusCounties": 21,
+        "coverage": 0.952,
+        "notListed": [
+          "Mercer County"
+        ]
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=NJ",
+        "website": "https://www.nj.gov/bpu/bpu/about/divisions/energy/",
+        "checked": {
+          "listed": "https://www.bpu.state.nj.us/bpu/about/divisions/energy/",
+          "status": 200,
+          "finalUrl": "https://www.nj.gov/bpu/bpu/about/divisions/energy/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "NM",
+      "name": "New Mexico",
+      "slug": "new-mexico",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 15.34,
+        "priorCentsPerKwh": 14.68,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 9.83,
+        "year": "2025",
+        "priorDollarsPerMcf": 9.05
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1020,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "3": 1,
+          "4": 3,
+          "5": 4,
+          "4B": 10,
+          "3B": 7,
+          "5B": 8
+        },
+        "countiesListed": 33,
+        "censusCounties": 33,
+        "coverage": 0.97,
+        "notListed": [
+          "Doña Ana County"
+        ]
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=NM",
+        "website": "https://www.emnrd.nm.gov/ecmd/",
+        "checked": {
+          "listed": "https://www.emnrd.nm.gov/ecmd/",
+          "status": 200,
+          "finalUrl": "https://www.emnrd.nm.gov/ecmd/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "NV",
+      "name": "Nevada",
+      "slug": "nevada",
+      "complete": false,
+      "missing": [
+        "PNNL lists 16 of 17 Census 2020 counties"
+      ],
+      "electricity": {
+        "centsPerKwh": 13.36,
+        "priorCentsPerKwh": 13.1,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 13.14,
+        "year": "2025",
+        "priorDollarsPerMcf": 18.69
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1042,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "4B": 7,
+          "5B": 9,
+          "3B": 1
+        },
+        "countiesListed": 17,
+        "censusCounties": 17,
+        "coverage": 0.941,
+        "notListed": [
+          "Carson City"
+        ]
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=NV",
+        "website": "https://www.energy.nv.gov/",
+        "checked": {
+          "listed": "https://energy.nv.gov",
+          "status": 200,
+          "finalUrl": "https://www.energy.nv.gov/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "NY",
+      "name": "New York",
+      "slug": "new-york",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 29.26,
+        "priorCentsPerKwh": 26.1,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 17.58,
+        "year": "2025",
+        "priorDollarsPerMcf": 16.58
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1032,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "5A": 35,
+          "4A": 8,
+          "6A": 18
+        },
+        "countiesListed": 61,
+        "censusCounties": 62,
+        "coverage": 0.984,
+        "notListed": [
+          "Yates County"
+        ]
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=NY",
+        "website": "https://www.nyserda.ny.gov/",
+        "checked": {
+          "listed": "https://nyserda.ny.gov",
+          "status": 200,
+          "finalUrl": "https://www.nyserda.ny.gov/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "OH",
+      "name": "Ohio",
+      "slug": "ohio",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 18.81,
+        "priorCentsPerKwh": 16.64,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 13.85,
+        "year": "2025",
+        "priorDollarsPerMcf": 13.77
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1062,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "4A": 24,
+          "5A": 64
+        },
+        "countiesListed": 88,
+        "censusCounties": 88,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=OH",
+        "website": "https://development.ohio.gov/bs/bs_renewenergy.htm",
+        "checked": {
+          "listed": "https://development.ohio.gov/bs/bs_renewenergy.htm",
+          "status": 200,
+          "finalUrl": "https://development.ohio.gov/bs/bs_renewenergy.htm",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "OK",
+      "name": "Oklahoma",
+      "slug": "oklahoma",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 13.81,
+        "priorCentsPerKwh": 12.95,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 14.38,
+        "year": "2025",
+        "priorDollarsPerMcf": 13.99
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1038,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "3A": 59,
+          "4A": 15,
+          "4B": 3
+        },
+        "countiesListed": 77,
+        "censusCounties": 77,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=OK",
+        "website": "https://ee.ok.gov/what-we-do/state-energy-office/",
+        "checked": {
+          "listed": "https://ee.ok.gov/what-we-do/state-energy-office/",
+          "status": 200,
+          "finalUrl": "https://ee.ok.gov/what-we-do/state-energy-office/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "OR",
+      "name": "Oregon",
+      "slug": "oregon",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 15.46,
+        "priorCentsPerKwh": 15.37,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 16.71,
+        "year": "2025",
+        "priorDollarsPerMcf": 15.71
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1075,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "5B": 18,
+          "4C": 18
+        },
+        "countiesListed": 36,
+        "censusCounties": 36,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=OR",
+        "website": "https://www.oregon.gov/energy/Pages/default.aspx",
+        "checked": {
+          "listed": "https://www.oregon.gov/energy",
+          "status": 200,
+          "finalUrl": "https://www.oregon.gov/energy/Pages/default.aspx",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "PA",
+      "name": "Pennsylvania",
+      "slug": "pennsylvania",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 21.13,
+        "priorCentsPerKwh": 18.86,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 15.04,
+        "year": "2025",
+        "priorDollarsPerMcf": 13.62
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1036,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "4A": 14,
+          "5A": 53
+        },
+        "countiesListed": 67,
+        "censusCounties": 67,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=PA",
+        "website": "https://www.pa.gov/agencies/dep/programs-and-services/energy-programs-office",
+        "checked": {
+          "listed": "https://www.dep.pa.gov/Business/Energy/Pages/default.aspx",
+          "status": 200,
+          "finalUrl": "https://www.pa.gov/agencies/dep/programs-and-services/energy-programs-office",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "RI",
+      "name": "Rhode Island",
+      "slug": "rhode-island",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 29.05,
+        "priorCentsPerKwh": 29.09,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 21.66,
+        "year": "2024",
+        "priorDollarsPerMcf": 20.52
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1030,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "5A": 5
+        },
+        "countiesListed": 5,
+        "censusCounties": 5,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=RI",
+        "website": "https://energy.ri.gov:443/",
+        "checked": {
+          "listed": "https://www.energy.ri.gov",
+          "status": 200,
+          "finalUrl": "https://energy.ri.gov:443/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "SC",
+      "name": "South Carolina",
+      "slug": "south-carolina",
+      "complete": false,
+      "missing": [
+        "state energy office link from NASEO returns 0"
+      ],
+      "electricity": {
+        "centsPerKwh": 15.9,
+        "priorCentsPerKwh": 14.98,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 16.91,
+        "year": "2024",
+        "priorDollarsPerMcf": 17.46
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1036,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "3A": 44,
+          "2A": 2
+        },
+        "countiesListed": 46,
+        "censusCounties": 46,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=SC",
+        "website": null,
+        "checked": {
+          "listed": "https://www.energy.sc.gov",
+          "status": 0,
+          "finalUrl": "https://www.energy.sc.gov",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "SD",
+      "name": "South Dakota",
+      "slug": "south-dakota",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 14.58,
+        "priorCentsPerKwh": 13.2,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 9.86,
+        "year": "2025",
+        "priorDollarsPerMcf": 9.32
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1075,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "6A": 48,
+          "5A": 18
+        },
+        "countiesListed": 66,
+        "censusCounties": 66,
+        "coverage": 0.985,
+        "notListed": [
+          "Oglala Lakota County"
+        ]
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=SD",
+        "website": "https://www.sd.gov/bhra",
+        "checked": {
+          "listed": "https://boa.sd.gov/state-engineer/energy-management.aspx",
+          "status": 200,
+          "finalUrl": "https://www.sd.gov/bhra",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "TN",
+      "name": "Tennessee",
+      "slug": "tennessee",
+      "complete": false,
+      "missing": [
+        "state energy office link from NASEO returns 403"
+      ],
+      "electricity": {
+        "centsPerKwh": 13.8,
+        "priorCentsPerKwh": 13.24,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 11.84,
+        "year": "2025",
+        "priorDollarsPerMcf": 10.75
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1025,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "4A": 61,
+          "3A": 34
+        },
+        "countiesListed": 95,
+        "censusCounties": 95,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=TN",
+        "website": null,
+        "checked": {
+          "listed": "https://tn.gov/environment/section/energy",
+          "status": 403,
+          "finalUrl": "https://tn.gov/environment/section/energy",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "TX",
+      "name": "Texas",
+      "slug": "texas",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 16.03,
+        "priorCentsPerKwh": 15.18,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 19.42,
+        "year": "2025",
+        "priorDollarsPerMcf": 17.98
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1016,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "2A": 81,
+          "3B": 70,
+          "3A": 58,
+          "4B": 28,
+          "2B": 14,
+          "1A": 3
+        },
+        "countiesListed": 254,
+        "censusCounties": 254,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=TX",
+        "website": "https://comptroller.texas.gov/programs/seco/",
+        "checked": {
+          "listed": "https://comptroller.texas.gov/programs/seco/",
+          "status": 200,
+          "finalUrl": "https://comptroller.texas.gov/programs/seco/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "UT",
+      "name": "Utah",
+      "slug": "utah",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 13.19,
+        "priorCentsPerKwh": 12.84,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 10.19,
+        "year": "2025",
+        "priorDollarsPerMcf": 13.15
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1049,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "5B": 21,
+          "6B": 7,
+          "3B": 1
+        },
+        "countiesListed": 29,
+        "censusCounties": 29,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=UT",
+        "website": "https://energy.utah.gov/",
+        "checked": {
+          "listed": "https://energy.utah.gov",
+          "status": 200,
+          "finalUrl": "https://energy.utah.gov/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "VA",
+      "name": "Virginia",
+      "slug": "virginia",
+      "complete": false,
+      "missing": [
+        "state energy office link from NASEO returns 0"
+      ],
+      "electricity": {
+        "centsPerKwh": 16.95,
+        "priorCentsPerKwh": 15,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 16.79,
+        "year": "2025",
+        "priorDollarsPerMcf": 15.4
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1047,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "4A": 110,
+          "5A": 5,
+          "3A": 20
+        },
+        "countiesListed": 135,
+        "censusCounties": 133,
+        "coverage": 0.992,
+        "notListed": [
+          "Fairfax city"
+        ]
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=VA",
+        "website": null,
+        "checked": {
+          "listed": "https://energy.virginia.gov/",
+          "status": 0,
+          "finalUrl": "https://energy.virginia.gov/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "VT",
+      "name": "Vermont",
+      "slug": "vermont",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 23.93,
+        "priorCentsPerKwh": 22.3,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 18,
+        "year": "2025",
+        "priorDollarsPerMcf": 17.34
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1048,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "6A": 14
+        },
+        "countiesListed": 14,
+        "censusCounties": 14,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=VT",
+        "website": "https://publicservice.vermont.gov/about-us/divisions",
+        "checked": {
+          "listed": "https://publicservice.vermont.gov/about_us/divisions",
+          "status": 200,
+          "finalUrl": "https://publicservice.vermont.gov/about-us/divisions",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "WA",
+      "name": "Washington",
+      "slug": "washington",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 14.42,
+        "priorCentsPerKwh": 12.91,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 17.62,
+        "year": "2025",
+        "priorDollarsPerMcf": 12.72
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1096,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "5B": 18,
+          "5C": 4,
+          "4C": 14,
+          "6B": 3
+        },
+        "countiesListed": 39,
+        "censusCounties": 39,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=WA",
+        "website": "https://www.commerce.wa.gov/energy/",
+        "checked": {
+          "listed": "https://www.commerce.wa.gov/energy/",
+          "status": 200,
+          "finalUrl": "https://www.commerce.wa.gov/energy/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "WI",
+      "name": "Wisconsin",
+      "slug": "wisconsin",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 19.05,
+        "priorCentsPerKwh": 18.02,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 10.74,
+        "year": "2025",
+        "priorDollarsPerMcf": 10.14
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1049,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "5A": 30,
+          "6A": 42
+        },
+        "countiesListed": 72,
+        "censusCounties": 72,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=WI",
+        "website": "https://psc.wi.gov/Pages/ServiceType/OfficeEnergyInnovation.aspx",
+        "checked": {
+          "listed": "https://psc.wi.gov/Pages/ServiceType/OfficeEnergyInnovation.aspx",
+          "status": 200,
+          "finalUrl": "https://psc.wi.gov/Pages/ServiceType/OfficeEnergyInnovation.aspx",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "WV",
+      "name": "West Virginia",
+      "slug": "west-virginia",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 15.58,
+        "priorCentsPerKwh": 15.37,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 13.8,
+        "year": "2025",
+        "priorDollarsPerMcf": 15.26
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1087,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "5A": 19,
+          "4A": 36
+        },
+        "countiesListed": 55,
+        "censusCounties": 55,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=WV",
+        "website": "https://energywv.org/",
+        "checked": {
+          "listed": "https://www.energywv.org",
+          "status": 200,
+          "finalUrl": "https://energywv.org/",
+          "usedDomainRoot": false
+        }
+      }
+    },
+    {
+      "code": "WY",
+      "name": "Wyoming",
+      "slug": "wyoming",
+      "complete": true,
+      "missing": [],
+      "electricity": {
+        "centsPerKwh": 14.01,
+        "priorCentsPerKwh": 13.08,
+        "period": "August 2026 YTD (prior: August 2025 YTD)"
+      },
+      "gas": {
+        "dollarsPerMcf": 11.74,
+        "year": "2025",
+        "priorDollarsPerMcf": 12.39
+      },
+      "gasHeatContentBtuPerCf": {
+        "value": 1054,
+        "year": "2025"
+      },
+      "climate": {
+        "zones": {
+          "7": 3,
+          "6B": 17,
+          "5B": 3
+        },
+        "countiesListed": 23,
+        "censusCounties": 23,
+        "coverage": 1,
+        "notListed": []
+      },
+      "energyOffice": {
+        "naseoProfile": "https://www.naseo.org/state?State=WY",
+        "website": "https://wyoenergy.org/",
+        "checked": {
+          "listed": "https://www.wyoenergy.org/",
+          "status": 200,
+          "finalUrl": "https://wyoenergy.org/",
+          "usedDomainRoot": false
+        }
+      }
+    }
+  ]
+}

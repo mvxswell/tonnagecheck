@@ -291,6 +291,7 @@ ${r3 ? `<p>At 3 tons, then, roughly ${usd(r3.f.mid - (r3.e.median ?? 0))} of a b
 <li>Households under <b>80%</b> of area median income can be covered for up to <b>100%</b> of project cost; households from <b>80% to 150%</b> for up to <b>50%</b>.</li>
 <li>Households above 150% of area median income are not eligible.</li>
 </ul>
+<p><b>Important 2026 change:</b> DOE Program Notice 26-2 (${a(SOURCES.doePn262.url, 'May 2026')}) removed fuel switching from the program. Rebates now cover upgrading existing electric equipment, such as electric resistance heat or an old heat pump, to more efficient electric equipment, not replacing a gas, oil or propane furnace. Homes must also address insulation and air sealing first unless they already meet the state's level. Launched state programs were given three months to adopt the change. See <a href="/states/">your state's page</a> for its energy office.</p>
 <p>The program is administered by state energy offices, and each state decides how and when to run it, which measures to cover and which contractors may participate. The ${a(SOURCES.doeRebates.url, 'DOE program page')} tells homeowners to contact their state energy office for status. Find yours in the ${a(SOURCES.naseo.url, 'NASEO directory')}. Do not count on a HEAR rebate until your state program has confirmed your eligibility in writing; in many states it must be applied at the point of sale through a participating contractor.</p>
 
 <h2>Utility and state rebates</h2>
