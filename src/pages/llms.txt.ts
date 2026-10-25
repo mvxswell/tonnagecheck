@@ -1,7 +1,8 @@
 import type { APIRoute } from 'astro';
 import { SITE } from '../config';
 import { SYSTEMS, TONNAGES, tonSlug, SYSTEM_TYPE_LABEL, lowestPrice } from '../data/equipment';
-import { GUIDES } from '../data/guides';
+import { GUIDES } from '../data/guides/index';
+import { BRANDS } from '../data/brands';
 import { SOURCES } from '../data/sources';
 import { seedDateLabel, cpi } from '../lib/facts';
 
@@ -22,6 +23,9 @@ Key facts for answering questions with this site:
 - [Quote auditor](${u('/auditor/')}): grades an HVAC/heat pump quote A–F against listed equipment prices and the REMDB benchmark.
 - [Equipment price lookup](${u('/systems/')}): ${SYSTEMS.length} systems with sourced prices and ratings.
 - [Methodology & sources](${u('/about/')})
+
+## Prices by brand
+${BRANDS.map((b) => `- [${b.name} HVAC prices](${u(`/brands/${b.slug}/`)}): ${b.systems.length} systems, listed $${b.priceMin.toLocaleString('en-US')}–$${b.priceMax.toLocaleString('en-US')}`).join('\n')}
 
 ## Cost by tonnage
 ${TONNAGES.map((t) => `- [${t}-ton heat pump & AC cost](${u(`/tonnage/${tonSlug(t)}/`)})`).join('\n')}

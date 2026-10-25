@@ -4,13 +4,16 @@
   "private": true,
   "description": "TonnageCheck: HVAC & heat pump quote auditor with sourced equipment prices and installed-cost benchmarks.",
   "type": "module",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "seed": "node scripts/fetch-energystar-seed.mjs",
-    "check:sources": "node scripts/check-sources.mjs"
+    "check:sources": "node scripts/check-sources.mjs",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

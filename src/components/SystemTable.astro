@@ -14,13 +14,13 @@ const shortType: Record<string, string> = { 'central-heat-pump': 'Ducted heat pu
       {systems.map((s) => {
         const best = s.prices.reduce((a, p) => (p.price < a.price ? p : a), s.prices[0]);
         return (
-          <tr data-search={searchable ? `${s.brand} ${s.title} ${s.components.join(' ')} ${SYSTEM_TYPE_LABEL[s.systemType]} ${s.tons} ton`.toLowerCase() : undefined} data-type={s.systemType} data-tons={s.tons}>
+          <tr data-search={searchable ? `${s.brand} ${s.title} ${s.components.join(' ')} ${SYSTEM_TYPE_LABEL[s.systemType]} ${s.tons} ton ${s.specs.seer2 ?? ''} seer2 ${s.zones && s.zones > 1 ? `${s.zones} zone multi-zone` : ''} ${s.energyStar?.coldClimate ? 'cold climate' : ''}`.toLowerCase() : undefined} data-type={s.systemType} data-tons={s.tons}>
             <td><a href={`/systems/${s.slug}/`}><b>{s.brand}</b> {s.components[0]}</a></td>
-            <td>{shortType[s.systemType]}</td>
+            <td>{shortType[s.systemType]}{s.zones && s.zones > 1 && `, ${s.zones}-zone`}</td>
             <td class="r num">{s.tons}</td>
             <td class="r num">{s.specs.seer2 ?? '—'}</td>
             <td class="r num">{s.specs.hspf2 ?? '—'}</td>
-            <td>{s.energyStar ? <span class="badge b-es">ENERGY STAR</span> : <span class="small muted">listing</span>}</td>
+            <td>{s.energyStar ? <span class="badge b-es">ENERGY STAR{s.energyStar.coldClimate && ' · cold climate'}</span> : <span class="small muted">listing</span>}</td>
             <td class="r num">{usd(lowestPrice(s))}</td>
             <td><a href={best.url} rel="nofollow noopener" target="_blank">{best.retailer}</a>{s.prices.length > 1 && <span class="small muted"> +{s.prices.length - 1}</span>}</td>
           </tr>

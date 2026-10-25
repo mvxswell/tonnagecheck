@@ -72,9 +72,12 @@ function parseHvacDirect(html, url) {
   const titleSeer2 = num((title.match(/(\d+(?:\.\d+)?)\s*SEER2/i) || [])[1]);
   const afue = num((title.match(/(\d+)%\s*AFUE/i) || title.match(/\s(\d{2})%\s/) || [])[1]);
   const furnaceBtu = num((title.match(/AFUE\s+([\d,]+)\s*BTU/i) || title.match(/\d+%\s+([\d,]+)\s*BTU/i) || [])[1]);
+  const zoneWord = { single: 1, dual: 2, tri: 3, quad: 4 };
+  const zm = title.match(/(\d)[\s-]*Zone/i) || title.match(/\b(Single|Dual|Tri|Quad)[\s-]*Zone/i);
+  const zones = zm ? (zoneWord[zm[1].toLowerCase()] ?? num(zm[1])) : null;
   return {
     title, url, price, components, brand,
-    tons, afue, furnaceBtu,
+    tons, afue, furnaceBtu, zones,
     ahriCertificateUrl: ahri ? new URL(ahri, url).href : null,
     retailerSpecs: {
       seer2: num(spec['SEER2']) ?? titleSeer2,
@@ -202,6 +205,7 @@ for (const src of sources.systems) {
     tons: p.tons,
     tier,
     components: p.components,
+    zones: src.systemType === 'mini-split' ? p.zones : null,
     afue: src.systemType === 'ac-furnace' ? p.afue : null,
     furnaceBtu: src.systemType === 'ac-furnace' ? p.furnaceBtu : null,
     specs: {
