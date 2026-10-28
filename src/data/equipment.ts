@@ -111,6 +111,30 @@ export function auditPayload() {
       prices: s.prices.map((p) => ({ r: p.retailer, u: p.url, p: p.price })),
     })),
     lineSet: (() => { const std = LINE_SETS.find((l) => l.url.includes('ls38583830')) || LINE_SETS[0]; return std ? { label: std.label, url: std.url, price: std.price } : null; })(),
+    addons: (() => {
+      const findAcc = (sku: string) => ACCESSORIES.find((a) => a.sku === sku);
+      const hs10 = findAcc('HKSC10XC') || ACCESSORIES.find((a) => a.category === 'heat-strip-kits');
+      const pad = findAcc('EL3232-3');
+      const disc = findAcc('83335');
+      const whip = findAcc('84136');
+      const surge = findAcc('SP517');
+      const pump = findAcc('CP201UL');
+      const ss1 = findAcc('SS1');
+      return {
+        heatStrip: hs10 ? { label: hs10.label, price: hs10.price, url: hs10.url, sku: hs10.sku } : { label: 'Goodman 10 kW SmartFrame electric heat strip kit', price: 155, url: 'https://hvacdirect.com/goodman-10-kilowatt-34-100-btu-heater-coil-for-smart-frame-air-handler-hksc10xc.html', sku: 'HKSC10XC' },
+        padWhipDisconnect: {
+          label: 'Composite condenser pad (EL3232-3) + 60A disconnect (83335) + 1/2" whip (84136)',
+          price: Math.round(((pad?.price ?? 117) + (disc?.price ?? 43.95) + (whip?.price ?? 34.99)) * 100) / 100,
+          url: pad?.url ?? 'https://hvacdirect.com/e-lite-equipment-pad-32-x-32-x-3.html',
+        },
+        surgeProtector: surge ? { label: surge.label, price: surge.price, url: surge.url, sku: surge.sku } : { label: '120/240V HVAC surge protector (SP517)', price: 148, url: 'https://hvacdirect.com/surge-protector-120-240-vac-single-phase-max-current-100000-amp-max-energy-1020-joules.html', sku: 'SP517' },
+        condensatePump: {
+          label: '20 ft condensate pump (CP201UL) + RectorSeal SS1 float switch',
+          price: Math.round(((pump?.price ?? 92) + (ss1?.price ?? 38.49)) * 100) / 100,
+          url: pump?.url ?? 'https://hvacdirect.com/20-lift-condensate-pump-cp201ul.html',
+        },
+      };
+    })(),
     remdb: BENCHMARKS.remdb.classes,
     cpi: { factor: BENCHMARKS.cpi.factor, base: BENCHMARKS.cpi.baseMonth, latest: BENCHMARKS.cpi.latestMonth },
   };
