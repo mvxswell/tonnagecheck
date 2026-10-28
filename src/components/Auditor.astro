@@ -55,15 +55,26 @@ const payload = auditPayload();
         <input id="f-zip" name="zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="30301" required autocomplete="postal-code" />
       </div>
       <fieldset class="f2 scope">
-        <legend>What's included in the quote?</legend>
-        <label class="check"><input type="checkbox" name="ductwork" id="f-duct" />New or modified ductwork</label>
-        <div class="duct-amt" hidden>
-          <label for="f-ductamt" class="small">Ductwork line amount, if itemized</label>
-          <div class="money"><span>$</span><input id="f-ductamt" name="ductworkAmount" type="text" inputmode="decimal" placeholder="optional" autocomplete="off" /></div>
+        <legend>What's included in the quote? (Line-item scope &amp; parts check)</legend>
+        <div class="scope-grid">
+          <div>
+            <label class="check"><input type="checkbox" name="ductwork" id="f-duct" />New or modified ductwork</label>
+            <div class="duct-amt" hidden>
+              <label for="f-ductamt" class="small">Ductwork line amount, if itemized</label>
+              <div class="money"><span>$</span><input id="f-ductamt" name="ductworkAmount" type="text" inputmode="decimal" placeholder="optional" autocomplete="off" /></div>
+            </div>
+            <label class="check"><input type="checkbox" name="panel" />200A electrical panel upgrade (REMDB benchmark)</label>
+            <label class="check"><input type="checkbox" name="lineSet" />New copper refrigerant line set ($289 material)</label>
+            <label class="check"><input type="checkbox" name="thermostat" />Smart thermostat ($542 installed benchmark)</label>
+          </div>
+          <div>
+            <label class="check"><input type="checkbox" name="heatStrip" />Aux electric heat strip kit 5–15 kW ($155 material)</label>
+            <label class="check"><input type="checkbox" name="padWhipDisconnect" />Outdoor pad + 60A disconnect + whip ($196 material)</label>
+            <label class="check"><input type="checkbox" name="surgeProtector" />HVAC 120/240V surge protector ($148 material)</label>
+            <label class="check"><input type="checkbox" name="condensatePump" />Condensate pump + SS1 float switch ($130 material)</label>
+          </div>
         </div>
-        <label class="check"><input type="checkbox" name="panel" />200A electrical panel upgrade</label>
-        <label class="check"><input type="checkbox" name="lineSet" />New refrigerant line set</label>
-        <label class="check"><input type="checkbox" name="thermostat" />Smart thermostat</label>
+        <p class="small muted" style="margin:6px 0 4px">See all 60 verified wholesale accessory SKUs in the <a href="/parts/">HVAC Parts &amp; Add-On Price Directory</a>.</p>
       </fieldset>
       <details class="f2 opt" open={brand ? true : undefined}>
         <summary>Optional: brand &amp; model on the quote</summary>
@@ -153,6 +164,22 @@ const payload = auditPayload();
 #tc-result tr.hl td:first-child{box-shadow:inset 3px 0 0 var(--acc)}
 .brandline{margin:0 0 10px}
 .method summary{cursor:pointer;color:var(--acc);font-weight:600}
+.scope-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:4px 16px}
+.sc-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.sc-tools-btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn.small-act{padding:7px 12px;font-size:.86rem}
+.print-only{display:none}
+@media print{
+  header,footer,.aform,.cta,#tc-match,.sc-tools,.crumbs,.rebates .links{display:none!important}
+  body{background:#fff!important;color:#000!important;font-size:10.5pt}
+  .wrap{max-width:100%!important;padding:0!important}
+  .card{box-shadow:none!important;border:1px solid #999!important;padding:14px!important;break-inside:avoid}
+  .print-only{display:block!important;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #000}
+  .kpis{grid-template-columns:repeat(4,1fr)!important;gap:8px!important}
+  .kpi{padding:8px!important}
+  .bar{display:none!important}
+  details.method{open:true}
+}
 </style>
 
 <script>
@@ -189,12 +216,43 @@ const payload = auditPayload();
 
   // prefill from ?quote=&zip=&type=&tons= (shared links)
   const qs = new URLSearchParams(location.search);
-  for (const [k, n] of [['type', 'systemType'], ['tons', 'tons'], ['tier', 'tier'], ['quote', 'quote'], ['zip', 'zip'], ['brand', 'brand'], ['model', 'model']] as const) {
+  for (const [k, n] of [['type', 'systemType'], ['tons', 'tons'], ['tier', 'tier'], ['quote', 'quote'], ['zip', 'zip'], ['brand', 'brand'], ['model', 'model'], ['btu', 'furnaceBtu'], ['afue', 'afue'], ['ductAmt', 'ductworkAmount']] as const) {
     const v = qs.get(k);
     const el = form.elements.namedItem(n) as HTMLInputElement | HTMLSelectElement | null;
     if (v && el) el.value = v.slice(0, 80);
   }
+  for (const [k, n] of [['duct', 'ductwork'], ['panel', 'panel'], ['lineSet', 'lineSet'], ['tstat', 'thermostat'], ['heatStrip', 'heatStrip'], ['padWhip', 'padWhipDisconnect'], ['surge', 'surgeProtector'], ['pump', 'condensatePump']] as const) {
+    const v = qs.get(k);
+    const el = form.elements.namedItem(n) as HTMLInputElement | null;
+    if (el && (v === '1' || v === 'true')) el.checked = true;
+  }
+  ductBox.hidden = !duct.checked;
   syncType();
+
+  function buildAuditUrl(input: AuditInput, brand: string, model: string): string {
+    const p = new URLSearchParams();
+    p.set('type', input.systemType);
+    p.set('tons', String(input.tons));
+    p.set('tier', input.tier);
+    p.set('quote', String(Math.round(input.quote)));
+    p.set('zip', input.zip);
+    if (brand) p.set('brand', brand);
+    if (model) p.set('model', model);
+    if (input.systemType === 'ac-furnace') {
+      p.set('btu', String(input.furnaceBtu));
+      p.set('afue', String(input.afue));
+    }
+    if (input.scope.ductwork) p.set('duct', '1');
+    if (input.scope.ductworkAmount > 0) p.set('ductAmt', String(Math.round(input.scope.ductworkAmount)));
+    if (input.scope.panel) p.set('panel', '1');
+    if (input.scope.lineSet) p.set('lineSet', '1');
+    if (input.scope.thermostat) p.set('tstat', '1');
+    if (input.scope.heatStrip) p.set('heatStrip', '1');
+    if (input.scope.padWhipDisconnect) p.set('padWhip', '1');
+    if (input.scope.surgeProtector) p.set('surge', '1');
+    if (input.scope.condensatePump) p.set('pump', '1');
+    return `${location.origin}${location.pathname}?${p.toString()}#tc-result`;
+  }
 
   // ?brand=Goodman (or a brand prop): open the brand field and say what we have for that brand.
   const brandInput = form.elements.namedItem('brand') as HTMLInputElement;
@@ -229,8 +287,22 @@ const payload = auditPayload();
       ? `This quote is ${usd(r.overcharge)} above the benchmark midpoint.`
       : r.gradedQuote < r.fair.low ? 'This quote is below the benchmark range. Read the flags below.' : `This quote is at or below the benchmark midpoint of ${usd(r.fair.mid)}.`;
 
+    const shareUrl = buildAuditUrl(input, brand, model);
     out.innerHTML = `
       <div class="card">
+        <div class="print-only">
+          <strong>TonnageCheck™ Printable HVAC Quote Audit &amp; Wholesale BOM Sheet</strong><br/>
+          <span class="small">Generated ${new Date().toLocaleDateString('en-US')} · Benchmark seed: ${esc(data.seedDate.slice(0, 10))} · Permalink: ${esc(shareUrl)}</span>
+        </div>
+        <div class="sc-tools">
+          <div class="small muted">Share or bring this audit sheet to your contractor negotiation:</div>
+          <div class="sc-tools-btns">
+            <button type="button" class="btn ghost small-act" id="tc-copy-link">Copy Audit Link</button>
+            <button type="button" class="btn ghost small-act" id="tc-print-btn">Print / Save PDF Audit Sheet</button>
+            <a class="btn ghost small-act" href="/calculator/?tons=${encodeURIComponent(String(input.tons))}&type=${encodeURIComponent(input.systemType)}">Run Operating Cost &amp; Payback →</a>
+            <span class="small muted" id="tc-share-msg" aria-live="polite"></span>
+          </div>
+        </div>
         <div class="sc-head">
           <div class="sc-grade g-${r.grade}" aria-label="Grade ${r.grade}">${r.grade}</div>
           <div>
@@ -290,6 +362,20 @@ const payload = auditPayload();
       </div>`;
     out.hidden = false;
 
+    (document.getElementById('tc-copy-link') as HTMLButtonElement).addEventListener('click', async () => {
+      history.replaceState(null, '', shareUrl.replace(location.origin, ''));
+      const msg = document.getElementById('tc-share-msg')!;
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        msg.textContent = 'Copied link!';
+      } catch {
+        msg.textContent = 'URL updated in address bar';
+      }
+      setTimeout(() => { msg.textContent = ''; }, 3000);
+    });
+    (document.getElementById('tc-print-btn') as HTMLButtonElement).addEventListener('click', () => {
+      window.print();
+    });
     (document.getElementById('tc-open-match') as HTMLButtonElement).addEventListener('click', () => {
       match.hidden = false;
       const mf = match.querySelector('form') as HTMLFormElement;
@@ -334,12 +420,24 @@ const payload = auditPayload();
       quote, zip,
       furnaceBtu: parseFloat(String(f.get('furnaceBtu'))),
       afue: parseFloat(String(f.get('afue'))),
-      scope: { ductwork: f.has('ductwork'), ductworkAmount: money(String(f.get('ductworkAmount') || '')) || 0, panel: f.has('panel'), lineSet: f.has('lineSet'), thermostat: f.has('thermostat') },
+      scope: {
+        ductwork: f.has('ductwork'),
+        ductworkAmount: money(String(f.get('ductworkAmount') || '')) || 0,
+        panel: f.has('panel'),
+        lineSet: f.has('lineSet'),
+        thermostat: f.has('thermostat'),
+        heatStrip: f.has('heatStrip'),
+        padWhipDisconnect: f.has('padWhipDisconnect'),
+        surgeProtector: f.has('surgeProtector'),
+        condensatePump: f.has('condensatePump'),
+      },
     };
     const brand = String(f.get('brand') || '').trim();
     const model = String(f.get('model') || '').trim();
     const r = render(input, brand, model);
     out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    history.replaceState(null, '', buildAuditUrl(input, brand, model).replace(location.origin, ''));
 
     if (f.has('share')) {
       rpc(SUPABASE_URL, SUPABASE_ANON_KEY, 'submit_quote_audit', {
@@ -349,4 +447,32 @@ const payload = auditPayload();
       });
     }
   });
+
+  // Auto-render on page load if shared URL includes valid quote and 5-digit ZIP
+  const initQuote = money(qs.get('quote') || '');
+  const initZip = (qs.get('zip') || '').trim();
+  if (initQuote >= 500 && initQuote <= 200000 && /^\d{5}$/.test(initZip)) {
+    const f = new FormData(form);
+    const input: AuditInput = {
+      systemType: f.get('systemType') as SystemType,
+      tons: parseFloat(String(f.get('tons'))),
+      tier: f.get('tier') as Tier,
+      quote: initQuote,
+      zip: initZip,
+      furnaceBtu: parseFloat(String(f.get('furnaceBtu'))),
+      afue: parseFloat(String(f.get('afue'))),
+      scope: {
+        ductwork: f.has('ductwork'),
+        ductworkAmount: money(String(f.get('ductworkAmount') || '')) || 0,
+        panel: f.has('panel'),
+        lineSet: f.has('lineSet'),
+        thermostat: f.has('thermostat'),
+        heatStrip: f.has('heatStrip'),
+        padWhipDisconnect: f.has('padWhipDisconnect'),
+        surgeProtector: f.has('surgeProtector'),
+        condensatePump: f.has('condensatePump'),
+      },
+    };
+    render(input, String(f.get('brand') || '').trim(), String(f.get('model') || '').trim());
+  }
 </script>

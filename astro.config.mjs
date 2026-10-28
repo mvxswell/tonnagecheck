@@ -44,7 +44,8 @@ function siteChecks() {
             path.startsWith('/brands/') ||
             path.startsWith('/guides/') ||
             path.startsWith('/compare/') ||
-            path.startsWith('/parts/')
+            path.startsWith('/parts/') ||
+            path.startsWith('/calculator/')
           ) {
             if (title && title.length >= 60) errors.push(`${path}: title is ${title.length} chars (must be < 60): "${title}"`);
             if (desc && desc.length >= 160) errors.push(`${path}: description is ${desc.length} chars (must be < 160): "${desc}"`);

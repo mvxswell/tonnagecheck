@@ -14,7 +14,7 @@ export interface AuditInput {
   tier: Tier;
   quote: number;
   zip: string;
-  scope: { ductwork: boolean; ductworkAmount: number; panel: boolean; lineSet: boolean; thermostat: boolean };
+  scope: { ductwork: boolean; ductworkAmount: number; panel: boolean; lineSet: boolean; thermostat: boolean; heatStrip?: boolean; padWhipDisconnect?: boolean; surgeProtector?: boolean; condensatePump?: boolean };
   furnaceBtu?: number; // AC + furnace only
   afue?: number; // percent, AC + furnace only
 }
@@ -158,13 +158,39 @@ export function audit(data: AuditPayload, input: AuditInput): AuditResult {
     lines.push({ label: `New line set (material: ${data.lineSet.label})`, range: flat(data.lineSet.price), estimate: false, method: 'Listed price of the line set. Brazing and evacuation labor are already inside the system benchmark.', sourceUrl: data.lineSet.url });
     if (input.tons >= 3.5) flags.push('Systems of 3.5 tons and up usually need a 7/8" suction line; the line set price shown is for 3/8" × 3/4", so expect a little more.');
   }
+  const addons = (data as any).addons;
+  let addonPartsTotal = 0;
+  if (input.scope.heatStrip && addons?.heatStrip) {
+    const hs = addons.heatStrip;
+    addonPartsTotal += hs.price;
+    fair = add(fair, flat(hs.price));
+    lines.push({ label: `Aux electric heat strip kit (material: ${hs.label})`, range: flat(hs.price), estimate: false, method: 'Listed online price of the plug-and-play heat strip kit on an existing circuit. If a new 240V circuit is required, check the REMDB new-circuit benchmark.', sourceUrl: hs.url });
+  }
+  if (input.scope.padWhipDisconnect && addons?.padWhipDisconnect) {
+    const pwd = addons.padWhipDisconnect;
+    addonPartsTotal += pwd.price;
+    fair = add(fair, flat(pwd.price));
+    lines.push({ label: `Outdoor pad, 60A disconnect & whip hardware (${pwd.label})`, range: flat(pwd.price), estimate: false, method: 'Combined listed hardware price on HVACDirect ($117 pad + $43.95 disconnect + $34.99 whip). Reconnecting at the existing outdoor circuit is part of standard installation labor.', sourceUrl: pwd.url });
+  }
+  if (input.scope.surgeProtector && addons?.surgeProtector) {
+    const sp = addons.surgeProtector;
+    addonPartsTotal += sp.price;
+    fair = add(fair, flat(sp.price));
+    lines.push({ label: `HVAC surge protector (material: ${sp.label})`, range: flat(sp.price), estimate: false, method: 'Listed online price of the 120/240V single-phase 100,000A surge protector wired at the outdoor disconnect.', sourceUrl: sp.url });
+  }
+  if (input.scope.condensatePump && addons?.condensatePump) {
+    const cp = addons.condensatePump;
+    addonPartsTotal += cp.price;
+    fair = add(fair, flat(cp.price));
+    lines.push({ label: `Condensate pump & float safety switch (${cp.label})`, range: flat(cp.price), estimate: false, method: 'Combined listed hardware price on HVACDirect ($92 20-ft condensate pump + $38.49 RectorSeal SS1 float switch).', sourceUrl: cp.url });
+  }
 
   const ductAmt = input.scope.ductwork ? Math.max(0, input.scope.ductworkAmount || 0) : 0;
   const gradedQuote = Math.max(0, input.quote - ductAmt);
   if (input.scope.ductwork && !ductAmt) flags.push('Ductwork is in scope but not itemized. No public benchmark covers duct replacement, so the grade below includes it and may overstate the overcharge. Ask the contractor to price ductwork as its own line.');
   if (ductAmt) flags.push(`We set aside the $${ductAmt.toLocaleString('en-US')} ductwork line and graded the remaining $${gradedQuote.toLocaleString('en-US')}. Ductwork is not benchmarked.`);
 
-  const equipValue = eq.value != null ? eq.value + (lineSet?.price ?? 0) : null;
+  const equipValue = eq.value != null ? eq.value + (lineSet?.price ?? 0) + addonPartsTotal : null;
   fair = roundRange(fair);
   const ratio = gradedQuote / fair.mid;
   const grade = gradeFor(ratio, fair);

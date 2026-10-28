@@ -1,0 +1,759 @@
+---
+import Base from '../../layouts/Base.astro';
+import Auditor from '../../components/Auditor.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import { SITE } from '../../config';
+import { STATES, STATE_SEED_DATE, EFFICIENCY, heatingCosts, climateSummary } from '../../data/states';
+import { SYSTEMS, TONNAGES, SYSTEM_TYPE_LABEL, lowestPrice } from '../../data/equipment';
+import { SOURCES } from '../../data/sources';
+import { fairRange, usd, fmtRange, seedDateLabel } from '../../lib/facts';
+
+const allCosts = STATES.flatMap((s) => heatingCosts(s).map((c) => ({ state: s.name, code: s.code, ...c })));
+const hpCosts = allCosts.filter((c) => c.label.startsWith('Heat pump,')).sort((a, b) => a.dollarsPerMMBtu - b.dollarsPerMMBtu);
+const minHp = hpCosts[0];
+const maxHp = hpCosts[hpCosts.length - 1];
+const f3 = fairRange('central-heat-pump', 3, 'standard');
+
+const title = `${usd(minHp.dollarsPerMMBtu)}–${usd(maxHp.dollarsPerMMBtu)}/MMBtu Heat Pump vs Gas Cost Calculator`;
+const description = `51-state EIA heat pump vs gas furnace $/MMBtu operating cost, dual-fuel balance-point COP, and SEER2/HSPF2 payback calculator (${fmtRange(f3)} 3-ton benchmark).`;
+
+const statePayload = STATES.map((s) => {
+  const clim = climateSummary(s);
+  return {
+    code: s.code,
+    name: s.name,
+    slug: s.slug,
+    elecCents: s.electricity?.centsPerKwh ?? null,
+    elecPeriod: s.electricity?.period?.split(' (')[0] ?? null,
+    gasDollarsPerMcf: s.gas?.dollarsPerMcf ?? null,
+    gasYear: s.gas?.year ?? null,
+    gasBtuPerCf: s.gasHeatContentBtuPerCf?.value ?? null,
+    climateZones: clim.zoneList,
+    climateKind: clim.kind,
+    coldSharePct: Math.round(clim.coldShare * 100),
+    countiesListed: s.climate.countiesListed,
+    energyOfficeUrl: s.energyOffice.website,
+    naseoProfile: s.energyOffice.naseoProfile,
+  };
+});
+
+const systemPayload = SYSTEMS.filter((s) => s.specs.seer2 != null).map((s) => {
+  const price = lowestPrice(s);
+  const fair = fairRange(s.systemType, s.tons, s.tier);
+  return {
+    slug: s.slug,
+    brand: s.brand,
+    title: s.title,
+    model: s.components[0],
+    systemType: s.systemType,
+    typeLabel: SYSTEM_TYPE_LABEL[s.systemType],
+    tons: s.tons,
+    tier: s.tier,
+    seer2: s.specs.seer2!,
+    eer2: s.specs.eer2,
+    hspf2: s.specs.hspf2,
+    cop5f: s.energyStar?.copAt5F ?? null,
+    coldClimate: !!s.energyStar?.coldClimate,
+    energyStar: !!s.energyStar,
+    afue: s.afue,
+    price,
+    retailer: s.prices[0].retailer,
+    retailerUrl: s.prices[0].url,
+    fairLow: fair.low,
+    fairMid: fair.mid,
+    fairHigh: fair.high,
+  };
+});
+
+const defaultState = statePayload.find((s) => s.code === 'NY') ?? statePayload[0];
+const stateDateLabel = new Date(STATE_SEED_DATE).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+
+const ld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'TonnageCheck Heat Pump vs Gas Furnace Operating Cost & Payback Calculator',
+    url: `${SITE.url}/calculator/`,
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description,
+    isBasedOn: [SOURCES.eiaElectricity.url, SOURCES.eiaGas.url, SOURCES.eiaHeatContent.url, SOURCES.pnnlClimateZones.url, SOURCES.remdb.url],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE.url}/` },
+      { '@type': 'ListItem', position: 2, name: 'Operating Cost & Payback Calculator', item: `${SITE.url}/calculator/` },
+    ],
+  },
+];
+---
+<Base title={title} description={description} jsonld={ld}>
+  <p class="crumbs"><a href="/">Home</a> / Operating cost &amp; payback calculator</p>
+  <h1>Heat pump vs. gas furnace operating cost, dual-fuel balance point &amp; SEER2 payback calculator</h1>
+  <p class="lead">Compare exact delivered heating fuel cost (<code>$/MMBtu</code>), dual-fuel economic crossover COP, and real-equipment SEER2/HSPF2 upgrade payback across all 50 states and D.C. Every rate comes from the U.S. Energy Information Administration ({stateDateLabel}) and every equipment price comes from our verified {SYSTEMS.length}-system catalog ({seedDateLabel}).</p>
+
+  <section class="card calc-box" id="calc-root" aria-labelledby="calc-h1">
+    <div class="calc-head">
+      <div>
+        <h2 id="calc-h1" style="margin:0 0 4px">1. Select your state, utility rates &amp; system efficiencies</h2>
+        <p class="small muted" style="margin:0">Defaults load your state's published EIA residential electricity and natural gas averages. Override them with the exact supply + delivery rate from your utility bill.</p>
+      </div>
+      <div class="calc-actions">
+        <button type="button" class="btn ghost small-btn" id="calc-share-btn">Copy calculator link</button>
+        <span class="small muted" id="calc-share-msg" aria-live="polite"></span>
+      </div>
+    </div>
+
+    <div class="calc-grid">
+      <div>
+        <label for="c-state">State / Jurisdiction (EIA &amp; PNNL data)</label>
+        <select id="c-state">
+          {statePayload.map((s) => (
+            <option value={s.code} selected={s.code === defaultState.code}>
+              {s.name} ({s.elecCents != null ? `${s.elecCents}¢/kWh` : '—'} · {s.gasDollarsPerMcf != null ? `$${s.gasDollarsPerMcf}/Mcf` : '—'})
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label for="c-elec">Electricity rate (¢ / kWh)</label>
+        <input id="c-elec" type="number" step="0.01" min="1" max="100" value={defaultState.elecCents ?? 18} />
+        <p class="small muted hint" id="c-elec-note">EIA state average: {defaultState.elecCents}¢/kWh ({defaultState.elecPeriod})</p>
+      </div>
+      <div>
+        <label for="c-gas">Natural gas price ($ / Mcf)</label>
+        <input id="c-gas" type="number" step="0.01" min="1" max="120" value={defaultState.gasDollarsPerMcf ?? 15} />
+        <p class="small muted hint" id="c-gas-note">EIA state average: ${defaultState.gasDollarsPerMcf}/Mcf ({defaultState.gasYear}) · {defaultState.gasBtuPerCf?.toLocaleString('en-US')} Btu/cf</p>
+      </div>
+      <div>
+        <label for="c-hspf2">Heat pump seasonal HSPF2</label>
+        <input id="c-hspf2" type="number" step="0.1" min="6.5" max="14" value={EFFICIENCY.hspf2Median} />
+        <p class="small muted hint">Catalog median: {EFFICIENCY.hspf2Median} HSPF2 (cold-climate median: {EFFICIENCY.coldHspf2Median} HSPF2)</p>
+      </div>
+      <div>
+        <label for="c-cop5">Heat pump low-ambient COP at 5°F</label>
+        <input id="c-cop5" type="number" step="0.05" min="1.0" max="3.5" value="1.85" />
+        <p class="small muted hint">ENERGY STAR Cold Climate minimum: 1.75 COP at 5°F</p>
+      </div>
+      <div>
+        <label for="c-afue">Comparison gas furnace AFUE (%)</label>
+        <select id="c-afue">
+          <option value="80">80% AFUE (standard atmospheric/induced draft)</option>
+          <option value="92">92% AFUE (mid-efficiency condensing)</option>
+          <option value="96" selected>96% AFUE (high-efficiency condensing)</option>
+        </select>
+        <p class="small muted hint">Seeded furnace catalog spans {EFFICIENCY.afueLow}%–{EFFICIENCY.afueHigh}% AFUE</p>
+      </div>
+    </div>
+
+    <div class="kpis" style="margin-top:16px">
+      <div class="kpi">
+        <div class="k">Heat pump seasonal cost <span class="badge b-est">$/MMBtu</span></div>
+        <div class="v num" id="kpi-hp-mmbtu">—</div>
+        <div class="s" id="kpi-hp-sub">Seasonal COP —</div>
+      </div>
+      <div class="kpi">
+        <div class="k">Gas furnace cost <span class="badge b-est">$/MMBtu</span></div>
+        <div class="v num" id="kpi-gas-mmbtu">—</div>
+        <div class="s" id="kpi-gas-sub">At selected AFUE</div>
+      </div>
+      <div class="kpi">
+        <div class="k">Dual-fuel economic balance COP</div>
+        <div class="v num" id="kpi-breakeven-cop">—</div>
+        <div class="s" id="kpi-breakeven-sub">Switch to gas below this COP</div>
+      </div>
+      <div class="kpi">
+        <div class="k">IECC 2021 climate profile</div>
+        <div class="v num" id="kpi-climate-zones">{defaultState.climateZones}</div>
+        <div class="s" id="kpi-climate-sub">{defaultState.coldSharePct}% of counties in Zone 4+</div>
+      </div>
+    </div>
+
+    <div class="note" id="c-crossover-verdict" style="margin-top:12px"></div>
+
+    <h3 style="margin-top:20px">Delivered heating fuel cost table (<span id="c-table-state">{defaultState.name}</span>)</h3>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Heating mode / equipment</th>
+            <th class="r">Effective COP / Efficiency</th>
+            <th class="r">$ per MMBtu delivered <span class="badge b-est">est.</span></th>
+            <th>Thermodynamic formula (EIA constants)</th>
+          </tr>
+        </thead>
+        <tbody id="c-cost-tbody"></tbody>
+      </table>
+    </div>
+    <p class="small muted" style="margin-top:8px">
+      Constants: <code>1 MMBtu = 1,000,000 BTU = 293.071 kWh</code> (<code>3,412.14 BTU/kWh</code>); <code>Seasonal COP = HSPF2 ÷ 3.41214</code>. State gas heat content from <a href={SOURCES.eiaHeatContent.url} rel="noopener" target="_blank">EIA</a>; electricity from <a href={SOURCES.eiaElectricity.url} rel="noopener" target="_blank">EIA Electric Power Monthly Table 5.6.B</a>; gas prices from <a href={SOURCES.eiaGas.url} rel="noopener" target="_blank">EIA Natural Gas Navigator</a>.
+    </p>
+  </section>
+
+  <section class="card calc-box" style="margin-top:22px" aria-labelledby="payback-h2">
+    <h2 id="payback-h2" style="margin-top:0">2. Real-equipment SEER2 &amp; HSPF2 upgrade payback calculator</h2>
+    <p class="small muted">Pick a tonnage and compare any two verified systems in our catalog ({seedDateLabel}). We use their actual listed wholesale/online price delta and rated SEER2 / HSPF2 efficiencies—never invented price tiers—to show how many cooling and heating million BTUs per year it takes to pay back the higher-efficiency unit at your state's electricity rate.</p>
+
+    <div class="calc-grid">
+      <div>
+        <label for="p-tons">System size (tons)</label>
+        <select id="p-tons">
+          {TONNAGES.map((t) => <option value={t} selected={t === 3}>{t} ton ({(t * 12000).toLocaleString('en-US')} BTU/h)</option>)}
+        </select>
+      </div>
+      <div>
+        <label for="p-type">System category filter</label>
+        <select id="p-type">
+          <option value="">All heat pumps &amp; AC systems</option>
+          <option value="central-heat-pump" selected>Central heat pump (ducted split)</option>
+          <option value="mini-split">Mini-split heat pump</option>
+          <option value="ac-furnace">Central AC + gas furnace</option>
+          <option value="heat-pump-only">Heat pump condenser only</option>
+        </select>
+      </div>
+      <div>
+        <label for="p-load-preset">Annual load reference (MMBtu/yr delivered)</label>
+        <select id="p-load-preset">
+          <option value="30,15">Cooling-dominant (30 MMBtu cool / 15 MMBtu heat)</option>
+          <option value="24,36" selected>Mixed climate (24 MMBtu cool / 36 MMBtu heat)</option>
+          <option value="15,55">Heating-dominant (15 MMBtu cool / 55 MMBtu heat)</option>
+          <option value="custom">Custom delivered MMBtu/yr below</option>
+        </select>
+      </div>
+      <div>
+        <label for="p-cool-mmbtu">Annual cooling load delivered (MMBtu/yr)</label>
+        <input id="p-cool-mmbtu" type="number" step="1" min="0" max="200" value="24" />
+        <p class="small muted hint">1 MMBtu = 1,000,000 BTU removed (<span id="p-cool-tonhrs">667</span> full-load 3-ton hrs)</p>
+      </div>
+      <div>
+        <label for="p-heat-mmbtu">Annual heat pump heating delivered (MMBtu/yr)</label>
+        <input id="p-heat-mmbtu" type="number" step="1" min="0" max="300" value="36" />
+        <p class="small muted hint">Set to 0 if comparing cooling-only savings</p>
+      </div>
+      <div>
+        <label for="p-basis">Upfront price delta basis</label>
+        <select id="p-basis">
+          <option value="equip" selected>Listed online equipment price delta (verified)</option>
+          <option value="remdb">DOE REMDB installed benchmark midpoint delta (est.)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="wb-pickers" style="margin-top:14px">
+      <div>
+        <label for="p-sys-a">Baseline system (lower price / standard SEER2)</label>
+        <select id="p-sys-a"></select>
+      </div>
+      <div>
+        <label for="p-sys-b">Upgrade system (higher SEER2 / inverter)</label>
+        <select id="p-sys-b"></select>
+      </div>
+    </div>
+
+    <div class="kpis" style="margin-top:16px">
+      <div class="kpi">
+        <div class="k">Upfront price delta (B − A)</div>
+        <div class="v num" id="p-kpi-delta">—</div>
+        <div class="s" id="p-kpi-delta-sub">Listed equipment difference</div>
+      </div>
+      <div class="kpi">
+        <div class="k">Annual electricity saved</div>
+        <div class="v num" id="p-kpi-kwh">—</div>
+        <div class="s" id="p-kpi-kwh-sub">Cooling + heating kWh/yr</div>
+      </div>
+      <div class="kpi">
+        <div class="k">Annual bill savings <span class="badge b-est">est.</span></div>
+        <div class="v num" id="p-kpi-save">—</div>
+        <div class="s" id="p-kpi-save-sub">At selected ¢/kWh rate</div>
+      </div>
+      <div class="kpi">
+        <div class="k">Simple payback period</div>
+        <div class="v num" id="p-kpi-years">—</div>
+        <div class="s" id="p-kpi-years-sub">Before any local utility rebate</div>
+      </div>
+    </div>
+
+    <div class="tablewrap" style="margin-top:14px">
+      <table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th class="r" id="p-th-a">Baseline (System A)</th>
+            <th class="r" id="p-th-b">Upgrade (System B)</th>
+            <th class="r">Difference (B vs A)</th>
+          </tr>
+        </thead>
+        <tbody id="p-tbody"></tbody>
+      </table>
+    </div>
+    <p class="small muted" style="margin-top:8px">
+      Formula: <code>Cooling kWh = (Cooling MMBtu × 1,000,000) ÷ (SEER2 × 1,000)</code>; <code>Heating kWh = (Heating MMBtu × 1,000,000) ÷ (HSPF2 × 1,000)</code>. Real household energy use depends on your ACCA Manual J load, ductwork static pressure, thermostat setbacks, and local weather. <a href="/guides/14-3-seer2-vs-16-seer2-vs-18-seer2-heat-pump-payback-math/">Read our full 14.3 vs 16 vs 18+ SEER2 payback guide →</a>
+    </p>
+  </section>
+
+  <section class="card calc-box" style="margin-top:22px" aria-labelledby="rebate-h2">
+    <h2 id="rebate-h2" style="margin-top:0">3. 2026 Federal 25C, HEAR / HOMES &amp; State Energy Office status (<span id="r-state-name">{defaultState.name}</span>)</h2>
+    <div class="rbx">
+      <div class="rb">
+        <b>Federal Section 25C tax credit</b> <span class="badge b-red">Not available in 2026</span>
+        <p class="small" style="margin:6px 0">Expired December 31, 2025 under Public Law 119-21 (Sections 70505–70507). The IRS states that 25C is not allowed for any property placed in service after Dec. 31, 2025. Do not let a contractor subtract a "$2,000 federal tax credit" from a 2026 proposal.</p>
+        <div class="links">
+          <a href={SOURCES.irsObbba.url} rel="noopener" target="_blank">IRS: OBBB provisions</a>
+          <a href={SOURCES.irs25c.url} rel="noopener" target="_blank">IRS: Section 25C</a>
+        </div>
+      </div>
+      <div class="rb">
+        <b>HEEHR / HEAR point-of-sale rebate (42 U.S.C. § 18795a)</b> <span class="badge b-over">Income-qualified · Electric-to-electric only</span>
+        <p class="small" style="margin:6px 0">Up to $8,000 for a qualifying heat pump for households below 150% of Area Median Income (100% of cost below 80% AMI; 50% of cost from 80%–150% AMI). Under <b>DOE Program Notice 26-2 (May 2026)</b>, HEAR no longer pays for fuel switching (replacing a natural gas, propane, or oil furnace with a heat pump); it only covers upgrading existing electric heating or cooling, and requires adequate insulation and air sealing first.</p>
+        <div class="links">
+          <a href={SOURCES.hearStatute.url} rel="noopener" target="_blank">42 U.S.C. § 18795a</a>
+          <a href={SOURCES.doePn262.url} rel="noopener" target="_blank">DOE Program Notice 26-2</a>
+          <a href={SOURCES.homesStatute.url} rel="noopener" target="_blank">42 U.S.C. § 18795 (HOMES)</a>
+        </div>
+      </div>
+      <div class="rb" id="r-state-box">
+        <b><span id="r-office-title">{defaultState.name}</span> state energy office &amp; utility incentives</b> <span class="badge b-fair">Check local programs</span>
+        <p class="small" style="margin:6px 0">State energy offices and electric utilities run their own heat pump rebates (often requiring an AHRI-certified cold-climate or ENERGY STAR pairing). Check your state page and official energy office directory below:</p>
+        <div class="links" id="r-state-links">
+          <a href={`/states/${defaultState.slug}/`} id="r-link-state-page">{defaultState.name} heat pump &amp; energy price page</a>
+          {defaultState.energyOfficeUrl && <a href={defaultState.energyOfficeUrl} id="r-link-office" rel="noopener" target="_blank">Official state energy office</a>}
+          <a href={SOURCES.dsire.url} rel="noopener" target="_blank">DSIRE database</a>
+          <a href={SOURCES.esRebateFinder.url} rel="noopener" target="_blank">ENERGY STAR Rebate Finder</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top:26px">
+    <h2>All 51 states: EIA electricity, natural gas &amp; heat pump vs. furnace $/MMBtu</h2>
+    <p class="small muted">Sorted alphabetically. Click any state for its full county-by-county IECC climate zone breakdown, cold-climate system list, and 2026 rebate rules.</p>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>State</th>
+            <th class="r">Electricity (EIA)</th>
+            <th class="r">Natural gas (EIA)</th>
+            <th class="r">Heat pump ({EFFICIENCY.hspf2Median} HSPF2)</th>
+            <th class="r">Gas furnace ({EFFICIENCY.afueLow}% / {EFFICIENCY.afueHigh}%)</th>
+            <th class="r">96% gas break-even COP</th>
+          </tr>
+        </thead>
+        <tbody>
+          {STATES.map((s) => {
+            const cs = heatingCosts(s);
+            const hp = cs.find((c) => c.label.startsWith('Heat pump,'));
+            const g80 = cs.find((c) => c.label.startsWith(`Gas furnace, ${EFFICIENCY.afueLow}%`));
+            const g96 = cs.find((c) => c.label.startsWith(`Gas furnace, ${EFFICIENCY.afueHigh}%`));
+            const resist = cs.find((c) => c.label.startsWith('Electric resistance'));
+            const beCop96 = resist && g96 ? (resist.dollarsPerMMBtu / g96.dollarsPerMMBtu).toFixed(2) : '—';
+            return (
+              <tr>
+                <td><a href={`/states/${s.slug}/`}><b>{s.name}</b></a></td>
+                <td class="r num">{s.electricity ? `${s.electricity.centsPerKwh}¢/kWh` : '—'}</td>
+                <td class="r num">{s.gas ? `$${s.gas.dollarsPerMcf}/Mcf` : '—'}</td>
+                <td class="r num">{hp ? usd(hp.dollarsPerMMBtu) : '—'}</td>
+                <td class="r num">{g80 && g96 ? `${usd(g80.dollarsPerMMBtu)} / ${usd(g96.dollarsPerMMBtu)}` : '—'}</td>
+                <td class="r num">{beCop96}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <Auditor heading="Have a contractor quote? Grade it A–F &amp; print an audit sheet" />
+  <Newsletter />
+</Base>
+
+<script type="application/json" id="calc-states-json" set:html={JSON.stringify(statePayload)} />
+<script type="application/json" id="calc-systems-json" set:html={JSON.stringify(systemPayload)} />
+<script type="application/json" id="calc-eff-json" set:html={JSON.stringify(EFFICIENCY)} />
+
+<style>
+.calc-box{padding:20px}
+.calc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.calc-actions{display:flex;align-items:center;gap:8px}
+.small-btn{padding:7px 12px;font-size:.86rem}
+.calc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.wb-pickers{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rbx{display:grid;gap:10px}
+.rb{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fff}
+.rb .links a{margin-right:14px;font-size:.88rem}
+@media (max-width:780px){.calc-grid,.wb-pickers{grid-template-columns:1fr}}
+</style>
+
+<script>
+  const states: any[] = JSON.parse(document.getElementById('calc-states-json')!.textContent!);
+  const systems: any[] = JSON.parse(document.getElementById('calc-systems-json')!.textContent!);
+  const eff: any = JSON.parse(document.getElementById('calc-eff-json')!.textContent!);
+
+  const stateByCode = new Map(states.map((s) => [s.code, s]));
+  const sysBySlug = new Map(systems.map((s) => [s.slug, s]));
+
+  const KWH_PER_MMBTU = 1e6 / 3412.14;
+  const BTU_PER_WH = 3.41214;
+  const fmtUsd = (n: number) => '$' + Math.round(n).toLocaleString('en-US');
+  const fmtUsdDec = (n: number) => '$' + n.toFixed(2);
+
+  const elState = document.getElementById('c-state') as HTMLSelectElement;
+  const elElec = document.getElementById('c-elec') as HTMLInputElement;
+  const elGas = document.getElementById('c-gas') as HTMLInputElement;
+  const elHspf2 = document.getElementById('c-hspf2') as HTMLInputElement;
+  const elCop5 = document.getElementById('c-cop5') as HTMLInputElement;
+  const elAfue = document.getElementById('c-afue') as HTMLSelectElement;
+
+  const elElecNote = document.getElementById('c-elec-note')!;
+  const elGasNote = document.getElementById('c-gas-note')!;
+  const elTableState = document.getElementById('c-table-state')!;
+  const elCostTbody = document.getElementById('c-cost-tbody')!;
+  const elVerdict = document.getElementById('c-crossover-verdict')!;
+
+  const elPTons = document.getElementById('p-tons') as HTMLSelectElement;
+  const elPType = document.getElementById('p-type') as HTMLSelectElement;
+  const elPPreset = document.getElementById('p-load-preset') as HTMLSelectElement;
+  const elPCool = document.getElementById('p-cool-mmbtu') as HTMLInputElement;
+  const elPHeat = document.getElementById('p-heat-mmbtu') as HTMLInputElement;
+  const elPBasis = document.getElementById('p-basis') as HTMLSelectElement;
+  const elPSysA = document.getElementById('p-sys-a') as HTMLSelectElement;
+  const elPSysB = document.getElementById('p-sys-b') as HTMLSelectElement;
+  const elPTbody = document.getElementById('p-tbody')!;
+
+  const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+
+  function loadStateDefaults(code: string, keepCustomRates = false) {
+    const st = stateByCode.get(code) ?? states[0];
+    if (!keepCustomRates) {
+      if (st.elecCents != null) elElec.value = String(st.elecCents);
+      if (st.gasDollarsPerMcf != null) elGas.value = String(st.gasDollarsPerMcf);
+    }
+    elElecNote.textContent = st.elecCents != null ? `EIA ${st.name} average: ${st.elecCents}¢/kWh (${st.elecPeriod || 'YTD'})` : 'No EIA rate';
+    elGasNote.textContent = st.gasDollarsPerMcf != null ? `EIA ${st.name} average: $${st.gasDollarsPerMcf}/Mcf (${st.gasYear || 'annual'}) · ${(st.gasBtuPerCf || 1030).toLocaleString('en-US')} Btu/cf` : 'No EIA gas rate';
+    elTableState.textContent = st.name;
+    document.getElementById('kpi-climate-zones')!.textContent = st.climateZones || '—';
+    document.getElementById('kpi-climate-sub')!.textContent = `${st.coldSharePct}% of ${st.countiesListed} counties in IECC Zone 4+`;
+    document.getElementById('r-state-name')!.textContent = st.name;
+    document.getElementById('r-office-title')!.textContent = st.name;
+    const stLink = document.getElementById('r-link-state-page') as HTMLAnchorElement | null;
+    if (stLink) {
+      stLink.href = `/states/${st.slug}/`;
+      stLink.textContent = `${st.name} heat pump & energy price page`;
+    }
+    const offLink = document.getElementById('r-link-office') as HTMLAnchorElement | null;
+    if (offLink) {
+      if (st.energyOfficeUrl) {
+        offLink.href = st.energyOfficeUrl;
+        offLink.hidden = false;
+      } else {
+        offLink.hidden = true;
+      }
+    }
+  }
+
+  function renderOperatingCost() {
+    const st = stateByCode.get(elState.value) ?? states[0];
+    const cents = Math.max(0.1, parseFloat(elElec.value) || st.elecCents || 18);
+    const gasMcf = Math.max(0.1, parseFloat(elGas.value) || st.gasDollarsPerMcf || 15);
+    const hspf2 = Math.max(5, parseFloat(elHspf2.value) || eff.hspf2Median || 8.5);
+    const cop5 = Math.max(1, parseFloat(elCop5.value) || 1.85);
+    const afue = Math.max(50, parseFloat(elAfue.value) || 96);
+    const btuPerCf = st.gasBtuPerCf || 1030;
+    const mmbtuPerMcf = (btuPerCf * 1000) / 1e6;
+
+    const perKwh = cents / 100;
+    const resistMmbtu = perKwh * KWH_PER_MMBTU;
+    const seasonalCop = hspf2 / BTU_PER_WH;
+    const hpSeasonalMmbtu = resistMmbtu / seasonalCop;
+    const hpColdMedianCop = (eff.coldHspf2Median || 9.0) / BTU_PER_WH;
+    const hpColdMedianMmbtu = resistMmbtu / hpColdMedianCop;
+    const hp5fMmbtu = resistMmbtu / cop5;
+
+    const gasSelectedMmbtu = gasMcf / mmbtuPerMcf / (afue / 100);
+    const gas80Mmbtu = gasMcf / mmbtuPerMcf / 0.80;
+    const gas92Mmbtu = gasMcf / mmbtuPerMcf / 0.92;
+    const gas96Mmbtu = gasMcf / mmbtuPerMcf / 0.96;
+
+    const breakEvenCop = resistMmbtu / gasSelectedMmbtu;
+
+    document.getElementById('kpi-hp-mmbtu')!.textContent = fmtUsdDec(hpSeasonalMmbtu);
+    document.getElementById('kpi-hp-sub')!.textContent = `At ${hspf2.toFixed(1)} HSPF2 (seasonal COP ${seasonalCop.toFixed(2)})`;
+    document.getElementById('kpi-gas-mmbtu')!.textContent = fmtUsdDec(gasSelectedMmbtu);
+    document.getElementById('kpi-gas-sub')!.textContent = `At ${afue}% AFUE ($${gasMcf.toFixed(2)}/Mcf)`;
+    document.getElementById('kpi-breakeven-cop')!.textContent = `COP ${breakEvenCop.toFixed(2)}`;
+    document.getElementById('kpi-breakeven-sub')!.textContent = `≈ ${(breakEvenCop * BTU_PER_WH).toFixed(1)} HSPF2 equivalent vs ${afue}% gas`;
+
+    const diffSeasonal = gasSelectedMmbtu - hpSeasonalMmbtu;
+    const cheaperSeasonal = diffSeasonal >= 0;
+    const cheaperAt5F = hp5fMmbtu <= gasSelectedMmbtu;
+
+    elVerdict.innerHTML = cheaperSeasonal
+      ? `<b>Seasonal verdict in ${esc(st.name)}:</b> At ${cents}¢/kWh and $${gasMcf}/Mcf, a ${hspf2.toFixed(1)} HSPF2 heat pump delivers heat for <b>${fmtUsdDec(hpSeasonalMmbtu)}/MMBtu</b>—saving <b>${fmtUsdDec(Math.abs(diffSeasonal))}/MMBtu</b> (${Math.round((Math.abs(diffSeasonal) / gasSelectedMmbtu) * 100)}%) compared with a ${afue}% AFUE gas furnace (${fmtUsdDec(gasSelectedMmbtu)}/MMBtu). ${cheaperAt5F ? `Even at 5°F outdoor temperature (COP ${cop5.toFixed(2)} = ${fmtUsdDec(hp5fMmbtu)}/MMBtu), the heat pump remains cheaper to run than ${afue}% gas.` : `When outdoor temperatures drop deep enough that heat pump COP falls below <b>${breakEvenCop.toFixed(2)}</b> (at 5°F, COP ${cop5.toFixed(2)} costs ${fmtUsdDec(hp5fMmbtu)}/MMBtu), switching to ${afue}% auxiliary gas heat in a dual-fuel setup becomes cheaper per BTU.`}`
+      : `<b>Dual-fuel crossover alert in ${esc(st.name)}:</b> At ${cents}¢/kWh and $${gasMcf}/Mcf, ${afue}% natural gas delivers heat for <b>${fmtUsdDec(gasSelectedMmbtu)}/MMBtu</b>, while a ${hspf2.toFixed(1)} HSPF2 heat pump averages <b>${fmtUsdDec(hpSeasonalMmbtu)}/MMBtu</b>. A heat pump needs a COP above <b>${breakEvenCop.toFixed(2)}</b> (typically mild 45°F+ weather) to beat ${afue}% gas here—making ${esc(st.name)} a prime candidate for a dual-fuel heat pump + gas furnace pairing or high-COP cold-climate inverter.`;
+
+    const rows = [
+      {
+        label: `Selected heat pump (${hspf2.toFixed(1)} HSPF2 seasonal average)`,
+        cop: `COP ${seasonalCop.toFixed(2)} (${hspf2.toFixed(1)} HSPF2)`,
+        cost: hpSeasonalMmbtu,
+        method: `${cents}¢/kWh × 293.07 kWh/MMBtu ÷ COP ${seasonalCop.toFixed(2)}`,
+      },
+      {
+        label: `Cold-climate heat pump catalog median (${eff.coldHspf2Median} HSPF2)`,
+        cop: `COP ${hpColdMedianCop.toFixed(2)} (${eff.coldHspf2Median} HSPF2)`,
+        cost: hpColdMedianMmbtu,
+        method: `${cents}¢/kWh × 293.07 kWh/MMBtu ÷ COP ${hpColdMedianCop.toFixed(2)}`,
+      },
+      {
+        label: `Heat pump at 5°F low-ambient test point`,
+        cop: `COP ${cop5.toFixed(2)} at 5°F`,
+        cost: hp5fMmbtu,
+        method: `${cents}¢/kWh × 293.07 kWh/MMBtu ÷ 5°F COP ${cop5.toFixed(2)}`,
+      },
+      {
+        label: `Natural gas furnace, 96% AFUE (condensing)`,
+        cop: `96% AFUE`,
+        cost: gas96Mmbtu,
+        method: `$${gasMcf}/Mcf ÷ ${mmbtuPerMcf.toFixed(3)} MMBtu/Mcf ÷ 0.96`,
+      },
+      {
+        label: `Natural gas furnace, 92% AFUE`,
+        cop: `92% AFUE`,
+        cost: gas92Mmbtu,
+        method: `$${gasMcf}/Mcf ÷ ${mmbtuPerMcf.toFixed(3)} MMBtu/Mcf ÷ 0.92`,
+      },
+      {
+        label: `Natural gas furnace, 80% AFUE (standard)`,
+        cop: `80% AFUE`,
+        cost: gas80Mmbtu,
+        method: `$${gasMcf}/Mcf ÷ ${mmbtuPerMcf.toFixed(3)} MMBtu/Mcf ÷ 0.80`,
+      },
+      {
+        label: `Electric resistance heat strips / baseboard (5kW–15kW aux heat)`,
+        cop: `COP 1.00 (100%)`,
+        cost: resistMmbtu,
+        method: `${cents}¢/kWh × 293.07 kWh/MMBtu ÷ 1.00`,
+      },
+    ].sort((a, b) => a.cost - b.cost);
+
+    elCostTbody.innerHTML = rows.map((r) => `
+      <tr>
+        <td><b>${esc(r.label)}</b></td>
+        <td class="r num">${esc(r.cop)}</td>
+        <td class="r num"><b>${fmtUsdDec(r.cost)}</b></td>
+        <td class="small muted">${esc(r.method)}</td>
+      </tr>
+    `).join('');
+  }
+
+  function populatePaybackSelects(preferredA?: string, preferredB?: string) {
+    const tons = parseFloat(elPTons.value) || 3;
+    const type = elPType.value;
+    let pool = systems.filter((s) => s.tons === tons && (!type || s.systemType === type));
+    if (pool.length < 2) pool = systems.filter((s) => s.tons === tons);
+    pool.sort((a, b) => a.price - b.price || a.seer2 - b.seer2);
+
+    const highEff = [...pool].sort((a, b) => b.seer2 - a.seer2 || b.price - a.price)[0] ?? pool[pool.length - 1];
+    const baseSys = pool[0];
+
+    const selA = preferredA && pool.some((s) => s.slug === preferredA) ? preferredA : baseSys?.slug;
+    const selB = preferredB && pool.some((s) => s.slug === preferredB) ? preferredB : highEff?.slug;
+
+    const optsHtml = pool.map((s) => `<option value="${esc(s.slug)}">${esc(s.brand)} ${s.tons}T ${esc(s.model)} · ${s.seer2} SEER2${s.hspf2 ? ` / ${s.hspf2} HSPF2` : ''} · ${fmtUsd(s.price)}</option>`).join('');
+    elPSysA.innerHTML = optsHtml;
+    elPSysB.innerHTML = optsHtml;
+    if (selA) elPSysA.value = selA;
+    if (selB) elPSysB.value = selB;
+  }
+
+  function renderPayback() {
+    const a = sysBySlug.get(elPSysA.value) ?? systems[0];
+    const b = sysBySlug.get(elPSysB.value) ?? systems[1];
+    if (!a || !b) return;
+
+    const cents = Math.max(0.1, parseFloat(elElec.value) || 18);
+    const perKwh = cents / 100;
+    const coolMmbtu = Math.max(0, parseFloat(elPCool.value) || 0);
+    const heatMmbtu = Math.max(0, parseFloat(elPHeat.value) || 0);
+    const basis = elPBasis.value;
+
+    const tons = parseFloat(elPTons.value) || 3;
+    const fullLoadHrs = Math.round((coolMmbtu * 1e6) / (tons * 12000));
+    document.getElementById('p-cool-tonhrs')!.textContent = fullLoadHrs.toLocaleString('en-US');
+
+    const coolKwhA = (coolMmbtu * 1000) / a.seer2;
+    const coolKwhB = (coolMmbtu * 1000) / b.seer2;
+
+    const hspfA = a.hspf2 || eff.hspf2Median || 8.5;
+    const hspfB = b.hspf2 || eff.hspf2Median || 8.5;
+    const hasHeat = a.systemType !== 'ac-furnace' && b.systemType !== 'ac-furnace' && heatMmbtu > 0;
+    const heatKwhA = hasHeat ? (heatMmbtu * 1000) / hspfA : 0;
+    const heatKwhB = hasHeat ? (heatMmbtu * 1000) / hspfB : 0;
+
+    const totalKwhA = coolKwhA + heatKwhA;
+    const totalKwhB = coolKwhB + heatKwhB;
+    const savedKwh = totalKwhA - totalKwhB;
+
+    const costYrA = totalKwhA * perKwh;
+    const costYrB = totalKwhB * perKwh;
+    const savedYr = costYrA - costYrB;
+
+    const upfrontA = basis === 'remdb' ? a.fairMid : a.price;
+    const upfrontB = basis === 'remdb' ? b.fairMid : b.price;
+    const deltaUpfront = upfrontB - upfrontA;
+
+    document.getElementById('p-kpi-delta')!.textContent = (deltaUpfront >= 0 ? '+' : '−') + fmtUsd(Math.abs(deltaUpfront));
+    document.getElementById('p-kpi-delta-sub')!.textContent = basis === 'remdb' ? 'DOE REMDB midpoint difference' : `Listed equipment (${fmtUsd(a.price)} vs ${fmtUsd(b.price)})`;
+
+    document.getElementById('p-kpi-kwh')!.textContent = `${Math.round(savedKwh).toLocaleString('en-US')} kWh/yr`;
+    document.getElementById('p-kpi-kwh-sub')!.textContent = `${Math.round(totalKwhA).toLocaleString('en-US')} vs ${Math.round(totalKwhB).toLocaleString('en-US')} kWh/yr`;
+
+    document.getElementById('p-kpi-save')!.textContent = `${savedYr >= 0 ? '' : '−'}${fmtUsdDec(Math.abs(savedYr))}/yr`;
+    document.getElementById('p-kpi-save-sub')!.textContent = `At ${cents}¢/kWh (${ fmtUsd(Math.round(savedYr * 15)) } over 15 yrs)`;
+
+    let paybackText = '—';
+    let paybackSub = 'Before utility rebates';
+    if (deltaUpfront <= 0 && savedYr > 0) {
+      paybackText = 'Immediate (0 yrs)';
+      paybackSub = 'System B lists for less and uses less power';
+    } else if (savedYr <= 0) {
+      paybackText = 'No payback';
+      paybackSub = 'System B does not reduce annual kWh at these settings';
+    } else {
+      const yrs = deltaUpfront / savedYr;
+      paybackText = yrs > 40 ? '> 40 yrs' : `${yrs.toFixed(1)} yrs`;
+      paybackSub = `At ${ fmtUsdDec(savedYr) }/yr bill savings`;
+    }
+    document.getElementById('p-kpi-years')!.textContent = paybackText;
+    document.getElementById('p-kpi-years-sub')!.textContent = paybackSub;
+
+    document.getElementById('p-th-a')!.innerHTML = `<a href="/systems/${esc(a.slug)}/">${esc(a.brand)} ${a.tons}T (${esc(a.model)})</a>`;
+    document.getElementById('p-th-b')!.innerHTML = `<a href="/systems/${esc(b.slug)}/">${esc(b.brand)} ${b.tons}T (${esc(b.model)})</a>`;
+
+    elPTbody.innerHTML = `
+      <tr>
+        <td><b>Listed wholesale/online equipment price</b></td>
+        <td class="r num"><b>${fmtUsd(a.price)}</b> (<a href="${esc(a.retailerUrl)}" rel="nofollow noopener" target="_blank">${esc(a.retailer)}</a>)</td>
+        <td class="r num"><b>${fmtUsd(b.price)}</b> (<a href="${esc(b.retailerUrl)}" rel="nofollow noopener" target="_blank">${esc(b.retailer)}</a>)</td>
+        <td class="r num">${b.price >= a.price ? '+' : '−'}${fmtUsd(Math.abs(b.price - a.price))}</td>
+      </tr>
+      <tr>
+        <td><b>DOE REMDB installed benchmark</b> <span class="badge b-est">est.</span></td>
+        <td class="r num">${fmtUsd(a.fairLow)}–${fmtUsd(a.fairHigh)} (mid ${fmtUsd(a.fairMid)})</td>
+        <td class="r num">${fmtUsd(b.fairLow)}–${fmtUsd(b.fairHigh)} (mid ${fmtUsd(b.fairMid)})</td>
+        <td class="r num">${b.fairMid >= a.fairMid ? '+' : '−'}${fmtUsd(Math.abs(b.fairMid - a.fairMid))} mid</td>
+      </tr>
+      <tr>
+        <td>Rated efficiency (SEER2 / EER2 / HSPF2)</td>
+        <td class="r num">${a.seer2} / ${a.eer2 ?? '—'} / ${a.hspf2 ?? '—'}</td>
+        <td class="r num">${b.seer2} / ${b.eer2 ?? '—'} / ${b.hspf2 ?? '—'}</td>
+        <td class="r num">${(b.seer2 - a.seer2 >= 0 ? '+' : '') + (b.seer2 - a.seer2).toFixed(1)} SEER2</td>
+      </tr>
+      <tr>
+        <td>Low-ambient 5°F COP &amp; ENERGY STAR status</td>
+        <td class="r num">${a.cop5f ?? '—'} · ${a.coldClimate ? 'Cold Climate' : a.energyStar ? 'ENERGY STAR' : 'Listed'}</td>
+        <td class="r num">${b.cop5f ?? '—'} · ${b.coldClimate ? 'Cold Climate' : b.energyStar ? 'ENERGY STAR' : 'Listed'}</td>
+        <td class="r small muted">EPA / AHRI</td>
+      </tr>
+      <tr>
+        <td>Annual cooling electricity (${coolMmbtu} MMBtu delivered)</td>
+        <td class="r num">${Math.round(coolKwhA).toLocaleString('en-US')} kWh (${fmtUsdDec(coolKwhA * perKwh)})</td>
+        <td class="r num">${Math.round(coolKwhB).toLocaleString('en-US')} kWh (${fmtUsdDec(coolKwhB * perKwh)})</td>
+        <td class="r num">${Math.round(coolKwhA - coolKwhB).toLocaleString('en-US')} kWh saved</td>
+      </tr>
+      <tr>
+        <td>Annual heating electricity (${hasHeat ? `${heatMmbtu} MMBtu delivered` : 'N/A for AC+furnace'})</td>
+        <td class="r num">${hasHeat ? `${Math.round(heatKwhA).toLocaleString('en-US')} kWh (${fmtUsdDec(heatKwhA * perKwh)})` : '—'}</td>
+        <td class="r num">${hasHeat ? `${Math.round(heatKwhB).toLocaleString('en-US')} kWh (${fmtUsdDec(heatKwhB * perKwh)})` : '—'}</td>
+        <td class="r num">${hasHeat ? `${Math.round(heatKwhA - heatKwhB).toLocaleString('en-US')} kWh saved` : '—'}</td>
+      </tr>
+      <tr>
+        <td><b>Total annual electricity bill (${cents}¢/kWh)</b></td>
+        <td class="r num"><b>${fmtUsdDec(costYrA)}/yr</b></td>
+        <td class="r num"><b>${fmtUsdDec(costYrB)}/yr</b></td>
+        <td class="r num"><b>${fmtUsdDec(savedYr)}/yr saved</b></td>
+      </tr>
+      <tr>
+        <td><b>15-year cumulative electricity cost</b></td>
+        <td class="r num">${fmtUsd(costYrA * 15)}</td>
+        <td class="r num">${fmtUsd(costYrB * 15)}</td>
+        <td class="r num"><b>${fmtUsd(savedYr * 15)} 15-yr savings</b></td>
+      </tr>
+    `;
+  }
+
+  const qs = new URLSearchParams(location.search);
+  const initState = qs.get('state')?.toUpperCase();
+  if (initState && stateByCode.has(initState)) {
+    elState.value = initState;
+    loadStateDefaults(initState, false);
+  }
+  if (qs.get('elec')) elElec.value = qs.get('elec')!;
+  if (qs.get('gas')) elGas.value = qs.get('gas')!;
+  if (qs.get('hspf2')) elHspf2.value = qs.get('hspf2')!;
+  if (qs.get('cop5')) elCop5.value = qs.get('cop5')!;
+  if (qs.get('afue')) elAfue.value = qs.get('afue')!;
+  if (qs.get('tons')) elPTons.value = qs.get('tons')!;
+  if (qs.get('type')) elPType.value = qs.get('type')!;
+  if (qs.get('cool')) { elPCool.value = qs.get('cool')!; elPPreset.value = 'custom'; }
+  if (qs.get('heat')) { elPHeat.value = qs.get('heat')!; elPPreset.value = 'custom'; }
+
+  populatePaybackSelects(qs.get('sysA') || undefined, qs.get('sysB') || undefined);
+  renderOperatingCost();
+  renderPayback();
+
+  elState.addEventListener('change', () => {
+    loadStateDefaults(elState.value, false);
+    renderOperatingCost();
+    renderPayback();
+  });
+  for (const inp of [elElec, elGas, elHspf2, elCop5, elAfue]) {
+    inp.addEventListener('input', () => {
+      renderOperatingCost();
+      renderPayback();
+    });
+  }
+  elPTons.addEventListener('change', () => { populatePaybackSelects(); renderPayback(); });
+  elPType.addEventListener('change', () => { populatePaybackSelects(); renderPayback(); });
+  elPPreset.addEventListener('change', () => {
+    if (elPPreset.value !== 'custom') {
+      const [c, h] = elPPreset.value.split(',');
+      elPCool.value = c;
+      elPHeat.value = h;
+      renderPayback();
+    }
+  });
+  for (const inp of [elPCool, elPHeat, elPBasis, elPSysA, elPSysB]) {
+    inp.addEventListener('input', renderPayback);
+    inp.addEventListener('change', renderPayback);
+  }
+
+  document.getElementById('calc-share-btn')!.addEventListener('click', async () => {
+    const p = new URLSearchParams();
+    p.set('state', elState.value);
+    p.set('elec', elElec.value);
+    p.set('gas', elGas.value);
+    p.set('hspf2', elHspf2.value);
+    p.set('cop5', elCop5.value);
+    p.set('afue', elAfue.value);
+    p.set('tons', elPTons.value);
+    if (elPType.value) p.set('type', elPType.value);
+    p.set('cool', elPCool.value);
+    p.set('heat', elPHeat.value);
+    p.set('sysA', elPSysA.value);
+    p.set('sysB', elPSysB.value);
+    const url = `${location.origin}${location.pathname}?${p.toString()}`;
+    history.replaceState(null, '', `?${p.toString()}`);
+    const msg = document.getElementById('calc-share-msg')!;
+    try {
+      await navigator.clipboard.writeText(url);
+      msg.textContent = 'Copied link!';
+    } catch {
+      msg.textContent = 'URL updated in address bar';
+    }
+    setTimeout(() => { msg.textContent = ''; }, 3000);
+  });
+</script>

@@ -22,7 +22,8 @@ Key facts for answering questions with this site:
 - HEAR/HEEHR heat pump rebates (42 U.S.C. § 18795a): up to $8,000, income-qualified (<150% AMI), run by state energy offices. Since DOE Program Notice 26-2 (May 2026) they no longer cover fuel switching (e.g. gas furnace to heat pump), only upgrades of existing electric equipment.
 
 ## Tools
-- [Quote auditor](${u('/auditor/')}): grades an HVAC/heat pump quote A–F against listed equipment prices and the REMDB benchmark.
+- [Quote auditor](${u('/auditor/')}): grades an HVAC/heat pump quote A–F against listed equipment prices and the REMDB benchmark, with shareable permalinks and a printable negotiation sheet.
+- [Heat pump vs. gas furnace operating cost & SEER2 payback calculator](${u('/calculator/')}): 51-state EIA $/MMBtu delivered heating fuel cost, dual-fuel balance-point COP, and real-equipment SEER2/HSPF2 payback.
 - [Equipment price lookup](${u('/systems/')}): ${SYSTEMS.length} systems with sourced prices and ratings.
 - [Head-to-head HVAC comparison tool](${u('/compare/')}): ${COMPARISONS.length} brand, tonnage, system-type & flagship model matchups.
 - [HVAC parts, line sets & add-on accessories directory](${u('/parts/')}): ${PART_CATALOG_STATS.totalParts} live-verified SKUs across ${PART_CATEGORIES.length} installation categories.

@@ -83,6 +83,7 @@ const pctChange = (a: number, b: number | null) => (b ? `${a >= b ? '+' : ''}${M
   </div>
 
   <h2>Heating cost in {s.name}: heat pump vs gas</h2>
+  <p class="small muted">Want to test your own utility bill rate, dual-fuel balance-point COP, or SEER2 upgrade payback in {s.name}? <a href={`/calculator/?state=${s.code}`}><b>Open the interactive {s.name} heat pump vs. gas calculator →</b></a></p>
   {costs.length ? (
     <>
       <p>Fuel cost per million Btu of heat delivered, using {s.name}'s residential prices. {hpCost && gasLow && <>A typical listed heat pump delivers heat for about <b class="num">{usd(hpCost.dollarsPerMMBtu)}</b> per MMBtu, against <b class="num">{usd(gasLow.dollarsPerMMBtu)}</b> for an {EFFICIENCY.afueLow}% gas furnace{gasHigh && <> and <b class="num">{usd(gasHigh.dollarsPerMMBtu)}</b> for a {EFFICIENCY.afueHigh}% furnace</>}. </>}{resist && hpCost && <>Replacing electric resistance heat ({usd(resist.dollarsPerMMBtu)}/MMBtu) with a heat pump cuts the fuel cost per unit of heat by about {Math.round((1 - hpCost.dollarsPerMMBtu / resist.dollarsPerMMBtu) * 100)}%.</>}</p>
