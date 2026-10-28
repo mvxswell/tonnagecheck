@@ -1,0 +1,94 @@
+---
+import Base from '../../layouts/Base.astro';
+import CompareWorkbench from '../../components/CompareWorkbench.astro';
+import Auditor from '../../components/Auditor.astro';
+import { COMPARISONS } from '../../data/comparisons';
+import { SYSTEMS } from '../../data/equipment';
+import { statsOf, usd, seedDateLabel } from '../../lib/facts';
+
+const allStats = statsOf(SYSTEMS)!;
+const brandComparisons = COMPARISONS.filter((c) => c.category === 'brand');
+const tonnageComparisons = COMPARISONS.filter((c) => c.category === 'tonnage');
+const typeComparisons = COMPARISONS.filter((c) => c.category === 'type');
+const modelComparisons = COMPARISONS.filter((c) => c.category === 'model');
+
+const title = `${usd(allStats.min)}–${usd(allStats.max)} HVAC Brand & Tonnage Comparisons`;
+const description = `Compare ${COMPARISONS.length} head-to-head HVAC brand, tonnage & model matchups (${usd(allStats.min)}–${usd(allStats.max)} equipment vs DOE installed costs).`;
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Head-to-Head HVAC Brand, Tonnage & System Comparisons',
+  description,
+  url: 'https://tonnagechecker.com/compare/',
+};
+---
+<Base title={title} description={description} jsonld={jsonld}>
+  <p class="crumbs"><a href="/">Home</a> / Comparisons</p>
+  <h1>Head-to-head HVAC brand, tonnage &amp; system comparisons</h1>
+  <p class="lead">Compare public distributor equipment prices ({usd(allStats.min)}–{usd(allStats.max)} across {SYSTEMS.length} systems as of {seedDateLabel}), DOE national-lab installed replacement benchmarks, SEER2/HSPF2 efficiency, refrigerant (R-32 vs R-454B), and contractor markup spreads side by side.</p>
+
+  <CompareWorkbench />
+
+  <h2>Brand-vs-brand HVAC cost &amp; spec comparisons ({brandComparisons.length})</h2>
+  <p class="small muted">See how much two brands actually differ in wholesale/online equipment price versus what contractors charge on tiered proposals.</p>
+  <div class="grid">
+    {brandComparisons.map((c) => (
+      <a class="card" href={`/compare/${c.slug}/`} style="text-decoration:none;color:inherit">
+        <div class="small muted">{c.shortLabel}</div>
+        <div style="font-weight:700;margin:4px 0;color:var(--acc)">{c.h1}</div>
+        <p class="small" style="margin:6px 0">
+          <b>{c.left.label}:</b> {usd(c.left.equipMin)}–{usd(c.left.equipMax)} (med {usd(c.left.equipMedian)}) · {c.left.seer2Span}<br />
+          <b>{c.right.label}:</b> {usd(c.right.equipMin)}–{usd(c.right.equipMax)} (med {usd(c.right.equipMedian)}) · {c.right.seer2Span}
+        </p>
+      </a>
+    ))}
+  </div>
+
+  <h2>Tonnage &amp; compressor staging comparisons ({tonnageComparisons.length})</h2>
+  <p class="small muted">Compare adjacent heat pump sizes (1.5 ton through 5 ton) and single-stage vs variable-speed inverter cost steps.</p>
+  <div class="grid">
+    {tonnageComparisons.map((c) => (
+      <a class="card" href={`/compare/${c.slug}/`} style="text-decoration:none;color:inherit">
+        <div class="small muted">{c.shortLabel}</div>
+        <div style="font-weight:700;margin:4px 0;color:var(--acc)">{c.h1}</div>
+        <p class="small" style="margin:6px 0">
+          <b>{c.left.label}:</b> {usd(c.left.equipMin)}–{usd(c.left.equipMax)} equip · mid {usd(c.left.fair.mid)} installed<br />
+          <b>{c.right.label}:</b> {usd(c.right.equipMin)}–{usd(c.right.equipMax)} equip · mid {usd(c.right.fair.mid)} installed
+        </p>
+      </a>
+    ))}
+  </div>
+
+  <h2>System-type &amp; A2L refrigerant comparisons ({typeComparisons.length})</h2>
+  <p class="small muted">Compare central heat pumps against central AC + gas furnaces, ductless mini-splits, and R-32 vs R-454B systems.</p>
+  <div class="grid">
+    {typeComparisons.map((c) => (
+      <a class="card" href={`/compare/${c.slug}/`} style="text-decoration:none;color:inherit">
+        <div class="small muted">{c.shortLabel}</div>
+        <div style="font-weight:700;margin:4px 0;color:var(--acc)">{c.h1}</div>
+        <p class="small" style="margin:6px 0">
+          <b>{c.left.label}:</b> {usd(c.left.equipMin)}–{usd(c.left.equipMax)} ({c.left.count} systems)<br />
+          <b>{c.right.label}:</b> {usd(c.right.equipMin)}–{usd(c.right.equipMax)} ({c.right.count} systems)
+        </p>
+      </a>
+    ))}
+  </div>
+
+  <h2>Flagship model-vs-model comparisons ({modelComparisons.length})</h2>
+  <p class="small muted">Exact outdoor + indoor model number matchups across 2-ton, 3-ton, 4-ton, and 5-ton heat pumps and mini-splits.</p>
+  <div class="grid">
+    {modelComparisons.map((c) => (
+      <a class="card" href={`/compare/${c.slug}/`} style="text-decoration:none;color:inherit">
+        <div class="small muted">{c.shortLabel}</div>
+        <div style="font-weight:700;margin:4px 0;color:var(--acc)">{c.h1}</div>
+        <p class="small" style="margin:6px 0">
+          <b>{c.left.label}:</b> {usd(c.left.equipMin)} · {c.left.seer2Span} · {c.left.refrigerants}<br />
+          <b>{c.right.label}:</b> {usd(c.right.equipMin)} · {c.right.seer2Span} · {c.right.refrigerants}
+        </p>
+      </a>
+    ))}
+  </div>
+
+  <Auditor heading="Audit your contractor quote" />
+</Base>

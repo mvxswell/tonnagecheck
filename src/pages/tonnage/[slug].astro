@@ -4,6 +4,7 @@ import Auditor from '../../components/Auditor.astro';
 import Newsletter from '../../components/Newsletter.astro';
 import SystemTable from '../../components/SystemTable.astro';
 import { TONNAGES, tonSlug, systemsFor, SYSTEM_TYPE_LABEL, TIER_LABEL, type SystemType, type Tier } from '../../data/equipment';
+import { comparisonsForTonnage } from '../../data/comparisons';
 import { fairRange, equipmentStats, usd, fmtRange, seedDateLabel } from '../../lib/facts';
 import { SITE } from '../../config';
 
@@ -20,6 +21,7 @@ const hp = rows[0];
 const idx = TONNAGES.indexOf(tons as (typeof TONNAGES)[number]);
 const prev = TONNAGES[idx - 1];
 const next = TONNAGES[idx + 1];
+const tonCmps = comparisonsForTonnage(tons);
 const title = `${usd(hp.stats.min)} Equip vs ${fmtRange(hp.ranges[0])} Installed: ${tons}-Ton HVAC Cost`;
 const description = `${tons}-ton (${btu.toLocaleString('en-US')} BTU/h) heat pump & AC cost: ${usd(hp.stats.min)}–${usd(hp.stats.max)} listed equipment (${systems.length} systems) vs ${fmtRange(hp.ranges[0])} installed benchmark.`;
 const ld = {
@@ -69,6 +71,21 @@ const ld = {
     <p>Tonnage should come from a room-by-room load calculation (ACCA Manual J), not from square footage alone. Insulation, windows, air leakage, ceiling height and climate can move the answer by a ton or more. An oversized system short-cycles, dehumidifies poorly and costs more up front; an undersized one runs constantly on design days.</p>
     <p>If your contractor matched the old unit's size without a load calculation, ask for one. If two contractors quote different tonnages for the same house, ask both to show their Manual J.</p>
   </div>
+
+  {tonCmps.length > 0 && (
+    <>
+      <h2>{tons}-ton head-to-head comparisons</h2>
+      <div class="grid">
+        {tonCmps.map((c) => (
+          <a class="card" href={`/compare/${c.slug}/`} style="text-decoration:none;color:inherit">
+            <div class="small muted">{c.shortLabel}</div>
+            <div style="font-weight:700;margin:4px 0">{c.h1}</div>
+            <div class="small muted">{usd(c.left.equipMin)} vs {usd(c.right.equipMin)} lowest listed</div>
+          </a>
+        ))}
+      </div>
+    </>
+  )}
 
   <Auditor tons={tons} heading={`Audit a ${tons}-ton quote`} />
 
