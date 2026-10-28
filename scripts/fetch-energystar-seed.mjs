@@ -59,7 +59,8 @@ function brandFrom(...texts) {
 
 function parseHvacDirect(html, url) {
   const meta = (p) => (html.match(new RegExp(`<meta property="${p}" content="([^"]*)"`)) || [])[1];
-  const title = decode(meta('og:title') || '');
+  const h1 = (html.match(/<h1[^>]*class="page-title"[^>]*>\s*<span[^>]*>([^<]+)<\/span>/i) || [])[1];
+  const title = decode(meta('og:title') || h1 || '');
   const price = num(meta('product:price:amount'));
   const skuRaw = (html.match(/"sku":"([^"]+)"/) || [])[1];
   // HVACDirect appends "-1", "-2" to duplicate listings of the same model; drop that so the model matches elsewhere
@@ -228,9 +229,19 @@ const lineSets = [];
 for (const ls of sources.lineSets || []) {
   try {
     const p = parseHvacDirect(get(ls.url), ls.url);
-    if (p.price) lineSets.push({ label: ls.label, title: p.title || ls.label, url: ls.url, price: p.price, retailer: 'HVACDirect', fetchedAt });
+    if (p.price) lineSets.push({ label: ls.label, title: p.title || ls.label, sku: p.components[0] || null, url: ls.url, price: p.price, retailer: 'HVACDirect', fetchedAt });
     else failures.push({ url: ls.url, reason: 'line set price not found' });
   } catch (e) { failures.push({ url: ls.url, reason: `fetch failed: ${e.message.split('\n')[0]}` }); }
+  await sleep(1000);
+}
+
+const accessories = [];
+for (const acc of sources.accessories || []) {
+  try {
+    const p = parseHvacDirect(get(acc.url), acc.url);
+    if (p.price) accessories.push({ category: acc.category, label: acc.label, title: p.title || acc.label, sku: p.components[0] || null, url: acc.url, price: p.price, retailer: 'HVACDirect', fetchedAt });
+    else failures.push({ url: acc.url, reason: 'accessory price not found' });
+  } catch (e) { failures.push({ url: acc.url, reason: `fetch failed: ${e.message.split('\n')[0]}` }); }
   await sleep(1000);
 }
 
@@ -279,8 +290,8 @@ benchmarks.cpi = {
 };
 
 mkdirSync(OUT, { recursive: true });
-writeFileSync(join(OUT, 'equipment.seed.json'), JSON.stringify({ generatedAt: fetchedAt, systems, lineSets, failures, warnings }, null, 2) + '\n');
+writeFileSync(join(OUT, 'equipment.seed.json'), JSON.stringify({ generatedAt: fetchedAt, systems, lineSets, accessories, failures, warnings }, null, 2) + '\n');
 writeFileSync(join(OUT, 'benchmarks.seed.json'), JSON.stringify({ generatedAt: fetchedAt, ...benchmarks }, null, 2) + '\n');
-console.log(`\n${systems.length} systems, ${lineSets.length} line sets, ${failures.length} failures. CPI factor ${benchmarks.cpi.factor} (${base[0]} → ${latest[0]}).`);
+console.log(`\n${systems.length} systems, ${lineSets.length} line sets, ${accessories.length} accessories, ${failures.length} failures. CPI factor ${benchmarks.cpi.factor} (${base[0]} → ${latest[0]}).`);
 if (failures.length) console.log("failures:", failures);
 if (warnings.length) console.log("warnings:", warnings);

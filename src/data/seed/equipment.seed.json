@@ -5815,14 +5815,592 @@
   ],
   "lineSets": [
     {
-      "label": "3/8 x 3/4 in. insulated line set, 30 ft",
-      "title": "3/8 x 3/4 in. insulated line set, 30 ft",
+      "label": "Style Crest Revolv 3/8 x 3/4 in. AccuCharge line set, 15 ft",
+      "title": "15' Long Style Crest-Revolv AccuCharge Mobile Home Line Sets - 3/8\" x 3/4\"",
+      "sku": "4463Q1531",
+      "url": "https://hvacdirect.com/revolv-accucharge-line-sets-3-8-x-3-4-15-feet-4463q1531.html",
+      "price": 235,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "label": "Stealth EZ Connect 3/8 x 3/4 in. R-454B pre-charged line set, 15 ft",
+      "title": "Stealth 15 Ft EZ Connect Pre-Charged Refrigerant Line Set - 3/8\" x 3/4\" Line Ends - R454B",
+      "sku": "EZ-16-3834-U",
+      "url": "https://hvacdirect.com/ez-connect-precharged-refrigerant-line-set-with-3-8-and-3-4-line-ends-15-feet-r454b-ez-16-3834-u.html",
+      "price": 299,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "label": "Style Crest Revolv 3/8 x 3/4 in. AccuCharge line set, 25 ft",
+      "title": "25' Long Style Crest-Revolv AccuCharge Mobile Home Line Sets - 3/8\" x 3/4\"",
+      "sku": "4463Q2531",
+      "url": "https://hvacdirect.com/revolv-accucharge-line-sets-3-8-x-3-4-25-feet-4463q2531.html",
+      "price": 425,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "label": "Stealth EZ Connect 3/8 x 3/4 in. R-454B pre-charged line set, 25 ft",
+      "title": "Stealth 25 Ft EZ Connect Pre-Charged Refrigerant Line Set - 3/8\" x 3/4\" Line Ends - R454B",
+      "sku": "EZ-25-3834-U",
+      "url": "https://hvacdirect.com/ez-connect-precharged-refrigerant-line-set-with-3-8-and-3-4-line-ends-25-feet-r454b-ez-25-3834-u.html",
+      "price": 399,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "label": "3/8 x 3/4 in. insulated copper line set, 30 ft",
+      "title": "30 Feet of 3/8\" LL x 5/8\" SL x 3/8\" Insulated Line Set",
+      "sku": "LS38583830",
       "url": "https://hvacdirect.com/3-8-ll-x-3-4-sl-x-3-8-insulation-line-set-30-feet-ls38583830.html",
       "price": 289,
       "retailer": "HVACDirect",
-      "fetchedAt": "2026-10-28T18:14:46.503Z"
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "label": "Stealth EZ Connect 3/8 x 3/4 in. R-454B pre-charged line set, 35 ft",
+      "title": "Stealth 35 Ft EZ Connect Pre-Charged Refrigerant Line Set - 3/8\" x 3/4\" Line Ends - R454B",
+      "sku": "EZ-35-3834-U",
+      "url": "https://hvacdirect.com/ez-connect-precharged-refrigerant-line-set-with-3-8-and-3-4-line-ends-35-feet-r454b-ez-35-3834-u.html",
+      "price": 499,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "label": "3/8 x 3/4 in. insulated copper line set, 50 ft",
+      "title": "50 Feet of 3/8\" LL x 5/8\" SL x 3/8\" Insulated Line Set",
+      "sku": "LS38583850",
+      "url": "https://hvacdirect.com/3-8-ll-x-3-4-sl-x-3-8-insulation-line-set-50-feet-ls38583850.html",
+      "price": 385,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "label": "Stealth EZ Connect 3/8 x 3/4 in. R-454B pre-charged line set, 50 ft",
+      "title": "Stealth 50 Ft EZ Connect Pre-Charged Refrigerant Line Set - 3/8\" x 3/4\" Line Ends - R454B",
+      "sku": "EZ-50-3834-U",
+      "url": "https://hvacdirect.com/ez-connect-precharged-refrigerant-line-set-with-3-8-and-3-4-line-ends-50-feet-r454b-ez-50-3834-u.html",
+      "price": 649,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "label": "Style Crest Revolv 3/8 x 7/8 in. AccuCharge line set, 15 ft",
+      "title": "15' Long Style Crest-Revolv AccuCharge Mobile Home Line Sets - 3/8\" x 7/8\"",
+      "sku": "4473Q1531",
+      "url": "https://hvacdirect.com/revolv-accucharge-line-sets-3-8-x-7-8-15-feet-4473q1531.html",
+      "price": 449,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "label": "Style Crest Revolv 3/8 x 7/8 in. AccuCharge line set, 25 ft",
+      "title": "25' Long Style Crest-Revolv AccuCharge Mobile Home Line Sets - 3/8\" x 7/8\"",
+      "sku": "4473Q2531",
+      "url": "https://hvacdirect.com/revolv-accucharge-line-sets-3-8-x-7-8-25-feet-4473q2531.html",
+      "price": 549,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "label": "Goodman 3/8 x 7/8 in. insulated copper line set, 30 ft",
+      "title": "30 Feet of 3/8\" LL x 7/8\" SL x 3/8\" Insulated Line Set",
+      "sku": "LS38783830",
+      "url": "https://hvacdirect.com/goodman-3-8-ll-x-7-8-sl-x-3-8-insulation-line-set-30-feet.html",
+      "price": 381,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "label": "Goodman 3/8 x 7/8 in. insulated copper line set, 50 ft",
+      "title": "50 Feet of 3/8\" LL x 7/8\" SL x 3/8\" Insulated Line Set",
+      "sku": "LS38783850",
+      "url": "https://hvacdirect.com/goodman-3-8-ll-x-7-8-sl-x-3-8-insulation-line-set-50-feet-ls38783850.html",
+      "price": 469,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "label": "Mini-split 1/4 x 1/2 in. flared insulated copper line set, 15 ft",
+      "title": "Refrigerant Line Set with 1/4\" and 1/2\" Line Ends - 15 feet",
+      "sku": "201814",
+      "url": "https://hvacdirect.com/refrigerant-line-set-with-1-4-inch-and-1-2-inch-line-ends-15-feet-201814.html",
+      "price": 188.23,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "label": "Mini-split 1/4 x 1/2 in. flared insulated copper line set, 25 ft",
+      "title": "Refrigerant Line Set with 1/4\" and 1/2\" Line Ends - 25 feet",
+      "sku": "366400",
+      "url": "https://hvacdirect.com/refrigerant-line-set-with-1-4-inch-and-1-2-inch-line-ends-25-feet-366400.html",
+      "price": 265.66,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "label": "Mini-split 1/4 x 1/2 in. flared insulated copper line set, 35 ft",
+      "title": "Refrigerant Line Set with 1/4\" and 1/2\" Line Ends - 35 feet",
+      "sku": "366401",
+      "url": "https://hvacdirect.com/refrigerant-line-set-with-1-4-inch-and-1-2-inch-line-ends-35-feet-366401.html",
+      "price": 282.35,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "label": "Mini-split 1/4 x 1/2 in. flared insulated copper line set, 50 ft",
+      "title": "Refrigerant Line Set with 1/4\" and 1/2\" Line Ends - 50 feet",
+      "sku": "366402",
+      "url": "https://hvacdirect.com/refrigerant-line-set-with-1-4-inch-and-1-2-inch-line-ends-50-feet-366402.html",
+      "price": 390.19,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
     }
   ],
   "failures": [],
-  "warnings": []
+  "warnings": [],
+  "accessories": [
+    {
+      "category": "heat-strip-kits",
+      "label": "Goodman 5 kW (16,200 BTU) electric heat strip kit",
+      "title": "5 Kilowatt 16,200 BTU Goodman Heater Coil",
+      "sku": "HKR-05C",
+      "url": "https://hvacdirect.com/goodman-5-kilowatt-16-200-btu-heater-coil-hkr-05c.html",
+      "price": 112,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "Goodman 5 kW (16,200 BTU) SmartFrame electric heat kit with breaker",
+      "title": "5 Kilowatt 16,200 BTU Goodman Heater Coil",
+      "sku": "HKSC05XC",
+      "url": "https://hvacdirect.com/goodman-5-kilowatt-16-200-btu-heater-coil-for-smart-frame-air-handlers-hksc05xc.html",
+      "price": 118,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "ACiQ 5 kW (17,000 BTU) electric auxiliary heater kit",
+      "title": "5 Kilowatt 17,000 BTU ACiQ Heater Coil",
+      "sku": "EHK05AKB",
+      "url": "https://hvacdirect.com/5-kilowatt-17-000-btu-aciq-heater-coil-ehk05akb.html",
+      "price": 166,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "Goodman 8 kW (23,800 BTU) electric heat strip kit",
+      "title": "7 Kilowatt 23,800 BTU Goodman Heater Coil",
+      "sku": "HKR-08C",
+      "url": "https://hvacdirect.com/goodman-7-kilowatt-23-800-btu-heater-coil-hkr-08c.html",
+      "price": 144,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "Goodman 8 kW (23,800 BTU) SmartFrame electric heat kit with breaker",
+      "title": "8 Kilowatt 23,800 BTU Goodman Heater Coil",
+      "sku": "HKSC08XC",
+      "url": "https://hvacdirect.com/goodman-8-kilowatt-23-800-btu-heater-coil-for-smart-frame-air-handlers-hksc08xc.html",
+      "price": 149,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "ACiQ 7.5 kW (23,800 BTU) electric auxiliary heater kit",
+      "title": "7 Kilowatt 23,800 BTU ACiQ Heater Coil",
+      "sku": "EHK07AKB",
+      "url": "https://hvacdirect.com/7-kilowatt-23-800-btu-aciq-heater-coil-ehk07akb.html",
+      "price": 209,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "Goodman 10 kW (34,100 BTU) electric heat strip kit",
+      "title": "10 Kilowatt 34,100 BTU Goodman Heater Coil",
+      "sku": "HKR-10C",
+      "url": "https://hvacdirect.com/goodman-10-kilowatt-34-100-btu-heater-coil-hkr-10c.html",
+      "price": 149,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "Goodman 10 kW (34,100 BTU) SmartFrame electric heat kit with breaker",
+      "title": "10 Kilowatt 34,100 BTU Goodman Heater Coil",
+      "sku": "HKSC10XC",
+      "url": "https://hvacdirect.com/goodman-10-kilowatt-34-100-btu-heater-coil-for-smart-frame-air-handler-hksc10xc.html",
+      "price": 155,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "ACiQ 10 kW (34,000 BTU) electric auxiliary heater kit",
+      "title": "10 Kilowatt 34,000 BTU ACiQ Heater Coil",
+      "sku": "EHK10AKB",
+      "url": "https://hvacdirect.com/10-kilowatt-34-000-btu-aciq-heater-coil-ehk10akb.html",
+      "price": 256,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "Goodman 15 kW (51,150 BTU) SmartFrame electric heat kit with breaker",
+      "title": "15 Kilowatt 51,150 BTU Goodman Heater Coil",
+      "sku": "HKSC15XB",
+      "url": "https://hvacdirect.com/goodman-15-kilowatt-51-150-btu-heater-coil-hksc15xb.html",
+      "price": 265,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "ACiQ 15 kW (51,000 BTU) electric auxiliary heater kit",
+      "title": "15 Kilowatt 51,000 BTU ACiQ Heater Coil",
+      "sku": "EHK15AKB",
+      "url": "https://hvacdirect.com/15-kilowatt-51-000-btu-aciq-heater-coil-ehk15akb-ebac01spk.html",
+      "price": 305,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "Goodman 20 kW (68,200 BTU) SmartFrame electric heat kit with breaker",
+      "title": "20 Kilowatt 68,200 BTU Goodman Heater Coil",
+      "sku": "HKSC20DB",
+      "url": "https://hvacdirect.com/goodman-20-kilowatt-68-200-btu-heater-coil-hksc20db.html",
+      "price": 281,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "ACiQ 20 kW (68,000 BTU) electric auxiliary heater kit",
+      "title": "20 Kilowatt 68,000 BTU ACiQ Heater Coil",
+      "sku": "EHK20AKB",
+      "url": "https://hvacdirect.com/20-kilowatt-68-000-btu-aciq-heater-coil-ehk20akb-ebac01spk.html",
+      "price": 240,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "DiversiTech E-Lite composite condenser pad, 18 x 38 x 3 in.",
+      "title": "E Lite Equipment Pad 18\" x 38\" x 3\"",
+      "sku": "EL1838-3",
+      "url": "https://hvacdirect.com/e-lite-equipment-pad-18-x-38-x-3.html",
+      "price": 103.73,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "DiversiTech E-Lite composite condenser pad, 32 x 32 x 3 in.",
+      "title": "E Lite Equipment Pad 32\" x 32\" x 3\"",
+      "sku": "EL3232-3",
+      "url": "https://hvacdirect.com/e-lite-equipment-pad-32-x-32-x-3.html",
+      "price": 117,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "DiversiTech E-Lite composite condenser pad, 36 x 36 x 3 in.",
+      "title": "E Lite Equipment Pad 36\" x 36\" x 3\"",
+      "sku": "EL3636-3",
+      "url": "https://hvacdirect.com/e-lite-equipment-pad-36-x-36-x-3.html",
+      "price": 141,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "DiversiTech E-Lite composite condenser pad, 36 x 48 x 3 in.",
+      "title": "E Lite Equipment Pad 36\" x 48\" x 3\"",
+      "sku": "EL3648-3",
+      "url": "https://hvacdirect.com/e-lite-equipment-pad-36-x-48-x-3.html",
+      "price": 132.25,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "60A non-fused outdoor pull-out AC disconnect switch box",
+      "title": "60 Amp Non-Fused Disconnect Switch – Outdoor Rated",
+      "sku": "83335",
+      "url": "https://hvacdirect.com/disconnect-switch-60a-non-fuse.html",
+      "price": 43.95,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "60A fusible outdoor pull-out AC disconnect switch box",
+      "title": "60 Amp Fusible Disconnect Switch – Outdoor Rated",
+      "sku": "83317",
+      "url": "https://hvacdirect.com/disconnect-switch-60a-fusible.html",
+      "price": 48,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "30A fusible outdoor pull-out AC disconnect switch box",
+      "title": "30 Amp Fusible Disconnect Switch – Outdoor Rated",
+      "sku": "83396",
+      "url": "https://hvacdirect.com/disconnect-switch-30a-fusible.html",
+      "price": 50.99,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "Pre-wired 1/2 in. x 6 ft non-metallic electrical whip (12 AWG)",
+      "title": "Electrical Whip 1/2\" X 6' Non-Metallic",
+      "sku": "6-12-6NM",
+      "url": "https://hvacdirect.com/electrical-whip-1-2-x-6-non-metallic-6-12-6nm.html",
+      "price": 20.89,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "Pre-wired 1/2 in. x 6 ft electrical whip (10 AWG)",
+      "title": "Electrical Whip 1/2\" X 6' 10 Gauge Non-Metallic",
+      "sku": "84136",
+      "url": "https://hvacdirect.com/electrical-whip-1-2-x-6-10-gauge-metallic-84136.html",
+      "price": 34.99,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "Pre-wired 3/4 in. x 6 ft electrical whip (8 AWG)",
+      "title": "Electrical Whip 3/4\" X 6' 8 Gauge Metallic",
+      "sku": "84138",
+      "url": "https://hvacdirect.com/electrical-whip-3-4-x-6-8-gauge-metallic-84138.html",
+      "price": 38.99,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "120/240V single-phase HVAC surge protector (100,000A, 1,020 Joules)",
+      "title": "Single-Phase Surge Protector – 120/240 VAC, 100,000 Amp, 1020 Joules",
+      "sku": "SP517",
+      "url": "https://hvacdirect.com/surge-protector-120-240-vac-single-phase-max-current-100000-amp-max-energy-1020-joules.html",
+      "price": 148,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "Beckett 20 ft lift low-profile condensate pump",
+      "title": "Beckett 20' Lift Low Profile Condensate Pump",
+      "sku": "CL201UL",
+      "url": "https://hvacdirect.com/beckett-20-lift-low-profile-condensate-pump-cl201ul.html",
+      "price": 49.95,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "15 ft lift automatic condensate removal pump",
+      "title": "15' Lift Condensate Pump",
+      "sku": "CP151UL",
+      "url": "https://hvacdirect.com/15-lift-condensate-pump-cb151ul.html",
+      "price": 82.99,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "20 ft lift automatic condensate removal pump",
+      "title": "20' Lift Condensate Pump",
+      "sku": "CP201UL",
+      "url": "https://hvacdirect.com/20-lift-condensate-pump-cp201ul.html",
+      "price": 92,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "20 ft lift condensate pump with 20 ft vinyl discharge tubing",
+      "title": "20' Lift Condensate Pump With Tubing",
+      "sku": "CP201TUL",
+      "url": "https://hvacdirect.com/20-lift-condensate-pump-with-tubing-cp201tul.html",
+      "price": 98,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "Aspen Mini White under-mount ductless condensate pump",
+      "title": "Aspen Mini White - Under Mount Condensate Pump - ASP-MW-UNI",
+      "sku": "83939",
+      "url": "https://hvacdirect.com/aspen-mini-white-under-mount-condensate-pump-asp-mw-uni-83939.html",
+      "price": 332.16,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "Beckett secondary drain pan clip-on float safety switch",
+      "title": "Beckett Central Air Drain Pan Float Switch",
+      "sku": "SS-1502C",
+      "url": "https://hvacdirect.com/beckett-condensate-pump-safety-switch-ss-1502c.html",
+      "price": 22.95,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "RectorSeal Safe-T-Switch SS1 inline primary drain float switch",
+      "title": "Rectorseal Safe-T-Switch SS1",
+      "sku": "SS1",
+      "url": "https://hvacdirect.com/rectorseal-safe-t-switch-ss1.html",
+      "price": 38.49,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "RectorSeal Safe-T-Switch SS3 auxiliary drain pan float switch",
+      "title": "Rectorseal Safe-T-Switch SS3",
+      "sku": "SS3",
+      "url": "https://hvacdirect.com/rectorseal-safe-t-switch-ss3.html",
+      "price": 29.95,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "DiversiTech molded polymer secondary drain pan, 27 x 63 in.",
+      "title": "DiversiTech Plastic Drain Pan - 2763L",
+      "sku": "2763L",
+      "url": "https://hvacdirect.com/diversitech-plastic-drain-pan-2763l.html",
+      "price": 99.95,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "Auxiliary secondary condensate drain pan, 32 x 36 in.",
+      "title": "Drain Pan - 32\" x 36\"",
+      "sku": "DP32X36W",
+      "url": "https://hvacdirect.com/drain-pan-32-x-36-dp32x36w.html",
+      "price": 116,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "Auxiliary secondary condensate drain pan, 32 x 60 in.",
+      "title": "Drain Pan - 32\" x 60\"",
+      "sku": "DP32X60W",
+      "url": "https://hvacdirect.com/drain-pan-32-x-60-dp32x60w.html",
+      "price": 143,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "mini-split-brackets-covers",
+      "label": "MRCOOL LineGuard 4.5 in. complete PVC line-set cover kit",
+      "title": "MRCOOL LineGuard 4.5\" Complete Wall Duct Kit-R410A",
+      "sku": "MLG450",
+      "url": "https://hvacdirect.com/mrcool-lineguard-4-5-complete-wall-duct-kit-mlg450.html",
+      "price": 132,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "mini-split-brackets-covers",
+      "label": "4.5 in. white PVC line-set cover guard complete 12 ft wall duct kit",
+      "title": "White Line Set Cover Guard – Complete Wall Duct Kit (12 ft.)",
+      "sku": "84105",
+      "url": "https://hvacdirect.com/white-line-set-cover-guard-4-5-complete-wall-duct-kit-81405.html",
+      "price": 149,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "mini-split-brackets-covers",
+      "label": "RectorSeal 300 lb outdoor mini-split condenser wall mount bracket",
+      "title": "Rectorseal Condenser Wall Mount Bracket - 300 Lbs",
+      "sku": "87733",
+      "url": "https://hvacdirect.com/rectorseal-condenser-wall-mount-bracket-300-lb-87733.html",
+      "price": 116.44,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "mini-split-brackets-covers",
+      "label": "RectorSeal WBB500 heavy-duty 500 lb outdoor condenser wall bracket",
+      "title": "Rectorseal Outdoor Condenser Wall Bracket",
+      "sku": "WBB500",
+      "url": "https://hvacdirect.com/rectorseal-outdoor-condenser-wall-bracket-wbb500.html",
+      "price": 222.52,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "mini-split-brackets-covers",
+      "label": "DiversiTech Quick-Sling QSWB2000 mini-split wall mount bracket",
+      "title": "DiversiTech Quick-Sling Mini Split Wall Mount Bracket - QSWB2000",
+      "sku": "QSWB2000",
+      "url": "https://hvacdirect.com/diversitech-quick-sling-mini-split-wall-mount-bracket-qswb2000.html",
+      "price": 349.95,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "mini-split-brackets-covers",
+      "label": "Senville GS-380 heavy-duty mini-split ground stand",
+      "title": "Senville Ground Stand for Mini Split Air Conditioners",
+      "sku": "GS-380",
+      "url": "https://hvacdirect.com/senville-ground-stand-for-mini-split-air-conditioners-gs-380.html",
+      "price": 94.99,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "mini-split-brackets-covers",
+      "label": "RectorSeal 87743 condenser slab ground stand (176 lb capacity)",
+      "title": "Rectorseal Condenser Slab Stand - 176 Lbs",
+      "sku": "87743",
+      "url": "https://hvacdirect.com/rectorseal-wall-condenser-bracket-176-lb-87743.html",
+      "price": 262.93,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "mini-split-brackets-covers",
+      "label": "DiversiTech Quick-Sling 12 in. elevated mini-split heat pump stand",
+      "title": "DiversiTech 12\" Mini Split Stand - QSMS1201",
+      "sku": "QSMS1201",
+      "url": "https://hvacdirect.com/diversitech-12-mini-split-stand-qsms1201.html",
+      "price": 349.95,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    },
+    {
+      "category": "mini-split-brackets-covers",
+      "label": "RectorSeal NFP-75 wall penetration sleeve for mini-split line sets",
+      "title": "Line Set Wall Sleeve",
+      "sku": "NFP-75",
+      "url": "https://hvacdirect.com/rectorseal-wall-sleeve-nfp-75.html",
+      "price": 24.95,
+      "retailer": "HVACDirect",
+      "fetchedAt": "2026-10-28T18:57:40.313Z"
+    }
+  ]
 }

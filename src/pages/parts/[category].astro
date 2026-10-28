@@ -1,0 +1,225 @@
+---
+import Base from '../../layouts/Base.astro';
+import ConciergeForm from '../../components/ConciergeForm.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import { PART_CATEGORIES, type PartCategoryWithStats } from '../../data/parts';
+import { usd, seedDateLabel } from '../../lib/facts';
+import { SITE } from '../../config';
+
+export function getStaticPaths() {
+  return PART_CATEGORIES.map((cat) => ({
+    params: { category: cat.slug },
+    props: { cat },
+  }));
+}
+
+const { cat } = Astro.props as { cat: PartCategoryWithStats };
+
+const fmtExact = (n: number) =>
+  Number.isInteger(n)
+    ? `$${n.toLocaleString('en-US')}`
+    : `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+const minRound = usd(cat.minPrice);
+const maxRound = usd(cat.maxPrice);
+const title = `${minRound}–${maxRound} ${cat.shortName.replace(' & ', ' / ')} Prices`;
+const description = `Compare ${cat.count} verified ${cat.shortName.toLowerCase()} (${fmtExact(cat.minPrice)}–${fmtExact(cat.maxPrice)}, median ${fmtExact(cat.medianPrice)}) with exact SKUs, source links & quote audit tips.`;
+
+const otherCategories = PART_CATEGORIES.filter((c) => c.slug !== cat.slug);
+
+const ld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: `${cat.name} Wholesale Price Directory`,
+    url: `${SITE.url}/parts/${cat.slug}/`,
+    description,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: cat.items.length,
+      itemListElement: cat.items.map((item, idx) => ({
+        '@type': 'ListItem',
+        position: idx + 1,
+        item: {
+          '@type': 'Product',
+          name: item.label,
+          sku: item.sku ?? undefined,
+          offers: {
+            '@type': 'Offer',
+            priceCurrency: 'USD',
+            price: item.price,
+            availability: 'https://schema.org/InStock',
+            url: item.url,
+            seller: { '@type': 'Organization', name: item.retailer },
+          },
+        },
+      })),
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE.url}/` },
+      { '@type': 'ListItem', position: 2, name: 'Parts & Add-Ons', item: `${SITE.url}/parts/` },
+      { '@type': 'ListItem', position: 3, name: cat.shortName, item: `${SITE.url}/parts/${cat.slug}/` },
+    ],
+  },
+];
+---
+<Base title={title} description={description} jsonld={ld}>
+  <p class="crumbs"><a href="/">Home</a> / <a href="/parts/">Parts &amp; Add-Ons</a> / {cat.shortName}</p>
+  <div class="small muted">{cat.badge}</div>
+  <h1 style="margin-top:4px">{cat.name}: verified wholesale &amp; retail prices</h1>
+  <p class="lead">{cat.summary} Every price below was fetched directly from the distributor product page on {seedDateLabel}.</p>
+
+  <div class="grid kp">
+    <div class="card">
+      <div class="small muted">Listed price span</div>
+      <div class="v num">{fmtExact(cat.minPrice)}–{fmtExact(cat.maxPrice)}</div>
+      <div class="small muted">Across {cat.count} live-verified SKUs</div>
+    </div>
+    <div class="card">
+      <div class="small muted">Category median price</div>
+      <div class="v num">{fmtExact(cat.medianPrice)}</div>
+      <div class="small muted">Public online hardware price (before labor)</div>
+    </div>
+    <div class="card">
+      <div class="small muted">Sub-categories covered</div>
+      <div class="v num">{cat.subGroups.length} groups</div>
+      <div class="small muted">Verified {seedDateLabel} on HVACDirect</div>
+    </div>
+  </div>
+
+  <p style="margin:14px 0 24px">
+    <a class="btn" href="/auditor/">Audit a quote with {cat.shortName.toLowerCase()}</a>
+    <a class="btn ghost" href="#second-opinion">Get an independent second quote</a>
+  </p>
+
+  <h2>Price summary by specification group</h2>
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Sub-group / specification</th>
+          <th class="r">SKUs</th>
+          <th class="r">Lowest listed</th>
+          <th class="r">Median listed</th>
+          <th class="r">Highest listed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {cat.subGroups.map((sg) => (
+          <tr>
+            <td><b>{sg.name}</b></td>
+            <td class="r num">{sg.items.length}</td>
+            <td class="r num">{fmtExact(sg.minPrice)}</td>
+            <td class="r num">{fmtExact(sg.medianPrice)}</td>
+            <td class="r num">{fmtExact(sg.maxPrice)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>All {cat.count} verified {cat.shortName.toLowerCase()} SKUs &amp; live source links</h2>
+  {cat.subGroups.map((sg) => (
+    <section style="margin:18px 0 26px">
+      <h3 style="margin-bottom:8px">{sg.name}</h3>
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Part description</th>
+              <th>Retailer product title</th>
+              <th>SKU / Part #</th>
+              <th class="r">Listed price</th>
+              <th>Source link</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sg.items.map((item) => (
+              <tr>
+                <td><b>{item.label}</b></td>
+                <td class="small muted">{item.title}</td>
+                <td class="num"><code>{item.sku ?? '—'}</code></td>
+                <td class="r num"><b>{fmtExact(item.price)}</b></td>
+                <td class="small">
+                  <a href={item.url} rel="noopener">{item.retailer}</a>
+                  <span class="muted"> ({item.fetchedAt.slice(0, 10)})</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  ))}
+
+  <h2>What this hardware does &amp; how to audit contractor quotes</h2>
+  <div class="card" style="margin:12px 0 18px">
+    <p style="margin-top:0"><b>Function in an HVAC install:</b> {cat.whatItDoes}</p>
+    <p style="margin-bottom:6px"><b>When it’s needed vs. when it’s padded on a proposal:</b></p>
+    <ul style="margin-top:4px">
+      {cat.whenNeededVsPadded.map((pt) => (
+        <li style="margin-bottom:6px">{pt}</li>
+      ))}
+    </ul>
+    <p class="small muted" style="margin-bottom:0"><b>Quote Auditor note:</b> {cat.auditorAdderNote}</p>
+  </div>
+
+  <h2>Homeowner inspection &amp; quote checklist for {cat.shortName.toLowerCase()}</h2>
+  <div class="card" style="margin:12px 0 22px">
+    <ol style="margin:0;padding-left:20px">
+      {cat.auditChecklist.map((step) => (
+        <li style="margin-bottom:8px">{step}</li>
+      ))}
+    </ol>
+  </div>
+
+  <h2>Related line-item add-on &amp; diagnostic guides</h2>
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:12px 0 24px">
+    {cat.relatedGuides.map((g) => (
+      <a class="card" href={`/guides/${g.slug}/`} style="text-decoration:none;color:inherit">
+        <div class="small muted">In-depth guide</div>
+        <div style="font-weight:700;margin:4px 0">{g.title}</div>
+        <div class="small muted">{g.summary}</div>
+      </a>
+    ))}
+  </div>
+
+  <h2>Primary sources &amp; methodology</h2>
+  <ul>
+    {cat.primarySources.map((src) => (
+      <li>
+        <a href={src.url} rel="noopener"><b>{src.label}</b></a> — <span class="small muted">{src.note}</span>
+      </li>
+    ))}
+    <li>
+      <a href="/about/#benchmarks"><b>TonnageCheck Data &amp; Benchmark Methodology</b></a> — <span class="small muted">How we combine live distributor pricing with DOE/NREL REMDB regressions and BLS CPI-U.</span>
+    </li>
+  </ul>
+
+  <div class="cta card" style="margin:22px 0">
+    <h2>Got a contractor quote with {cat.shortName.toLowerCase()} add-ons?</h2>
+    <p>Run your quote through the TonnageCheck Quote Auditor to compare equipment and scope adders against these verified part prices and NREL REMDB installed-cost benchmarks.</p>
+    <a class="btn" href="/auditor/">Audit my HVAC quote</a>
+  </div>
+
+  <section class="card second" id="second-opinion">
+    <ConciergeForm brandModel={cat.shortName} />
+  </section>
+
+  <h2>Explore other HVAC installation part categories</h2>
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:12px 0 24px">
+    {otherCategories.map((o) => (
+      <a class="card" href={`/parts/${o.slug}/`} style="text-decoration:none;color:inherit">
+        <div class="small muted">{o.count} verified SKUs</div>
+        <div style="font-weight:700;margin:4px 0">{o.shortName}</div>
+        <div class="small num muted">{fmtExact(o.minPrice)}–{fmtExact(o.maxPrice)} listed</div>
+      </a>
+    ))}
+  </div>
+
+  <Newsletter />
+</Base>

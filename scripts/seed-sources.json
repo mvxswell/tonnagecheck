@@ -536,8 +536,290 @@
   ],
   "lineSets": [
     {
-      "label": "3/8 x 3/4 in. insulated line set, 30 ft",
+      "label": "Style Crest Revolv 3/8 x 3/4 in. AccuCharge line set, 15 ft",
+      "url": "https://hvacdirect.com/revolv-accucharge-line-sets-3-8-x-3-4-15-feet-4463q1531.html"
+    },
+    {
+      "label": "Stealth EZ Connect 3/8 x 3/4 in. R-454B pre-charged line set, 15 ft",
+      "url": "https://hvacdirect.com/ez-connect-precharged-refrigerant-line-set-with-3-8-and-3-4-line-ends-15-feet-r454b-ez-16-3834-u.html"
+    },
+    {
+      "label": "Style Crest Revolv 3/8 x 3/4 in. AccuCharge line set, 25 ft",
+      "url": "https://hvacdirect.com/revolv-accucharge-line-sets-3-8-x-3-4-25-feet-4463q2531.html"
+    },
+    {
+      "label": "Stealth EZ Connect 3/8 x 3/4 in. R-454B pre-charged line set, 25 ft",
+      "url": "https://hvacdirect.com/ez-connect-precharged-refrigerant-line-set-with-3-8-and-3-4-line-ends-25-feet-r454b-ez-25-3834-u.html"
+    },
+    {
+      "label": "3/8 x 3/4 in. insulated copper line set, 30 ft",
       "url": "https://hvacdirect.com/3-8-ll-x-3-4-sl-x-3-8-insulation-line-set-30-feet-ls38583830.html"
+    },
+    {
+      "label": "Stealth EZ Connect 3/8 x 3/4 in. R-454B pre-charged line set, 35 ft",
+      "url": "https://hvacdirect.com/ez-connect-precharged-refrigerant-line-set-with-3-8-and-3-4-line-ends-35-feet-r454b-ez-35-3834-u.html"
+    },
+    {
+      "label": "3/8 x 3/4 in. insulated copper line set, 50 ft",
+      "url": "https://hvacdirect.com/3-8-ll-x-3-4-sl-x-3-8-insulation-line-set-50-feet-ls38583850.html"
+    },
+    {
+      "label": "Stealth EZ Connect 3/8 x 3/4 in. R-454B pre-charged line set, 50 ft",
+      "url": "https://hvacdirect.com/ez-connect-precharged-refrigerant-line-set-with-3-8-and-3-4-line-ends-50-feet-r454b-ez-50-3834-u.html"
+    },
+    {
+      "label": "Style Crest Revolv 3/8 x 7/8 in. AccuCharge line set, 15 ft",
+      "url": "https://hvacdirect.com/revolv-accucharge-line-sets-3-8-x-7-8-15-feet-4473q1531.html"
+    },
+    {
+      "label": "Style Crest Revolv 3/8 x 7/8 in. AccuCharge line set, 25 ft",
+      "url": "https://hvacdirect.com/revolv-accucharge-line-sets-3-8-x-7-8-25-feet-4473q2531.html"
+    },
+    {
+      "label": "Goodman 3/8 x 7/8 in. insulated copper line set, 30 ft",
+      "url": "https://hvacdirect.com/goodman-3-8-ll-x-7-8-sl-x-3-8-insulation-line-set-30-feet.html"
+    },
+    {
+      "label": "Goodman 3/8 x 7/8 in. insulated copper line set, 50 ft",
+      "url": "https://hvacdirect.com/goodman-3-8-ll-x-7-8-sl-x-3-8-insulation-line-set-50-feet-ls38783850.html"
+    },
+    {
+      "label": "Mini-split 1/4 x 1/2 in. flared insulated copper line set, 15 ft",
+      "url": "https://hvacdirect.com/refrigerant-line-set-with-1-4-inch-and-1-2-inch-line-ends-15-feet-201814.html"
+    },
+    {
+      "label": "Mini-split 1/4 x 1/2 in. flared insulated copper line set, 25 ft",
+      "url": "https://hvacdirect.com/refrigerant-line-set-with-1-4-inch-and-1-2-inch-line-ends-25-feet-366400.html"
+    },
+    {
+      "label": "Mini-split 1/4 x 1/2 in. flared insulated copper line set, 35 ft",
+      "url": "https://hvacdirect.com/refrigerant-line-set-with-1-4-inch-and-1-2-inch-line-ends-35-feet-366401.html"
+    },
+    {
+      "label": "Mini-split 1/4 x 1/2 in. flared insulated copper line set, 50 ft",
+      "url": "https://hvacdirect.com/refrigerant-line-set-with-1-4-inch-and-1-2-inch-line-ends-50-feet-366402.html"
+    }
+  ],
+  "accessories": [
+    {
+      "category": "heat-strip-kits",
+      "label": "Goodman 5 kW (16,200 BTU) electric heat strip kit",
+      "url": "https://hvacdirect.com/goodman-5-kilowatt-16-200-btu-heater-coil-hkr-05c.html"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "Goodman 5 kW (16,200 BTU) SmartFrame electric heat kit with breaker",
+      "url": "https://hvacdirect.com/goodman-5-kilowatt-16-200-btu-heater-coil-for-smart-frame-air-handlers-hksc05xc.html"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "ACiQ 5 kW (17,000 BTU) electric auxiliary heater kit",
+      "url": "https://hvacdirect.com/5-kilowatt-17-000-btu-aciq-heater-coil-ehk05akb.html"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "Goodman 8 kW (23,800 BTU) electric heat strip kit",
+      "url": "https://hvacdirect.com/goodman-7-kilowatt-23-800-btu-heater-coil-hkr-08c.html"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "Goodman 8 kW (23,800 BTU) SmartFrame electric heat kit with breaker",
+      "url": "https://hvacdirect.com/goodman-8-kilowatt-23-800-btu-heater-coil-for-smart-frame-air-handlers-hksc08xc.html"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "ACiQ 7.5 kW (23,800 BTU) electric auxiliary heater kit",
+      "url": "https://hvacdirect.com/7-kilowatt-23-800-btu-aciq-heater-coil-ehk07akb.html"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "Goodman 10 kW (34,100 BTU) electric heat strip kit",
+      "url": "https://hvacdirect.com/goodman-10-kilowatt-34-100-btu-heater-coil-hkr-10c.html"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "Goodman 10 kW (34,100 BTU) SmartFrame electric heat kit with breaker",
+      "url": "https://hvacdirect.com/goodman-10-kilowatt-34-100-btu-heater-coil-for-smart-frame-air-handler-hksc10xc.html"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "ACiQ 10 kW (34,000 BTU) electric auxiliary heater kit",
+      "url": "https://hvacdirect.com/10-kilowatt-34-000-btu-aciq-heater-coil-ehk10akb.html"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "Goodman 15 kW (51,150 BTU) SmartFrame electric heat kit with breaker",
+      "url": "https://hvacdirect.com/goodman-15-kilowatt-51-150-btu-heater-coil-hksc15xb.html"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "ACiQ 15 kW (51,000 BTU) electric auxiliary heater kit",
+      "url": "https://hvacdirect.com/15-kilowatt-51-000-btu-aciq-heater-coil-ehk15akb-ebac01spk.html"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "Goodman 20 kW (68,200 BTU) SmartFrame electric heat kit with breaker",
+      "url": "https://hvacdirect.com/goodman-20-kilowatt-68-200-btu-heater-coil-hksc20db.html"
+    },
+    {
+      "category": "heat-strip-kits",
+      "label": "ACiQ 20 kW (68,000 BTU) electric auxiliary heater kit",
+      "url": "https://hvacdirect.com/20-kilowatt-68-000-btu-aciq-heater-coil-ehk20akb-ebac01spk.html"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "DiversiTech E-Lite composite condenser pad, 18 x 38 x 3 in.",
+      "url": "https://hvacdirect.com/e-lite-equipment-pad-18-x-38-x-3.html"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "DiversiTech E-Lite composite condenser pad, 32 x 32 x 3 in.",
+      "url": "https://hvacdirect.com/e-lite-equipment-pad-32-x-32-x-3.html"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "DiversiTech E-Lite composite condenser pad, 36 x 36 x 3 in.",
+      "url": "https://hvacdirect.com/e-lite-equipment-pad-36-x-36-x-3.html"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "DiversiTech E-Lite composite condenser pad, 36 x 48 x 3 in.",
+      "url": "https://hvacdirect.com/e-lite-equipment-pad-36-x-48-x-3.html"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "60A non-fused outdoor pull-out AC disconnect switch box",
+      "url": "https://hvacdirect.com/disconnect-switch-60a-non-fuse.html"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "60A fusible outdoor pull-out AC disconnect switch box",
+      "url": "https://hvacdirect.com/disconnect-switch-60a-fusible.html"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "30A fusible outdoor pull-out AC disconnect switch box",
+      "url": "https://hvacdirect.com/disconnect-switch-30a-fusible.html"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "Pre-wired 1/2 in. x 6 ft non-metallic electrical whip (12 AWG)",
+      "url": "https://hvacdirect.com/electrical-whip-1-2-x-6-non-metallic-6-12-6nm.html"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "Pre-wired 1/2 in. x 6 ft electrical whip (10 AWG)",
+      "url": "https://hvacdirect.com/electrical-whip-1-2-x-6-10-gauge-metallic-84136.html"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "Pre-wired 3/4 in. x 6 ft electrical whip (8 AWG)",
+      "url": "https://hvacdirect.com/electrical-whip-3-4-x-6-8-gauge-metallic-84138.html"
+    },
+    {
+      "category": "pads-disconnects-whips",
+      "label": "120/240V single-phase HVAC surge protector (100,000A, 1,020 Joules)",
+      "url": "https://hvacdirect.com/surge-protector-120-240-vac-single-phase-max-current-100000-amp-max-energy-1020-joules.html"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "Beckett 20 ft lift low-profile condensate pump",
+      "url": "https://hvacdirect.com/beckett-20-lift-low-profile-condensate-pump-cl201ul.html"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "15 ft lift automatic condensate removal pump",
+      "url": "https://hvacdirect.com/15-lift-condensate-pump-cb151ul.html"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "20 ft lift automatic condensate removal pump",
+      "url": "https://hvacdirect.com/20-lift-condensate-pump-cp201ul.html"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "20 ft lift condensate pump with 20 ft vinyl discharge tubing",
+      "url": "https://hvacdirect.com/20-lift-condensate-pump-with-tubing-cp201tul.html"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "Aspen Mini White under-mount ductless condensate pump",
+      "url": "https://hvacdirect.com/aspen-mini-white-under-mount-condensate-pump-asp-mw-uni-83939.html"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "Beckett secondary drain pan clip-on float safety switch",
+      "url": "https://hvacdirect.com/beckett-condensate-pump-safety-switch-ss-1502c.html"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "RectorSeal Safe-T-Switch SS1 inline primary drain float switch",
+      "url": "https://hvacdirect.com/rectorseal-safe-t-switch-ss1.html"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "RectorSeal Safe-T-Switch SS3 auxiliary drain pan float switch",
+      "url": "https://hvacdirect.com/rectorseal-safe-t-switch-ss3.html"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "DiversiTech molded polymer secondary drain pan, 27 x 63 in.",
+      "url": "https://hvacdirect.com/diversitech-plastic-drain-pan-2763l.html"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "Auxiliary secondary condensate drain pan, 32 x 36 in.",
+      "url": "https://hvacdirect.com/drain-pan-32-x-36-dp32x36w.html"
+    },
+    {
+      "category": "condensate-pumps-drains",
+      "label": "Auxiliary secondary condensate drain pan, 32 x 60 in.",
+      "url": "https://hvacdirect.com/drain-pan-32-x-60-dp32x60w.html"
+    },
+    {
+      "category": "mini-split-brackets-covers",
+      "label": "MRCOOL LineGuard 4.5 in. complete PVC line-set cover kit",
+      "url": "https://hvacdirect.com/mrcool-lineguard-4-5-complete-wall-duct-kit-mlg450.html"
+    },
+    {
+      "category": "mini-split-brackets-covers",
+      "label": "4.5 in. white PVC line-set cover guard complete 12 ft wall duct kit",
+      "url": "https://hvacdirect.com/white-line-set-cover-guard-4-5-complete-wall-duct-kit-81405.html"
+    },
+    {
+      "category": "mini-split-brackets-covers",
+      "label": "RectorSeal 300 lb outdoor mini-split condenser wall mount bracket",
+      "url": "https://hvacdirect.com/rectorseal-condenser-wall-mount-bracket-300-lb-87733.html"
+    },
+    {
+      "category": "mini-split-brackets-covers",
+      "label": "RectorSeal WBB500 heavy-duty 500 lb outdoor condenser wall bracket",
+      "url": "https://hvacdirect.com/rectorseal-outdoor-condenser-wall-bracket-wbb500.html"
+    },
+    {
+      "category": "mini-split-brackets-covers",
+      "label": "DiversiTech Quick-Sling QSWB2000 mini-split wall mount bracket",
+      "url": "https://hvacdirect.com/diversitech-quick-sling-mini-split-wall-mount-bracket-qswb2000.html"
+    },
+    {
+      "category": "mini-split-brackets-covers",
+      "label": "Senville GS-380 heavy-duty mini-split ground stand",
+      "url": "https://hvacdirect.com/senville-ground-stand-for-mini-split-air-conditioners-gs-380.html"
+    },
+    {
+      "category": "mini-split-brackets-covers",
+      "label": "RectorSeal 87743 condenser slab ground stand (176 lb capacity)",
+      "url": "https://hvacdirect.com/rectorseal-wall-condenser-bracket-176-lb-87743.html"
+    },
+    {
+      "category": "mini-split-brackets-covers",
+      "label": "DiversiTech Quick-Sling 12 in. elevated mini-split heat pump stand",
+      "url": "https://hvacdirect.com/diversitech-12-mini-split-stand-qsms1201.html"
+    },
+    {
+      "category": "mini-split-brackets-covers",
+      "label": "RectorSeal NFP-75 wall penetration sleeve for mini-split line sets",
+      "url": "https://hvacdirect.com/rectorseal-wall-sleeve-nfp-75.html"
     }
   ]
 }

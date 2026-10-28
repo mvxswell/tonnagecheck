@@ -61,11 +61,14 @@ export interface System {
   prices: PricePoint[];
 }
 
-export interface LineSet { label: string; title: string; url: string; price: number; retailer: string; fetchedAt: string }
+export interface LineSet { label: string; title: string; sku?: string | null; url: string; price: number; retailer: string; fetchedAt: string }
+export type AccessoryCategorySlug = 'heat-strip-kits' | 'pads-disconnects-whips' | 'condensate-pumps-drains' | 'mini-split-brackets-covers';
+export interface Accessory { category: AccessoryCategorySlug; label: string; title: string; sku: string | null; url: string; price: number; retailer: string; fetchedAt: string }
 
 export const SEED_DATE: string = seed.generatedAt;
 export const SYSTEMS = seed.systems as System[];
 export const LINE_SETS = seed.lineSets as LineSet[];
+export const ACCESSORIES = ((seed as any).accessories || []) as Accessory[];
 export const BENCHMARKS = bench;
 
 export const SYSTEM_TYPE_LABEL: Record<SystemType, string> = {
@@ -107,7 +110,7 @@ export function auditPayload() {
       seer2: s.specs.seer2, energyStar: !!s.energyStar,
       prices: s.prices.map((p) => ({ r: p.retailer, u: p.url, p: p.price })),
     })),
-    lineSet: LINE_SETS[0] ? { label: LINE_SETS[0].label, url: LINE_SETS[0].url, price: LINE_SETS[0].price } : null,
+    lineSet: (() => { const std = LINE_SETS.find((l) => l.url.includes('ls38583830')) || LINE_SETS[0]; return std ? { label: std.label, url: std.url, price: std.price } : null; })(),
     remdb: BENCHMARKS.remdb.classes,
     cpi: { factor: BENCHMARKS.cpi.factor, base: BENCHMARKS.cpi.baseMonth, latest: BENCHMARKS.cpi.latestMonth },
   };

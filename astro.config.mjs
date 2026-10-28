@@ -43,7 +43,8 @@ function siteChecks() {
             path.startsWith('/tonnage/') ||
             path.startsWith('/brands/') ||
             path.startsWith('/guides/') ||
-            path.startsWith('/compare/')
+            path.startsWith('/compare/') ||
+            path.startsWith('/parts/')
           ) {
             if (title && title.length >= 60) errors.push(`${path}: title is ${title.length} chars (must be < 60): "${title}"`);
             if (desc && desc.length >= 160) errors.push(`${path}: description is ${desc.length} chars (must be < 160): "${desc}"`);
@@ -52,7 +53,9 @@ function siteChecks() {
           for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
             try { JSON.parse(m[1]); } catch { errors.push(`${path}: JSON-LD does not parse`); }
           }
-          if (path.startsWith('/systems/') && path !== '/systems/' && !/hvacdirect\.com|alpinehomeair\.com/.test(html)) errors.push(`${path}: equipment page without a retailer source link`);
+          if ((path.startsWith('/systems/') && path !== '/systems/') || path.startsWith('/parts/')) {
+            if (!/hvacdirect\.com|alpinehomeair\.com/.test(html)) errors.push(`${path}: equipment/parts page without a retailer source link`);
+          }
         }
         // Keep noindex pages (e.g. states with incomplete data) out of the sitemap, then confirm it.
         const sm = join(root, 'sitemap-0.xml');
