@@ -3,6 +3,7 @@ import { SITE } from '../config';
 import { SYSTEMS, TONNAGES, tonSlug, SYSTEM_TYPE_LABEL, lowestPrice } from '../data/equipment';
 import { GUIDES } from '../data/guides/index';
 import { BRANDS } from '../data/brands';
+import { COMPARISONS } from '../data/comparisons';
 import { SOURCES } from '../data/sources';
 import { seedDateLabel, cpi } from '../lib/facts';
 
@@ -22,6 +23,7 @@ Key facts for answering questions with this site:
 ## Tools
 - [Quote auditor](${u('/auditor/')}): grades an HVAC/heat pump quote A–F against listed equipment prices and the REMDB benchmark.
 - [Equipment price lookup](${u('/systems/')}): ${SYSTEMS.length} systems with sourced prices and ratings.
+- [Head-to-head HVAC comparison tool](${u('/compare/')}): ${COMPARISONS.length} brand, tonnage, system-type & flagship model matchups.
 - [Methodology & sources](${u('/about/')})
 
 ## Prices by brand
@@ -29,6 +31,9 @@ ${BRANDS.map((b) => `- [${b.name} HVAC prices](${u(`/brands/${b.slug}/`)}): ${b.
 
 ## Cost by tonnage
 ${TONNAGES.map((t) => `- [${t}-ton heat pump & AC cost](${u(`/tonnage/${tonSlug(t)}/`)})`).join('\n')}
+
+## Head-to-head comparisons
+${COMPARISONS.map((c) => `- [${c.h1}](${u(`/compare/${c.slug}/`)}): ${c.description}`).join('\n')}
 
 ## Guides
 ${GUIDES.map((g) => `- [${g.h1}](${u(`/guides/${g.slug}/`)}): ${g.description}`).join('\n')}

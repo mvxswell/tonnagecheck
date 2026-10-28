@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Auditor from '../../components/Auditor.astro';
 import { SYSTEMS, SYSTEM_TYPE_LABEL, TIER_LABEL, tonSlug, lowestPrice, belowEnergyStarMinimum, type System } from '../../data/equipment';
 import { brandSlug } from '../../data/brands';
+import { comparisonsForSystem } from '../../data/comparisons';
 import { fairRange, usd, fmtRange } from '../../lib/facts';
 import { SOURCES } from '../../data/sources';
 import { SITE } from '../../config';
@@ -20,6 +21,7 @@ const title = `${usd(low)} Equip vs ${fmtRange(fair)} Installed: ${s.brand} ${s.
 const description = `${usd(low)} listed equipment vs ${fmtRange(fair)} installed benchmark for ${name} (${s.components[0]})${es ? `, AHRI #${es.ahriReferenceNumber}` : ''}.`;
 const fetched = new Date(s.prices[0].fetchedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
 const related = SYSTEMS.filter((x) => x.slug !== s.slug && x.tons === s.tons).slice(0, 6);
+const sysCmps = comparisonsForSystem(s.slug, s.brand, s.tons);
 const ld = {
   '@context': 'https://schema.org', '@type': 'Product', name, brand: { '@type': 'Brand', name: s.brand }, mpn: s.components[0], model: s.components.join(' / '),
   url: `${SITE.url}/systems/${s.slug}/`,
@@ -96,6 +98,12 @@ const ld = {
     <>
       <h2>Other {s.tons}-ton systems</h2>
       <ul class="rel">{related.map((r) => <li><a href={`/systems/${r.slug}/`}>{r.brand} {r.components[0]}</a> <span class="small muted">{SYSTEM_TYPE_LABEL[r.systemType]}, {r.specs.seer2 ?? '?'} SEER2, <span class="num">{usd(lowestPrice(r))}</span></span></li>)}</ul>
+    </>
+  )}
+  {sysCmps.length > 0 && (
+    <>
+      <h2>Head-to-head comparisons for {s.brand} &amp; {s.tons}-ton systems</h2>
+      <ul class="rel">{sysCmps.map((c) => <li><a href={`/compare/${c.slug}/`}>{c.shortLabel}: {c.h1}</a></li>)}</ul>
     </>
   )}
 </Base>

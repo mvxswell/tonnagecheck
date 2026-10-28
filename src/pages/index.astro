@@ -6,6 +6,7 @@ import { SITE } from '../config';
 import { SYSTEMS, TONNAGES, tonSlug } from '../data/equipment';
 import { GUIDES } from '../data/guides/index';
 import { BRANDS } from '../data/brands';
+import { COMPARISONS } from '../data/comparisons';
 import { STATES } from '../data/states';
 import { fairRange, equipmentStats, seedDateLabel, usd, fmtRange } from '../lib/facts';
 
@@ -73,6 +74,14 @@ const ld = [
     <p class="muted small">Electricity and gas prices from EIA, climate zones from PNNL, and the 2026 rebate rules for your state.</p>
     <div class="states">
       {STATES.map((s) => <a href={`/states/${s.slug}/`}>{s.name}</a>)}
+    </div>
+  </section>
+
+  <section>
+    <h2>Head-to-head HVAC comparisons</h2>
+    <p class="muted small">Compare brands, adjacent tonnages, system types, and R-32 vs R-454B models side by side. <a href="/compare/">Interactive comparison tool &amp; all {COMPARISONS.length} matchups →</a></p>
+    <div class="grid">
+      {COMPARISONS.slice(0, 6).map((c) => <a class="card glink" href={`/compare/${c.slug}/`}><b>{c.shortLabel}</b><span class="small muted">{c.description}</span></a>)}
     </div>
   </section>
 

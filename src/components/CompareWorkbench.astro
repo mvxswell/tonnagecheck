@@ -1,0 +1,267 @@
+---
+import { SYSTEMS, SYSTEM_TYPE_LABEL, TIER_LABEL, lowestPrice, type System } from '../data/equipment';
+import { fairRange, refrigerantOf, isInverter, usd, fmtRange, pct, seedDateLabel } from '../lib/facts';
+
+interface Props {
+  defaultLeftSlug?: string;
+  defaultRightSlug?: string;
+}
+
+const {
+  defaultLeftSlug = 'goodman-3-ton-17-2-seer2-heat-pump-system-glzt7ca3610',
+  defaultRightSlug = 'bosch-3-ton-20-seer2-heat-pump-system-bovb-36rxb-m15s',
+} = Astro.props;
+
+const serialized = SYSTEMS.map((s) => {
+  const equip = lowestPrice(s);
+  const fair = fairRange(s.systemType, s.tons, s.tier);
+  const markupMid = fair.mid - equip;
+  return {
+    slug: s.slug,
+    brand: s.brand,
+    title: s.title,
+    model: s.components[0],
+    components: s.components.join(' + '),
+    systemType: s.systemType,
+    typeLabel: SYSTEM_TYPE_LABEL[s.systemType],
+    tons: s.tons,
+    btu: (s.tons * 12000).toLocaleString('en-US'),
+    tierLabel: TIER_LABEL[s.tier],
+    seer2: s.specs.seer2 ?? '—',
+    eer2: s.specs.eer2 ?? '—',
+    hspf2: s.specs.hspf2 ?? '—',
+    refrigerant: s.energyStar?.refrigerant ?? refrigerantOf(s) ?? 'Listed on unit',
+    staging: s.energyStar?.compressorStaging ?? s.specs.stages ?? (isInverter(s) ? 'Variable-speed inverter' : 'Fixed-stage'),
+    cop5f: s.energyStar?.copAt5F ?? '—',
+    cap5f: s.energyStar?.heatingCapacity5F ? `${s.energyStar.heatingCapacity5F.toLocaleString('en-US')} BTU/h` : '—',
+    energyStar: s.energyStar ? (s.energyStar.coldClimate ? 'ENERGY STAR · Cold Climate' : 'ENERGY STAR Certified') : 'Manufacturer listing',
+    ahri: s.energyStar?.ahriReferenceNumber ?? 'Verify on AHRI Directory',
+    warranty: '10-yr parts (with registration); labor varies by installer',
+    equip,
+    equipFmt: usd(equip),
+    retailer: s.prices[0].retailer,
+    retailerUrl: s.prices[0].url,
+    fairLow: fair.low,
+    fairMid: fair.mid,
+    fairHigh: fair.high,
+    fairFmt: fmtRange(fair),
+    fairMidFmt: usd(fair.mid),
+    markupMid,
+    markupMidFmt: usd(markupMid),
+    markupPctFmt: pct(markupMid / fair.mid),
+  };
+});
+
+const leftInit = serialized.find((x) => x.slug === defaultLeftSlug) ?? serialized[0];
+const rightInit = serialized.find((x) => x.slug === defaultRightSlug) ?? serialized[1];
+const sizes = [...new Set(SYSTEMS.map((s) => s.tons))].sort((a, b) => a - b);
+const types = [...new Set(SYSTEMS.map((s) => s.systemType))];
+---
+<section class="card" data-compare-wb style="margin:18px 0">
+  <h2 style="margin-top:0">Interactive side-by-side system comparison tool</h2>
+  <p class="small muted">Filter by tonnage or system type and pick any two of our {SYSTEMS.length} verified systems ({seedDateLabel}) to compare public wholesale/online equipment prices, DOE REMDB installed benchmarks, non-equipment markup spread, SEER2/HSPF2, refrigerant, and AHRI / ENERGY STAR status.</p>
+
+  <div class="wb-filters">
+    <div>
+      <label for="wb-tons">Filter by size</label>
+      <select id="wb-tons" data-wb-tons>
+        <option value="">All tonnages (1.5–5 ton)</option>
+        {sizes.map((t) => <option value={String(t)}>{t} ton ({(t * 12000).toLocaleString('en-US')} BTU/h)</option>)}
+      </select>
+    </div>
+    <div>
+      <label for="wb-type">Filter by system type</label>
+      <select id="wb-type" data-wb-type>
+        <option value="">All system types</option>
+        {types.map((t) => <option value={t}>{SYSTEM_TYPE_LABEL[t]}</option>)}
+      </select>
+    </div>
+  </div>
+
+  <div class="wb-pickers">
+    <div>
+      <label for="wb-left">System A</label>
+      <select id="wb-left" data-wb-left>
+        {serialized.map((s) => (
+          <option value={s.slug} selected={s.slug === leftInit.slug} data-tons={s.tons} data-type={s.systemType}>
+            {s.brand} · {s.tons}T · {s.model} ({s.seer2} SEER2 · {s.equipFmt})
+          </option>
+        ))}
+      </select>
+    </div>
+    <div>
+      <label for="wb-right">System B</label>
+      <select id="wb-right" data-wb-right>
+        {serialized.map((s) => (
+          <option value={s.slug} selected={s.slug === rightInit.slug} data-tons={s.tons} data-type={s.systemType}>
+            {s.brand} · {s.tons}T · {s.model} ({s.seer2} SEER2 · {s.equipFmt})
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+
+  <div class="tablewrap" style="margin-top:14px">
+    <table>
+      <thead>
+        <tr>
+          <th>Specification / Cost Benchmark</th>
+          <th class="r" data-col-a><a href={`/systems/${leftInit.slug}/`}>{leftInit.brand} {leftInit.tons}T ({leftInit.model})</a></th>
+          <th class="r" data-col-b><a href={`/systems/${rightInit.slug}/`}>{rightInit.brand} {rightInit.tons}T ({rightInit.model})</a></th>
+          <th class="r">Spread (A vs B)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Listed equipment price ({seedDateLabel})</b></td>
+          <td class="r num" data-a-equip><b>{leftInit.equipFmt}</b> ({leftInit.retailer})</td>
+          <td class="r num" data-b-equip><b>{rightInit.equipFmt}</b> ({rightInit.retailer})</td>
+          <td class="r num" data-diff-equip>{usd(Math.abs(leftInit.equip - rightInit.equip))}</td>
+        </tr>
+        <tr>
+          <td><b>DOE installed quote range</b> <span class="badge b-est">est.</span></td>
+          <td class="r num" data-a-fair>{leftInit.fairFmt} (mid {leftInit.fairMidFmt})</td>
+          <td class="r num" data-b-fair>{rightInit.fairFmt} (mid {rightInit.fairMidFmt})</td>
+          <td class="r num" data-diff-fair>{usd(Math.abs(leftInit.fairMid - rightInit.fairMid))} mid</td>
+        </tr>
+        <tr>
+          <td><b>Contractor non-equipment spread (at midpoint)</b></td>
+          <td class="r num" data-a-markup>{leftInit.markupMidFmt} ({leftInit.markupPctFmt})</td>
+          <td class="r num" data-b-markup>{rightInit.markupMidFmt} ({rightInit.markupPctFmt})</td>
+          <td class="r num" data-diff-markup>{usd(Math.abs(leftInit.markupMid - rightInit.markupMid))}</td>
+        </tr>
+        <tr>
+          <td>System type &amp; nominal capacity</td>
+          <td class="r" data-a-cap>{leftInit.typeLabel} · {leftInit.tons} ton ({leftInit.btu} BTU/h)</td>
+          <td class="r" data-b-cap>{rightInit.typeLabel} · {rightInit.tons} ton ({rightInit.btu} BTU/h)</td>
+          <td class="r num" data-diff-tons>{leftInit.tons === rightInit.tons ? 'Same tonnage' : `${Math.abs(leftInit.tons - rightInit.tons)} ton diff`}</td>
+        </tr>
+        <tr>
+          <td>SEER2 / EER2 / HSPF2</td>
+          <td class="r num" data-a-eff>{leftInit.seer2} / {leftInit.eer2} / {leftInit.hspf2}</td>
+          <td class="r num" data-b-eff>{rightInit.seer2} / {rightInit.eer2} / {rightInit.hspf2}</td>
+          <td class="r num" data-diff-seer>{typeof leftInit.seer2 === 'number' && typeof rightInit.seer2 === 'number' ? `${(leftInit.seer2 - rightInit.seer2).toFixed(1)} SEER2` : '—'}</td>
+        </tr>
+        <tr>
+          <td>Compressor staging</td>
+          <td class="r" data-a-stage>{leftInit.staging}</td>
+          <td class="r" data-b-stage>{rightInit.staging}</td>
+          <td class="r" data-diff-stage>{leftInit.staging === rightInit.staging ? 'Matched' : 'Different staging'}</td>
+        </tr>
+        <tr>
+          <td>Refrigerant</td>
+          <td class="r" data-a-ref>{leftInit.refrigerant}</td>
+          <td class="r" data-b-ref>{rightInit.refrigerant}</td>
+          <td class="r" data-diff-ref>{leftInit.refrigerant === rightInit.refrigerant ? 'Same refrigerant' : `${leftInit.refrigerant} vs ${rightInit.refrigerant}`}</td>
+        </tr>
+        <tr>
+          <td>Low-ambient 5°F COP &amp; capacity</td>
+          <td class="r num" data-a-cop>{leftInit.cop5f} · {leftInit.cap5f}</td>
+          <td class="r num" data-b-cop>{rightInit.cop5f} · {rightInit.cap5f}</td>
+          <td class="r muted small">Cold-climate test</td>
+        </tr>
+        <tr>
+          <td>Certification &amp; AHRI reference #</td>
+          <td class="r" data-a-ahri>{leftInit.energyStar} · #{leftInit.ahri}</td>
+          <td class="r" data-b-ahri>{rightInit.energyStar} · #{rightInit.ahri}</td>
+          <td class="r muted small">AHRI / EPA</td>
+        </tr>
+        <tr>
+          <td>Standard factory warranty</td>
+          <td class="r small" data-a-war>{leftInit.warranty}</td>
+          <td class="r small" data-b-war>{rightInit.warranty}</td>
+          <td class="r muted small">Registration req.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <script type="application/json" data-wb-json set:html={JSON.stringify(serialized)} />
+</section>
+
+<style>
+.wb-filters,.wb-pickers{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+@media (max-width:680px){.wb-filters,.wb-pickers{grid-template-columns:1fr}}
+</style>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-compare-wb]')) {
+    const raw = root.querySelector('[data-wb-json]')?.textContent ?? '[]';
+    const items: any[] = JSON.parse(raw);
+    const bySlug = new Map(items.map((x) => [x.slug, x]));
+    const selTons = root.querySelector('[data-wb-tons]') as HTMLSelectElement;
+    const selType = root.querySelector('[data-wb-type]') as HTMLSelectElement;
+    const selLeft = root.querySelector('[data-wb-left]') as HTMLSelectElement;
+    const selRight = root.querySelector('[data-wb-right]') as HTMLSelectElement;
+    const fmtUsd = (n: number) => '$' + Math.round(n).toLocaleString('en-US');
+
+    const filterOptions = () => {
+      const tVal = selTons.value;
+      const tyVal = selType.value;
+      for (const select of [selLeft, selRight]) {
+        let firstVisible = '';
+        let currentVisible = false;
+        for (const opt of [...select.options]) {
+          const ok = (!tVal || opt.dataset.tons === tVal) && (!tyVal || opt.dataset.type === tyVal);
+          opt.hidden = !ok;
+          if (ok && !firstVisible) firstVisible = opt.value;
+          if (ok && opt.value === select.value) currentVisible = true;
+        }
+        if (!currentVisible && firstVisible) select.value = firstVisible;
+      }
+      render();
+    };
+
+    const setCell = (sel: string, text: string) => {
+      const el = root.querySelector(sel);
+      if (el) el.textContent = text;
+    };
+
+    const setLinkCell = (sel: string, href: string, text: string) => {
+      const el = root.querySelector(sel);
+      if (!el) return;
+      el.textContent = '';
+      const a = document.createElement('a');
+      a.href = href;
+      a.textContent = text;
+      el.appendChild(a);
+    };
+
+    const render = () => {
+      const a = bySlug.get(selLeft.value) ?? items[0];
+      const b = bySlug.get(selRight.value) ?? items[1];
+      if (!a || !b) return;
+      setLinkCell('[data-col-a]', `/systems/${a.slug}/`, `${a.brand} ${a.tons}T (${a.model})`);
+      setLinkCell('[data-col-b]', `/systems/${b.slug}/`, `${b.brand} ${b.tons}T (${b.model})`);
+      setCell('[data-a-equip]', `${a.equipFmt} (${a.retailer})`);
+      setCell('[data-b-equip]', `${b.equipFmt} (${b.retailer})`);
+      setCell('[data-diff-equip]', a.equip === b.equip ? '$0' : `${a.equip < b.equip ? a.brand + ' −' : b.brand + ' −'}${fmtUsd(Math.abs(a.equip - b.equip))}`);
+      setCell('[data-a-fair]', `${a.fairFmt} (mid ${a.fairMidFmt})`);
+      setCell('[data-b-fair]', `${b.fairFmt} (mid ${b.fairMidFmt})`);
+      setCell('[data-diff-fair]', `${fmtUsd(Math.abs(a.fairMid - b.fairMid))} mid`);
+      setCell('[data-a-markup]', `${a.markupMidFmt} (${a.markupPctFmt})`);
+      setCell('[data-b-markup]', `${b.markupMidFmt} (${b.markupPctFmt})`);
+      setCell('[data-diff-markup]', fmtUsd(Math.abs(a.markupMid - b.markupMid)));
+      setCell('[data-a-cap]', `${a.typeLabel} · ${a.tons} ton (${a.btu} BTU/h)`);
+      setCell('[data-b-cap]', `${b.typeLabel} · ${b.tons} ton (${b.btu} BTU/h)`);
+      setCell('[data-diff-tons]', a.tons === b.tons ? 'Same tonnage' : `${Math.abs(a.tons - b.tons)} ton diff`);
+      setCell('[data-a-eff]', `${a.seer2} / ${a.eer2} / ${a.hspf2}`);
+      setCell('[data-b-eff]', `${b.seer2} / ${b.eer2} / ${b.hspf2}`);
+      setCell('[data-diff-seer]', typeof a.seer2 === 'number' && typeof b.seer2 === 'number' ? `${(a.seer2 - b.seer2).toFixed(1)} SEER2` : '—');
+      setCell('[data-a-stage]', a.staging);
+      setCell('[data-b-stage]', b.staging);
+      setCell('[data-diff-stage]', a.staging === b.staging ? 'Matched' : 'Different staging');
+      setCell('[data-a-ref]', a.refrigerant);
+      setCell('[data-b-ref]', b.refrigerant);
+      setCell('[data-diff-ref]', a.refrigerant === b.refrigerant ? 'Same refrigerant' : `${a.refrigerant} vs ${b.refrigerant}`);
+      setCell('[data-a-cop]', `${a.cop5f} · ${a.cap5f}`);
+      setCell('[data-b-cop]', `${b.cop5f} · ${b.cap5f}`);
+      setCell('[data-a-ahri]', `${a.energyStar} · #${a.ahri}`);
+      setCell('[data-b-ahri]', `${b.energyStar} · #${b.ahri}`);
+    };
+
+    selTons.addEventListener('change', filterOptions);
+    selType.addEventListener('change', filterOptions);
+    selLeft.addEventListener('change', render);
+    selRight.addEventListener('change', render);
+  }
+</script>

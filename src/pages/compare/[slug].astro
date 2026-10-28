@@ -1,0 +1,182 @@
+---
+import Base from '../../layouts/Base.astro';
+import SystemTable from '../../components/SystemTable.astro';
+import CompareWorkbench from '../../components/CompareWorkbench.astro';
+import Auditor from '../../components/Auditor.astro';
+import ConciergeForm from '../../components/ConciergeForm.astro';
+import { COMPARISONS, type CompareEntry } from '../../data/comparisons';
+import { tonSlug } from '../../data/equipment';
+import { brandSlug } from '../../data/brands';
+import { usd, fmtRange, pct, seedDateLabel } from '../../lib/facts';
+
+export function getStaticPaths() {
+  return COMPARISONS.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props { entry: CompareEntry }
+const { entry } = Astro.props;
+const { left, right } = entry;
+
+const combinedSystems = [...new Map([...entry.systemsLeft, ...entry.systemsRight].map((s) => [s.slug, s])).values()];
+const otherComparisons = COMPARISONS.filter(
+  (c) => c.slug !== entry.slug && (c.category === entry.category || c.relatedBrands.some((b) => entry.relatedBrands.includes(b))),
+).slice(0, 6);
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: entry.h1,
+    description: entry.description,
+    datePublished: '2026-04-20',
+    dateModified: '2026-04-20',
+    author: { '@type': 'Organization', name: 'TonnageCheck', url: 'https://tonnagechecker.com' },
+    publisher: { '@type': 'Organization', name: 'TonnageCheck', url: 'https://tonnagechecker.com' },
+    mainEntityOfPage: `https://tonnagechecker.com/compare/${entry.slug}/`,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://tonnagechecker.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Comparisons', item: 'https://tonnagechecker.com/compare/' },
+      { '@type': 'ListItem', position: 3, name: entry.shortLabel, item: `https://tonnagechecker.com/compare/${entry.slug}/` },
+    ],
+  },
+];
+---
+<Base title={entry.title} description={entry.description} jsonld={jsonld}>
+  <p class="crumbs"><a href="/">Home</a> / <a href="/compare/">Comparisons</a> / {entry.shortLabel}</p>
+  <h1>{entry.h1}</h1>
+  <p class="lead">{entry.lead}</p>
+
+  <div class="grid" style="margin:18px 0">
+    <div class="card">
+      <div class="small muted">{left.href ? <a href={left.href}>{left.label}</a> : left.label} ({left.sublabel})</div>
+      <div class="num" style="font-size:1.35rem;font-weight:700;margin:6px 0 2px">{left.equipMin === left.equipMax ? usd(left.equipMin) : `${usd(left.equipMin)}–${usd(left.equipMax)}`}</div>
+      <div class="small muted">Median equipment {usd(left.equipMedian)} · Installed benchmark {fmtRange(left.fair)} (mid {usd(left.fair.mid)})</div>
+    </div>
+    <div class="card">
+      <div class="small muted">{right.href ? <a href={right.href}>{right.label}</a> : right.label} ({right.sublabel})</div>
+      <div class="num" style="font-size:1.35rem;font-weight:700;margin:6px 0 2px">{right.equipMin === right.equipMax ? usd(right.equipMin) : `${usd(right.equipMin)}–${usd(right.equipMax)}`}</div>
+      <div class="small muted">Median equipment {usd(right.equipMedian)} · Installed benchmark {fmtRange(right.fair)} (mid {usd(right.fair.mid)})</div>
+    </div>
+  </div>
+
+  <h2>Side-by-side summary: {left.label} vs {right.label}</h2>
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Metric ({seedDateLabel})</th>
+          <th class="r">{left.href ? <a href={left.href}>{left.label}</a> : left.label}</th>
+          <th class="r">{right.href ? <a href={right.href}>{right.label}</a> : right.label}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Listed equipment price range</td>
+          <td class="r num"><b>{left.equipMin === left.equipMax ? usd(left.equipMin) : `${usd(left.equipMin)}–${usd(left.equipMax)}`}</b> (med {usd(left.equipMedian)})</td>
+          <td class="r num"><b>{right.equipMin === right.equipMax ? usd(right.equipMin) : `${usd(right.equipMin)}–${usd(right.equipMax)}`}</b> (med {usd(right.equipMedian)})</td>
+        </tr>
+        <tr>
+          <td>DOE installed replacement benchmark <span class="badge b-est">est.</span></td>
+          <td class="r num">{fmtRange(left.fair)} (mid {usd(left.fair.mid)})</td>
+          <td class="r num">{fmtRange(right.fair)} (mid {usd(right.fair.mid)})</td>
+        </tr>
+        <tr>
+          <td>Non-equipment share at midpoint (labor/overhead/margin)</td>
+          <td class="r num">{usd(left.markupMid)} ({pct(left.markupMid / left.fair.mid)})</td>
+          <td class="r num">{usd(right.markupMid)} ({pct(right.markupMid / right.fair.mid)})</td>
+        </tr>
+        <tr>
+          <td>SEER2 / HSPF2 ratings</td>
+          <td class="r num">{left.seer2Span} / {left.hspf2Span}</td>
+          <td class="r num">{right.seer2Span} / {right.hspf2Span}</td>
+        </tr>
+        <tr>
+          <td>Compressor staging</td>
+          <td class="r">{left.staging}</td>
+          <td class="r">{right.staging}</td>
+        </tr>
+        <tr>
+          <td>Refrigerant</td>
+          <td class="r">{left.refrigerants}</td>
+          <td class="r">{right.refrigerants}</td>
+        </tr>
+        <tr>
+          <td>ENERGY STAR / Cold Climate listings</td>
+          <td class="r num">{left.energyStarCount} of {left.count} ({left.coldClimateCount} Cold Climate)</td>
+          <td class="r num">{right.energyStarCount} of {right.count} ({right.coldClimateCount} Cold Climate)</td>
+        </tr>
+        <tr>
+          <td>Lowest-priced system in catalog</td>
+          <td class="r"><a href={`/systems/${left.sampleSystem.slug}/`}>{left.sampleSystem.brand} {left.sampleSystem.tons}T {left.sampleSystem.components[0]}</a></td>
+          <td class="r"><a href={`/systems/${right.sampleSystem.slug}/`}>{right.sampleSystem.brand} {right.sampleSystem.tons}T {right.sampleSystem.components[0]}</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <article class="prose" set:html={entry.bodyHtml} />
+
+  <h2>All matching systems in this comparison ({combinedSystems.length})</h2>
+  <p class="small muted">Click any model below to open its full spec sheet, AHRI reference number, and equipment vs installed cost breakdown.</p>
+  <SystemTable systems={combinedSystems} searchable={combinedSystems.length > 6} />
+
+  <CompareWorkbench
+    defaultLeftSlug={entry.modelLeft?.slug ?? left.sampleSystem.slug}
+    defaultRightSlug={entry.modelRight?.slug ?? right.sampleSystem.slug}
+  />
+
+  <Auditor
+    systemType={entry.auditDefaults.systemType}
+    tons={entry.auditDefaults.tons}
+    tier={entry.auditDefaults.tier}
+    brand={entry.auditDefaults.brand}
+    heading={`Audit a quote for ${entry.shortLabel}`}
+  />
+
+  <section class="card" style="margin-top:20px;border:2px solid var(--acc)">
+    <ConciergeForm standalone idp="cmp" brandModel={entry.conciergeBrandModel} />
+  </section>
+
+  <h2>Related brand, tonnage &amp; head-to-head hubs</h2>
+  <div class="grid">
+    {entry.relatedBrands.map((b) => (
+      <a class="card" href={`/brands/${brandSlug(b)}/`} style="text-decoration:none;color:inherit">
+        <div class="small muted">Brand hub</div>
+        <div style="font-weight:700;margin:4px 0">{b} Equipment &amp; Installed Cost</div>
+      </a>
+    ))}
+    {entry.relatedTonnages.map((t) => (
+      <a class="card" href={`/tonnage/${tonSlug(t)}/`} style="text-decoration:none;color:inherit">
+        <div class="small muted">Tonnage hub</div>
+        <div style="font-weight:700;margin:4px 0">{t}-Ton Heat Pump &amp; AC Cost</div>
+      </a>
+    ))}
+  </div>
+
+  {otherComparisons.length > 0 && (
+    <>
+      <h3>More head-to-head matchups</h3>
+      <div class="grid">
+        {otherComparisons.map((c) => (
+          <a class="card" href={`/compare/${c.slug}/`} style="text-decoration:none;color:inherit">
+            <div class="small muted">{c.shortLabel}</div>
+            <div style="font-weight:700;margin:4px 0">{c.h1}</div>
+            <div class="small muted">{usd(c.left.equipMin)} vs {usd(c.right.equipMin)} lowest listed</div>
+          </a>
+        ))}
+      </div>
+    </>
+  )}
+</Base>
+
+<style>
+.prose :global(table){margin:12px 0}
+.prose :global(li){margin:6px 0}
+</style>
