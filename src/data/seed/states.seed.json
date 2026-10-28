@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-25T15:25:51.921Z",
+  "generatedAt": "2026-10-28T18:07:22.631Z",
   "sources": {
     "electricity": {
       "url": "https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_6_b",
@@ -36,10 +36,15 @@
         "Pocahontas: labelled IN in the source, inside the IA block; counted as IA",
         "Polk: labelled IN in the source, inside the IA block; counted as IA",
         "Pottawattamie: labelled IN in the source, inside the IA block; counted as IA",
-        "Poweshiek: labelled IN in the source, inside the IA block; counted as IA"
+        "Poweshiek: labelled IN in the source, inside the IA block; counted as IA",
+        "Sussex (DE): printed as a duplicate Kent after New Castle in the source DE block; counted as Sussex",
+        "Prince of Wales - Outer Ketchikan (CA) (AK): mapped to 2020 Census equivalent Prince of Wales-Hyder Census Area",
+        "Skagway - Hoonah - Angoon (CA) (AK): mapped to 2020 Census equivalent Skagway Municipality and Hoonah-Angoon Census Area",
+        "Valdez - Cordova (CA) (AK): mapped to 2020 Census equivalent Chugach Census Area and Copper River Census Area",
+        "Wade Hampton (CA) (AK): mapped to 2020 Census equivalent Kusilvak Census Area",
+        "Wrangell - Petersburg (CA) (AK): mapped to 2020 Census equivalent Wrangell City and Borough and Petersburg Borough"
       ],
       "duplicatesDropped": [
-        "DE Kent",
         "NC Stanly",
         "NC Stokes",
         "NC Surry",
@@ -93,10 +98,8 @@
       "code": "AK",
       "name": "Alaska",
       "slug": "alaska",
-      "complete": false,
-      "missing": [
-        "PNNL lists 16 of 30 Census 2020 counties"
-      ],
+      "complete": true,
+      "missing": [],
       "electricity": {
         "centsPerKwh": 27.32,
         "priorCentsPerKwh": 26.07,
@@ -113,30 +116,15 @@
       },
       "climate": {
         "zones": {
-          "7": 11,
+          "7": 12,
           "8": 8,
-          "6A": 5,
+          "6A": 7,
           "5C": 3
         },
-        "countiesListed": 27,
+        "countiesListed": 30,
         "censusCounties": 30,
-        "coverage": 0.533,
-        "notListed": [
-          "Aleutians West Census Area",
-          "Bethel Census Area",
-          "Chugach Census Area",
-          "Copper River Census Area",
-          "Dillingham Census Area",
-          "Hoonah-Angoon Census Area",
-          "Kusilvak Census Area",
-          "Nome Census Area",
-          "Petersburg Borough",
-          "Prince of Wales-Hyder Census Area",
-          "Skagway Municipality",
-          "Southeast Fairbanks Census Area",
-          "Wrangell City and Borough",
-          "Yukon-Koyukuk Census Area"
-        ]
+        "coverage": 1,
+        "notListed": []
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=AK",
@@ -268,12 +256,13 @@
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=AZ",
-        "website": "https://resilient.az.gov/",
+        "website": "https://efficiencyarizona.com/",
         "checked": {
           "listed": "https://resilient.az.gov/",
           "status": 200,
-          "finalUrl": "https://resilient.az.gov/",
-          "usedDomainRoot": false
+          "finalUrl": "https://efficiencyarizona.com/",
+          "usedDomainRoot": false,
+          "usedFallback": true
         }
       }
     },
@@ -359,12 +348,12 @@
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=CO",
-        "website": "https://energyoffice.colorado.gov/",
+        "website": "https://www.colorado.gov/",
         "checked": {
           "listed": "https://www.colorado.gov/energy",
           "status": 200,
-          "finalUrl": "https://energyoffice.colorado.gov/",
-          "usedDomainRoot": false
+          "finalUrl": "https://www.colorado.gov/",
+          "usedDomainRoot": true
         }
       }
     },
@@ -452,10 +441,8 @@
       "code": "DE",
       "name": "Delaware",
       "slug": "delaware",
-      "complete": false,
-      "missing": [
-        "PNNL lists 2 of 3 Census 2020 counties"
-      ],
+      "complete": true,
+      "missing": [],
       "electricity": {
         "centsPerKwh": 17.98,
         "priorCentsPerKwh": 16.79,
@@ -472,14 +459,12 @@
       },
       "climate": {
         "zones": {
-          "4A": 2
+          "4A": 3
         },
-        "countiesListed": 2,
+        "countiesListed": 3,
         "censusCounties": 3,
-        "coverage": 0.667,
-        "notListed": [
-          "Sussex County"
-        ]
+        "coverage": 1,
+        "notListed": []
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=DE",
@@ -539,10 +524,8 @@
       "code": "GA",
       "name": "Georgia",
       "slug": "georgia",
-      "complete": false,
-      "missing": [
-        "state energy office link from NASEO returns 0"
-      ],
+      "complete": true,
+      "missing": [],
       "electricity": {
         "centsPerKwh": 15.48,
         "priorCentsPerKwh": 14.86,
@@ -569,11 +552,11 @@
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=GA",
-        "website": null,
+        "website": "https://gefa.georgia.gov/energy-programs",
         "checked": {
           "listed": "https://www.gefa.georgia.gov/energy-resources",
-          "status": 0,
-          "finalUrl": "https://www.gefa.georgia.gov/energy-resources",
+          "status": 200,
+          "finalUrl": "https://gefa.georgia.gov/energy-programs",
           "usedDomainRoot": false
         }
       }
@@ -915,10 +898,8 @@
       "code": "MA",
       "name": "Massachusetts",
       "slug": "massachusetts",
-      "complete": false,
-      "missing": [
-        "state energy office link from NASEO returns 403"
-      ],
+      "complete": true,
+      "missing": [],
       "electricity": {
         "centsPerKwh": 30.19,
         "priorCentsPerKwh": 30.21,
@@ -944,12 +925,13 @@
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=MA",
-        "website": null,
+        "website": "https://www.masscec.com/",
         "checked": {
           "listed": "https://www.mass.gov/doer/",
-          "status": 403,
-          "finalUrl": "https://www.mass.gov/doer/",
-          "usedDomainRoot": false
+          "status": 200,
+          "finalUrl": "https://www.masscec.com/",
+          "usedDomainRoot": false,
+          "usedFallback": true
         }
       }
     },
@@ -1039,10 +1021,8 @@
       "code": "MI",
       "name": "Michigan",
       "slug": "michigan",
-      "complete": false,
-      "missing": [
-        "state energy office link from NASEO returns 403"
-      ],
+      "complete": true,
+      "missing": [],
       "electricity": {
         "centsPerKwh": 21.73,
         "priorCentsPerKwh": 19.94,
@@ -1070,10 +1050,10 @@
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=MI",
-        "website": null,
+        "website": "https://www.michigan.gov/egle/",
         "checked": {
           "listed": "https://www.michigan.gov/egle/",
-          "status": 403,
+          "status": 200,
           "finalUrl": "https://www.michigan.gov/egle/",
           "usedDomainRoot": false
         }
@@ -1112,11 +1092,11 @@
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=MN",
-        "website": "http://validate.perfdrive.com/d5bd5333eafe8b0ccd6023ba818d1aa6/?ssa=6e419a8a-76c9-46ff-92d8-897499866e73&ssb=16286252662&ssc=https%3A%2F%2Fmn.gov%2Fcommerce%2Fenergy%2F&ssi=bdb59c60-bf56-4c96-9438-e92c63b117c4&ssk=support@shieldsquare.com&ssm=74680927448248923107080923960653&ssn=3afb6eaada9d595295d9a0e1d5240bc806ab0cd6d681-b542-4cd2-946e7c&sso=5b849242-61cb3496cb32f972f367081a11d7fd2e9428884cab23bec9&ssp=72121099771792949824179298139946928&ssq=61965924199677439140741996008780738369203&ssr=NzEuMjMwLjY1LjUy&sst=TonnageCheckSeed/1.0+(+https://tonnagechecker.com/about/)&ssu=&ssv=&ssw=&ssx=W10=",
+        "website": "https://mn.gov/commerce/energy/",
         "checked": {
           "listed": "https://mn.gov/commerce/energy/",
           "status": 200,
-          "finalUrl": "http://validate.perfdrive.com/d5bd5333eafe8b0ccd6023ba818d1aa6/?ssa=6e419a8a-76c9-46ff-92d8-897499866e73&ssb=16286252662&ssc=https%3A%2F%2Fmn.gov%2Fcommerce%2Fenergy%2F&ssi=bdb59c60-bf56-4c96-9438-e92c63b117c4&ssk=support@shieldsquare.com&ssm=74680927448248923107080923960653&ssn=3afb6eaada9d595295d9a0e1d5240bc806ab0cd6d681-b542-4cd2-946e7c&sso=5b849242-61cb3496cb32f972f367081a11d7fd2e9428884cab23bec9&ssp=72121099771792949824179298139946928&ssq=61965924199677439140741996008780738369203&ssr=NzEuMjMwLjY1LjUy&sst=TonnageCheckSeed/1.0+(+https://tonnagechecker.com/about/)&ssu=&ssv=&ssw=&ssx=W10=",
+          "finalUrl": "https://mn.gov/commerce/energy/",
           "usedDomainRoot": false
         }
       }
@@ -1198,11 +1178,11 @@
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=MS",
-        "website": "https://mississippi.org/community-resources/office-of-energy/",
+        "website": "https://mississippi.org/community-resources/office-energy/",
         "checked": {
           "listed": "https://mississippi.org/community-resources/office-energy/",
-          "status": 200,
-          "finalUrl": "https://mississippi.org/community-resources/office-of-energy/",
+          "status": 202,
+          "finalUrl": "https://mississippi.org/community-resources/office-energy/",
           "usedDomainRoot": false
         }
       }
@@ -1334,10 +1314,8 @@
       "code": "NE",
       "name": "Nebraska",
       "slug": "nebraska",
-      "complete": false,
-      "missing": [
-        "state energy office link from NASEO returns 0"
-      ],
+      "complete": true,
+      "missing": [],
       "electricity": {
         "centsPerKwh": 12.92,
         "priorCentsPerKwh": 11.94,
@@ -1363,12 +1341,13 @@
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=NE",
-        "website": null,
+        "website": "https://dwee.nebraska.gov/",
         "checked": {
           "listed": "https://dee.ne.gov/",
-          "status": 0,
-          "finalUrl": "https://dee.ne.gov/",
-          "usedDomainRoot": false
+          "status": 200,
+          "finalUrl": "https://dwee.nebraska.gov/",
+          "usedDomainRoot": false,
+          "usedFallback": true
         }
       }
     },
@@ -1376,10 +1355,8 @@
       "code": "NH",
       "name": "New Hampshire",
       "slug": "new-hampshire",
-      "complete": false,
-      "missing": [
-        "state energy office link from NASEO returns 403"
-      ],
+      "complete": true,
+      "missing": [],
       "electricity": {
         "centsPerKwh": 26.91,
         "priorCentsPerKwh": 23.4,
@@ -1406,12 +1383,13 @@
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=NH",
-        "website": null,
+        "website": "https://nhsaves.com/",
         "checked": {
           "listed": "https://www.energy.nh.gov/",
-          "status": 403,
-          "finalUrl": "https://www.energy.nh.gov/",
-          "usedDomainRoot": false
+          "status": 200,
+          "finalUrl": "https://nhsaves.com/",
+          "usedDomainRoot": false,
+          "usedFallback": true
         }
       }
     },
@@ -1510,10 +1488,8 @@
       "code": "NV",
       "name": "Nevada",
       "slug": "nevada",
-      "complete": false,
-      "missing": [
-        "PNNL lists 16 of 17 Census 2020 counties"
-      ],
+      "complete": true,
+      "missing": [],
       "electricity": {
         "centsPerKwh": 13.36,
         "priorCentsPerKwh": 13.1,
@@ -1536,10 +1512,8 @@
         },
         "countiesListed": 17,
         "censusCounties": 17,
-        "coverage": 0.941,
-        "notListed": [
-          "Carson City"
-        ]
+        "coverage": 1,
+        "notListed": []
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=NV",
@@ -1628,12 +1602,13 @@
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=OH",
-        "website": "https://development.ohio.gov/bs/bs_renewenergy.htm",
+        "website": "https://www.occ.ohio.gov/",
         "checked": {
           "listed": "https://development.ohio.gov/bs/bs_renewenergy.htm",
           "status": 200,
-          "finalUrl": "https://development.ohio.gov/bs/bs_renewenergy.htm",
-          "usedDomainRoot": false
+          "finalUrl": "https://www.occ.ohio.gov/",
+          "usedDomainRoot": false,
+          "usedFallback": true
         }
       }
     },
@@ -1805,10 +1780,8 @@
       "code": "SC",
       "name": "South Carolina",
       "slug": "south-carolina",
-      "complete": false,
-      "missing": [
-        "state energy office link from NASEO returns 0"
-      ],
+      "complete": true,
+      "missing": [],
       "electricity": {
         "centsPerKwh": 15.9,
         "priorCentsPerKwh": 14.98,
@@ -1835,11 +1808,11 @@
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=SC",
-        "website": null,
+        "website": "https://energy.sc.gov/",
         "checked": {
           "listed": "https://www.energy.sc.gov",
-          "status": 0,
-          "finalUrl": "https://www.energy.sc.gov",
+          "status": 200,
+          "finalUrl": "https://energy.sc.gov/",
           "usedDomainRoot": false
         }
       }
@@ -1891,10 +1864,8 @@
       "code": "TN",
       "name": "Tennessee",
       "slug": "tennessee",
-      "complete": false,
-      "missing": [
-        "state energy office link from NASEO returns 403"
-      ],
+      "complete": true,
+      "missing": [],
       "electricity": {
         "centsPerKwh": 13.8,
         "priorCentsPerKwh": 13.24,
@@ -1921,11 +1892,11 @@
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=TN",
-        "website": null,
+        "website": "https://www.tn.gov/environment/program-areas/energy.html",
         "checked": {
           "listed": "https://tn.gov/environment/section/energy",
-          "status": 403,
-          "finalUrl": "https://tn.gov/environment/section/energy",
+          "status": 200,
+          "finalUrl": "https://www.tn.gov/environment/program-areas/energy.html",
           "usedDomainRoot": false
         }
       }
@@ -2021,10 +1992,8 @@
       "code": "VA",
       "name": "Virginia",
       "slug": "virginia",
-      "complete": false,
-      "missing": [
-        "state energy office link from NASEO returns 0"
-      ],
+      "complete": true,
+      "missing": [],
       "electricity": {
         "centsPerKwh": 16.95,
         "priorCentsPerKwh": 15,
@@ -2054,10 +2023,10 @@
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=VA",
-        "website": null,
+        "website": "https://energy.virginia.gov/",
         "checked": {
           "listed": "https://energy.virginia.gov/",
-          "status": 0,
+          "status": 200,
           "finalUrl": "https://energy.virginia.gov/",
           "usedDomainRoot": false
         }

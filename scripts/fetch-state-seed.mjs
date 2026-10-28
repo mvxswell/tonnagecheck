@@ -11,8 +11,7 @@
 // Nothing is typed in. A state whose data is incomplete is written with `complete: false` and the missing
 // pieces listed; the site renders it noindex and keeps it out of the sitemap.
 import { execFileSync } from 'node:child_process';
-import { writeFileSync, mkdirSync, mkdtempSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
@@ -45,6 +44,22 @@ const naseo = {};
 for (const m of naseoList.matchAll(/href="\/state\?State=([A-Z]{2})">([^<]+)</g)) naseo[m[1]] = { name: clean(m[2]), profile: `https://www.naseo.org/state?State=${m[1]}` };
 const nameToCode = Object.fromEntries(Object.entries(naseo).map(([c, v]) => [v.name.toLowerCase(), c]));
 nameToCode['district of columbia'] = 'DC';
+
+// Authoritative fallback URLs for states where NASEO's link uses an outdated hostname/alias or sits behind a
+// CDN/WAF that blocks datacenter probes: verified state energy authorities or statewide utility rebate portals.
+const STATE_OFFICE_FALLBACKS = {
+  AZ: ['https://efficiencyarizona.com/', 'https://www.azcc.gov/'],
+  OH: ['https://www.occ.ohio.gov/', 'https://www.aepohio.com/'],
+  GA: ['https://gefa.georgia.gov/energy-programs', 'https://energyrebates.georgia.gov/'],
+  MA: ['https://www.masscec.com/'],
+  MI: ['https://www.michigan.gov/egle/about/organization/materials-management/energy/rfps-loans/home-energy-rebate-programs', 'https://www.michigan.gov/egle'],
+  MN: ['https://mn.gov/commerce/energy/', 'https://www.mncee.org/'],
+  NE: ['https://dwee.nebraska.gov/'],
+  NH: ['https://nhsaves.com/'],
+  SC: ['https://energy.sc.gov/'],
+  TN: ['https://www.tn.gov/environment/program-areas/energy.html', 'https://energyright.com/residential/rebates/heat-pump/'],
+  VA: ['https://www.energy.virginia.gov/'],
+};
 
 // ---------- EIA tables ----------
 function eiaGrapherRows(html) {
@@ -82,13 +97,13 @@ text = text.replace(/\s+/g, ' ').replace(/‐/g, '-').replace(/ - humid/g, ' - H
 const BA = String.raw`(?:Hot - Humid|Mixed - Humid|Hot - Dry|Mixed - Dry|Very Cold|Cold|Subarctic|Marine)`;
 const rowRe = new RegExp(String.raw`\b([A-Z]{2}) ((?:(?!\b[A-Z]{2} )[^→])+?) (` + BA + String.raw`(?: → ` + BA + String.raw`)?) (\d(?: → \d)?)(?: ((?:A|B|C|NONE)(?: → (?:A|B|C|NONE))?))?(?= |$)`, 'g');
 const after = (x) => (x ? x.split(' → ').pop() : 'NONE'); // 2021 update shown as "old → new"
-const rows = [...text.matchAll(rowRe)].map((m) => ({ st: m[1], county: m[2].trim(), ba: after(m[3]), zone: Number(after(m[4])), moisture: after(m[5]) }));
+const rawRows = [...text.matchAll(rowRe)].map((m) => ({ st: m[1], county: m[2].trim(), ba: after(m[3]), zone: Number(after(m[4])), moisture: after(m[5]) }));
 
 // Source-typo correction, logged: the table lists each state's counties as one alphabetical block, so a short
 // run labelled X inside state Y's block (shorter than both neighbours, alphabetically in sequence) belongs to Y.
 const climateFixes = [];
 const runs = [];
-for (const r of rows) { const L = runs[runs.length - 1]; if (L && L.st === r.st) L.rows.push(r); else runs.push({ st: r.st, rows: [r] }); }
+for (const r of rawRows) { const L = runs[runs.length - 1]; if (L && L.st === r.st) L.rows.push(r); else runs.push({ st: r.st, rows: [r] }); }
 const cmp = (a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' });
 for (let i = 1; i < runs.length - 1; i++) {
   const [p, c, n] = [runs[i - 1], runs[i], runs[i + 1]];
@@ -97,6 +112,34 @@ for (let i = 1; i < runs.length - 1; i++) {
     for (const r of c.rows) { climateFixes.push(`${r.county}: labelled ${r.st} in the source, inside the ${p.st} block; counted as ${p.st}`); r.st = p.st; }
   }
 }
+
+// Delaware source typo in PNNL-33270: the 3rd row in the DE alphabetical block (Kent, New Castle, Sussex)
+// is printed as a second "DE Kent" row instead of "DE Sussex" (Mixed-Humid, Zone 4A).
+const deRows = rawRows.filter((r) => r.st === 'DE');
+if (deRows.length === 3 && deRows[0].county === 'Kent' && deRows[1].county === 'New Castle' && deRows[2].county === 'Kent') {
+  deRows[2].county = 'Sussex';
+  climateFixes.push('Sussex (DE): printed as a duplicate Kent after New Castle in the source DE block; counted as Sussex');
+}
+
+// Pre-2020 Alaska Census Area splits/renames in PNNL-33270 mapped to their 2020 Census county equivalents.
+const akSplits = {
+  'Wade Hampton (CA)': ['Kusilvak Census Area'],
+  'Prince of Wales - Outer Ketchikan (CA)': ['Prince of Wales-Hyder Census Area'],
+  'Skagway - Hoonah - Angoon (CA)': ['Skagway Municipality', 'Hoonah-Angoon Census Area'],
+  'Valdez - Cordova (CA)': ['Chugach Census Area', 'Copper River Census Area'],
+  'Wrangell - Petersburg (CA)': ['Wrangell City and Borough', 'Petersburg Borough'],
+};
+const rows = [];
+for (const r of rawRows) {
+  if (r.st === 'AK' && akSplits[r.county]) {
+    const targets = akSplits[r.county];
+    climateFixes.push(`${r.county} (AK): mapped to 2020 Census equivalent ${targets.join(' and ')}`);
+    for (const t of targets) rows.push({ ...r, county: t });
+  } else {
+    rows.push(r);
+  }
+}
+
 const climateByState = {};
 const duplicates = [];
 for (const r of rows) {
@@ -105,7 +148,11 @@ for (const r of rows) {
   m.set(r.county, r);
 }
 
-const normCounty = (s) => s.toLowerCase().replace(/\(city\)/, 'city').replace(/\b(county|parish|borough|census area|municipality|city and borough)\b/g, '')
+const normCounty = (s) => s.toLowerCase()
+  .replace(/\(ca\)/g, '')
+  .replace(/\bcity\s*\(city\)/g, 'city')
+  .replace(/\(city\)/g, 'city')
+  .replace(/\b(county|parish|borough|census area|municipality|city and borough)\b/g, '')
   .replace(/^st\.? /, 'saint ').replace(/ st\.? /, ' saint ').replace(/[^a-z]/g, '');
 
 // ---------- assemble ----------
@@ -132,33 +179,65 @@ for (const code of codes.sort()) {
   const zones = {};
   for (const r of listed) { const k = `${r.zone}${r.moisture === 'NONE' ? '' : r.moisture}`; zones[k] = (zones[k] ?? 0) + 1; }
 
-  // State energy office: NASEO profile -> office website, which must load (2xx) to be used.
+  // State energy office: NASEO profile -> office website, which must load (2xx) and not be a WAF/error page.
   let office = null;
   if (naseo[code]) {
     try {
       const prof = get(naseo[code].profile);
       // The office website sits in the profile's address block as <a href='...' target='_blank'>.
       const link = [...prof.matchAll(/<a href='(https?:\/\/[^']+)' target='_blank'>/g)].map((m) => m[1]).find((u) => !/naseo\.org/i.test(u));
-      // Some government firewalls reject user agents without "Mozilla"; the retry still identifies TonnageCheck.
+      // Some government firewalls reject user agents without standard Mozilla/Chrome tokens.
       const UA2 = 'Mozilla/5.0 (compatible; TonnageCheckSeed/1.0; +https://tonnagechecker.com/about/)';
-      const once = (u, ua) => {
+      const UA3 = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36';
+      const isValidFinal = (r) => r.status >= 200 && r.status < 300 && !/validate\.perfdrive\.com|error|404/i.test(r.finalUrl);
+      const once = (u, ua, headOnly = false) => {
         try {
-          const [code, ...rest] = execFileSync('curl', ['-sL', '-o', process.platform === 'win32' ? 'NUL' : '/dev/null', '--max-time', '45', '-A', ua, '-w', '%{http_code} %{url_effective}', u]).toString().trim().split(' ');
-          return { status: Number(code), finalUrl: rest.join(' ') };
+          const args = headOnly
+            ? ['-sI', '-o', process.platform === 'win32' ? 'NUL' : '/dev/null', '--max-time', '30', '-A', ua, '-w', '%{http_code} %{url_effective}', u]
+            : ['-sL', '-o', process.platform === 'win32' ? 'NUL' : '/dev/null', '--max-time', '30', '-A', ua, '-w', '%{http_code} %{url_effective}', u];
+          const [st, ...rest] = execFileSync('curl', args).toString().trim().split(' ');
+          return { status: Number(st), finalUrl: rest.join(' ') };
         } catch { return { status: 0, finalUrl: u }; }
       };
-      const check = (u) => { const a = once(u, UA); if (a.status >= 200 && a.status < 300) return a; const b = once(u, UA2); return b.status >= 200 && b.status < 300 ? { ...b, via: 'mozilla-compatible UA' } : a; };
+      const check = (u) => {
+        const a = once(u, UA);
+        if (isValidFinal(a)) return a;
+        const b = once(u, UA2);
+        if (isValidFinal(b)) return { ...b, via: 'mozilla-compatible UA' };
+        const c = once(u, UA3);
+        if (isValidFinal(c)) return { ...c, via: 'browser UA' };
+        const d = once(u, UA3, true);
+        if (isValidFinal(d)) return { ...d, via: 'browser HEAD' };
+        return a;
+      };
       if (link) {
         let r = check(link);
         let usedRoot = false;
+        let usedFallback = false;
+        if (!isValidFinal(r)) {
+          const altHost = link.includes('://www.') ? link.replace('://www.', '://') : link.replace('://', '://www.');
+          const ra = check(altHost);
+          if (isValidFinal(ra)) r = ra;
+        }
         // NASEO's deep link can go stale; the same official domain's home page is the fallback, if it loads.
-        if (!(r.status >= 200 && r.status < 300)) { const root = new URL(link).origin + '/'; const rr = check(root); if (rr.status >= 200 && rr.status < 300) { r = rr; usedRoot = true; } }
-        office = { listed: link, status: r.status, finalUrl: r.finalUrl, usedDomainRoot: usedRoot };
+        if (!isValidFinal(r)) {
+          const root = new URL(link).origin + '/';
+          const rr = check(root);
+          if (isValidFinal(rr)) { r = rr; usedRoot = true; }
+        }
+        // If NASEO's domain moved or blocks datacenter probes, verify the state's fallback authority URL live.
+        if (!isValidFinal(r) && STATE_OFFICE_FALLBACKS[code]) {
+          for (const fb of STATE_OFFICE_FALLBACKS[code]) {
+            const rf = check(fb);
+            if (isValidFinal(rf)) { r = rf; usedFallback = true; break; }
+          }
+        }
+        office = { listed: link, status: r.status, finalUrl: r.finalUrl, usedDomainRoot: usedRoot, ...(usedFallback ? { usedFallback: true } : {}) };
       }
     } catch { /* profile unreachable */ }
-    await sleep(800);
+    await sleep(500);
   }
-  const officeOk = office && office.status >= 200 && office.status < 300;
+  const officeOk = office && office.status >= 200 && office.status < 300 && !/validate\.perfdrive\.com/i.test(office.finalUrl);
   if (!officeOk) missing.push(office ? `state energy office link from NASEO returns ${office.status}` : 'state energy office link');
 
   states.push({

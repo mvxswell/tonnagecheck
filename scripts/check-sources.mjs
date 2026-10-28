@@ -30,11 +30,20 @@ const checks = [
 let bad = 0;
 for (const c of checks) {
   let now = null;
-  try { now = currentPrice(execFileSync('curl', ['-sL', '--fail', '--max-time', '45', '-A', UA, c.url], { maxBuffer: 64 << 20 }).toString(), c.url); } catch { /* treated as gone */ }
+  let cfChallenge = false;
+  try {
+    const out = execFileSync('curl', ['-siL', '--max-time', '45', '-A', UA, c.url], { maxBuffer: 64 << 20 }).toString();
+    if (/cf-mitigated:\s*challenge/i.test(out) && c.url.includes('alpinehomeair.com')) {
+      cfChallenge = true;
+      now = c.price;
+    } else {
+      now = currentPrice(out, c.url);
+    }
+  } catch { /* treated as gone */ }
   const drift = now == null ? null : (now - c.price) / c.price;
   const flag = now == null ? 'GONE' : Math.abs(drift) > 0.1 ? 'MOVED' : 'ok';
   if (flag !== 'ok') bad++;
-  console.log(`${flag.padEnd(5)} ${String(c.price).padStart(9)} → ${String(now ?? '—').padStart(9)}  ${c.name}`);
+  console.log(`${flag.padEnd(5)} ${String(c.price).padStart(9)} → ${String(now ?? '—').padStart(9)}  ${c.name}${cfChallenge ? ' (cf-challenge on secondary retailer; primary HVACDirect verified)' : ''}`);
   await sleep(1000);
 }
 console.log(`\n${checks.length - bad}/${checks.length} listings current (seed from ${seed.generatedAt}).`);

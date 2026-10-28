@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-25T03:29:47.028Z",
+  "generatedAt": "2026-10-28T18:06:05.345Z",
   "systems": [
     {
       "slug": "goodman-2-ton-15-2-seer2-heat-pump-system-glzs4ba2410",
@@ -31,7 +31,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/2-ton-15-2-seer2-goodman-r32-heat-pump-split-system-multi-positional-182303.html",
           "price": 3819,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -86,7 +86,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-ton-15-2-seer2-goodman-r32-heat-pump-split-system-multi-positional-182393.html",
           "price": 5333,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -120,7 +120,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-ton-17-seer2-two-stage-goodman-heat-pump-air-conditioner-system-multi-positional-id173554.html",
           "price": 6767,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -154,7 +154,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/4-ton-15-2-seer2-goodman-r32-heat-pump-split-system-multi-positional-182330.html",
           "price": 5444,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -188,7 +188,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/4-ton-17-2-seer2-two-stage-goodman-heat-pump-air-conditioner-system-multi-positional-id173557.html",
           "price": 8053,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -243,7 +243,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/5-ton-16-seer2-goodman-r32-heat-pump-split-system-multi-positional-182435.html",
           "price": 7076,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -276,8 +276,8 @@
         {
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/2-5-ton-14-3-seer2-trane-heat-pump-split-system-multi-positional-192316.html",
-          "price": 3148,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "price": 3306,
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -331,8 +331,8 @@
         {
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-ton-16-seer2-variable-speed-trane-inverter-heat-pump-split-system-multi-positional-192308.html",
-          "price": 4146,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "price": 4355,
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -386,8 +386,8 @@
         {
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/4-ton-16-seer2-variable-speed-trane-inverter-heat-pump-split-system-multi-positional-192309.html",
-          "price": 4643,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "price": 4876,
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -420,8 +420,8 @@
         {
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/5-ton-16-seer2-variable-speed-trane-inverter-heat-pump-split-system-multi-positional-192310.html",
-          "price": 5146,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "price": 5404,
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -455,7 +455,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-3-ton-16-seer2-heat-pump-split-system-r32-inverter-multi-positional-224462.html",
           "price": 4500,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -510,7 +510,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-3-ton-19-seer2-high-efficiency-heat-pump-split-system-lgred-series-r32-inverter-multi-positional-231991.html",
           "price": 8446,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -565,7 +565,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-4-ton-18-seer2-high-efficiency-heat-pump-split-system-r32-inverter-multi-positional-231999.html",
           "price": 7038,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -599,7 +599,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/bosch-ids-light-series-3-ton-20-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237614.html",
           "price": 6616,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -654,7 +654,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/48-000-btu-19-seer2-gree-flexx-ultra-r32-central-air-inverter-heat-pump-split-system-id198429.html",
           "price": 6990,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -688,7 +688,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/aciq-essentials-3-ton-17-seer2-high-efficiency-central-heat-pump-split-system-r32-inverter-219180.html",
           "price": 3100,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -743,7 +743,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-ton-17-4-seer2-mrcool-central-ducted-hyper-heat-2nd-gen-heat-pump-split-system-r454b-central-36-hp-c-230b00-o-mvp-36-hp-muah-230a00-o.html",
           "price": 3899,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -798,7 +798,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/aciq-5-ton-17-5-seer2-high-efficiency-central-heat-pump-system-inverter-extreme-series-r454b-197827.html",
           "price": 6699.99,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -853,7 +853,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/mitsubishi-3-ton-15-2-seer2-ducted-central-air-inverter-h2i-heat-pump-split-system-r454b-198648.html",
           "price": 7938,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -908,7 +908,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/mitsubishi-2-ton-18-6-seer2-ducted-central-air-inverter-h2i-heat-pump-split-system-r454b-198630.html",
           "price": 6357,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -963,7 +963,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/18-000-btu-daikin-oterra-21-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-194693.html",
           "price": 2255,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -996,7 +996,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-24000-btu-mega-20-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-226356.html",
           "price": 1977,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1051,7 +1051,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/24000-btu-carrier-infinity-21-2-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r454b-230v-213415.html",
           "price": 4274.99,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1084,8 +1084,8 @@
         {
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/24-000-btu-daikin-atmosphera-22-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-194705.html",
-          "price": 4902,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "price": 4167,
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1120,7 +1120,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-ton-16-seer2-96-afue-80-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-177038.html",
           "price": 5951,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1155,7 +1155,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/4-ton-15-2-seer2-80-afue-80-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-190091.html",
           "price": 5949,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1190,7 +1190,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/5-ton-14-3-seer2-80-afue-80-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-181121.html",
           "price": 6417,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1225,7 +1225,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-5-ton-15-2-seer2-80-afue-80-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-184661.html",
           "price": 6205,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1258,13 +1258,13 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba3610.html",
           "price": 3051,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         },
         {
           "retailer": "Alpine Home Air",
           "url": "https://www.alpinehomeair.com/product/air-conditioning-cooling/split-system-central-air/heat-pumps-electric-heat-cool/goodman/glzs4ba3610",
           "price": 3189,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1297,13 +1297,13 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-ton-17-seer2-two-stage-goodman-heat-pump-glzt7ca3610.html",
           "price": 4572,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         },
         {
           "retailer": "Alpine Home Air",
           "url": "https://www.alpinehomeair.com/product/air-conditioning-cooling/split-system-central-air/heat-pumps-electric-heat-cool/goodman/glzt7ca3610",
           "price": 4824,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1336,13 +1336,13 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/4-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba4810-1.html",
           "price": 3609,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         },
         {
           "retailer": "Alpine Home Air",
           "url": "https://www.alpinehomeair.com/product/air-conditioning-cooling/split-system-central-air/heat-pumps-electric-heat-cool/goodman/glzs4ba4810",
           "price": 3772,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1375,13 +1375,13 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/5-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba6010.html",
           "price": 4223,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         },
         {
           "retailer": "Alpine Home Air",
           "url": "https://www.alpinehomeair.com/product/air-conditioning-cooling/split-system-central-air/heat-pumps-electric-heat-cool/goodman/glzs4ba6010",
           "price": 4413,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1415,7 +1415,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/1-5-ton-15-2-seer2-goodman-r32-heat-pump-split-system-multi-positional-182300.html",
           "price": 3743,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1449,7 +1449,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/2-5-ton-15-2-seer2-goodman-r32-heat-pump-split-system-multi-positional-182312.html",
           "price": 4441,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1483,7 +1483,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-5-ton-15-2-seer2-goodman-r32-heat-pump-split-system-multi-positional-182318.html",
           "price": 5079,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1517,7 +1517,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/2-ton-17-seer2-two-stage-goodman-heat-pump-air-conditioner-system-multi-positional-id173539.html",
           "price": 6022,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1551,7 +1551,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/5-ton-16-2-seer2-two-stage-goodman-heat-pump-air-conditioner-system-multi-positional-id173566.html",
           "price": 8855,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1605,8 +1605,8 @@
         {
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/1-5-ton-15-2-seer2-variable-speed-trane-heat-pump-split-system-multi-positional-192329.html",
-          "price": 3777,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "price": 3967,
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1660,8 +1660,8 @@
         {
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/2-ton-16-seer2-variable-speed-trane-inverter-heat-pump-split-system-multi-positional-192307.html",
-          "price": 3837,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "price": 4030,
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1715,8 +1715,8 @@
         {
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-5-ton-15-2-seer2-variable-speed-trane-heat-pump-split-system-multi-positional-192333.html",
-          "price": 4863,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "price": 5107,
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1770,8 +1770,8 @@
         {
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/4-ton-15-2-seer2-variable-speed-trane-heat-pump-split-system-multi-positional-192334.html",
-          "price": 5003,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "price": 5254,
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1826,7 +1826,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-1-5-ton-17-5-seer2-high-efficiency-heat-pump-split-system-lgred-series-r32-inverter-multi-positional-231987.html",
           "price": 5847,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1881,7 +1881,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-2-5-ton-18-2-seer2-high-efficiency-heat-pump-split-system-lgred-series-r32-inverter-multi-positional-231989.html",
           "price": 6756,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1936,7 +1936,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-3-5-ton-18-seer2-high-efficiency-heat-pump-split-system-r32-inverter-multi-positional-231998.html",
           "price": 7053,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -1970,7 +1970,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-5-ton-16-seer2-heat-pump-split-system-r32-inverter-multi-positional-id224464.html",
           "price": 6187,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2004,7 +2004,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/bosch-ids-light-series-2-ton-18-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237613.html",
           "price": 6156,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2059,7 +2059,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/bosch-ids-light-series-3-ton-15-2-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237591.html",
           "price": 5314,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2093,7 +2093,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/bosch-ids-ligh-series-5-ton-17-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237616.html",
           "price": 8175,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2148,7 +2148,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/24-000-btu-gree-flexx-ultra-r32-central-air-inverter-heat-pump-split-system-id198427.html",
           "price": 5190,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2203,7 +2203,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/36-000-btu-18-seer2-gree-flexx-ultra-r32-central-air-inverter-heat-pump-split-system-id198428.html",
           "price": 5290,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2258,7 +2258,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/60-000-btu-18-5-seer2-gree-flexx-ultra-r32-central-air-inverter-heat-pump-split-system-id198430.html",
           "price": 7090,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2313,7 +2313,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/mrcool-universal-2nd-gen-2-5-ton-17-2-seer2-central-ducted-heat-pump-split-system-r454b-inverter-multi-positional-216532.html",
           "price": 4010,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2368,7 +2368,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/5-ton-16-seer2-mrcool-central-ducted-hyper-heat-2nd-gen-heat-pump-split-system-r454b-central-60-hp-c-230b00-o-mvp-60-hp-muah-230a00-o.html",
           "price": 4599,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2423,7 +2423,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/aciq-2-5-ton-16-8-seer2-high-efficiency-central-heat-pump-system-inverter-extreme-series-r454b-197646.html",
           "price": 3999.99,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2478,7 +2478,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/mitsubishi-2-5-ton-17-1-seer2-ducted-central-air-inverter-h2i-heat-pump-split-system-r454b-198633.html",
           "price": 7463.25,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2533,7 +2533,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/18000-btu-carrier-infinity-21-5-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r454b-230v-213414.html",
           "price": 3349.99,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2568,7 +2568,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/24-000-btu-daikin-21-seer2-tri-zone-wall-mount-mini-split-heat-pump-system-r32-230v-7-12-12-195115.html",
           "price": 4772.8,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2603,7 +2603,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/36-000-btu-daikin-20-seer2-quad-zone-wall-mount-mini-split-heat-pump-system-r32-230v-7-7-7-12-195172.html",
           "price": 5762.4,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2638,7 +2638,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-24000-btu-21-seer2-3-zone-wall-mount-mini-split-heat-pump-system-r32-230v-227579.html",
           "price": 4799,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2694,7 +2694,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/20000-btu-mitsubishi-gx-series-20-seer2-dual-zone-wall-mounted-mini-split-heat-pump-system-r454b-199773.html",
           "price": 4076.25,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2751,7 +2751,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/36000-mrcool-5th-gen-diy-23-seer2-three-zone-wall-mounted-mini-split-heat-pump-system-r-454b-6-9-24-211025.html",
           "price": 4497,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2806,7 +2806,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/18-000-btu-gree-livo-21-seer2-dual-zone-wall-mount-mini-split-heat-pump-system-r32-230v-12-12.html",
           "price": 3546,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2861,7 +2861,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/36-000-btu-24-seer2-aciq-standard-4-zone-wall-mount-mini-split-system-r454b-230v-6-6-6-6-202528.html",
           "price": 4259.99,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2895,8 +2895,8 @@
         {
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/1-5-ton-14-3-seer2-80-afue-40-000-btu-trane-gas-furnace-and-air-conditioner-system-multi-positional-r454b-192398.html",
-          "price": 3499,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "price": 3614,
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     },
@@ -2931,7 +2931,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/5-ton-15-2-seer2-96-afue-100-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-downflow-178787.html",
           "price": 7542,
-          "fetchedAt": "2026-10-25T03:29:47.028Z"
+          "fetchedAt": "2026-10-28T18:06:05.345Z"
         }
       ]
     }
