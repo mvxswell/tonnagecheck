@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-10-25T03:29:47.028Z",
+  "generatedAt": "2026-10-28T18:14:46.503Z",
   "remdb": {
     "source": "National Residential Efficiency Measures Database (REMDB), National Laboratory of the Rockies (formerly NREL)",
     "url": "https://remdb.nlr.gov/",
     "dataUrl": "https://remdb.nlr.gov/db.json",
-    "fetchedAt": "2026-10-25T03:29:47.028Z",
+    "fetchedAt": "2026-10-28T18:14:46.503Z",
     "dollarYear": 2023,
     "formula": "installed cost = multiplier × (x1 × metric1 + x2 × metric2 + b) + adder (retrofit), evaluated at low / mid / high coefficients — the same calculation the REMDB web app performs",
     "classes": {
@@ -331,6 +331,6 @@
     "latestMonth": "2026-09-01",
     "latestValue": 336.298,
     "factor": 1.0893,
-    "fetchedAt": "2026-10-25T03:29:47.028Z"
+    "fetchedAt": "2026-10-28T18:14:46.503Z"
   }
 }

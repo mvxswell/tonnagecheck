@@ -115,23 +115,19 @@
     },
     {
       "systemType": "heat-pump-only",
-      "url": "https://hvacdirect.com/3-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba3610.html",
-      "alpineUrl": "https://www.alpinehomeair.com/product/air-conditioning-cooling/split-system-central-air/heat-pumps-electric-heat-cool/goodman/glzs4ba3610"
+      "url": "https://hvacdirect.com/3-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba3610.html"
     },
     {
       "systemType": "heat-pump-only",
-      "url": "https://hvacdirect.com/3-ton-17-seer2-two-stage-goodman-heat-pump-glzt7ca3610.html",
-      "alpineUrl": "https://www.alpinehomeair.com/product/air-conditioning-cooling/split-system-central-air/heat-pumps-electric-heat-cool/goodman/glzt7ca3610"
+      "url": "https://hvacdirect.com/3-ton-17-seer2-two-stage-goodman-heat-pump-glzt7ca3610.html"
     },
     {
       "systemType": "heat-pump-only",
-      "url": "https://hvacdirect.com/4-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba4810-1.html",
-      "alpineUrl": "https://www.alpinehomeair.com/product/air-conditioning-cooling/split-system-central-air/heat-pumps-electric-heat-cool/goodman/glzs4ba4810"
+      "url": "https://hvacdirect.com/4-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba4810-1.html"
     },
     {
       "systemType": "heat-pump-only",
-      "url": "https://hvacdirect.com/5-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba6010.html",
-      "alpineUrl": "https://www.alpinehomeair.com/product/air-conditioning-cooling/split-system-central-air/heat-pumps-electric-heat-cool/goodman/glzs4ba6010"
+      "url": "https://hvacdirect.com/5-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba6010.html"
     },
     {
       "systemType": "central-heat-pump",
@@ -264,6 +260,278 @@
     {
       "systemType": "ac-furnace",
       "url": "https://hvacdirect.com/5-ton-15-2-seer2-96-afue-100-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-downflow-178787.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/1-5-ton-15-2-seer2-96-afue-60-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-176177.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/2-ton-15-2-seer2-96-afue-80-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-horizontal-175988.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/2-ton-15-2-seer2-80-afue-60-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-id180743.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/2-ton-13-4-seer2-96-afue-40-000-btu-trane-gas-furnace-and-air-conditioner-system-upflow-r454b-193578.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/2-5-ton-16-seer2-96-afue-80-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-horizontal-176009.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/2-5-ton-15-2-seer2-80-afue-60-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-id180773.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/2-5-ton-15-2-seer2-96-afue-60-000-btu-trane-gas-furnace-and-air-conditioner-system-upflow-160480.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/2-5-ton-13-4-seer2-96-afue-40-000-btu-trane-gas-furnace-and-air-conditioner-system-upflow-r454b-193592.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/2-5-ton-16-5-seer2-80-afue-110-000-btu-aciq-gas-furnace-and-air-conditioner-system-multi-positional-116807.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/3-ton-13-4-seer2-80-afue-40-000-btu-trane-gas-furnace-and-air-conditioner-system-multi-positional-r454b-193606.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/3-ton-15-2-seer2-80-afue-80-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-id180923.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/3-5-ton-13-4-seer2-80-afue-80-000-btu-trane-gas-furnace-and-air-conditioner-system-multi-positional-r454b-193630.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/4-ton-13-4-seer2-80-afue-80-000-btu-trane-gas-furnace-and-air-conditioner-system-multi-positional-r454b-193642.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/5-ton-13-4-seer2-80-afue-120-000-btu-trane-gas-furnace-and-air-conditioner-system-multi-positional-r454b-193656.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/mrcool-universal-2nd-gen-2-ton-18-6-seer2-central-ducted-heat-pump-split-system-r454b-inverter-multi-positional-216531.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/mrcool-universal-2nd-gen-3-ton-18-seer2-central-ducted-heat-pump-split-system-r454b-inverter-multi-positional-216533.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/mrcool-universal-2nd-gen-4-ton-17-5-seer2-central-ducted-heat-pump-split-system-r454b-inverter-multi-positional-216535.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/mrcool-universal-2nd-gen-5-ton-17-5-seer2-central-ducted-heat-pump-split-system-r454b-inverter-multi-positional-216536.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/mrcool-universal-2nd-gen-3-ton-18-seer2-inverter-package-heat-pump-unit-r32-downflow-horizontal-mdph18036d.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/lg-1-5-ton-16-seer2-heat-pump-split-system-r32-inverter-multi-positional-223674.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/lg-2-ton-17-5-seer2-high-efficiency-heat-pump-split-system-lgred-series-r32-inverter-multi-positional-231988.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/lg-2-5-ton-16-seer2-heat-pump-split-system-r32-inverter-multi-positional-224460.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/lg-3-5-ton-18-2-seer2-high-efficiency-heat-pump-split-system-lgred-series-r32-inverter-multi-positional-231990.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/lg-4-ton-19-seer2-high-efficiency-heat-pump-split-system-lgred-series-r32-inverter-multi-positional-231992.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/2-5-ton-15-2-seer2-variable-speed-trane-heat-pump-split-system-multi-positional-192331.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/3-5-ton-14-3-seer2-trane-heat-pump-split-system-multi-positional-192324.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/mitsubishi-1-5-ton-16-2-seer2-ducted-central-air-inverter-h2i-heat-pump-split-system-r454b-198628.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/mitsubishi-2-5-ton-21-seer2-ducted-h2i-central-air-inverter-heat-pump-split-system-r454b-201909.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/mitsubishi-3-5-ton-19-1-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-201899.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/mitsubishi-30-000-btu-fx-series-20-seer2-three-zone-wall-mounted-mini-split-hyper-heat-pump-system-r454b-230v-9-9-15-mxz-3d30nlhz-2-msz-fx09nl-msz-fx15nl.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/mitsubishi-42-000-btu-gx-series-20-seer2-three-zone-wall-mounted-mini-split-heat-pump-system-r454b-230v-9-9-12-mxz-5d42nl-2-msz-gx09nl-msz-gx12nl.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/mitsubishi-60000-btu-gx-series-20-seer2-4-zone-wall-mounted-mini-split-heat-pump-system-r454b-230v-226683.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/24-000-btu-daikin-aurora-21-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-194701.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/lg-30000-btu-22-seer2-dual-zone-wall-mount-mini-split-heat-pump-system-r32-230v-227511.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/lg-42000-btu-215-seer2-3-zone-wall-mount-mini-split-heat-pump-system-r32-230v-227623.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/lg-48000-btu-205-seer2-dual-zone-wall-mount-mini-split-heat-pump-system-r32-230v-227523.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/lg-60000-btu-205-seer2-3-zone-wall-mount-mini-split-heat-pump-system-r32-230v-227599.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/30-000-btu-gree-livo-21-seer2-dual-zone-wall-mount-mini-split-heat-pump-system-r32-230v-12-18.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/42-000-btu-gree-livo-21-seer2-dual-zone-wall-mount-mini-split-heat-pump-system-r32-230v-18-24.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/18-000-btu-mrcool-advantage-5th-gen-19-2-seer2-single-zone-mini-split-r454b-230v-id198423.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/48000-btu-mrcool-diy-5th-gen-21-8-seer2-four-zone-wall-mount-mini-split-heat-pump-system-r454b-230v-6-9-12-12diy-multi6-48hp-diy-06-hp-wmah-230-diy-09-hp-wmah-230-diy-12-hp-wmah-230-2.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/18-000-btu-aciq-essentials-20-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-197955.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/24-000-btu-aciq-essentials-20-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-197957.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/18-000-btu-carrier-infinity-25-8-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r454b-230v-213410.html"
+    },
+    {
+      "systemType": "heat-pump-only",
+      "url": "https://hvacdirect.com/1-5-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba1810.html"
+    },
+    {
+      "systemType": "heat-pump-only",
+      "url": "https://hvacdirect.com/2-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba2410.html"
+    },
+    {
+      "systemType": "heat-pump-only",
+      "url": "https://hvacdirect.com/2-5-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba3010.html"
+    },
+    {
+      "systemType": "heat-pump-only",
+      "url": "https://hvacdirect.com/3-5-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba4210.html"
+    },
+    {
+      "systemType": "heat-pump-only",
+      "url": "https://hvacdirect.com/2-ton-15-seer2-bosch-heat-pump-inverter-condenser-r454b-ids-light-series-bova-24rxb-m15s.html"
+    },
+    {
+      "systemType": "heat-pump-only",
+      "url": "https://hvacdirect.com/3-ton-20-seer2-bosch-heat-pump-inverter-condenser-r454b-ids-light-series-bova-36rtb-m20s.html"
+    },
+    {
+      "systemType": "heat-pump-only",
+      "url": "https://hvacdirect.com/aciq-essentials-2-5-ton-18-seer2-high-efficiency-central-heat-pump-condenser-r32-inverter-aciq-30-hp-e-32.html"
+    },
+    {
+      "systemType": "heat-pump-only",
+      "url": "https://hvacdirect.com/3-ton-14-3-seer2-trane-heat-pump-condenser-r454b-single-stage-rt-series-174626.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/aciq-essentials-1-5-ton-17-seer2-high-efficiency-central-heat-pump-split-system-r32-inverter-219177.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/aciq-essentials-2-ton-17-seer2-high-efficiency-central-heat-pump-split-system-r32-inverter-219178.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/aciq-essentials-4-ton-16-seer2-high-efficiency-central-heat-pump-split-system-r32-inverter-219181.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/aciq-3-5-ton-16-7-seer2-high-efficiency-central-heat-pump-system-inverter-extreme-series-r454b-197648.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/bosch-ids-light-series-2-ton-15-2-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237749.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/bosch-3-ton-18-seer2-80-000-btu-ids-premium-connected-series-furnace-and-heat-pump-system-r454b-upflow-horizontal-237554.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/bosch-5-ton-18-seer2-100-000-btu-ids-premium-connected-series-furnace-and-heat-pump-system-r454b-upflow-horizontal-237588.html"
+    },
+    {
+      "systemType": "central-heat-pump",
+      "url": "https://hvacdirect.com/bosch-ids-light-series-5-ton-14-3-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237607.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/2-ton-14-5-seer2-96-afue-40-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-176198.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/2-5-ton-14-seer2-80-afue-60-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-181034.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/3-ton-14-seer2-80-afue-60-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-181073.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/3-5-ton-13-8-seer2-96-afue-120-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-id180680.html"
+    },
+    {
+      "systemType": "ac-furnace",
+      "url": "https://hvacdirect.com/4-ton-14-5-seer2-96-afue-120-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-id180713.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/24-000-btu-daikin-oterra-21-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-194694.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/18-000-btu-daikin-aurora-21-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-194700.html"
+    },
+    {
+      "systemType": "mini-split",
+      "url": "https://hvacdirect.com/33000-btu-carrier-infinity-19-6-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r454b-230v-213416.html"
     }
   ],
   "lineSets": [
