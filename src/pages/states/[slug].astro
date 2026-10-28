@@ -1,0 +1,149 @@
+---
+import Base from '../../layouts/Base.astro';
+import Auditor from '../../components/Auditor.astro';
+import ConciergeForm from '../../components/ConciergeForm.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import { STATES, STATE_SEED_DATE, EFFICIENCY, heatingCosts, climateSummary, recommendedSystems, type StateRecord } from '../../data/states';
+import { TONNAGES, tonSlug, lowestPrice } from '../../data/equipment';
+import { SOURCES } from '../../data/sources';
+import { fairRange, usd, fmtRange } from '../../lib/facts';
+import { SITE } from '../../config';
+
+export function getStaticPaths() {
+  return STATES.map((s) => ({ params: { slug: s.slug }, props: { s } }));
+}
+const { s } = Astro.props as { s: StateRecord };
+const f3 = fairRange('central-heat-pump', 3, 'standard');
+const range = `${usd(f3.low)}–${usd(f3.high)}`;
+const clim = climateSummary(s);
+const costs = heatingCosts(s);
+const rec = recommendedSystems(clim.kind);
+const e = s.electricity;
+const g = s.gas;
+
+// Titles under 60 characters and descriptions under 160, both leading with the benchmark dollar range.
+const title = [`${s.name} Heat Pump Cost: ${range} + Rebates`, `${s.name} Heat Pump Cost: ${range}`, `${s.name} Heat Pump: ${range}`].find((t) => t.length < 60)!;
+const descParts = [
+  `${range} installed for a 3-ton heat pump (US DOE-lab benchmark) in ${s.name}.`,
+  e ? ` Power ${e.centsPerKwh}¢/kWh` : '',
+  g ? `${e ? ',' : ' '} gas $${g.dollarsPerMcf}/Mcf (EIA).` : e ? ' (EIA).' : '',
+  clim.zoneList ? ` IECC zones ${clim.zoneList}.` : '',
+];
+let description = descParts.join('');
+if (description.length >= 160) description = descParts.slice(0, 3).join('');
+if (description.length >= 160) description = descParts[0] + ' Energy prices, climate zones, 2026 rebates.';
+
+const hpCost = costs.find((c) => c.label.startsWith('Heat pump,'));
+const gasLow = costs.find((c) => c.label.startsWith('Gas furnace, ' + EFFICIENCY.afueLow));
+const gasHigh = costs.find((c) => c.label.startsWith('Gas furnace, ' + EFFICIENCY.afueHigh));
+const resist = costs.find((c) => c.label.startsWith('Electric resistance'));
+const idx = STATES.indexOf(s);
+const nearby = [STATES[idx - 1], STATES[idx + 1]].filter(Boolean);
+const ld = [
+  { '@context': 'https://schema.org', '@type': 'WebPage', name: title, description, url: `${SITE.url}/states/${s.slug}/`, about: { '@type': 'State', name: s.name, address: { '@type': 'PostalAddress', addressRegion: s.code, addressCountry: 'US' } } },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE.url}/` },
+    { '@type': 'ListItem', position: 2, name: 'States', item: `${SITE.url}/states/` },
+    { '@type': 'ListItem', position: 3, name: s.name, item: `${SITE.url}/states/${s.slug}/` },
+  ] },
+];
+const allCold = clim.coldCounties === s.climate.countiesListed;
+const coldSentence = clim.kind === 'heating'
+  ? (allCold ? `All of ${s.name}'s listed counties (${clim.coldCounties}) are in climate zone 4 or colder.` : `Most of ${s.name} (${clim.coldCounties} of ${s.climate.countiesListed} counties) is in climate zone 4 or colder.`)
+  : `Part of ${s.name} (${clim.coldCounties} of ${s.climate.countiesListed} counties) is in climate zone 4 or colder.`;
+const checkedOn = new Date(STATE_SEED_DATE).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+const pctChange = (a: number, b: number | null) => (b ? `${a >= b ? '+' : ''}${Math.round(((a - b) / b) * 100)}%` : '');
+---
+<Base title={title} description={description} jsonld={ld} noindex={!s.complete}>
+  <p class="crumbs"><a href="/">Home</a> / <a href="/states/">States</a> / {s.name}</p>
+  <h1>{s.name} heat pump cost, energy prices &amp; 2026 rebates</h1>
+  <p class="lead">What a heat pump or AC replacement should cost installed, what it costs to run on {s.name}'s electricity and gas prices, which climate zones the state falls in, and what rebates are actually available in 2026. Every number links to its source.</p>
+  {!s.complete && (
+    <div class="warnbox"><b>Partial data for {s.name}.</b> We could not verify everything this page needs, so it is not listed in search: {s.missing.join('; ')}. The figures shown are still sourced.</div>
+  )}
+
+  <div class="grid kp">
+    <div class="card"><div class="small muted">3-ton heat pump, installed <span class="badge b-est">US benchmark</span></div><div class="v num">{range}</div><div class="small muted">Midpoint {usd(f3.mid)}. National average; no state adjustment.</div></div>
+    <div class="card"><div class="small muted">Residential electricity</div><div class="v num">{e ? `${e.centsPerKwh}¢/kWh` : '—'}</div><div class="small muted">{e ? <>{e.period?.split(' (')[0]}{e.priorCentsPerKwh ? `, ${pctChange(e.centsPerKwh, e.priorCentsPerKwh)} vs a year earlier` : ''}. <a href={SOURCES.eiaElectricity.url}>EIA</a></> : 'Not reported'}</div></div>
+    <div class="card"><div class="small muted">Residential natural gas</div><div class="v num">{g ? `$${g.dollarsPerMcf}/Mcf` : '—'}</div><div class="small muted">{g ? <>{g.year} average{g.priorDollarsPerMcf ? `, ${pctChange(g.dollarsPerMcf, g.priorDollarsPerMcf)} vs prior year` : ''}. <a href={SOURCES.eiaGas.url}>EIA</a></> : 'Not reported'}</div></div>
+    <div class="card"><div class="small muted">IECC climate zones</div><div class="v num">{clim.zoneList || '—'}</div><div class="small muted">{s.climate.countiesListed} counties listed by <a href={SOURCES.pnnlClimateZones.url}>PNNL</a></div></div>
+  </div>
+
+  <h2>Installed cost by size in {s.name}</h2>
+  <p class="small muted">REMDB (National Laboratory of the Rockies, formerly NREL) replacement-cost benchmark, restated from 2023 dollars with CPI-U. It is a national average: there is no public, citable state adjustment, so expect higher-cost metros to run above the midpoint. <a href="/about/#benchmarks">Method</a></p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Size</th><th class="r">Heat pump, standard <span class="badge b-est">est.</span></th><th class="r">Heat pump, high-eff. / cold-climate <span class="badge b-est">est.</span></th><th class="r">AC + gas furnace <span class="badge b-est">est.</span></th></tr></thead>
+      <tbody>
+        {TONNAGES.map((t) => { const a = fairRange('central-heat-pump', t, 'standard'); const b = fairRange('central-heat-pump', t, 'high'); const c = fairRange('ac-furnace', t, 'standard'); return (
+          <tr><td><a href={`/tonnage/${tonSlug(t)}/`}><b>{t} ton</b></a></td><td class="r num">{usd(a.mid)}<br /><span class="small muted">{fmtRange(a)}</span></td><td class="r num">{usd(b.mid)}<br /><span class="small muted">{fmtRange(b)}</span></td><td class="r num">{usd(c.mid)}<br /><span class="small muted">{fmtRange(c)}</span></td></tr>
+        ); })}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Heating cost in {s.name}: heat pump vs gas</h2>
+  {costs.length ? (
+    <>
+      <p>Fuel cost per million Btu of heat delivered, using {s.name}'s residential prices. {hpCost && gasLow && <>A typical listed heat pump delivers heat for about <b class="num">{usd(hpCost.dollarsPerMMBtu)}</b> per MMBtu, against <b class="num">{usd(gasLow.dollarsPerMMBtu)}</b> for an {EFFICIENCY.afueLow}% gas furnace{gasHigh && <> and <b class="num">{usd(gasHigh.dollarsPerMMBtu)}</b> for a {EFFICIENCY.afueHigh}% furnace</>}. </>}{resist && hpCost && <>Replacing electric resistance heat ({usd(resist.dollarsPerMMBtu)}/MMBtu) with a heat pump cuts the fuel cost per unit of heat by about {Math.round((1 - hpCost.dollarsPerMMBtu / resist.dollarsPerMMBtu) * 100)}%.</>}</p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Heating option</th><th class="r">$ per MMBtu delivered <span class="badge b-est">est.</span></th><th>How it's calculated</th></tr></thead>
+        <tbody>{costs.map((c) => <tr><td>{c.label}</td><td class="r num">{usd(c.dollarsPerMMBtu)}</td><td class="small">{c.method}</td></tr>)}</tbody>
+      </table></div>
+      <p class="small muted">Prices: <a href={SOURCES.eiaElectricity.url}>EIA electricity</a> ({e?.period?.split(' (')[0]}), <a href={SOURCES.eiaGas.url}>EIA natural gas</a> ({g?.year}), <a href={SOURCES.eiaHeatContent.url}>EIA heat content</a> ({s.gasHeatContentBtuPerCf?.value?.toLocaleString('en-US')} Btu/cf, {s.gasHeatContentBtuPerCf?.year}). HSPF2 is a seasonal rating for a moderate climate; in very cold weather a heat pump's efficiency falls, which is why cold-climate models matter. Bills also depend on your home's heating load, ducts and rate plan.</p>
+    </>
+  ) : <p>EIA does not report the prices needed for this comparison in {s.name}.</p>}
+
+  <h2>Climate zones and what to buy in {s.name}</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>IECC 2021 climate zone</th><th class="r">Counties</th><th class="r">Share</th></tr></thead>
+    <tbody>{clim.entries.map(([z, n]) => <tr><td>Zone {z}</td><td class="r num">{n}</td><td class="r num">{Math.round((n / (s.climate.countiesListed || 1)) * 100)}%</td></tr>)}</tbody>
+  </table></div>
+  <p class="small muted">From the DOE Building America county guide (<a href={SOURCES.pnnlClimateZones.url}>PNNL-33270</a>), which lists {s.climate.countiesListed} of {s.name}'s {s.climate.censusCounties} counties in the <a href={SOURCES.censusCounties.url}>Census 2020 county list</a>{s.climate.notListed.length > 0 && <> (not listed: {s.climate.notListed.slice(0, 12).join(', ')}{s.climate.notListed.length > 12 ? ', …' : ''})</>}. Look up your own county's zone there.</p>
+  {clim.kind !== 'cooling' && (
+    <p>{coldSentence} DOE's Building America guidance says that in zones 4 and above, "cold-climate heat pumps should be utilized if a significant portion of the heating load is to be met by the heat pump" (<a href={SOURCES.bascColdClimate.url}>Cold Climate Heat Pump Sizing and Selection</a>){clim.veryColdCounties > 0 && <>, and that sizing is more sensitive in zones 5–8, which cover {clim.veryColdCounties} counties here</>}. ENERGY STAR's cold-climate designation requires a COP of at least 1.75 at 5°F and at least 70% of rated heating capacity at 5°F (<a href={SOURCES.esCriteria.url}>criteria</a>).</p>
+  )}
+  {clim.kind !== 'heating' && (
+    <p>{clim.kind === 'cooling' ? `All of ${s.name}'s listed counties are in climate zones 1–3, where cooling dominates.` : `The rest of ${s.name} is in warmer zones where cooling matters more.`} Compare EER2 as well as SEER2: EER2 is the efficiency at a hot 95°F outdoor test condition, while SEER2 averages over a cooling season.</p>
+  )}
+  {rec.cold.length > 0 && (
+    <>
+      <h3>Cold-climate heat pumps we list</h3>
+      <div class="tablewrap"><table><thead><tr><th>System</th><th class="r">HSPF2</th><th class="r">COP at 5°F</th><th class="r">Listed</th></tr></thead>
+      <tbody>{rec.cold.map((x) => <tr><td><a href={`/systems/${x.slug}/`}>{x.brand} {x.tons}-ton {x.components[0]}</a></td><td class="r num">{x.energyStar!.hspf2}</td><td class="r num">{x.energyStar!.copAt5F ?? '—'}</td><td class="r num">{usd(lowestPrice(x))}</td></tr>)}</tbody></table></div>
+    </>
+  )}
+  {rec.cooling.length > 0 && (
+    <>
+      <h3>Highest-EER2 systems we list</h3>
+      <div class="tablewrap"><table><thead><tr><th>System</th><th class="r">EER2</th><th class="r">SEER2</th><th class="r">Listed</th></tr></thead>
+      <tbody>{rec.cooling.map((x) => <tr><td><a href={`/systems/${x.slug}/`}>{x.brand} {x.tons}-ton {x.components[0]}</a></td><td class="r num">{x.specs.eer2}</td><td class="r num">{x.specs.seer2 ?? '—'}</td><td class="r num">{usd(lowestPrice(x))}</td></tr>)}</tbody></table></div>
+    </>
+  )}
+
+  <h2>2026 tax credits and rebates in {s.name}</h2>
+  <div class="rbx">
+    <div class="card"><b>Federal 25C tax credit</b> <span class="badge b-red">Not available</span><p class="small">The IRS lists 25C as not allowed for property placed in service after Dec. 31, 2025, so no 2026 installation in {s.name} qualifies. <a href={SOURCES.irsObbba.url}>IRS</a></p></div>
+    <div class="card"><b>HEEHR (HEAR) heat pump rebate</b> <span class="badge b-over">Check eligibility</span><p class="small">Under <a href={SOURCES.hearStatute.url}>42 U.S.C. § 18795a</a>, up to $8,000 for a heat pump for households under 150% of area median income (up to 100% of cost under 80% AMI, 50% from 80–150%). Since DOE <a href={SOURCES.doePn262.url}>Program Notice 26-2</a> (May 2026) it no longer covers fuel switching: it pays to replace existing electric heating or cooling with more efficient electric equipment, not to replace a gas, oil or propane furnace, and insulation and air sealing come first unless already adequate. {s.name}'s state energy office runs it and decides availability.</p></div>
+    <div class="card"><b>HOMES whole-house rebate</b> <span class="badge b-over">Check eligibility</span><p class="small">{SOURCES.homesStatute.note} <a href={SOURCES.homesStatute.url}>42 U.S.C. § 18795</a></p></div>
+    <div class="card"><b>{s.name} state energy office</b><p class="small">{s.energyOffice.website ? <><a href={s.energyOffice.website} rel="noopener">{new URL(s.energyOffice.website).host}</a> (listed in the NASEO directory; link checked {checkedOn}). </> : <>We could not verify the office's website automatically. </>}{s.energyOffice.naseoProfile && <><a href={s.energyOffice.naseoProfile} rel="noopener">NASEO contact profile</a>. </>}For utility and local programs: <a href={`${SOURCES.dsire.url}`} rel="noopener">DSIRE</a> · <a href={SOURCES.esRebateFinder.url} rel="noopener">ENERGY STAR Rebate Finder</a>.</p></div>
+  </div>
+
+  <Auditor tier={clim.kind === 'heating' ? 'high' : 'standard'} heading={`Audit a ${s.name} HVAC quote`} />
+
+  <section class="card second" id="second-opinion">
+    <ConciergeForm idp="s" />
+  </section>
+
+  <h2>Other states</h2>
+  <p>{nearby.map((n, i) => <>{i > 0 && ' · '}<a href={`/states/${n.slug}/`}>{n.name}</a></>)} · <a href="/states/">All states</a></p>
+  <Newsletter />
+</Base>
+
+<style>
+.kp{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.kp .v{font-size:1.3rem;font-weight:700;margin:6px 0 2px}
+.rbx{display:grid;gap:10px}
+.rbx p{margin:6px 0 0}
+.second{margin-top:20px;border:2px solid var(--acc)}
+</style>

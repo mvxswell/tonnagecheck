@@ -6,6 +6,7 @@ import { SITE } from '../config';
 import { SYSTEMS, TONNAGES, tonSlug } from '../data/equipment';
 import { GUIDES } from '../data/guides/index';
 import { BRANDS } from '../data/brands';
+import { STATES } from '../data/states';
 import { fairRange, equipmentStats, seedDateLabel, usd, fmtRange } from '../lib/facts';
 
 const esCount = SYSTEMS.filter((s) => s.energyStar).length;
@@ -68,6 +69,14 @@ const ld = [
   </section>
 
   <section>
+    <h2>Energy prices &amp; rebates by state</h2>
+    <p class="muted small">Electricity and gas prices from EIA, climate zones from PNNL, and the 2026 rebate rules for your state.</p>
+    <div class="states">
+      {STATES.map((s) => <a href={`/states/${s.slug}/`}>{s.name}</a>)}
+    </div>
+  </section>
+
+  <section>
     <h2>Buyer guides</h2>
     <div class="grid">
       {GUIDES.map((g) => <a class="card glink" href={`/guides/${g.slug}/`}><b>{g.title}</b><span class="small muted">{g.description}</span></a>)}
@@ -89,4 +98,5 @@ const ld = [
 .tonlink small{color:var(--mut);font-weight:500;font-size:.8rem}
 .tonlink:hover,.glink:hover{border-color:var(--acc)}
 .glink{text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:6px}
+.states{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:4px 14px;font-size:.95rem}
 </style>

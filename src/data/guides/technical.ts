@@ -205,7 +205,7 @@ ${steps.map((x) => `<tr><td>${tonLink(x.a, `${x.a}`)} → ${tonLink(x.b, `${x.b}
     slug: 'heat-pump-tax-credit-and-rebate-stacking-2026',
     title: 'Heat pump tax credit & rebate stacking in 2026: 25C, HEEHRA/HEAR, HOMES and utilities | TonnageCheck',
     h1: 'Heat pump tax credits and rebate stacking in 2026',
-    description: 'What is left for a 2026 heat pump install: why 25C no longer applies, how HEEHRA/HEAR and HOMES work, the federal rule against combining them for the same upgrade, and utility rebates.',
+    description: 'What is left for a 2026 heat pump install: why 25C no longer applies, HEEHRA/HEAR after DOE dropped fuel switching, HOMES, the no-combining rule, and utility rebates.',
     updated: today,
     related: { brands: BRANDS.filter((b) => b.coldClimateCount > 0).map((b) => b.name), systems: { coldClimate: true } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'high' },
@@ -225,7 +225,8 @@ ${steps.map((x) => `<tr><td>${tonLink(x.a, `${x.a}`)} → ${tonLink(x.b, `${x.b}
 <li>Households under <b>80%</b> of area median income: up to <b>100%</b> of project cost. From <b>80% to 150%</b>: up to <b>50%</b>.</li>
 <li>Households above 150% of area median income are not eligible.</li>
 </ul>
-<p>It is run by state energy offices, which decide whether, when and how to offer it, often through participating contractors at the point of sale (${src('doeRebates', 'DOE')}; find yours in the ${src('naseo', 'NASEO directory')}). Do not count on it until your state program confirms eligibility in writing.</p>
+<p><b>The 2026 change that matters most:</b> DOE Program Notice 26-2 (${src('doePn262', 'May 2026')}) removed fuel switching from the program. HEAR now pays only to upgrade existing electric equipment, such as electric resistance heat or an old heat pump, to more efficient electric equipment. Replacing a gas, oil or propane furnace with a heat pump no longer qualifies. Homes must also address insulation and air sealing first unless they already meet the state's level, and state programs that had launched were given three months to adopt the change.</p>
+<p>It is run by state energy offices, which decide whether, when and how to offer it, often through participating contractors at the point of sale (${src('doeRebates', 'DOE')}; find yours in the ${src('naseo', 'NASEO directory')} or on our <a href="/states/">state pages</a>). Do not count on it until your state program confirms eligibility in writing.</p>
 
 <h2>HOMES: whole-house savings rebates</h2>
 <p>The HOMES program pays for measured or modeled whole-house energy savings, not for specific equipment. For a single-family home, the statute (${src('homesStatute', '42 U.S.C. § 18795')}) sets modeled-savings rebates at the lesser of $2,000 or 50% of project cost for 20–35% savings, and $4,000 or 50% for 35% or more. For households under 80% of area median income, the amounts rise to $4,000 and $8,000, or 80% of cost. HOMES is also run by state energy offices.</p>
@@ -241,6 +242,7 @@ ${steps.map((x) => `<tr><td>${tonLink(x.a, `${x.a}`)} → ${tonLink(x.b, `${x.b}
 <ol>
 <li>Get the price before any rebates first. A high-efficiency 3-ton heat pump benchmarks at ${rangeText(f3)} installed. ${remdbNote}</li>
 <li>Remove any 25C credit for a 2026 install.</li>
+<li>Question any HEAR rebate on a quote that replaces a gas, oil or propane furnace: since Program Notice 26-2 that fuel switch no longer qualifies.</li>
 <li>For each rebate listed, ask: which program, who applies, when is it paid, and what happens if it is denied?</li>
 <li>Make sure the contract price does not depend on a rebate you have not been approved for.</li>
 </ol>
