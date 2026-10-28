@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-28T18:06:05.345Z",
+  "generatedAt": "2026-10-28T18:14:46.503Z",
   "systems": [
     {
       "slug": "goodman-2-ton-15-2-seer2-heat-pump-system-glzs4ba2410",
@@ -31,7 +31,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/2-ton-15-2-seer2-goodman-r32-heat-pump-split-system-multi-positional-182303.html",
           "price": 3819,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -86,7 +86,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-ton-15-2-seer2-goodman-r32-heat-pump-split-system-multi-positional-182393.html",
           "price": 5333,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -120,7 +120,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-ton-17-seer2-two-stage-goodman-heat-pump-air-conditioner-system-multi-positional-id173554.html",
           "price": 6767,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -154,7 +154,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/4-ton-15-2-seer2-goodman-r32-heat-pump-split-system-multi-positional-182330.html",
           "price": 5444,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -188,7 +188,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/4-ton-17-2-seer2-two-stage-goodman-heat-pump-air-conditioner-system-multi-positional-id173557.html",
           "price": 8053,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -243,7 +243,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/5-ton-16-seer2-goodman-r32-heat-pump-split-system-multi-positional-182435.html",
           "price": 7076,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -277,7 +277,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/2-5-ton-14-3-seer2-trane-heat-pump-split-system-multi-positional-192316.html",
           "price": 3306,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -332,7 +332,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-ton-16-seer2-variable-speed-trane-inverter-heat-pump-split-system-multi-positional-192308.html",
           "price": 4355,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -387,7 +387,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/4-ton-16-seer2-variable-speed-trane-inverter-heat-pump-split-system-multi-positional-192309.html",
           "price": 4876,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -421,7 +421,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/5-ton-16-seer2-variable-speed-trane-inverter-heat-pump-split-system-multi-positional-192310.html",
           "price": 5404,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -455,7 +455,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-3-ton-16-seer2-heat-pump-split-system-r32-inverter-multi-positional-224462.html",
           "price": 4500,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -510,7 +510,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-3-ton-19-seer2-high-efficiency-heat-pump-split-system-lgred-series-r32-inverter-multi-positional-231991.html",
           "price": 8446,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -565,7 +565,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-4-ton-18-seer2-high-efficiency-heat-pump-split-system-r32-inverter-multi-positional-231999.html",
           "price": 7038,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -599,7 +599,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/bosch-ids-light-series-3-ton-20-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237614.html",
           "price": 6616,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -654,7 +654,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/48-000-btu-19-seer2-gree-flexx-ultra-r32-central-air-inverter-heat-pump-split-system-id198429.html",
           "price": 6990,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -688,7 +688,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/aciq-essentials-3-ton-17-seer2-high-efficiency-central-heat-pump-split-system-r32-inverter-219180.html",
           "price": 3100,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -743,7 +743,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-ton-17-4-seer2-mrcool-central-ducted-hyper-heat-2nd-gen-heat-pump-split-system-r454b-central-36-hp-c-230b00-o-mvp-36-hp-muah-230a00-o.html",
           "price": 3899,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -798,7 +798,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/aciq-5-ton-17-5-seer2-high-efficiency-central-heat-pump-system-inverter-extreme-series-r454b-197827.html",
           "price": 6699.99,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -853,7 +853,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/mitsubishi-3-ton-15-2-seer2-ducted-central-air-inverter-h2i-heat-pump-split-system-r454b-198648.html",
           "price": 7938,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -908,7 +908,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/mitsubishi-2-ton-18-6-seer2-ducted-central-air-inverter-h2i-heat-pump-split-system-r454b-198630.html",
           "price": 6357,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -963,7 +963,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/18-000-btu-daikin-oterra-21-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-194693.html",
           "price": 2255,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -996,7 +996,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-24000-btu-mega-20-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-226356.html",
           "price": 1977,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1051,7 +1051,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/24000-btu-carrier-infinity-21-2-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r454b-230v-213415.html",
           "price": 4274.99,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1085,7 +1085,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/24-000-btu-daikin-atmosphera-22-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-194705.html",
           "price": 4167,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1120,7 +1120,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-ton-16-seer2-96-afue-80-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-177038.html",
           "price": 5951,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1155,7 +1155,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/4-ton-15-2-seer2-80-afue-80-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-190091.html",
           "price": 5949,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1190,7 +1190,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/5-ton-14-3-seer2-80-afue-80-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-181121.html",
           "price": 6417,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1225,7 +1225,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-5-ton-15-2-seer2-80-afue-80-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-184661.html",
           "price": 6205,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1258,13 +1258,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba3610.html",
           "price": 3051,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
-        },
-        {
-          "retailer": "Alpine Home Air",
-          "url": "https://www.alpinehomeair.com/product/air-conditioning-cooling/split-system-central-air/heat-pumps-electric-heat-cool/goodman/glzs4ba3610",
-          "price": 3189,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1297,13 +1291,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-ton-17-seer2-two-stage-goodman-heat-pump-glzt7ca3610.html",
           "price": 4572,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
-        },
-        {
-          "retailer": "Alpine Home Air",
-          "url": "https://www.alpinehomeair.com/product/air-conditioning-cooling/split-system-central-air/heat-pumps-electric-heat-cool/goodman/glzt7ca3610",
-          "price": 4824,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1336,13 +1324,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/4-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba4810-1.html",
           "price": 3609,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
-        },
-        {
-          "retailer": "Alpine Home Air",
-          "url": "https://www.alpinehomeair.com/product/air-conditioning-cooling/split-system-central-air/heat-pumps-electric-heat-cool/goodman/glzs4ba4810",
-          "price": 3772,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1375,13 +1357,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/5-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba6010.html",
           "price": 4223,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
-        },
-        {
-          "retailer": "Alpine Home Air",
-          "url": "https://www.alpinehomeair.com/product/air-conditioning-cooling/split-system-central-air/heat-pumps-electric-heat-cool/goodman/glzs4ba6010",
-          "price": 4413,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1415,7 +1391,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/1-5-ton-15-2-seer2-goodman-r32-heat-pump-split-system-multi-positional-182300.html",
           "price": 3743,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1449,7 +1425,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/2-5-ton-15-2-seer2-goodman-r32-heat-pump-split-system-multi-positional-182312.html",
           "price": 4441,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1483,7 +1459,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-5-ton-15-2-seer2-goodman-r32-heat-pump-split-system-multi-positional-182318.html",
           "price": 5079,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1517,7 +1493,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/2-ton-17-seer2-two-stage-goodman-heat-pump-air-conditioner-system-multi-positional-id173539.html",
           "price": 6022,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1551,7 +1527,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/5-ton-16-2-seer2-two-stage-goodman-heat-pump-air-conditioner-system-multi-positional-id173566.html",
           "price": 8855,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1606,7 +1582,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/1-5-ton-15-2-seer2-variable-speed-trane-heat-pump-split-system-multi-positional-192329.html",
           "price": 3967,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1661,7 +1637,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/2-ton-16-seer2-variable-speed-trane-inverter-heat-pump-split-system-multi-positional-192307.html",
           "price": 4030,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1716,7 +1692,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/3-5-ton-15-2-seer2-variable-speed-trane-heat-pump-split-system-multi-positional-192333.html",
           "price": 5107,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1771,7 +1747,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/4-ton-15-2-seer2-variable-speed-trane-heat-pump-split-system-multi-positional-192334.html",
           "price": 5254,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1826,7 +1802,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-1-5-ton-17-5-seer2-high-efficiency-heat-pump-split-system-lgred-series-r32-inverter-multi-positional-231987.html",
           "price": 5847,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1881,7 +1857,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-2-5-ton-18-2-seer2-high-efficiency-heat-pump-split-system-lgred-series-r32-inverter-multi-positional-231989.html",
           "price": 6756,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1936,7 +1912,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-3-5-ton-18-seer2-high-efficiency-heat-pump-split-system-r32-inverter-multi-positional-231998.html",
           "price": 7053,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -1970,7 +1946,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-5-ton-16-seer2-heat-pump-split-system-r32-inverter-multi-positional-id224464.html",
           "price": 6187,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2004,7 +1980,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/bosch-ids-light-series-2-ton-18-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237613.html",
           "price": 6156,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2059,7 +2035,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/bosch-ids-light-series-3-ton-15-2-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237591.html",
           "price": 5314,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2093,7 +2069,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/bosch-ids-ligh-series-5-ton-17-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237616.html",
           "price": 8175,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2148,7 +2124,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/24-000-btu-gree-flexx-ultra-r32-central-air-inverter-heat-pump-split-system-id198427.html",
           "price": 5190,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2203,7 +2179,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/36-000-btu-18-seer2-gree-flexx-ultra-r32-central-air-inverter-heat-pump-split-system-id198428.html",
           "price": 5290,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2258,7 +2234,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/60-000-btu-18-5-seer2-gree-flexx-ultra-r32-central-air-inverter-heat-pump-split-system-id198430.html",
           "price": 7090,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2313,7 +2289,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/mrcool-universal-2nd-gen-2-5-ton-17-2-seer2-central-ducted-heat-pump-split-system-r454b-inverter-multi-positional-216532.html",
           "price": 4010,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2368,7 +2344,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/5-ton-16-seer2-mrcool-central-ducted-hyper-heat-2nd-gen-heat-pump-split-system-r454b-central-60-hp-c-230b00-o-mvp-60-hp-muah-230a00-o.html",
           "price": 4599,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2423,7 +2399,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/aciq-2-5-ton-16-8-seer2-high-efficiency-central-heat-pump-system-inverter-extreme-series-r454b-197646.html",
           "price": 3999.99,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2478,7 +2454,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/mitsubishi-2-5-ton-17-1-seer2-ducted-central-air-inverter-h2i-heat-pump-split-system-r454b-198633.html",
           "price": 7463.25,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2533,7 +2509,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/18000-btu-carrier-infinity-21-5-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r454b-230v-213414.html",
           "price": 3349.99,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2568,7 +2544,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/24-000-btu-daikin-21-seer2-tri-zone-wall-mount-mini-split-heat-pump-system-r32-230v-7-12-12-195115.html",
           "price": 4772.8,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2603,7 +2579,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/36-000-btu-daikin-20-seer2-quad-zone-wall-mount-mini-split-heat-pump-system-r32-230v-7-7-7-12-195172.html",
           "price": 5762.4,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2638,7 +2614,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-24000-btu-21-seer2-3-zone-wall-mount-mini-split-heat-pump-system-r32-230v-227579.html",
           "price": 4799,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2694,7 +2670,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/20000-btu-mitsubishi-gx-series-20-seer2-dual-zone-wall-mounted-mini-split-heat-pump-system-r454b-199773.html",
           "price": 4076.25,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2751,7 +2727,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/36000-mrcool-5th-gen-diy-23-seer2-three-zone-wall-mounted-mini-split-heat-pump-system-r-454b-6-9-24-211025.html",
           "price": 4497,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2806,7 +2782,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/18-000-btu-gree-livo-21-seer2-dual-zone-wall-mount-mini-split-heat-pump-system-r32-230v-12-12.html",
           "price": 3546,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2861,7 +2837,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/36-000-btu-24-seer2-aciq-standard-4-zone-wall-mount-mini-split-system-r454b-230v-6-6-6-6-202528.html",
           "price": 4259.99,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2896,7 +2872,7 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/1-5-ton-14-3-seer2-80-afue-40-000-btu-trane-gas-furnace-and-air-conditioner-system-multi-positional-r454b-192398.html",
           "price": 3614,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     },
@@ -2931,7 +2907,2908 @@
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/5-ton-15-2-seer2-96-afue-100-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-downflow-178787.html",
           "price": 7542,
-          "fetchedAt": "2026-10-28T18:06:05.345Z"
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "goodman-1-5-ton-15-2-seer2-ac-furnace-glxs5ba1810",
+      "systemType": "ac-furnace",
+      "brand": "Goodman",
+      "title": "Goodman 1.5 Ton 15.2 SEER2 96% AFUE 60,000 BTU Furnace and AC System - R32 Upflow",
+      "tons": 1.5,
+      "tier": "standard",
+      "components": [
+        "GLXS5BA1810",
+        "CAPTA1818B3",
+        "GR9T960603BN"
+      ],
+      "zones": null,
+      "afue": 96,
+      "furnaceBtu": 60000,
+      "specs": {
+        "seer2": 15.2,
+        "eer2": null,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'GLXS5BA1810%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/1-5-ton-15-2-seer2-96-afue-60-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-176177.html",
+          "price": 4894,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "goodman-2-ton-15-2-seer2-ac-furnace-glxs5ba2410",
+      "systemType": "ac-furnace",
+      "brand": "Goodman",
+      "title": "Goodman 2 Ton 15.2 SEER2 96% AFUE 80,000 BTU Furnace and AC System - R32 Horizontal",
+      "tons": 2,
+      "tier": "standard",
+      "components": [
+        "GLXS5BA2410",
+        "CHPTA2426C3",
+        "GR9T960804CN"
+      ],
+      "zones": null,
+      "afue": 96,
+      "furnaceBtu": 80000,
+      "specs": {
+        "seer2": 15.2,
+        "eer2": null,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'GLXS5BA2410%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/2-ton-15-2-seer2-96-afue-80-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-horizontal-175988.html",
+          "price": 5563,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "goodman-2-ton-15-2-seer2-ac-furnace-glxs4ba2410",
+      "systemType": "ac-furnace",
+      "brand": "Goodman",
+      "title": "Goodman 2 Ton 15.2 SEER2 80% AFUE 60,000 BTU Furnace and AC System - R32 Upflow",
+      "tons": 2,
+      "tier": "standard",
+      "components": [
+        "GLXS4BA2410",
+        "CAPTA2422B3",
+        "GM9S800604BN"
+      ],
+      "zones": null,
+      "afue": 80,
+      "furnaceBtu": 60000,
+      "specs": {
+        "seer2": 15.2,
+        "eer2": null,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'GLXS4BA2410%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/2-ton-15-2-seer2-80-afue-60-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-id180743.html",
+          "price": 2809,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "trane-2-ton-13-4-seer2-ac-furnace-a5ac3024a1",
+      "systemType": "ac-furnace",
+      "brand": "Trane",
+      "title": "Trane 2 Ton 13.4 SEER2 96% 40,000 BTU Furnace & AC System - R454B Upflow - RunTru by Trane",
+      "tons": 2,
+      "tier": "standard",
+      "components": [
+        "A5AC3024A1",
+        "5MXCB004AC6HCA",
+        "A951X040BU3SA"
+      ],
+      "zones": null,
+      "afue": 96,
+      "furnaceBtu": 40000,
+      "specs": {
+        "seer2": 13.4,
+        "eer2": 11,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R454B",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'A5AC3024A1%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/2-ton-13-4-seer2-96-afue-40-000-btu-trane-gas-furnace-and-air-conditioner-system-upflow-r454b-193578.html",
+          "price": 3765,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "goodman-2-5-ton-16-seer2-ac-furnace-glxs5ba3010",
+      "systemType": "ac-furnace",
+      "brand": "Goodman",
+      "title": "Goodman 2.5 Ton 16 SEER2 96% AFUE 80,000 BTU Furnace and AC System - R32 Horizontal",
+      "tons": 2.5,
+      "tier": "mid",
+      "components": [
+        "GLXS5BA3010",
+        "CHPTA3630C3",
+        "GR9S960804CN"
+      ],
+      "zones": null,
+      "afue": 96,
+      "furnaceBtu": 80000,
+      "specs": {
+        "seer2": 16,
+        "eer2": null,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'GLXS5BA3010%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/2-5-ton-16-seer2-96-afue-80-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-horizontal-176009.html",
+          "price": 5501,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "goodman-2-5-ton-15-2-seer2-ac-furnace-glxs4ba3010",
+      "systemType": "ac-furnace",
+      "brand": "Goodman",
+      "title": "Goodman 2.5 Ton 15.2 SEER2 80% AFUE 60,000 BTU Furnace and AC System - R32 Upflow",
+      "tons": 2.5,
+      "tier": "standard",
+      "components": [
+        "GLXS4BA3010",
+        "CAPTA3026B3",
+        "GM9S800604BN"
+      ],
+      "zones": null,
+      "afue": 80,
+      "furnaceBtu": 60000,
+      "specs": {
+        "seer2": 15.2,
+        "eer2": null,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'GLXS4BA3010%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/2-5-ton-15-2-seer2-80-afue-60-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-id180773.html",
+          "price": 3015,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "trane-2-5-ton-15-2-seer2-ac-furnace-a4ac5030d1",
+      "systemType": "ac-furnace",
+      "brand": "Trane",
+      "title": "Trane 2.5 Ton 15.2 SEER2 96% 60,000 BTU Furnace & AC System - R410A Upflow - RunTru by Trane",
+      "tons": 2.5,
+      "tier": "standard",
+      "components": [
+        "A4AC5030D1",
+        "4MXCB016AC6HCB",
+        "A952V060BU4SA",
+        "4AYTXVH3G2436A"
+      ],
+      "zones": null,
+      "afue": 96,
+      "furnaceBtu": 60000,
+      "specs": {
+        "seer2": 15.2,
+        "eer2": 11.7,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R410A",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'A4AC5030D1%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/2-5-ton-15-2-seer2-96-afue-60-000-btu-trane-gas-furnace-and-air-conditioner-system-upflow-160480.html",
+          "price": 2415,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "trane-2-5-ton-13-4-seer2-ac-furnace-a5ac3030a1",
+      "systemType": "ac-furnace",
+      "brand": "Trane",
+      "title": "Trane 2.5 Ton 13.4 SEER2 96% 40,000 BTU Furnace & AC System - R454B Upflow - RunTru by Trane",
+      "tons": 2.5,
+      "tier": "standard",
+      "components": [
+        "A5AC3030A1",
+        "5MXCB004AC6HCA",
+        "A951X040BU3SA"
+      ],
+      "zones": null,
+      "afue": 96,
+      "furnaceBtu": 40000,
+      "specs": {
+        "seer2": 13.4,
+        "eer2": 11,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R454B",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'A5AC3030A1%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/2-5-ton-13-4-seer2-96-afue-40-000-btu-trane-gas-furnace-and-air-conditioner-system-upflow-r454b-193592.html",
+          "price": 3849,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "aciq-2-5-ton-16-5-seer2-ac-furnace-r4a5s30akawa",
+      "systemType": "ac-furnace",
+      "brand": "ACiQ",
+      "title": "2.5 Ton 16.5 SEER2 80% AFUE 110,000 BTU ACiQ Gas Furnace and Air Conditioner System - Multi-Positional",
+      "tons": 2.5,
+      "tier": "mid",
+      "components": [
+        "R4A5S30AKAWA",
+        "EAM4X37L21A",
+        "G80CTL1102120"
+      ],
+      "zones": null,
+      "afue": 80,
+      "furnaceBtu": 110000,
+      "specs": {
+        "seer2": 16.5,
+        "eer2": 12.2,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R410A",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'R4A5S30AKAWA%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/2-5-ton-16-5-seer2-80-afue-110-000-btu-aciq-gas-furnace-and-air-conditioner-system-multi-positional-116807.html",
+          "price": 2511,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "trane-3-ton-13-4-seer2-ac-furnace-a5ac3036a1",
+      "systemType": "ac-furnace",
+      "brand": "Trane",
+      "title": "Trane 3 Ton 13.4 SEER2 80% 40,000 BTU Furnace & AC System - R454B Multi-Positional - RunTru by Trane",
+      "tons": 3,
+      "tier": "standard",
+      "components": [
+        "A5AC3036A1",
+        "5MXCA003AC6HCA",
+        "A801X040AM3SD"
+      ],
+      "zones": null,
+      "afue": 80,
+      "furnaceBtu": 40000,
+      "specs": {
+        "seer2": 13.4,
+        "eer2": 11,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R454B",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'A5AC3036A1%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/3-ton-13-4-seer2-80-afue-40-000-btu-trane-gas-furnace-and-air-conditioner-system-multi-positional-r454b-193606.html",
+          "price": 3719,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "goodman-3-ton-15-2-seer2-ac-furnace-glxs4ba3610",
+      "systemType": "ac-furnace",
+      "brand": "Goodman",
+      "title": "Goodman 3 Ton 15.2 SEER2 80% AFUE 80,000 BTU Furnace and AC System - R32 Upflow",
+      "tons": 3,
+      "tier": "standard",
+      "components": [
+        "GLXS4BA3610",
+        "CAPTA3626B3",
+        "GM9S800803BN"
+      ],
+      "zones": null,
+      "afue": 80,
+      "furnaceBtu": 80000,
+      "specs": {
+        "seer2": 15.2,
+        "eer2": null,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'GLXS4BA3610%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/3-ton-15-2-seer2-80-afue-80-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-id180923.html",
+          "price": 3278,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "trane-3-5-ton-13-4-seer2-ac-furnace-a5ac3042a1",
+      "systemType": "ac-furnace",
+      "brand": "Trane",
+      "title": "Trane 3.5 Ton 13.4 SEER2 80% 80,000 BTU Furnace & AC System - R454B Multi-Positional - RunTru by Trane",
+      "tons": 3.5,
+      "tier": "standard",
+      "components": [
+        "A5AC3042A1",
+        "5MXCC009AC6HCA",
+        "A801X080CM5SD"
+      ],
+      "zones": null,
+      "afue": 80,
+      "furnaceBtu": 80000,
+      "specs": {
+        "seer2": 13.4,
+        "eer2": 11,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R454B",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'A5AC3042A1%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/3-5-ton-13-4-seer2-80-afue-80-000-btu-trane-gas-furnace-and-air-conditioner-system-multi-positional-r454b-193630.html",
+          "price": 4710,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "trane-4-ton-13-4-seer2-ac-furnace-a5ac3048a1",
+      "systemType": "ac-furnace",
+      "brand": "Trane",
+      "title": "Trane 4 Ton 13.4 SEER2 80% 80,000 BTU Furnace & AC System - R454B Multi-Positional - RunTru by Trane",
+      "tons": 4,
+      "tier": "standard",
+      "components": [
+        "A5AC3048A1",
+        "5MXCC009AC6HCA",
+        "A801X080CM5SD"
+      ],
+      "zones": null,
+      "afue": 80,
+      "furnaceBtu": 80000,
+      "specs": {
+        "seer2": 13.4,
+        "eer2": 11,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R454B",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'A5AC3048A1%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/4-ton-13-4-seer2-80-afue-80-000-btu-trane-gas-furnace-and-air-conditioner-system-multi-positional-r454b-193642.html",
+          "price": 4794,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "trane-5-ton-13-4-seer2-ac-furnace-a5ac3060a1",
+      "systemType": "ac-furnace",
+      "brand": "Trane",
+      "title": "Trane 5 Ton 13.4 SEER2 80% 120,000 BTU Furnace & AC System - R454B Multi-Positional - RunTru by Trane",
+      "tons": 5,
+      "tier": "standard",
+      "components": [
+        "A5AC3060A1",
+        "5MXCD010AC6HCA",
+        "A801X120DM5SD",
+        "5AYTXVH3A6000A"
+      ],
+      "zones": null,
+      "afue": 80,
+      "furnaceBtu": 120000,
+      "specs": {
+        "seer2": 13.4,
+        "eer2": 11,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R454B",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'A5AC3060A1%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/5-ton-13-4-seer2-80-afue-120-000-btu-trane-gas-furnace-and-air-conditioner-system-multi-positional-r454b-193656.html",
+          "price": 5393,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "mrcool-2-ton-18-6-seer2-heat-pump-system-uhp18024-o",
+      "systemType": "central-heat-pump",
+      "brand": "MRCOOL",
+      "title": "MRCOOL DIY Universal 2nd Gen 2 Ton 18.6 SEER2 Central Ducted Heat Pump Split System - R454B Inverter - Multi-Positional",
+      "tons": 2,
+      "tier": "high",
+      "components": [
+        "UHP18024-O",
+        "UAH18024-O"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 18.6,
+        "eer2": 12,
+        "hspf2": 10,
+        "source": "energystar",
+        "refrigerant": "R454B",
+        "stages": "Variable Speed"
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_1129317_UHP18024-O_09042025053006_28217730328",
+        "matchedOn": "outdoor + indoor model",
+        "ahriReferenceNumber": "217730328",
+        "outdoorModel": "UHP18024-O",
+        "indoorModel": "UAH18024 - O",
+        "furnaceModel": null,
+        "seer2": 18.6,
+        "eer2": 12,
+        "hspf2": 10,
+        "copAt5F": 2.14,
+        "heatingCapacity5F": 20600,
+        "heatingCapacity47F": 24000,
+        "coolingCapacity": 24000,
+        "outdoorBrand": "MRCOOL",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2026-05-01",
+        "refrigerant": "R-454B (GWP:470 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'UHP18024-O%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/mrcool-universal-2nd-gen-2-ton-18-6-seer2-central-ducted-heat-pump-split-system-r454b-inverter-multi-positional-216531.html",
+          "price": 3601,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "mrcool-3-ton-18-seer2-heat-pump-system-uhp18036-o",
+      "systemType": "central-heat-pump",
+      "brand": "MRCOOL",
+      "title": "MRCOOL DIY Universal 2nd Gen 3 Ton 18 SEER2 Central Ducted Heat Pump Split System - R454B Inverter - Multi-Positional",
+      "tons": 3,
+      "tier": "high",
+      "components": [
+        "UHP18036-O",
+        "UAH18036-O"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 18,
+        "eer2": 12,
+        "hspf2": 10,
+        "source": "energystar",
+        "refrigerant": "R454B",
+        "stages": "Variable Speed"
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_1129317_UHP18036-O_09042025053006_28217730330",
+        "matchedOn": "outdoor + indoor model",
+        "ahriReferenceNumber": "217730330",
+        "outdoorModel": "UHP18036-O",
+        "indoorModel": "UAH18036 - O",
+        "furnaceModel": null,
+        "seer2": 18,
+        "eer2": 12,
+        "hspf2": 10,
+        "copAt5F": 1.9,
+        "heatingCapacity5F": 37400,
+        "heatingCapacity47F": 37000,
+        "coolingCapacity": 36000,
+        "outdoorBrand": "MRCOOL",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2026-05-01",
+        "refrigerant": "R-454B (GWP:470 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'UHP18036-O%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/mrcool-universal-2nd-gen-3-ton-18-seer2-central-ducted-heat-pump-split-system-r454b-inverter-multi-positional-216533.html",
+          "price": 4472,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "mrcool-4-ton-17-5-seer2-heat-pump-system-uhp18048-o",
+      "systemType": "central-heat-pump",
+      "brand": "MRCOOL",
+      "title": "MRCOOL DIY Universal 2nd Gen 4 Ton 17.5 SEER2 Central Ducted Heat Pump Split System - R454B Inverter - Multi-Positional",
+      "tons": 4,
+      "tier": "high",
+      "components": [
+        "UHP18048-O",
+        "UAH18048-O"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 17.5,
+        "eer2": 12,
+        "hspf2": 9.5,
+        "source": "energystar",
+        "refrigerant": "R454B",
+        "stages": "Variable Speed"
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_1129317_UHP18048-O_09042025053006_28217730331",
+        "matchedOn": "outdoor + indoor model",
+        "ahriReferenceNumber": "217730331",
+        "outdoorModel": "UHP18048-O",
+        "indoorModel": "UAH18048 - O",
+        "furnaceModel": null,
+        "seer2": 17.5,
+        "eer2": 12,
+        "hspf2": 9.5,
+        "copAt5F": 2,
+        "heatingCapacity5F": 48000,
+        "heatingCapacity47F": 48000,
+        "coolingCapacity": 48000,
+        "outdoorBrand": "MRCOOL",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2026-05-01",
+        "refrigerant": "R-454B (GWP:470 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'UHP18048-O%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/mrcool-universal-2nd-gen-4-ton-17-5-seer2-central-ducted-heat-pump-split-system-r454b-inverter-multi-positional-216535.html",
+          "price": 4912,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "mrcool-5-ton-17-5-seer2-heat-pump-system-uhp18060-o",
+      "systemType": "central-heat-pump",
+      "brand": "MRCOOL",
+      "title": "MRCOOL DIY Universal 2nd Gen 5 Ton 17.5 SEER2 Central Ducted Heat Pump Split System - R454B Inverter - Multi-Positional",
+      "tons": 5,
+      "tier": "high",
+      "components": [
+        "UHP18060-O",
+        "UAH18060-O"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 17.5,
+        "eer2": 12,
+        "hspf2": 9.5,
+        "source": "energystar",
+        "refrigerant": "R454B",
+        "stages": "Variable Speed"
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_1129317_UHP18060-O_09042025053007_28217730332",
+        "matchedOn": "outdoor + indoor model",
+        "ahriReferenceNumber": "217730332",
+        "outdoorModel": "UHP18060-O",
+        "indoorModel": "UAH18060 - O",
+        "furnaceModel": null,
+        "seer2": 17.5,
+        "eer2": 12,
+        "hspf2": 9.5,
+        "copAt5F": 1.9,
+        "heatingCapacity5F": 54000,
+        "heatingCapacity47F": 55000,
+        "coolingCapacity": 54000,
+        "outdoorBrand": "MRCOOL",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2026-05-01",
+        "refrigerant": "R-454B (GWP:470 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'UHP18060-O%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/mrcool-universal-2nd-gen-5-ton-17-5-seer2-central-ducted-heat-pump-split-system-r454b-inverter-multi-positional-216536.html",
+          "price": 5281,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "mrcool-3-ton-18-seer2-heat-pump-system-mdph18036d",
+      "systemType": "central-heat-pump",
+      "brand": "MRCOOL",
+      "title": "MRCOOL Universal 2nd Gen 3 Ton 18 SEER2 Inverter Package Heat Pump Unit - R32 Downflow/Horizontal",
+      "tons": 3,
+      "tier": "high",
+      "components": [
+        "MDPH18036D"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 18,
+        "eer2": 11.2,
+        "hspf2": 8.5,
+        "source": "energystar",
+        "refrigerant": "R32",
+        "stages": "Variable Speed"
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_1129317_MDPH18036D_12112025120037_28217905216",
+        "matchedOn": "outdoor model + listed SEER2",
+        "ahriReferenceNumber": "217905216",
+        "outdoorModel": "MDPH18036D",
+        "indoorModel": null,
+        "furnaceModel": null,
+        "seer2": 18,
+        "eer2": 11.2,
+        "hspf2": 8.5,
+        "copAt5F": 1.9,
+        "heatingCapacity5F": 29000,
+        "heatingCapacity47F": 34000,
+        "coolingCapacity": 34000,
+        "outdoorBrand": "MRCOOL",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2026-03-17",
+        "refrigerant": "R-32 (GWP:675 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'MDPH18036D%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/mrcool-universal-2nd-gen-3-ton-18-seer2-inverter-package-heat-pump-unit-r32-downflow-horizontal-mdph18036d.html",
+          "price": 6327,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "lg-1-5-ton-16-seer2-heat-pump-system-kusxe181a",
+      "systemType": "central-heat-pump",
+      "brand": "LG",
+      "title": "LG 1.5 Ton 16 SEER2 Heat Pump Split System - R32 Inverter - Multi-Positional",
+      "tons": 1.5,
+      "tier": "mid",
+      "components": [
+        "KUSXE181A",
+        "KNSLE182A"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 16,
+        "eer2": 9.8,
+        "hspf2": 8.5,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Variable Speed"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'KUSXE181A%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/lg-1-5-ton-16-seer2-heat-pump-split-system-r32-inverter-multi-positional-223674.html",
+          "price": 3500,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "lg-2-ton-17-5-seer2-heat-pump-system-kusxa241a",
+      "systemType": "central-heat-pump",
+      "brand": "LG",
+      "title": "LG 2 Ton 17.5 SEER2 High Efficiency Heat Pump Split System - LGRED Series - R32 Inverter - Multi-Positional",
+      "tons": 2,
+      "tier": "high",
+      "components": [
+        "KUSXA241A",
+        "KNSLA241A"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 17.5,
+        "eer2": 12.5,
+        "hspf2": 10,
+        "source": "energystar",
+        "refrigerant": "R32",
+        "stages": "Variable Speed"
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_1118034_KUSXA241A_09142024011042_3136634",
+        "matchedOn": "outdoor + indoor model",
+        "ahriReferenceNumber": "215588568",
+        "outdoorModel": "KUSXA241A",
+        "indoorModel": "KNSLA241A",
+        "furnaceModel": null,
+        "seer2": 17.5,
+        "eer2": 12.5,
+        "hspf2": 10,
+        "copAt5F": 2,
+        "heatingCapacity5F": 25000,
+        "heatingCapacity47F": 27000,
+        "coolingCapacity": 24000,
+        "outdoorBrand": "LG",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2026-04-17",
+        "refrigerant": "R-32 (GWP:675 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'KUSXA241A%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/lg-2-ton-17-5-seer2-high-efficiency-heat-pump-split-system-lgred-series-r32-inverter-multi-positional-231988.html",
+          "price": 6093,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "lg-2-5-ton-16-seer2-heat-pump-system-kusxe301a",
+      "systemType": "central-heat-pump",
+      "brand": "LG",
+      "title": "LG 2.5 Ton 16 SEER2 Heat Pump Split System - R32 Inverter - Multi-Positional",
+      "tons": 2.5,
+      "tier": "mid",
+      "components": [
+        "KUSXE301A",
+        "KNSLE302A"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 16,
+        "eer2": 10,
+        "hspf2": 8.5,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Variable Speed"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'KUSXE301A%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/lg-2-5-ton-16-seer2-heat-pump-split-system-r32-inverter-multi-positional-224460.html",
+          "price": 4000,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "lg-3-5-ton-18-2-seer2-heat-pump-system-kusxa361a",
+      "systemType": "central-heat-pump",
+      "brand": "LG",
+      "title": "LG 3.5 Ton 18.2 SEER2 High Efficiency Heat Pump Split System - LGRED Series - R32 Inverter - Multi-Positional",
+      "tons": 3.5,
+      "tier": "high",
+      "components": [
+        "KUSXA361A",
+        "KNSLA361A"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 18.2,
+        "eer2": 13,
+        "hspf2": 9.6,
+        "source": "energystar",
+        "refrigerant": "R32",
+        "stages": "Variable Speed"
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_1118034_KUSXA361A_09142024011054_6220995",
+        "matchedOn": "outdoor + indoor model",
+        "ahriReferenceNumber": "215588576",
+        "outdoorModel": "KUSXA361A",
+        "indoorModel": "KNSLA361A",
+        "furnaceModel": null,
+        "seer2": 18.2,
+        "eer2": 13,
+        "hspf2": 9.6,
+        "copAt5F": 2,
+        "heatingCapacity5F": 33000,
+        "heatingCapacity47F": 40000,
+        "coolingCapacity": 33000,
+        "outdoorBrand": "LG",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2026-04-17",
+        "refrigerant": "R-32 (GWP:675 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'KUSXA361A%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/lg-3-5-ton-18-2-seer2-high-efficiency-heat-pump-split-system-lgred-series-r32-inverter-multi-positional-231990.html",
+          "price": 6878,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "lg-4-ton-19-seer2-heat-pump-system-kusxa482a",
+      "systemType": "central-heat-pump",
+      "brand": "LG",
+      "title": "LG 4 Ton 19 SEER2 High Efficiency Heat Pump Split System - LGRED Series - R32 Inverter - Multi-Positional",
+      "tons": 4,
+      "tier": "high",
+      "components": [
+        "KUSXA482A",
+        "KNSLB481A"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 19,
+        "eer2": 12.3,
+        "hspf2": 9.6,
+        "source": "energystar",
+        "refrigerant": "R32",
+        "stages": "Variable Speed"
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_1118034_KUSXA482A_09252024012816_2534807",
+        "matchedOn": "outdoor + indoor model",
+        "ahriReferenceNumber": "215735574",
+        "outdoorModel": "KUSXA482A",
+        "indoorModel": "KNSLB481A",
+        "furnaceModel": null,
+        "seer2": 19,
+        "eer2": 12.3,
+        "hspf2": 9.6,
+        "copAt5F": 2,
+        "heatingCapacity5F": 46000,
+        "heatingCapacity47F": 50000,
+        "coolingCapacity": 46000,
+        "outdoorBrand": "LG",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2026-04-17",
+        "refrigerant": "R-32 (GWP:675 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'KUSXA482A%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/lg-4-ton-19-seer2-high-efficiency-heat-pump-split-system-lgred-series-r32-inverter-multi-positional-231992.html",
+          "price": 8371,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "trane-2-5-ton-16-seer2-heat-pump-system-a5hp5030a1",
+      "systemType": "central-heat-pump",
+      "brand": "Trane",
+      "title": "Trane 2.5 Ton 15.2 SEER2 Heat Pump Split System - R454B Single Stage - Multi-Positional - RunTru by Trane",
+      "tons": 2.5,
+      "tier": "mid",
+      "components": [
+        "A5HP5030A1",
+        "A5AHV004A1D3"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 16,
+        "eer2": 12,
+        "hspf2": 8.1,
+        "source": "energystar",
+        "refrigerant": "R454B",
+        "stages": "Single Stage"
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_1075581_A5HP5030A1_03102024013033_2644562",
+        "matchedOn": "outdoor + indoor model",
+        "ahriReferenceNumber": "214296373",
+        "outdoorModel": "A5HP5030A1",
+        "indoorModel": "A5AHV004A1D3+TDR+TSTAT",
+        "furnaceModel": null,
+        "seer2": 16,
+        "eer2": 12,
+        "hspf2": 8.1,
+        "copAt5F": 2.1,
+        "heatingCapacity5F": 13700,
+        "heatingCapacity47F": 26000,
+        "coolingCapacity": 27800,
+        "outdoorBrand": "Ameristar",
+        "coldClimate": false,
+        "mostEfficient": true,
+        "dateCertified": "2025-04-09",
+        "refrigerant": "R-454B (GWP:470 | Lower GWP)",
+        "compressorStaging": "Single stage"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'A5HP5030A1%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/2-5-ton-15-2-seer2-variable-speed-trane-heat-pump-split-system-multi-positional-192331.html",
+          "price": 4380,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "trane-3-5-ton-14-3-seer2-heat-pump-system-a5hp4042a1",
+      "systemType": "central-heat-pump",
+      "brand": "Trane",
+      "title": "Trane 3.5 Ton 14.3 SEER2 Heat Pump Split System - R454B Single Stage - Multi-Positional - RunTru by Trane",
+      "tons": 3.5,
+      "tier": "standard",
+      "components": [
+        "A5HP4042A1",
+        "A5AHC004A1B3"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 14.3,
+        "eer2": null,
+        "hspf2": 7.8,
+        "source": "retailer",
+        "refrigerant": "R454B",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'A5HP4042A1%25'&$limit=200",
+      "ahriCertificateUrl": "https://hvacdirect.com/media/pdf/218154627_AHRI.pdf",
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/3-5-ton-14-3-seer2-trane-heat-pump-split-system-multi-positional-192324.html",
+          "price": 3576,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "mitsubishi-1-5-ton-16-2-seer2-mini-split-suz-aa18nlhz",
+      "systemType": "mini-split",
+      "brand": "Mitsubishi",
+      "title": "Mitsubishi 18,000 BTU 16.2 SEER2 Single Zone Ducted Central Air Inverter H2i Hyper Mini Split Heat Pump System – R454B | 230V",
+      "tons": 1.5,
+      "tier": "high",
+      "components": [
+        "SUZ-AA18NLHZ",
+        "SVZ-AP18NL"
+      ],
+      "zones": 1,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 16.2,
+        "eer2": 12,
+        "hspf2": 9.5,
+        "source": "energystar",
+        "refrigerant": "R454B",
+        "stages": null
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_14817_SUZ-AA18NLHZ***_02032025003315_29215734923",
+        "matchedOn": "outdoor + indoor model",
+        "ahriReferenceNumber": "215734923",
+        "outdoorModel": "SUZ-AA18NLHZ***",
+        "indoorModel": "SVZ-AP18NL***",
+        "furnaceModel": null,
+        "seer2": 16.2,
+        "eer2": 12,
+        "hspf2": 9.5,
+        "copAt5F": 2,
+        "heatingCapacity5F": 20000,
+        "heatingCapacity47F": 20000,
+        "coolingCapacity": 18000,
+        "outdoorBrand": "Mitsubishi Electric",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2026-05-06",
+        "refrigerant": "R-454B (GWP:470 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'SUZ-AA18NLHZ%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/mitsubishi-1-5-ton-16-2-seer2-ducted-central-air-inverter-h2i-heat-pump-split-system-r454b-198628.html",
+          "price": 5374.5,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "mitsubishi-2-5-ton-21-seer2-mini-split-puz-ak30nlhz",
+      "systemType": "mini-split",
+      "brand": "Mitsubishi",
+      "title": "Mitsubishi 30,000 BTU SEZ-AD-Series 17.6 SEER2 Single Zone Ducted H2i Central Air Mini Split Hyper Heat Pump System - R454B | 230V",
+      "tons": 2.5,
+      "tier": "high",
+      "components": [
+        "PUZ-AK30NLHZ",
+        "PVA-AA30NL"
+      ],
+      "zones": 1,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 21,
+        "eer2": 13.5,
+        "hspf2": 9.3,
+        "source": "energystar",
+        "refrigerant": "R454B",
+        "stages": "Variable Speed"
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_14817_PUZ-AK30NLHZ***_09302024003322_8065664",
+        "matchedOn": "outdoor + indoor model",
+        "ahriReferenceNumber": "215712209",
+        "outdoorModel": "PUZ-AK30NLHZ***",
+        "indoorModel": "PVA-AA30NL***",
+        "furnaceModel": null,
+        "seer2": 21,
+        "eer2": 13.5,
+        "hspf2": 9.3,
+        "copAt5F": 2.3,
+        "heatingCapacity5F": 32000,
+        "heatingCapacity47F": 34000,
+        "coolingCapacity": 30000,
+        "outdoorBrand": "Mitsubishi Electric",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2025-03-13",
+        "refrigerant": "R-454B (GWP:470 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'PUZ-AK30NLHZ%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/mitsubishi-2-5-ton-21-seer2-ducted-h2i-central-air-inverter-heat-pump-split-system-r454b-201909.html",
+          "price": 10103.25,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "mitsubishi-3-5-ton-19-1-seer2-mini-split-puz-ak42nl",
+      "systemType": "mini-split",
+      "brand": "Mitsubishi",
+      "title": "Mitsubishi 42,000 BTU SEZ-AD-Series 17.1 SEER2 Single Zone Ducted Central Air Mini Split Heat Pump System - R454B | 230V",
+      "tons": 3.5,
+      "tier": "high",
+      "components": [
+        "PUZ-AK42NL",
+        "PVA-AA42NL"
+      ],
+      "zones": 1,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 19.1,
+        "eer2": 11.1,
+        "hspf2": 9.4,
+        "source": "energystar",
+        "refrigerant": "R454B",
+        "stages": "Variable Speed"
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_14817_PUZ-AK42NL***_07292025072459_29215712232",
+        "matchedOn": "outdoor + indoor model",
+        "ahriReferenceNumber": "215712232",
+        "outdoorModel": "PUZ-AK42NL***",
+        "indoorModel": "PVA-AA42NL***",
+        "furnaceModel": null,
+        "seer2": 19.1,
+        "eer2": 11.1,
+        "hspf2": 9.4,
+        "copAt5F": 2.5,
+        "heatingCapacity5F": 25400,
+        "heatingCapacity47F": 48000,
+        "coolingCapacity": 42000,
+        "outdoorBrand": "Mitsubishi Electric",
+        "coldClimate": false,
+        "mostEfficient": true,
+        "dateCertified": "2025-09-09",
+        "refrigerant": "R-454B (GWP:470 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'PUZ-AK42NL%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/mitsubishi-3-5-ton-19-1-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-201899.html",
+          "price": 8965.5,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "mitsubishi-2-5-ton-20-seer2-mini-split-mxz-3d30nlhz",
+      "systemType": "mini-split",
+      "brand": "Mitsubishi",
+      "title": "Mitsubishi 30,000 BTU FX-Series 20 SEER2 3 Zone Wall Mounted Mini Split Hyper Heat Pump System - R454B | 230V - 9 + 9 + 15",
+      "tons": 2.5,
+      "tier": "high",
+      "components": [
+        "MXZ-3D30NLHZ",
+        "2-MSZ-FX09NL",
+        "MSZ-FX15NL"
+      ],
+      "zones": 3,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 20,
+        "eer2": 11.5,
+        "hspf2": 10,
+        "source": "energystar",
+        "refrigerant": "R454B",
+        "stages": null
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_14817_MXZ-3D30NLHZ***_12092024003353_23216505934",
+        "matchedOn": "outdoor model + listed SEER2",
+        "ahriReferenceNumber": "216505934",
+        "outdoorModel": "MXZ-3D30NLHZ***",
+        "indoorModel": null,
+        "furnaceModel": null,
+        "seer2": 20,
+        "eer2": 11.5,
+        "hspf2": 10,
+        "copAt5F": 1.86,
+        "heatingCapacity5F": 28600,
+        "heatingCapacity47F": 28600,
+        "coolingCapacity": 28400,
+        "outdoorBrand": "Mitsubishi Electric",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2025-02-17",
+        "refrigerant": "R-454B (GWP:470 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'MXZ-3D30NLHZ%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/mitsubishi-30-000-btu-fx-series-20-seer2-three-zone-wall-mounted-mini-split-hyper-heat-pump-system-r454b-230v-9-9-15-mxz-3d30nlhz-2-msz-fx09nl-msz-fx15nl.html",
+          "price": 7941,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "mitsubishi-3-5-ton-19-3-seer2-mini-split-mxz-5d42nl",
+      "systemType": "mini-split",
+      "brand": "Mitsubishi",
+      "title": "Mitsubishi 42,000 BTU GX-Series 19.3 SEER2  3 Zone Wall Mounted Mini Split Heat Pump System - R454B | 230V - 9 + 9 + 12",
+      "tons": 3.5,
+      "tier": "high",
+      "components": [
+        "MXZ-5D42NL",
+        "2-MSZ-GX09NL",
+        "MSZ-GX12NL"
+      ],
+      "zones": 3,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 19.3,
+        "eer2": 9.3,
+        "hspf2": 9.1,
+        "source": "retailer",
+        "refrigerant": "R454B",
+        "stages": null
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'MXZ-5D42NL%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/mitsubishi-42-000-btu-gx-series-20-seer2-three-zone-wall-mounted-mini-split-heat-pump-system-r454b-230v-9-9-12-mxz-5d42nl-2-msz-gx09nl-msz-gx12nl.html",
+          "price": 7888.75,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "mitsubishi-5-ton-20-seer2-mini-split-mxz-sm60nl",
+      "systemType": "mini-split",
+      "brand": "Mitsubishi",
+      "title": "Mitsubishi 60,000 BTU GX-Series 20 Seer2 4 Zone Wall Mounted Mini Split Heat Pump System R454B | 230V 6 + 9 + 18 + 24",
+      "tons": 5,
+      "tier": "high",
+      "components": [
+        "MXZ-SM60NL",
+        "MSZ-GX06NL",
+        "MSZ-GX09NL",
+        "MSZ-GX18NL",
+        "MSZ-GX24NL"
+      ],
+      "zones": 4,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 20,
+        "eer2": 12,
+        "hspf2": 10.5,
+        "source": "energystar",
+        "refrigerant": "R454B",
+        "stages": null
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_14817_MXZ-SM60NL***_09192024013031_140587",
+        "matchedOn": "outdoor model + listed SEER2",
+        "ahriReferenceNumber": "215685468",
+        "outdoorModel": "MXZ-SM60NL***",
+        "indoorModel": null,
+        "furnaceModel": null,
+        "seer2": 20,
+        "eer2": 12,
+        "hspf2": 10.5,
+        "copAt5F": 2,
+        "heatingCapacity5F": 46500,
+        "heatingCapacity47F": 64500,
+        "coolingCapacity": 60000,
+        "outdoorBrand": "Mitsubishi Electric",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2025-09-02",
+        "refrigerant": "R-454B (GWP:470 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'MXZ-SM60NL%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/mitsubishi-60000-btu-gx-series-20-seer2-4-zone-wall-mounted-mini-split-heat-pump-system-r454b-230v-226683.html",
+          "price": 11744.25,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "daikin-2-ton-21-seer2-mini-split-rxt24avju9",
+      "systemType": "mini-split",
+      "brand": "Daikin",
+      "title": "Daikin 24,000 BTU Aurora 21 SEER2 Single Zone Wall Mount Mini Split Heat Pump System - R32 | 230V",
+      "tons": 2,
+      "tier": "high",
+      "components": [
+        "RXT24AVJU9",
+        "FTXV24AVJU9"
+      ],
+      "zones": 1,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 21,
+        "eer2": 12,
+        "hspf2": 10,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": null
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'RXT24AVJU9%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/24-000-btu-daikin-aurora-21-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-194701.html",
+          "price": 3646,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "lg-2-5-ton-22-seer2-mini-split-kumxb301a",
+      "systemType": "mini-split",
+      "brand": "LG",
+      "title": "LG 30,000 BTU Multi F 22 SEER2 2 Zone Wall Mount Mini Split Heat Pump System - R32 | 230V -18 + 18",
+      "tons": 2.5,
+      "tier": "high",
+      "components": [
+        "KUMXB301A",
+        "2-KNUAB181A"
+      ],
+      "zones": 2,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 22,
+        "eer2": 13,
+        "hspf2": 9.5,
+        "source": "energystar",
+        "refrigerant": "R32",
+        "stages": null
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_1118034_KUMXB301A_08142024011706_5005875",
+        "matchedOn": "outdoor model + listed SEER2",
+        "ahriReferenceNumber": "215402335",
+        "outdoorModel": "KUMXB301A",
+        "indoorModel": null,
+        "furnaceModel": null,
+        "seer2": 22,
+        "eer2": 13,
+        "hspf2": 9.5,
+        "copAt5F": 2.14,
+        "heatingCapacity5F": 18400,
+        "heatingCapacity47F": 32000,
+        "coolingCapacity": 30000,
+        "outdoorBrand": "LG",
+        "coldClimate": false,
+        "mostEfficient": true,
+        "dateCertified": "2025-10-27",
+        "refrigerant": "R-32 (GWP:675 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'KUMXB301A%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/lg-30000-btu-22-seer2-dual-zone-wall-mount-mini-split-heat-pump-system-r32-230v-227511.html",
+          "price": 5150,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "lg-3-5-ton-21-5-seer2-mini-split-kumxa421a",
+      "systemType": "mini-split",
+      "brand": "LG",
+      "title": "LG 42,000 BTU Multi F RED 21.5 SEER2 Tri Zone Wall Mount Mini Split Heat Pump System - R32 | 230V - 9 + 9 + 9",
+      "tons": 3.5,
+      "tier": "high",
+      "components": [
+        "KUMXA421A",
+        "3-KNUAB091A"
+      ],
+      "zones": 3,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 21.5,
+        "eer2": 13.8,
+        "hspf2": 11,
+        "source": "energystar",
+        "refrigerant": "R32",
+        "stages": null
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_1118034_KUMXA421A_08142024011734_8052801",
+        "matchedOn": "outdoor model + listed SEER2",
+        "ahriReferenceNumber": "215402347",
+        "outdoorModel": "KUMXA421A",
+        "indoorModel": null,
+        "furnaceModel": null,
+        "seer2": 21.5,
+        "eer2": 13.8,
+        "hspf2": 11,
+        "copAt5F": 2,
+        "heatingCapacity5F": 44000,
+        "heatingCapacity47F": 48000,
+        "coolingCapacity": 42000,
+        "outdoorBrand": "LG",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2025-03-04",
+        "refrigerant": "R-32 (GWP:675 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'KUMXA421A%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/lg-42000-btu-215-seer2-3-zone-wall-mount-mini-split-heat-pump-system-r32-230v-227623.html",
+          "price": 7553,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "lg-4-ton-20-8-seer2-mini-split-kumxb481a",
+      "systemType": "mini-split",
+      "brand": "LG",
+      "title": "LG 48,000 BTU Multi F 20.8 SEER2 2 Zone Wall Mount Mini Split Heat Pump System – R32 | 230V -18 + 18",
+      "tons": 4,
+      "tier": "high",
+      "components": [
+        "KUMXB481A",
+        "2-KNUAB181A"
+      ],
+      "zones": 2,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 20.8,
+        "eer2": 12.8,
+        "hspf2": 9.5,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": null
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'KUMXB481A%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/lg-48000-btu-205-seer2-dual-zone-wall-mount-mini-split-heat-pump-system-r32-230v-227523.html",
+          "price": 5731,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "lg-5-ton-20-5-seer2-mini-split-kumxb601a",
+      "systemType": "mini-split",
+      "brand": "LG",
+      "title": "LG 60,000 BTU Multi F 20.5 SEER2 Tri Zone Wall Mount Mini Split Heat Pump System - R32 | 230V - 15 + 15 + 15",
+      "tons": 5,
+      "tier": "high",
+      "components": [
+        "KUMXB601A",
+        "3-KNMAB151A"
+      ],
+      "zones": 3,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 20.5,
+        "eer2": 12,
+        "hspf2": 10,
+        "source": "energystar",
+        "refrigerant": "R32",
+        "stages": null
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_1118034_KUMXB601A_08142024011725_4426679",
+        "matchedOn": "outdoor model + listed SEER2",
+        "ahriReferenceNumber": "215402343",
+        "outdoorModel": "KUMXB601A",
+        "indoorModel": null,
+        "furnaceModel": null,
+        "seer2": 20.5,
+        "eer2": 12,
+        "hspf2": 10,
+        "copAt5F": 2.01,
+        "heatingCapacity5F": 46000,
+        "heatingCapacity47F": 64000,
+        "coolingCapacity": 56000,
+        "outdoorBrand": "LG",
+        "coldClimate": false,
+        "mostEfficient": true,
+        "dateCertified": "2025-11-07",
+        "refrigerant": "R-32 (GWP:675 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'KUMXB601A%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/lg-60000-btu-205-seer2-3-zone-wall-mount-mini-split-heat-pump-system-r32-230v-227599.html",
+          "price": 7975,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "gree-2-5-ton-21-seer2-mini-split-mul30hp230v1r32ao",
+      "systemType": "mini-split",
+      "brand": "Gree",
+      "title": "Gree 30,000 BTU Livo 21 SEER2 2 Zone Wall Mount Mini Split Heat Pump System - R32 | 230V - 12 + 18",
+      "tons": 2.5,
+      "tier": "high",
+      "components": [
+        "MUL30HP230V1R32AO",
+        "LIV12HP230V1R32AH",
+        "LIV18HP230V1R32AH"
+      ],
+      "zones": 2,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 21,
+        "eer2": 13.6,
+        "hspf2": 10,
+        "source": "energystar",
+        "refrigerant": "R32",
+        "stages": null
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_1105164_MUL30HP230V1R32AO_07112024011140_7916064",
+        "matchedOn": "outdoor model + listed SEER2",
+        "ahriReferenceNumber": "215218915",
+        "outdoorModel": "MUL30HP230V1R32AO",
+        "indoorModel": null,
+        "furnaceModel": null,
+        "seer2": 21,
+        "eer2": 13.6,
+        "hspf2": 10,
+        "copAt5F": 2.07,
+        "heatingCapacity5F": 27000,
+        "heatingCapacity47F": 30000,
+        "coolingCapacity": 28400,
+        "outdoorBrand": "GREE",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2026-04-21",
+        "refrigerant": "R-32 (GWP:675 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'MUL30HP230V1R32AO%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/30-000-btu-gree-livo-21-seer2-dual-zone-wall-mount-mini-split-heat-pump-system-r32-230v-12-18.html",
+          "price": 4828,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "gree-3-5-ton-21-seer2-mini-split-mul42hp230v1r32ao",
+      "systemType": "mini-split",
+      "brand": "Gree",
+      "title": "Gree 42,000 BTU Livo 21 SEER2 2 Zone Wall Mount Mini Split Heat Pump System - R32 | 230V - 18 + 24",
+      "tons": 3.5,
+      "tier": "high",
+      "components": [
+        "MUL42HP230V1R32AO",
+        "LIV18HP230V1R32AH",
+        "LIV24HP230V1R32AH"
+      ],
+      "zones": 2,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 21,
+        "eer2": 13,
+        "hspf2": 10,
+        "source": "energystar",
+        "refrigerant": "R32",
+        "stages": null
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_1105164_MUL42HP230V1R32AO_07112024011143_76819",
+        "matchedOn": "outdoor model + listed SEER2",
+        "ahriReferenceNumber": "215218917",
+        "outdoorModel": "MUL42HP230V1R32AO",
+        "indoorModel": null,
+        "furnaceModel": null,
+        "seer2": 21,
+        "eer2": 13,
+        "hspf2": 10,
+        "copAt5F": 2.1,
+        "heatingCapacity5F": 37800,
+        "heatingCapacity47F": 42000,
+        "coolingCapacity": 42000,
+        "outdoorBrand": "GREE",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2026-04-21",
+        "refrigerant": "R-32 (GWP:675 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'MUL42HP230V1R32AO%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/42-000-btu-gree-livo-21-seer2-dual-zone-wall-mount-mini-split-heat-pump-system-r32-230v-18-24.html",
+          "price": 6902,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "mrcool-1-5-ton-19-2-seer2-mini-split-a-18-hp-230d-o",
+      "systemType": "mini-split",
+      "brand": "MRCOOL",
+      "title": "MRCOOL 18,000 BTU Advantage 19.2 SEER2 Single Zone Wall Mount Mini Split Heat Pump System – R454B w/ 16' Line Set| 230V",
+      "tons": 1.5,
+      "tier": "high",
+      "components": [
+        "A-18-HP-230D-O"
+      ],
+      "zones": 1,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 19.2,
+        "eer2": null,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": null,
+        "stages": null
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'A-18-HP-230D-O%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/18-000-btu-mrcool-advantage-5th-gen-19-2-seer2-single-zone-mini-split-r454b-230v-id198423.html",
+          "price": 1180,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "mrcool-4-ton-21-8-seer2-mini-split-diy-multi6-48hp-230",
+      "systemType": "mini-split",
+      "brand": "MRCOOL",
+      "title": "MRCOOL 48,000 BTU DIY 5th Gen 21.8 SEER2 4 Zone Wall Mount Mini Split Heat Pump System  R454B | 230V  6 + 9 + 12 + 12",
+      "tons": 4,
+      "tier": "high",
+      "components": [
+        "DIY-MULTI6-48HP-230",
+        "DIY-06-WMAH",
+        "DIY-09-WMAH",
+        "DIY-12-WMAH"
+      ],
+      "zones": 4,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 21.8,
+        "eer2": null,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": null,
+        "stages": null
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'DIY-MULTI6-48HP-230%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/48000-btu-mrcool-diy-5th-gen-21-8-seer2-four-zone-wall-mount-mini-split-heat-pump-system-r454b-230v-6-9-12-12diy-multi6-48hp-diy-06-hp-wmah-230-diy-09-hp-wmah-230-diy-12-hp-wmah-230-2.html",
+          "price": 5595,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "aciq-1-5-ton-20-seer2-mini-split-aciq-k18z-32-hp230b",
+      "systemType": "mini-split",
+      "brand": "ACiQ",
+      "title": "18,000 BTU ACiQ Essentials 20 SEER2 Single Zone Wall Mount Mini Split Heat Pump System w/16 Ft. Line Set - R32 | 230V",
+      "tons": 1.5,
+      "tier": "high",
+      "components": [
+        "ACIQ-K18Z-32-HP230B",
+        "ACIQ-K18W-W-32-HP230B"
+      ],
+      "zones": 1,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 20,
+        "eer2": 9.5,
+        "hspf2": 8.5,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": null
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'ACIQ-K18Z-32-HP230B%25'&$limit=200",
+      "ahriCertificateUrl": "https://hvacdirect.com/media/pdf/ACiQ-AHRI-ESS-K18W-BL-HP230B-K18Z-HP230B-091025.pdf",
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/18-000-btu-aciq-essentials-20-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-197955.html",
+          "price": 939.99,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "aciq-2-ton-20-seer2-mini-split-aciq-k24z-32-hp230b",
+      "systemType": "mini-split",
+      "brand": "ACiQ",
+      "title": "24,000 BTU ACiQ Essentials 20 SEER2 Single Zone Wall Mount Mini Split Heat Pump System w/16 Ft. Line Set - R32 | 230V",
+      "tons": 2,
+      "tier": "high",
+      "components": [
+        "ACIQ-K24Z-32-HP230B",
+        "ACIQ-K24W-W-32-HP230B"
+      ],
+      "zones": 1,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 20,
+        "eer2": 10.5,
+        "hspf2": 8.1,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": null
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'ACIQ-K24Z-32-HP230B%25'&$limit=200",
+      "ahriCertificateUrl": "https://hvacdirect.com/media/pdf/ACiQ-AHRI-ESS-K24W-BL-HP230B-K24Z-HP230B-091025.pdf",
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/24-000-btu-aciq-essentials-20-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-197957.html",
+          "price": 1359.99,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "carrier-1-5-ton-25-8-seer2-mini-split-37mpraq18aa3",
+      "systemType": "mini-split",
+      "brand": "Carrier",
+      "title": "18,000 BTU Carrier Infinity 25.8 SEER2 Single Zone Wall Mount Mini Split Heat Pump System – R454B | 230V",
+      "tons": 1.5,
+      "tier": "high",
+      "components": [
+        "37MPRAQ18AA3",
+        "45MPHAQ18XA3"
+      ],
+      "zones": 1,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 25.8,
+        "eer2": 15,
+        "hspf2": 16.2,
+        "source": "energystar",
+        "refrigerant": "R454B",
+        "stages": null
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_1020846_37MPRAQ18AA3_08182024230553_8583459",
+        "matchedOn": "outdoor + indoor model",
+        "ahriReferenceNumber": "215413144",
+        "outdoorModel": "37MPRAQ18AA3",
+        "indoorModel": "45MPHAQ18XA3",
+        "furnaceModel": null,
+        "seer2": 25.8,
+        "eer2": 15,
+        "hspf2": 16.2,
+        "copAt5F": 2.34,
+        "heatingCapacity5F": 22600,
+        "heatingCapacity47F": 20000,
+        "coolingCapacity": 18000,
+        "outdoorBrand": "Carrier",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2025-03-04",
+        "refrigerant": "R-454B (GWP:470 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'37MPRAQ18AA3%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/18-000-btu-carrier-infinity-25-8-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r454b-230v-213410.html",
+          "price": 4599.99,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "goodman-1-5-ton-14-3-seer2-heat-pump-condenser-glzs4ba1810",
+      "systemType": "heat-pump-only",
+      "brand": "Goodman",
+      "title": "Goodman 1.5 Ton 14.3 SEER2 Heat Pump Condenser - R32 Single Stage",
+      "tons": 1.5,
+      "tier": "standard",
+      "components": [
+        "GLZS4BA1810"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 14.3,
+        "eer2": null,
+        "hspf2": 7.8,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'GLZS4BA1810%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/1-5-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba1810.html",
+          "price": 2226,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "goodman-2-ton-14-3-seer2-heat-pump-condenser-glzs4ba2410",
+      "systemType": "heat-pump-only",
+      "brand": "Goodman",
+      "title": "Goodman 2 Ton 14.3 SEER2 Heat Pump Condenser - R32 Single Stage",
+      "tons": 2,
+      "tier": "standard",
+      "components": [
+        "GLZS4BA2410"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 14.3,
+        "eer2": null,
+        "hspf2": 7.8,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'GLZS4BA2410%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/2-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba2410.html",
+          "price": 2302,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "goodman-2-5-ton-14-3-seer2-heat-pump-condenser-glzs4ba3010",
+      "systemType": "heat-pump-only",
+      "brand": "Goodman",
+      "title": "Goodman 2.5 Ton 14.3 SEER2 Heat Pump Condenser - R32 Single Stage",
+      "tons": 2.5,
+      "tier": "standard",
+      "components": [
+        "GLZS4BA3010"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 14.3,
+        "eer2": null,
+        "hspf2": 7.8,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'GLZS4BA3010%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/2-5-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba3010.html",
+          "price": 2660,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "goodman-3-5-ton-14-3-seer2-heat-pump-condenser-glzs4ba4210",
+      "systemType": "heat-pump-only",
+      "brand": "Goodman",
+      "title": "Goodman 3.5 Ton 14.3 SEER2 Heat Pump Condenser - R32 Single Stage",
+      "tons": 3.5,
+      "tier": "standard",
+      "components": [
+        "GLZS4BA4210"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 14.3,
+        "eer2": null,
+        "hspf2": 7.8,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'GLZS4BA4210%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/3-5-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba4210.html",
+          "price": 3298,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "bosch-2-ton-15-seer2-heat-pump-condenser-bova-24rxb-m15s",
+      "systemType": "heat-pump-only",
+      "brand": "Bosch",
+      "title": "2 Ton 15 SEER2 Bosch Heat Pump Inverter Condenser R454B - IDS Light Series",
+      "tons": 2,
+      "tier": "standard",
+      "components": [
+        "BOVA-24RXB-M15S"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 15,
+        "eer2": 12,
+        "hspf2": 9,
+        "source": "retailer",
+        "refrigerant": "R454B",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'BOVA-24RXB-M15S%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/2-ton-15-seer2-bosch-heat-pump-inverter-condenser-r454b-ids-light-series-bova-24rxb-m15s.html",
+          "price": 3169,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "bosch-3-ton-20-seer2-heat-pump-condenser-bova-36rtb-m20s",
+      "systemType": "heat-pump-only",
+      "brand": "Bosch",
+      "title": "3 Ton 20 SEER2 Bosch Heat Pump Inverter Condenser R454B - IDS Light Series",
+      "tons": 3,
+      "tier": "high",
+      "components": [
+        "BOVA-36RTB-M20S"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 20,
+        "eer2": 13,
+        "hspf2": 9.5,
+        "source": "energystar",
+        "refrigerant": "R454B",
+        "stages": "Single Stage"
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_16809_BOVA-36RTB-M20S_05202024053021_9817356",
+        "matchedOn": "outdoor model + listed SEER2",
+        "ahriReferenceNumber": "214771710",
+        "outdoorModel": "BOVA-36RTB-M20S",
+        "indoorModel": "BIVA-24RCB-M20X",
+        "furnaceModel": null,
+        "seer2": 20,
+        "eer2": 13,
+        "hspf2": 9.5,
+        "copAt5F": 2,
+        "heatingCapacity5F": 17400,
+        "heatingCapacity47F": 24000,
+        "coolingCapacity": 24000,
+        "outdoorBrand": "Bosch",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2026-04-22",
+        "refrigerant": "R-454B (GWP:470 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'BOVA-36RTB-M20S%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/3-ton-20-seer2-bosch-heat-pump-inverter-condenser-r454b-ids-light-series-bova-36rtb-m20s.html",
+          "price": 5491,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "aciq-2-5-ton-18-seer2-heat-pump-condenser-aciq-30-hp-e-32",
+      "systemType": "heat-pump-only",
+      "brand": "ACiQ",
+      "title": "ACiQ Essentials 2.5 Ton 18 SEER2 High Efficiency Central Heat Pump Condenser - R32 Inverter",
+      "tons": 2.5,
+      "tier": "high",
+      "components": [
+        "ACIQ-30-HP-E-32"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 18,
+        "eer2": 10,
+        "hspf2": 8.5,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Variable Speed"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'ACIQ-30-HP-E-32%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/aciq-essentials-2-5-ton-18-seer2-high-efficiency-central-heat-pump-condenser-r32-inverter-aciq-30-hp-e-32.html",
+          "price": 1530,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "trane-3-ton-14-3-seer2-heat-pump-condenser-a5hp4036a1",
+      "systemType": "heat-pump-only",
+      "brand": "Trane",
+      "title": "Trane 3 Ton 14.3 SEER2 Heat Pump Condenser - R454B Single Stage - RunTru by Trane",
+      "tons": 3,
+      "tier": "standard",
+      "components": [
+        "A5HP4036A1"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 14.3,
+        "eer2": null,
+        "hspf2": 7.8,
+        "source": "retailer",
+        "refrigerant": "R454B",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'A5HP4036A1%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/3-ton-14-3-seer2-trane-heat-pump-condenser-r454b-single-stage-rt-series-174626.html",
+          "price": 2228,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "aciq-1-5-ton-17-seer2-heat-pump-system-aciq-18-hp-e-32",
+      "systemType": "central-heat-pump",
+      "brand": "ACiQ",
+      "title": "ACiQ Essentials 1.5 Ton 17 SEER2 High Efficiency Central Heat Pump Split System - R32 Inverter - Multi-Positional",
+      "tons": 1.5,
+      "tier": "mid",
+      "components": [
+        "ACIQ-18-HP-E-32",
+        "ACIQ-18-AH-E-32B"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 17,
+        "eer2": 11.25,
+        "hspf2": 8.6,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Variable Speed"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'ACIQ-18-HP-E-32%25'&$limit=200",
+      "ahriCertificateUrl": "https://hvacdirect.com/media/pdf/ACIQ-AHRI-CISTD-24TD-AH32-24TD-HP32-040926.pdf",
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/aciq-essentials-1-5-ton-17-seer2-high-efficiency-central-heat-pump-split-system-r32-inverter-219177.html",
+          "price": 2310,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "aciq-2-ton-17-seer2-heat-pump-system-aciq-24-hp-e-32",
+      "systemType": "central-heat-pump",
+      "brand": "ACiQ",
+      "title": "ACiQ Essentials 2 Ton 17 SEER2 High Efficiency Central Heat Pump Split System - R32 Inverter - Multi-Positional",
+      "tons": 2,
+      "tier": "mid",
+      "components": [
+        "ACIQ-24-HP-E-32",
+        "ACIQ-24-AH-E-32B"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 17,
+        "eer2": 10.5,
+        "hspf2": 8.5,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Variable Speed"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'ACIQ-24-HP-E-32%25'&$limit=200",
+      "ahriCertificateUrl": "https://hvacdirect.com/media/pdf/ACIQ-AHRI-CISTD-24TD-AH32-24TD-HP32-040926.pdf",
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/aciq-essentials-2-ton-17-seer2-high-efficiency-central-heat-pump-split-system-r32-inverter-219178.html",
+          "price": 2499,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "aciq-4-ton-16-seer2-heat-pump-system-aciq-48-hp-e-32",
+      "systemType": "central-heat-pump",
+      "brand": "ACiQ",
+      "title": "ACiQ Essentials 4 Ton 16 SEER2 High Efficiency Central Heat Pump Split System - R32 Inverter - Multi-Positional",
+      "tons": 4,
+      "tier": "mid",
+      "components": [
+        "ACIQ-48-HP-E-32",
+        "ACIQ-48-AH-E-32B"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 16,
+        "eer2": 9.5,
+        "hspf2": 9,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Variable Speed"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'ACIQ-48-HP-E-32%25'&$limit=200",
+      "ahriCertificateUrl": "https://hvacdirect.com/media/pdf/ACIQ-AHRI-CISTD-48TD-AH32-48TD-HP32-040926.pdf",
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/aciq-essentials-4-ton-16-seer2-high-efficiency-central-heat-pump-split-system-r32-inverter-219181.html",
+          "price": 3720,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "aciq-3-5-ton-16-7-seer2-heat-pump-system-aciq-42-hpd",
+      "systemType": "central-heat-pump",
+      "brand": "ACiQ",
+      "title": "ACIQ Extreme Series 3.5 Ton 16.7 SEER2 High Efficiency Heat Pump Split System - R454B Inverter - Multi-Positional",
+      "tons": 3.5,
+      "tier": "high",
+      "components": [
+        "ACIQ-42-HPD",
+        "ACIQ-42-AHD"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 16.7,
+        "eer2": 11.7,
+        "hspf2": 9.5,
+        "source": "energystar",
+        "refrigerant": "R454B",
+        "stages": "Variable Speed"
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_1145863_ACIQ-42-HPD_11082024223011_4897174",
+        "matchedOn": "outdoor + indoor model",
+        "ahriReferenceNumber": "216032231",
+        "outdoorModel": "ACIQ-42-HPD",
+        "indoorModel": "ACIQ-42-AHD",
+        "furnaceModel": null,
+        "seer2": 16.7,
+        "eer2": 11.7,
+        "hspf2": 9.5,
+        "copAt5F": 1.9,
+        "heatingCapacity5F": 46000,
+        "heatingCapacity47F": 50000,
+        "coolingCapacity": 42000,
+        "outdoorBrand": "1HVAC",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2026-09-16",
+        "refrigerant": "R-454B (GWP:470 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'ACIQ-42-HPD%25'&$limit=200",
+      "ahriCertificateUrl": "https://hvacdirect.com/media/pdf/ACiQ-AHRI-42-AHD-42-HPD-031725.pdf",
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/aciq-3-5-ton-16-7-seer2-high-efficiency-central-heat-pump-system-inverter-extreme-series-r454b-197648.html",
+          "price": 4599.99,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "bosch-2-ton-15-2-seer2-heat-pump-system-bovb-24rtb-m15s",
+      "systemType": "central-heat-pump",
+      "brand": "Bosch",
+      "title": "Bosch IDS Light Series 2 Ton 15.2 SEER2 Ducted Central Air Inverter Heat Pump Split System - R454B",
+      "tons": 2,
+      "tier": "high",
+      "components": [
+        "BOVB-24RTB-M15S",
+        "BIVA-24RXB-M15X"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 15.2,
+        "eer2": 10.6,
+        "hspf2": 8.5,
+        "source": "energystar",
+        "refrigerant": "R454B",
+        "stages": "Single Stage"
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_16809_BOVB-24RTB-M15S_10132025213040_28217895296",
+        "matchedOn": "outdoor + indoor model",
+        "ahriReferenceNumber": "217895296",
+        "outdoorModel": "BOVB-24RTB-M15S",
+        "indoorModel": "BIVA-24RXB-M15X",
+        "furnaceModel": null,
+        "seer2": 15.2,
+        "eer2": 10.6,
+        "hspf2": 8.5,
+        "copAt5F": 1.8,
+        "heatingCapacity5F": 17000,
+        "heatingCapacity47F": 24000,
+        "coolingCapacity": 24000,
+        "outdoorBrand": "Bosch",
+        "coldClimate": true,
+        "mostEfficient": false,
+        "dateCertified": "2025-10-17",
+        "refrigerant": "R-454B (GWP:470 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'BOVB-24RTB-M15S%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/bosch-ids-light-series-2-ton-15-2-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237749.html",
+          "price": 4854,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "bosch-3-ton-18-seer2-heat-pump-system-bovb-36rtb-m20s",
+      "systemType": "central-heat-pump",
+      "brand": "Bosch",
+      "title": "Bosch IDS Premium 3 Ton 18 SEER2 96% AFUE 80,000 BTU Hybrid Heat Pump & Furnace System - R454B Inverter - Upflow/Horizontal",
+      "tons": 3,
+      "tier": "high",
+      "components": [
+        "BOVB-36RTB-M20S",
+        "BMAC2430ABTA",
+        "BGH96M080B3C"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 18,
+        "eer2": 11.7,
+        "hspf2": 9,
+        "source": "energystar",
+        "refrigerant": "R454B",
+        "stages": "Single Stage"
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_16809_BOVB-36RTB-M20S_10132025213038_28217895269",
+        "matchedOn": "outdoor + indoor model",
+        "ahriReferenceNumber": "217895269",
+        "outdoorModel": "BOVB-36RTB-M20S",
+        "indoorModel": "BMAC2430ABTA",
+        "furnaceModel": "BGH96M080B3C",
+        "seer2": 18,
+        "eer2": 11.7,
+        "hspf2": 9,
+        "copAt5F": 1.85,
+        "heatingCapacity5F": 16800,
+        "heatingCapacity47F": 24000,
+        "coolingCapacity": 23800,
+        "outdoorBrand": "Bosch",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2026-09-01",
+        "refrigerant": "R-454B (GWP:470 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'BOVB-36RTB-M20S%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/bosch-3-ton-18-seer2-80-000-btu-ids-premium-connected-series-furnace-and-heat-pump-system-r454b-upflow-horizontal-237554.html",
+          "price": 9705,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "bosch-5-ton-16-5-seer2-heat-pump-system-bovb-60rtb-m20s",
+      "systemType": "central-heat-pump",
+      "brand": "Bosch",
+      "title": "Bosch IDS Premium 5 Ton 18 SEER2 96% AFUE 100,000 BTU Hybrid Heat Pump & Furnace System - R454B Inverter - Upflow/Horizontal",
+      "tons": 5,
+      "tier": "high",
+      "components": [
+        "BOVB-60RTB-M20S",
+        "BMAC4860DBTA",
+        "BGH96M100D5C"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 16.5,
+        "eer2": 11.7,
+        "hspf2": 8.8,
+        "source": "energystar",
+        "refrigerant": "R454B",
+        "stages": "Single Stage"
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_16809_BOVB-60RTB-M20S_10132025213039_28217895282",
+        "matchedOn": "outdoor + indoor model",
+        "ahriReferenceNumber": "217895282",
+        "outdoorModel": "BOVB-60RTB-M20S",
+        "indoorModel": "BMAC4248CBTA",
+        "furnaceModel": "BGH96M100C5C",
+        "seer2": 16.5,
+        "eer2": 11.7,
+        "hspf2": 8.8,
+        "copAt5F": 1.9,
+        "heatingCapacity5F": 32800,
+        "heatingCapacity47F": 46500,
+        "coolingCapacity": 44000,
+        "outdoorBrand": "Bosch",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2026-09-01",
+        "refrigerant": "R-454B (GWP:470 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'BOVB-60RTB-M20S%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/bosch-5-ton-18-seer2-100-000-btu-ids-premium-connected-series-furnace-and-heat-pump-system-r454b-upflow-horizontal-237588.html",
+          "price": 12485,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "bosch-5-ton-14-3-seer2-heat-pump-system-bovb-60rtb-m15s",
+      "systemType": "central-heat-pump",
+      "brand": "Bosch",
+      "title": "Bosch IDS Light Series 5 Ton 14.3 SEER2 Ducted Central Air Inverter Heat Pump Split System - R454B",
+      "tons": 5,
+      "tier": "standard",
+      "components": [
+        "BOVB-60RTB-M15S",
+        "BIVA-60RXB-M15X"
+      ],
+      "zones": null,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 14.3,
+        "eer2": 9,
+        "hspf2": 9,
+        "source": "retailer",
+        "refrigerant": "R454B",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'BOVB-60RTB-M15S%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/bosch-ids-light-series-5-ton-14-3-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237607.html",
+          "price": 7669,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "goodman-2-ton-14-5-seer2-ac-furnace-glxs5ba2410",
+      "systemType": "ac-furnace",
+      "brand": "Goodman",
+      "title": "Goodman 2 Ton 14.5 SEER2 96% AFUE 40,000 BTU Furnace and AC System - R32 Upflow",
+      "tons": 2,
+      "tier": "standard",
+      "components": [
+        "GLXS5BA2410",
+        "CAPTA2422A3",
+        "GR9T960403AN"
+      ],
+      "zones": null,
+      "afue": 96,
+      "furnaceBtu": 40000,
+      "specs": {
+        "seer2": 14.5,
+        "eer2": null,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'GLXS5BA2410%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/2-ton-14-5-seer2-96-afue-40-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-176198.html",
+          "price": 4938,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "goodman-2-5-ton-13-4-seer2-ac-furnace-glxs3bn3010",
+      "systemType": "ac-furnace",
+      "brand": "Goodman",
+      "title": "Goodman 2.5 Ton 13.4 SEER2 80% AFUE 60,000 BTU Furnace and AC System - R32 Upflow",
+      "tons": 2.5,
+      "tier": "standard",
+      "components": [
+        "GLXS3BN3010",
+        "CAPTA3026B3",
+        "GMVC800603BN"
+      ],
+      "zones": null,
+      "afue": 80,
+      "furnaceBtu": 60000,
+      "specs": {
+        "seer2": 13.4,
+        "eer2": null,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'GLXS3BN3010%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/2-5-ton-14-seer2-80-afue-60-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-181034.html",
+          "price": 2781,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "goodman-3-ton-13-4-seer2-ac-furnace-glxs3bn3610",
+      "systemType": "ac-furnace",
+      "brand": "Goodman",
+      "title": "Goodman 3 Ton 13.4 SEER2 80% AFUE 60,000 BTU Furnace and AC System - R32 Upflow",
+      "tons": 3,
+      "tier": "standard",
+      "components": [
+        "GLXS3BN3610",
+        "CAPTA3626B3",
+        "GMVC800604BN"
+      ],
+      "zones": null,
+      "afue": 80,
+      "furnaceBtu": 60000,
+      "specs": {
+        "seer2": 13.4,
+        "eer2": null,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'GLXS3BN3610%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/3-ton-14-seer2-80-afue-60-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-181073.html",
+          "price": 4928,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "goodman-3-5-ton-13-4-seer2-ac-furnace-glxs3bn4210",
+      "systemType": "ac-furnace",
+      "brand": "Goodman",
+      "title": "Goodman 3.5 Ton 13.4 SEER2 96% AFUE 120,000 BTU Furnace and AC System - R32 Upflow",
+      "tons": 3.5,
+      "tier": "standard",
+      "components": [
+        "GLXS3BN4210",
+        "CAPTA4230D3",
+        "GM9C961205DN"
+      ],
+      "zones": null,
+      "afue": 96,
+      "furnaceBtu": 120000,
+      "specs": {
+        "seer2": 13.4,
+        "eer2": null,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'GLXS3BN4210%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/3-5-ton-13-8-seer2-96-afue-120-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-id180680.html",
+          "price": 3342,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "goodman-4-ton-14-5-seer2-ac-furnace-glxs4ba4810",
+      "systemType": "ac-furnace",
+      "brand": "Goodman",
+      "title": "Goodman 4 Ton 14.5 SEER2 96% AFUE 120,000 BTU Furnace and AC System - R32 Upflow",
+      "tons": 4,
+      "tier": "standard",
+      "components": [
+        "GLXS4BA4810",
+        "CAPTA6030D3",
+        "GM9C961205DN"
+      ],
+      "zones": null,
+      "afue": 96,
+      "furnaceBtu": 120000,
+      "specs": {
+        "seer2": 14.5,
+        "eer2": null,
+        "hspf2": null,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": "Single Stage"
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/tyr2-hhgu.json?$where=upper(model_number)%20like%20'GLXS4BA4810%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/4-ton-14-5-seer2-96-afue-120-000-btu-goodman-gas-furnace-and-r32-air-conditioner-system-upflow-id180713.html",
+          "price": 3977,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "daikin-2-ton-21-seer2-mini-split-rxf24axvju",
+      "systemType": "mini-split",
+      "brand": "Daikin",
+      "title": "Daikin 24,000 BTU Oterra 21 SEER2 Single Zone Wall Mount Mini Split Heat Pump System - R32 | 230V",
+      "tons": 2,
+      "tier": "high",
+      "components": [
+        "RXF24AXVJU",
+        "FTXF24AXVJU"
+      ],
+      "zones": 1,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 21,
+        "eer2": 12,
+        "hspf2": 9.1,
+        "source": "energystar",
+        "refrigerant": "R32",
+        "stages": null
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_1035638_RXF24AXVJU_01122024180944_1673738",
+        "matchedOn": "outdoor + indoor model",
+        "ahriReferenceNumber": "213895722",
+        "outdoorModel": "RXF24AXVJU",
+        "indoorModel": "FTXF24AXVJU",
+        "furnaceModel": null,
+        "seer2": 21,
+        "eer2": 12,
+        "hspf2": 9.1,
+        "copAt5F": 1.9,
+        "heatingCapacity5F": 10800,
+        "heatingCapacity47F": 23600,
+        "coolingCapacity": 22400,
+        "outdoorBrand": "Daikin",
+        "coldClimate": false,
+        "mostEfficient": false,
+        "dateCertified": "2025-11-20",
+        "refrigerant": "R-32 (GWP:675 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'RXF24AXVJU%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/24-000-btu-daikin-oterra-21-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-194694.html",
+          "price": 3018,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "daikin-1-5-ton-21-seer2-mini-split-rxt18avju9",
+      "systemType": "mini-split",
+      "brand": "Daikin",
+      "title": "Daikin 18,000 BTU Aurora 21 SEER2 Single Zone Wall Mount Mini Split Heat Pump System - R32 | 230V",
+      "tons": 1.5,
+      "tier": "high",
+      "components": [
+        "RXT18AVJU9",
+        "FTXV18AVJU9"
+      ],
+      "zones": 1,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 21,
+        "eer2": 12,
+        "hspf2": 10.5,
+        "source": "retailer",
+        "refrigerant": "R32",
+        "stages": null
+      },
+      "energyStar": null,
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'RXT18AVJU9%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/18-000-btu-daikin-aurora-21-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r32-230v-194700.html",
+          "price": 3336,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
+        }
+      ]
+    },
+    {
+      "slug": "carrier-3-ton-19-6-seer2-mini-split-37mahaq33aa3",
+      "systemType": "mini-split",
+      "brand": "Carrier",
+      "title": "33,000 BTU Carrier Infinity 19.6 SEER2 Single Zone Wall Mount Mini Split Heat Pump System – R454B | 230V",
+      "tons": 3,
+      "tier": "high",
+      "components": [
+        "37MAHAQ33AA3",
+        "45MAHAQ33XA3"
+      ],
+      "zones": 1,
+      "afue": null,
+      "furnaceBtu": null,
+      "specs": {
+        "seer2": 19.6,
+        "eer2": 12,
+        "hspf2": 10.5,
+        "source": "energystar",
+        "refrigerant": "R454B",
+        "stages": null
+      },
+      "energyStar": {
+        "dataset": "w7cv-9xjt",
+        "apiUrl": "https://data.energystar.gov/resource/w7cv-9xjt.json?energy_star_model_identifier=ES_1020846_37MAHAQ33AA3_07272024050515_4368231",
+        "matchedOn": "outdoor + indoor model",
+        "ahriReferenceNumber": "215323747",
+        "outdoorModel": "37MAHAQ33AA3",
+        "indoorModel": "45MAHAQ33XA3",
+        "furnaceModel": null,
+        "seer2": 19.6,
+        "eer2": 12,
+        "hspf2": 10.5,
+        "copAt5F": 1.98,
+        "heatingCapacity5F": 35000,
+        "heatingCapacity47F": 36000,
+        "coolingCapacity": 33000,
+        "outdoorBrand": "Carrier",
+        "coldClimate": true,
+        "mostEfficient": true,
+        "dateCertified": "2026-09-22",
+        "refrigerant": "R-454B (GWP:470 | Lower GWP)",
+        "compressorStaging": "Continuously variable"
+      },
+      "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'37MAHAQ33AA3%25'&$limit=200",
+      "ahriCertificateUrl": null,
+      "prices": [
+        {
+          "retailer": "HVACDirect",
+          "url": "https://hvacdirect.com/33000-btu-carrier-infinity-19-6-seer2-single-zone-wall-mount-mini-split-heat-pump-system-r454b-230v-213416.html",
+          "price": 5774.99,
+          "fetchedAt": "2026-10-28T18:14:46.503Z"
         }
       ]
     }
@@ -2943,7 +5820,7 @@
       "url": "https://hvacdirect.com/3-8-ll-x-3-4-sl-x-3-8-insulation-line-set-30-feet-ls38583830.html",
       "price": 289,
       "retailer": "HVACDirect",
-      "fetchedAt": "2026-10-25T03:29:47.028Z"
+      "fetchedAt": "2026-10-28T18:14:46.503Z"
     }
   ],
   "failures": [],
