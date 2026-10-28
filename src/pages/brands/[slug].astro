@@ -17,8 +17,9 @@ const auditHref = `/auditor/?brand=${encodeURIComponent(b.name)}`;
 const shortType: Record<string, string> = { 'central-heat-pump': 'ducted heat pumps', 'mini-split': 'mini-splits', 'ac-furnace': 'AC + furnace systems', 'heat-pump-only': 'heat pump condensers' };
 const cold = b.systems.filter((s) => s.energyStar?.coldClimate);
 const others = BRANDS.filter((x) => x.slug !== b.slug);
-const title = `${b.name} HVAC prices: listed equipment vs installed cost | TonnageCheck`;
-const description = `${b.systems.length} ${b.name} systems with sourced prices from ${usd(b.priceMin)} to ${usd(b.priceMax)} (${b.tonnages[0]}–${b.tonnages[b.tonnages.length - 1]} tons), next to DOE-lab installed benchmarks. Audit a ${b.name} quote free.`;
+const refRow = b.rows.find((r) => r.tons === 3) ?? b.rows[0];
+const title = `${usd(b.priceMin)} Equip vs ${fmtRange(refRow.fair)} Installed: ${b.name} HVAC`;
+const description = `${b.systems.length} ${b.name} systems listed from ${usd(b.priceMin)} to ${usd(b.priceMax)} (${b.tonnages[0]}–${b.tonnages[b.tonnages.length - 1]}T) vs ${fmtRange(refRow.fair)} installed benchmark. Audit a ${b.name} quote free.`;
 const ld = [
   {
     '@context': 'https://schema.org', '@type': 'CollectionPage', name: `${b.name} HVAC equipment prices`, url: `${SITE.url}/brands/${b.slug}/`, description,

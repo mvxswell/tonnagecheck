@@ -2,16 +2,21 @@
 import Base from '../../layouts/Base.astro';
 import Newsletter from '../../components/Newsletter.astro';
 import { BRANDS } from '../../data/brands';
-import { SYSTEMS, SYSTEM_TYPE_LABEL } from '../../data/equipment';
-import { usd, seedDateLabel } from '../../lib/facts';
+import { SYSTEMS, SYSTEM_TYPE_LABEL, lowestPrice } from '../../data/equipment';
+import { fairRange, usd, fmtRange, seedDateLabel } from '../../lib/facts';
 import { SITE } from '../../config';
 const shortType: Record<string, string> = { 'central-heat-pump': 'ducted heat pump', 'mini-split': 'mini-split', 'ac-furnace': 'AC + furnace', 'heat-pump-only': 'condenser' };
+const minEq = Math.min(...SYSTEMS.map(lowestPrice));
+const maxEq = Math.max(...SYSTEMS.map(lowestPrice));
+const f3 = fairRange('central-heat-pump', 3);
+const title = `${usd(minEq)}–${usd(maxEq)} Equip vs ${fmtRange(f3)} Installed: Brands`;
+const description = `Compare ${BRANDS.length} HVAC brands (${SYSTEMS.length} systems from ${usd(minEq)} to ${usd(maxEq)} equipment vs ${fmtRange(f3)} 3-ton installed benchmark): Goodman, Trane, Bosch, Mitsubishi & more.`;
 const ld = {
   '@context': 'https://schema.org', '@type': 'ItemList', name: 'HVAC brands with listed equipment prices',
   itemListElement: BRANDS.map((b, i) => ({ '@type': 'ListItem', position: i + 1, name: `${b.name} HVAC prices`, url: `${SITE.url}/brands/${b.slug}/` })),
 };
 ---
-<Base title="HVAC brand prices compared: Goodman, Trane, LG, Mitsubishi & more | TonnageCheck" description={`Listed equipment prices and DOE-lab installed benchmarks for ${BRANDS.length} HVAC brands, ${SYSTEMS.length} real systems: heat pumps, mini-splits and AC + furnace. Audit a quote for any brand.`} jsonld={ld}>
+<Base title={title} description={description} jsonld={ld}>
   <p class="crumbs"><a href="/">Home</a> / Brands</p>
   <h1>HVAC brands: listed prices vs installed benchmarks</h1>
   <p class="lead">Every brand below has real listings with sourced prices (captured {seedDateLabel}). Pick a brand to see its equipment price span by size next to what installation should cost, then audit a quote for that brand.</p>

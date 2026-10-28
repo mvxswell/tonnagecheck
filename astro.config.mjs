@@ -37,10 +37,17 @@ function siteChecks() {
           else seenD.set(desc, path);
           if (canonical !== `${SITE}${path}`) errors.push(`${path}: canonical ${canonical}`);
           if (/<meta name="robots" content="[^"]*noindex/.test(html)) noindex.push(`${SITE}${path}`);
-          if (path.startsWith('/states/') && path !== '/states/') {
-            if (title && title.length >= 60) errors.push(`${path}: title is ${title.length} chars (must be < 60)`);
-            if (desc && desc.length >= 160) errors.push(`${path}: description is ${desc.length} chars (must be < 160)`);
-            if (!/\$[\d,]+–\$[\d,]+/.test(title || '')) errors.push(`${path}: title does not lead with a dollar range`);
+          if (
+            (path.startsWith('/states/') && path !== '/states/') ||
+            path.startsWith('/systems/') ||
+            path.startsWith('/tonnage/') ||
+            path.startsWith('/brands/') ||
+            path.startsWith('/guides/') ||
+            path.startsWith('/compare/')
+          ) {
+            if (title && title.length >= 60) errors.push(`${path}: title is ${title.length} chars (must be < 60): "${title}"`);
+            if (desc && desc.length >= 160) errors.push(`${path}: description is ${desc.length} chars (must be < 160): "${desc}"`);
+            if (!/\$[\d,]+(–| vs )\$[\d,]+/.test(title || '')) errors.push(`${path}: title does not include a dollar range or comparison: "${title}"`);
           }
           for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
             try { JSON.parse(m[1]); } catch { errors.push(`${path}: JSON-LD does not parse`); }

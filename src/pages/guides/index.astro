@@ -2,8 +2,13 @@
 import Base from '../../layouts/Base.astro';
 import Newsletter from '../../components/Newsletter.astro';
 import { GUIDES } from '../../data/guides/index';
+import { fairRange, equipmentStats, usd, fmtRange } from '../../lib/facts';
+const eq3 = equipmentStats('central-heat-pump', 3);
+const f3 = fairRange('central-heat-pump', 3);
+const title = `${usd(eq3.min)} Equip vs ${fmtRange(f3)} Installed: ${GUIDES.length} HVAC Guides`;
+const description = `${GUIDES.length} HVAC quote & line-item guides comparing ${usd(eq3.min)}–${usd(eq3.max)} 3-ton equipment vs ${fmtRange(f3)} installed benchmarks, add-ons, diagnostics & rebates.`;
 ---
-<Base title="HVAC buyer guides: quotes, sizing, rebates & contractors | TonnageCheck" description="Plain-English guides for homeowners buying a heat pump, AC or furnace: spotting rip-off quotes, sizing, equipment vs installed cost, choosing a contractor, rebates and AHRI certificates.">
+<Base title={title} description={description}>
   <p class="crumbs"><a href="/">Home</a> / Guides</p>
   <h1>Buyer guides</h1>
   <p class="lead">Written from the buyer's side of the table. Every price in these guides comes from our sourced data, and every rule links to the agency that wrote it.</p>

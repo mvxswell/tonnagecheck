@@ -9,9 +9,9 @@ import type { Guide } from './types';
 export const PRODUCT_GUIDES: Guide[] = [
   {
     slug: 'goodman-vs-trane-vs-carrier-equipment-markup',
-    title: 'Goodman vs Trane vs Carrier: equipment price and installed markup compared | TonnageCheck',
+    get title() { return `${usd(brandByName('Goodman')!.priceMin)} Equip vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: Goodman vs Trane`; },
     h1: 'Goodman vs Trane vs Carrier: what the equipment costs and how much is markup',
-    description: 'Listed equipment prices for Goodman, Trane and Carrier side by side, the DOE-lab installed benchmark for the same sizes, and how much of a brand-name quote is markup.',
+    get description() { return `Goodman (${usd(brandByName('Goodman')!.priceMin)}+), Trane (${usd(brandByName('Trane')!.priceMin)}+) & Carrier equipment prices vs ${fmtRange(fairRange('central-heat-pump', 3))} 3-ton installed benchmarks.`; },
     updated: today,
     related: { brands: ['Goodman', 'Trane', 'Carrier'], tons: [3], systems: { brand: ['Goodman', 'Trane', 'Carrier'] } },
     audit: { systemType: 'central-heat-pump', tons: 3, brand: 'Trane' },
@@ -68,9 +68,9 @@ ${systemsTable([...carrierMs, ...otherMs].sort((x, y) => x.tons - y.tons || lowe
   },
   {
     slug: 'bosch-ids-inverter-heat-pump-cost',
-    title: 'Bosch IDS inverter heat pump cost: listed price vs installed benchmark | TonnageCheck',
+    get title() { return `${usd(brandByName('Bosch')!.priceMin)} Equip vs ${fmtRange(fairRange('central-heat-pump', 3, 'high'))} Installed: Bosch IDS Cost`; },
     h1: 'Bosch IDS inverter heat pump cost',
-    description: 'What Bosch IDS inverter heat pump systems list for by size, their SEER2/HSPF2 ratings, and what a fair installed price looks like, including how to check an IDS 2.0 quote.',
+    get description() { return `Bosch IDS inverter heat pumps list from ${usd(brandByName('Bosch')!.priceMin)} to ${usd(brandByName('Bosch')!.priceMax)} vs ${fmtRange(fairRange('central-heat-pump', 3, 'high'))} 3-ton installed benchmark.`; },
     updated: today,
     related: { brands: ['Bosch'], tons: [2, 3, 5], systems: { brand: 'Bosch' } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'high', brand: 'Bosch' },
@@ -108,9 +108,9 @@ ${sizes.map((t) => { const s = cheapest(bosch.filter((x) => x.tons === t)); cons
   },
   {
     slug: 'mitsubishi-hyper-heat-cost',
-    title: 'Mitsubishi Hyper-Heat (H2i) cost: listed price, cold-climate specs & installed benchmark | TonnageCheck',
+    get title() { return `${usd(brandByName('Mitsubishi')!.priceMin)} Equip vs ${fmtRange(fairRange('mini-split', 2, 'high'))} Installed: Mitsubishi H2i`; },
     h1: 'Mitsubishi Hyper-Heat (H2i) cost',
-    description: 'Listed prices for Mitsubishi H2i Hyper-Heat and other Mitsubishi heat pumps, their ENERGY STAR cold-climate ratings (COP and capacity at 5°F), and fair installed prices.',
+    get description() { return `Mitsubishi H2i Hyper-Heat heat pumps list from ${usd(brandByName('Mitsubishi')!.priceMin)} to ${usd(brandByName('Mitsubishi')!.priceMax)} vs ${fmtRange(fairRange('mini-split', 2, 'high'))} 2-ton installed benchmark.`; },
     updated: today,
     related: { brands: ['Mitsubishi'], tons: [2, 2.5, 3], systems: { brand: 'Mitsubishi' } },
     audit: { systemType: 'mini-split', tons: 2, tier: 'high', brand: 'Mitsubishi' },

@@ -5,6 +5,10 @@ import { PRODUCT_GUIDES } from './products';
 import { PRICING_GUIDES } from './pricing';
 import { TECHNICAL_GUIDES } from './technical';
 import { COMPARISON_GUIDES } from './comparisons';
+import { ADDON_GUIDES } from './addons';
+import { DIAGNOSTIC_GUIDES } from './diagnostics';
+import { INSTALLATION_GUIDES } from './installation';
+import { SALES_TACTICS_GUIDES } from './sales-tactics';
 import type { Guide } from './types';
 
 export type { Guide };
@@ -25,4 +29,8 @@ export const GUIDES: Guide[] = [
   ...PRICING_GUIDES,
   ...TECHNICAL_GUIDES,
   ...COMPARISON_GUIDES,
+  ...ADDON_GUIDES,
+  ...DIAGNOSTIC_GUIDES,
+  ...INSTALLATION_GUIDES,
+  ...SALES_TACTICS_GUIDES,
 ];
