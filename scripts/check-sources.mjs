@@ -26,6 +26,7 @@ function currentPrice(html, url) {
 const checks = [
   ...seed.systems.flatMap((s) => s.prices.map((p) => ({ name: s.slug, url: p.url, price: p.price }))),
   ...seed.lineSets.map((l) => ({ name: l.label, url: l.url, price: l.price })),
+  ...(seed.accessories || []).map((a) => ({ name: a.label, url: a.url, price: a.price })),
 ];
 let bad = 0;
 for (const c of checks) {

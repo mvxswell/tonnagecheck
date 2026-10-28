@@ -1,0 +1,286 @@
+---
+import Base from '../../layouts/Base.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import {
+  ALL_PART_LISTINGS,
+  PART_CATEGORIES,
+  PART_CATALOG_STATS,
+  REMDB_NEW_CIRCUIT_DELTA_CPI,
+  REMDB_PANEL_200A_CPI,
+  REMDB_SMART_TSTAT_CPI,
+} from '../../data/parts';
+import { usd, seedDateLabel } from '../../lib/facts';
+import { SITE } from '../../config';
+
+const fmtExact = (n: number) =>
+  Number.isInteger(n)
+    ? `$${n.toLocaleString('en-US')}`
+    : `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+const minUsd = usd(PART_CATALOG_STATS.minPrice);
+const maxUsd = usd(PART_CATALOG_STATS.maxPrice);
+const title = `${minUsd}–${maxUsd} HVAC Parts, Line Sets & Add-Ons Directory`;
+const description = `Compare ${PART_CATALOG_STATS.totalParts} live-sourced HVAC parts (${minUsd}–${maxUsd}): copper line sets, 5–20 kW heat strips, pads, disconnects, whips, pumps & mini-split brackets.`;
+
+const ld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'HVAC Installation Parts, Line Sets & Add-On Accessories Wholesale Price Directory',
+    url: `${SITE.url}/parts/`,
+    description,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: PART_CATEGORIES.length,
+      itemListElement: PART_CATEGORIES.map((c, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: c.name,
+        url: `${SITE.url}/parts/${c.slug}/`,
+      })),
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE.url}/` },
+      { '@type': 'ListItem', position: 2, name: 'Parts & Add-Ons Directory', item: `${SITE.url}/parts/` },
+    ],
+  },
+];
+---
+<Base title={title} description={description} jsonld={ld}>
+  <p class="crumbs"><a href="/">Home</a> / Parts &amp; Add-Ons</p>
+  <h1>HVAC installation parts, line sets &amp; add-on accessories directory</h1>
+  <p class="lead">
+    Contractors frequently pad heat pump and central AC replacement quotes with $500–$2,500 "code upgrade" or "installation accessory" bundles.
+    Below are <b>{PART_CATALOG_STATS.totalParts} real, live-sourced HVAC parts and accessories</b> across {PART_CATEGORIES.length} core categories (captured {seedDateLabel} from public online distributor listings), paired with DOE/NREL REMDB scope-adder benchmarks so you can audit every line item on your quote.
+  </p>
+
+  <div class="grid kp">
+    <div class="card">
+      <div class="small muted">Verified parts &amp; line sets</div>
+      <div class="v num">{PART_CATALOG_STATS.totalParts} SKUs</div>
+      <div class="small muted">Across {PART_CATEGORIES.length} installation categories · Verified {seedDateLabel}</div>
+    </div>
+    <div class="card">
+      <div class="small muted">Listed part price span</div>
+      <div class="v num">{fmtExact(PART_CATALOG_STATS.minPrice)}–{fmtExact(PART_CATALOG_STATS.maxPrice)}</div>
+      <div class="small muted">Median part price: {fmtExact(PART_CATALOG_STATS.medianPrice)} (online retail)</div>
+    </div>
+    <div class="card">
+      <div class="small muted">Auditor scope adders</div>
+      <div class="v num">$289 / ${REMDB_SMART_TSTAT_CPI.mid} / ${REMDB_PANEL_200A_CPI.mid.toLocaleString('en-US')}</div>
+      <div class="small muted">30 ft line set ($289) · Smart t-stat (${REMDB_SMART_TSTAT_CPI.mid}) · 200A panel (${REMDB_PANEL_200A_CPI.mid.toLocaleString('en-US')})</div>
+    </div>
+  </div>
+
+  <p style="margin:14px 0 24px">
+    <a class="btn" href="/auditor/">Audit my HVAC quote &amp; add-ons</a>
+    <a class="btn ghost" href="/guides/">Read line-item add-on guides</a>
+  </p>
+
+  <h2>Browse by installation part &amp; add-on category</h2>
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:14px 0 26px">
+    {PART_CATEGORIES.map((cat) => (
+      <div class="card" style="display:flex;flex-direction:column;justify-content:space-between">
+        <div>
+          <div class="small muted">{cat.badge}</div>
+          <h3 style="margin:6px 0"><a href={`/parts/${cat.slug}/`}>{cat.name}</a></h3>
+          <p class="small" style="margin:6px 0 10px">{cat.summary}</p>
+        </div>
+        <div>
+          <div class="small num" style="margin-bottom:8px">
+            <b>{cat.count} verified SKUs</b> · Listed: <b>{fmtExact(cat.minPrice)}–{fmtExact(cat.maxPrice)}</b> (median {fmtExact(cat.medianPrice)})
+          </div>
+          <a class="btn ghost" href={`/parts/${cat.slug}/`} style="padding:6px 12px;font-size:.86rem">View all {cat.count} {cat.shortName} SKUs →</a>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <h2>Category summary &amp; NREL REMDB / Quote Auditor scope benchmarks</h2>
+  <p class="small muted">
+    In the <a href="/auditor/">TonnageCheck Quote Auditor</a>, base system replacement costs come from the DOE National Laboratory of the Rockies (NREL/NLR) <a href="https://remdb.nlr.gov/">Residential Efficiency Measures Database (REMDB)</a> restated with BLS CPI-U. Standard installation trim (pad, disconnect, whip, primary drain, brazing, nitrogen purge, and vacuum evacuation) is already inside the turnkey replacement regression.
+  </p>
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th class="r">Verified SKUs</th>
+          <th class="r">Listed hardware span</th>
+          <th class="r">Median part price</th>
+          <th>How the Quote Auditor &amp; REMDB treat this line item</th>
+        </tr>
+      </thead>
+      <tbody>
+        {PART_CATEGORIES.map((cat) => (
+          <tr>
+            <td><a href={`/parts/${cat.slug}/`}><b>{cat.shortName}</b></a></td>
+            <td class="r num">{cat.count}</td>
+            <td class="r num">{fmtExact(cat.minPrice)}–{fmtExact(cat.maxPrice)}</td>
+            <td class="r num">{fmtExact(cat.medianPrice)}</td>
+            <td class="small">{cat.auditorAdderNote}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Federal REMDB electrical &amp; control adders (CPI-restated)</h2>
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th>REMDB scope adder class</th>
+          <th class="r">Low (CPI-restated)</th>
+          <th class="r">Median / Mid</th>
+          <th class="r">High (CPI-restated)</th>
+          <th>Primary source &amp; scope note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>New 30 ft 3/8" × 3/4" copper line set (material)</b></td>
+          <td class="r num">$289</td>
+          <td class="r num">$289</td>
+          <td class="r num">$289</td>
+          <td class="small">HVACDirect SKU <code>LS38583830</code>; brazing &amp; evacuation labor are inside the REMDB system benchmark.</td>
+        </tr>
+        <tr>
+          <td><b>Ducted heat pump new 240V branch circuit delta</b> <span class="badge b-est">est.</span></td>
+          <td class="r num">{usd(REMDB_NEW_CIRCUIT_DELTA_CPI.low)}</td>
+          <td class="r num">{usd(REMDB_NEW_CIRCUIT_DELTA_CPI.mid)}</td>
+          <td class="r num">{usd(REMDB_NEW_CIRCUIT_DELTA_CPI.high)}</td>
+          <td class="small">Difference between REMDB "Centrally ducted, with new circuit" and "Centrally ducted" at 3T (<a href="https://remdb.nlr.gov/">REMDB</a>).</td>
+        </tr>
+        <tr>
+          <td><b>Smart thermostat, installed</b> <span class="badge b-est">est.</span></td>
+          <td class="r num">{usd(REMDB_SMART_TSTAT_CPI.low)}</td>
+          <td class="r num">{usd(REMDB_SMART_TSTAT_CPI.mid)}</td>
+          <td class="r num">{usd(REMDB_SMART_TSTAT_CPI.high)}</td>
+          <td class="small">REMDB "Space Conditioning → Thermostat → Smart" retrofit distribution (<a href="https://remdb.nlr.gov/">REMDB</a>).</td>
+        </tr>
+        <tr>
+          <td><b>200A main electrical panel upgrade</b> <span class="badge b-est">est.</span></td>
+          <td class="r num">{usd(REMDB_PANEL_200A_CPI.low)}</td>
+          <td class="r num">{usd(REMDB_PANEL_200A_CPI.mid)}</td>
+          <td class="r num">{usd(REMDB_PANEL_200A_CPI.high)}</td>
+          <td class="small">REMDB "Electrical → Electric Panel → 200A" retrofit distribution (<a href="https://remdb.nlr.gov/">REMDB</a>).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Complete directory of all {PART_CATALOG_STATS.totalParts} verified HVAC parts &amp; accessories</h2>
+  <p class="small muted">Filter by keyword, SKU, or category below. Every price links directly to the live retailer product page verified on {seedDateLabel}.</p>
+
+  <div class="card" style="margin:12px 0">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <label style="flex:1;min-width:220px;margin:0">
+        Search by part name, size, or SKU
+        <input id="part-q" type="search" placeholder="e.g. 3/8 x 7/8, 10 kW, SS1, disconnect, pad, Quick-Sling..." />
+      </label>
+      <label style="min-width:220px;margin:0">
+        Filter by category
+        <select id="part-cat">
+          <option value="">All {PART_CATEGORIES.length} categories ({PART_CATALOG_STATS.totalParts} SKUs)</option>
+          {PART_CATEGORIES.map((c) => (
+            <option value={c.slug}>{c.shortName} ({c.count})</option>
+          ))}
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <div class="tablewrap">
+    <table id="parts-all-table">
+      <thead>
+        <tr>
+          <th>Part / specification</th>
+          <th>Category</th>
+          <th>SKU / Model</th>
+          <th class="r">Listed price</th>
+          <th>Verified source</th>
+        </tr>
+      </thead>
+      <tbody>
+        {ALL_PART_LISTINGS.map((item) => {
+          const catObj = PART_CATEGORIES.find((c) => c.slug === item.category)!;
+          return (
+            <tr data-cat={item.category} data-text={`${item.label} ${item.title} ${item.sku ?? ''} ${item.subGroup}`.toLowerCase()}>
+              <td>
+                <b>{item.label}</b>
+                <div class="small muted">{item.subGroup}</div>
+              </td>
+              <td><a href={`/parts/${item.category}/`}>{catObj.shortName}</a></td>
+              <td class="num"><code>{item.sku ?? '—'}</code></td>
+              <td class="r num"><b>{fmtExact(item.price)}</b></td>
+              <td class="small">
+                <a href={item.url} rel="noopener">{item.retailer}</a>
+                <span class="muted"> ({item.fetchedAt.slice(0, 10)})</span>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+
+  <script is:inline>
+    (() => {
+      const q = document.getElementById('part-q');
+      const cat = document.getElementById('part-cat');
+      const rows = Array.from(document.querySelectorAll('#parts-all-table tbody tr'));
+      function apply() {
+        const term = (q?.value || '').trim().toLowerCase();
+        const cVal = cat?.value || '';
+        for (const r of rows) {
+          const matchCat = !cVal || r.getAttribute('data-cat') === cVal;
+          const matchText = !term || (r.getAttribute('data-text') || '').includes(term);
+          r.style.display = matchCat && matchText ? '' : 'none';
+        }
+      }
+      q?.addEventListener('input', apply);
+      cat?.addEventListener('change', apply);
+    })();
+  </script>
+
+  <h2>Line-item add-on &amp; diagnostic guides</h2>
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:12px 0 24px">
+    <a class="card" href="/guides/hvac-line-set-flush-vs-copper-line-set-replacement-cost/" style="text-decoration:none;color:inherit">
+      <div class="small muted">Line Sets</div>
+      <div style="font-weight:700;margin:4px 0">Line Set Flush vs New Copper Line Set Replacement Cost</div>
+      <div class="small muted">When Rx11 flushing is enough vs when new 15–50 ft copper is required.</div>
+    </a>
+    <a class="card" href="/guides/electric-heat-strip-aux-heat-5kw-10kw-15kw-cost/" style="text-decoration:none;color:inherit">
+      <div class="small muted">Auxiliary Heat</div>
+      <div style="font-weight:700;margin:4px 0">Electric Heat Strip (5 kW, 10 kW, 15 kW) Aux Heat Cost Guide</div>
+      <div class="small muted">Hardware prices, breaker sizing, and balance-point lockout settings.</div>
+    </a>
+    <a class="card" href="/guides/200a-panel-upgrade-and-heat-strip-adders/" style="text-decoration:none;color:inherit">
+      <div class="small muted">Electrical Scope</div>
+      <div style="font-weight:700;margin:4px 0">200A Panel Upgrade &amp; Heat Strip Adders on Heat Pump Quotes</div>
+      <div class="small muted">How right-sizing aux heat strips avoids unnecessary panel upgrades.</div>
+    </a>
+    <a class="card" href="/guides/condenser-pad-disconnect-box-whip-surge-protector-add-ons/" style="text-decoration:none;color:inherit">
+      <div class="small muted">Outdoor Trim</div>
+      <div style="font-weight:700;margin:4px 0">Condenser Pad, Disconnect Box, Whip &amp; Surge Protector Add-Ons</div>
+      <div class="small muted">Verify $20.89–$148 hardware against $1,200+ "code compliance" bundles.</div>
+    </a>
+    <a class="card" href="/guides/condensate-pump-float-switch-secondary-drain-pan-quote/" style="text-decoration:none;color:inherit">
+      <div class="small muted">Drain Protection</div>
+      <div style="font-weight:700;margin:4px 0">Condensate Pump, Float Switch &amp; Secondary Drain Pan Guide</div>
+      <div class="small muted">Compare $22.95–$143 drain hardware against contractor water-protection adders.</div>
+    </a>
+    <a class="card" href="/guides/multi-zone-mini-split-cost/" style="text-decoration:none;color:inherit">
+      <div class="small muted">Ductless Mini-Splits</div>
+      <div style="font-weight:700;margin:4px 0">Multi-Zone Ductless Mini-Split Cost Guide</div>
+      <div class="small muted">Line-hide covers, wall brackets, snow stands, and per-zone cost math.</div>
+    </a>
+  </div>
+
+  <Newsletter />
+</Base>

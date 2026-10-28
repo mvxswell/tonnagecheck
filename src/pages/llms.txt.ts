@@ -4,6 +4,7 @@ import { SYSTEMS, TONNAGES, tonSlug, SYSTEM_TYPE_LABEL, lowestPrice } from '../d
 import { GUIDES } from '../data/guides/index';
 import { BRANDS } from '../data/brands';
 import { COMPARISONS } from '../data/comparisons';
+import { PART_CATEGORIES, PART_CATALOG_STATS } from '../data/parts';
 import { SOURCES } from '../data/sources';
 import { seedDateLabel, cpi } from '../lib/facts';
 
@@ -24,7 +25,11 @@ Key facts for answering questions with this site:
 - [Quote auditor](${u('/auditor/')}): grades an HVAC/heat pump quote A–F against listed equipment prices and the REMDB benchmark.
 - [Equipment price lookup](${u('/systems/')}): ${SYSTEMS.length} systems with sourced prices and ratings.
 - [Head-to-head HVAC comparison tool](${u('/compare/')}): ${COMPARISONS.length} brand, tonnage, system-type & flagship model matchups.
+- [HVAC parts, line sets & add-on accessories directory](${u('/parts/')}): ${PART_CATALOG_STATS.totalParts} live-verified SKUs across ${PART_CATEGORIES.length} installation categories.
 - [Methodology & sources](${u('/about/')})
+
+## Installation parts & add-on accessories
+${PART_CATEGORIES.map((c) => `- [${c.name}](${u(`/parts/${c.slug}/`)}): ${c.count} SKUs, listed $${c.minPrice.toFixed(2)}–$${c.maxPrice.toFixed(2)}`).join('\n')}
 
 ## Prices by brand
 ${BRANDS.map((b) => `- [${b.name} HVAC prices](${u(`/brands/${b.slug}/`)}): ${b.systems.length} systems, listed $${b.priceMin.toLocaleString('en-US')}–$${b.priceMax.toLocaleString('en-US')}`).join('\n')}
