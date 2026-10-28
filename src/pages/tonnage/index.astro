@@ -3,8 +3,11 @@ import Base from '../../layouts/Base.astro';
 import { TONNAGES, tonSlug } from '../../data/equipment';
 import { fairRange, equipmentStats, usd, fmtRange } from '../../lib/facts';
 const rows = TONNAGES.map((t) => ({ t, hp: equipmentStats('central-heat-pump', t), fair: fairRange('central-heat-pump', t, 'standard'), fairHi: fairRange('central-heat-pump', t, 'high') }));
+const r3 = rows.find((r) => r.t === 3)!;
+const title = `${usd(r3.hp.min)} Equip vs ${fmtRange(r3.fair)} Installed: 1.5–5 Ton HVAC`;
+const description = `Compare 1.5 to 5-ton heat pump & AC costs (${usd(r3.hp.min)}–${usd(r3.hp.max)} 3-ton equipment vs ${fmtRange(r3.fair)} installed benchmark) with sourced prices by size.`;
 ---
-<Base title="HVAC cost by tonnage: 1.5 to 5 ton heat pump & AC prices | TonnageCheck" description="Compare 1.5, 2, 2.5, 3, 3.5, 4 and 5-ton heat pump and AC costs: listed equipment prices with sources, and DOE-lab installed-cost benchmarks by efficiency tier.">
+<Base title={title} description={description}>
   <p class="crumbs"><a href="/">Home</a> / By tonnage</p>
   <h1>HVAC &amp; heat pump cost by tonnage</h1>
   <p class="lead">One ton of cooling is 12,000 BTU per hour. Pick a size to see real listed systems and the installed-cost benchmark.</p>

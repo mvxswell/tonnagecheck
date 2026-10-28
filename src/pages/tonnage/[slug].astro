@@ -20,8 +20,8 @@ const hp = rows[0];
 const idx = TONNAGES.indexOf(tons as (typeof TONNAGES)[number]);
 const prev = TONNAGES[idx - 1];
 const next = TONNAGES[idx + 1];
-const title = `${tons}-Ton Heat Pump & AC Cost: equipment prices vs installed (${new Date().getFullYear()}) | TonnageCheck`;
-const description = `What a ${tons}-ton (${btu.toLocaleString('en-US')} BTU/h) heat pump or AC system costs: ${systems.length} listed systems with sourced prices, plus DOE-lab installed-cost ranges by efficiency tier.`;
+const title = `${usd(hp.stats.min)} Equip vs ${fmtRange(hp.ranges[0])} Installed: ${tons}-Ton HVAC Cost`;
+const description = `${tons}-ton (${btu.toLocaleString('en-US')} BTU/h) heat pump & AC cost: ${usd(hp.stats.min)}–${usd(hp.stats.max)} listed equipment (${systems.length} systems) vs ${fmtRange(hp.ranges[0])} installed benchmark.`;
 const ld = {
   '@context': 'https://schema.org', '@type': 'Dataset',
   name: `${tons}-ton HVAC equipment prices and installed-cost benchmarks`,

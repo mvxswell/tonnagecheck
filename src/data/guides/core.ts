@@ -13,9 +13,9 @@ const today = new Date().toISOString().slice(0, 10);
 export const CORE_GUIDES: Guide[] = [
   {
     slug: 'how-to-tell-if-hvac-quote-is-ripoff',
-    title: 'How to tell if an HVAC quote is a rip-off: 9 red flags | TonnageCheck',
+    get title() { return `${usd(equipmentStats('central-heat-pump', 3).min)} Equip vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: 9 Quote Red Flags`; },
     h1: 'How to tell if your HVAC quote is a rip-off',
-    description: 'Nine red flags in AC, furnace and heat pump quotes, the numbers to check them against, and what to ask before you sign.',
+    get description() { return `Nine red flags in AC, furnace and heat pump quotes (${usd(equipmentStats('central-heat-pump', 3).min)}–${usd(equipmentStats('central-heat-pump', 3).max)} 3-ton equipment vs ${fmtRange(fairRange('central-heat-pump', 3))} installed benchmark).`; },
     updated: today,
     body: () => {
       const eq = equipmentStats('central-heat-pump', 3);
@@ -82,9 +82,9 @@ export const CORE_GUIDES: Guide[] = [
   },
   {
     slug: '3-ton-vs-4-ton-heat-pump-cost',
-    title: '3-ton vs 4-ton heat pump cost: equipment and installed prices | TonnageCheck',
+    get title() { return `${usd(equipmentStats('central-heat-pump', 3).min)} Equip vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: 3T vs 4T Cost`; },
     h1: '3-ton vs 4-ton heat pump: what the extra ton costs',
-    description: 'Side-by-side cost of 3-ton and 4-ton heat pumps: listed equipment prices, DOE-lab installed benchmarks, and how to tell which size your house needs.',
+    get description() { return `Side-by-side 3-ton (${usd(equipmentStats('central-heat-pump', 3).min)}+ equip, ${fmtRange(fairRange('central-heat-pump', 3))} installed) and 4-ton (${fmtRange(fairRange('central-heat-pump', 4))} installed) heat pump costs.`; },
     updated: today,
     body: () => {
       const e3 = equipmentStats('central-heat-pump', 3);
@@ -154,9 +154,9 @@ ${c3.count && c4.count ? `<p>If only the outdoor condenser is being replaced, th
   },
   {
     slug: 'wholesale-hvac-equipment-cost-vs-installed-price',
-    title: 'Wholesale HVAC equipment cost vs installed price: where the money goes | TonnageCheck',
+    get title() { return `${usd(equipmentStats('central-heat-pump', 3).min)} Equip vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: Equip vs Labor`; },
     h1: 'HVAC equipment cost vs installed price: where your money goes',
-    description: 'How much of an HVAC quote is equipment and how much is labor, overhead and margin, by system size, using listed prices and DOE-lab benchmarks.',
+    get description() { return `How much of an HVAC quote is equipment (${usd(equipmentStats('central-heat-pump', 3).min)}–${usd(equipmentStats('central-heat-pump', 3).max)} at 3 tons) vs labor and margin (${fmtRange(fairRange('central-heat-pump', 3))} installed).`; },
     updated: today,
     body: () => {
       const sizes = [2, 3, 4, 5];
@@ -210,9 +210,9 @@ ${r3 ? `<p>At 3 tons, then, roughly ${usd(r3.f.mid - (r3.e.median ?? 0))} of a b
   },
   {
     slug: 'independent-hvac-tech-vs-big-company',
-    title: 'Independent HVAC tech vs big HVAC company: price, pressure & warranty | TonnageCheck',
+    get title() { return `${usd(equipmentStats('central-heat-pump', 3).min)} Equip vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: Indie vs Big Co`; },
     h1: 'Independent HVAC tech vs big HVAC company',
-    description: 'How owner-operated HVAC contractors and large or private-equity-backed companies differ on price, sales process, warranty and accountability, and how to vet either.',
+    get description() { return `How independent HVAC techs and big companies compare on ${fmtRange(fairRange('central-heat-pump', 3))} 3-ton heat pump quotes (${usd(equipmentStats('central-heat-pump', 3).min)}+ equipment), warranties, and vetting.`; },
     updated: today,
     body: () => {
       const f = fairRange('central-heat-pump', 3, 'standard');
@@ -270,9 +270,9 @@ ${r3 ? `<p>At 3 tons, then, roughly ${usd(r3.f.mid - (r3.e.median ?? 0))} of a b
   },
   {
     slug: 'heat-pump-rebates-and-ahri-certificate-check',
-    title: 'Heat pump rebates in 2026 & how to check an AHRI certificate | TonnageCheck',
+    get title() { return `${usd(equipmentStats('central-heat-pump', 3).min)} Equip vs ${fmtRange(fairRange('central-heat-pump', 3, 'high'))} Installed: AHRI Rebates`; },
     h1: 'Heat pump rebates after 25C, and how to check the AHRI certificate',
-    description: 'The federal 25C credit ended for 2026 installs. What is still available (HEAR, utility rebates), and how to verify the AHRI certificate and ENERGY STAR status of a quote.',
+    get description() { return `2026 heat pump rebates after 25C ended: HEAR rules, utility rebates, and AHRI checks on ${usd(equipmentStats('central-heat-pump', 3).min)}+ equipment (${fmtRange(fairRange('central-heat-pump', 3, 'high'))} installed).`; },
     updated: today,
     body: () => {
       const ex = SYSTEMS.find((s) => s.energyStar?.coldClimate && s.energyStar.ahriReferenceNumber && s.systemType === 'central-heat-pump');

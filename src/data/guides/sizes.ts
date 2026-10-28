@@ -57,9 +57,9 @@ function sizeGuide(t: number): Guide {
   const w = word(t);
   return {
     slug: slugOf(t),
-    title: `${w}-ton heat pump & AC replacement cost: line-by-line quote breakdown | TonnageCheck`,
+    get title() { const eq = statsOf(systemsWhere({ type: 'central-heat-pump', tons: t })); const f = fairRange('central-heat-pump', t); return `${usd(eq.min)} Equip vs ${fmtRange(f)} Installed: ${w}-Ton Guide`; },
     h1: `${w}-ton heat pump & AC replacement cost, line by line`,
-    description: `What a ${w}-ton heat pump or AC replacement should cost: listed equipment prices by brand, DOE-lab installed benchmarks by efficiency, and the adders that inflate ${w}-ton quotes.`,
+    get description() { const eq = statsOf(systemsWhere({ type: 'central-heat-pump', tons: t })); const f = fairRange('central-heat-pump', t); return `${w}-ton heat pump & AC replacement cost: ${usd(eq.min)}–${usd(eq.max)} listed equipment by brand vs ${fmtRange(f)} DOE installed benchmark.`; },
     updated: today,
     related: { tons: [t], systems: { tons: t } },
     audit: { systemType: 'central-heat-pump', tons: t },

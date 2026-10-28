@@ -11,9 +11,9 @@ const threeStd = () => fairRange('central-heat-pump', 3, 'standard');
 export const PRICING_GUIDES: Guide[] = [
   {
     slug: 'why-hvac-quotes-cost-more-than-equipment',
-    get title() { return `Why a 3-ton heat pump runs ${usd(threeStd().mid)}–${usd(threeStd().high)} installed when the equipment lists for ${usd(lowestPrice(cheapest(threeHp())))} | TonnageCheck`; },
+    get title() { return `${usd(lowestPrice(cheapest(threeHp())))} Equip vs ${fmtRange(threeStd())} Installed: Quote Markup`; },
     get h1() { return `Why HVAC companies charge ${usd(threeStd().mid)}–${usd(threeStd().high)} for ${usd(lowestPrice(cheapest(threeHp())))} of equipment`; },
-    description: 'The gap between listed HVAC equipment prices and installed quotes, size by size: what legitimately fills it, what pushes a quote to the top of the range, and what is padding.',
+    get description() { return `Why 3-ton HVAC quotes run ${fmtRange(threeStd())} installed when equipment lists from ${usd(lowestPrice(cheapest(threeHp())))}: labor, overhead & padding by size.`; },
     updated: today,
     related: { tons: [2, 3, 4, 5], systems: { type: 'central-heat-pump', tons: 3 } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
@@ -61,9 +61,9 @@ ${sizes.map((t) => { const xs = systemsWhere({ type: 'central-heat-pump', tons: 
   },
   {
     slug: 'flat-rate-price-books-and-pe-hvac-rollups',
-    title: 'Flat-rate price books & private-equity HVAC roll-ups: what they do to your quote | TonnageCheck',
+    get title() { return `${usd(lowestPrice(cheapest(threeHp())))} Equip vs ${fmtRange(threeStd())} Installed: Flat-Rate Books`; },
     h1: 'Flat-rate price books and private-equity HVAC roll-ups: what they do to your quote',
-    description: 'How flat-rate pricing, sales commissions and private-equity HVAC consolidators shape replacement quotes, how to tell who you are dealing with, and how to check the price.',
+    get description() { return `How flat-rate price books, commissions, and PE roll-ups shape ${fmtRange(threeStd())} 3-ton quotes (${usd(lowestPrice(cheapest(threeHp())))}+ equipment) and how to check them.`; },
     updated: today,
     related: { tons: [3, 4], systems: { type: ['central-heat-pump', 'ac-furnace'], tons: [3, 4] } },
     audit: { systemType: 'central-heat-pump', tons: 3 },

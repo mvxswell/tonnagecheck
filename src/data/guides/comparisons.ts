@@ -9,9 +9,9 @@ const med = (xs: System[]) => (xs.length ? usd(median(xs.map(lowestPrice))) : 'â
 export const COMPARISON_GUIDES: Guide[] = [
   {
     slug: 'heat-pump-vs-ac-and-furnace-replacement-cost',
-    title: 'Heat pump vs AC + gas furnace replacement cost, by size | TonnageCheck',
+    get title() { return `${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))} Equip vs ${fmtRange(fairRange('ac-furnace', 3))} Installed: HP vs AC+Furnace`; },
     h1: 'Heat pump vs AC + gas furnace: replacement cost compared',
-    description: 'Installed benchmarks and listed equipment prices for a heat pump versus a central AC plus gas furnace at each size, and which rebates and add-ons change the comparison.',
+    get description() { return `Compare heat pump (${fmtRange(fairRange('central-heat-pump', 3))}) vs AC + gas furnace (${fmtRange(fairRange('ac-furnace', 3))}) installed benchmarks and ${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))}+ equipment by size.`; },
     updated: today,
     related: { tons: [2, 3, 4, 5], systems: { type: ['central-heat-pump', 'ac-furnace'], tons: [3, 4] } },
     audit: { systemType: 'ac-furnace', tons: 3 },
@@ -51,9 +51,9 @@ ${systemsTable([...r3.hpX.slice(0, 4), ...r3.afX.slice(0, 3)], { showType: true 
   },
   {
     slug: 'multi-zone-mini-split-cost',
-    title: 'Multi-zone mini-split cost: listed prices by zones & installed benchmark | TonnageCheck',
+    get title() { const mz = systemsWhere({ type: 'mini-split', multiZone: true }); return `${usd(lowestPrice(cheapest(mz)))} Equip vs ${fmtRange(fairRange('mini-split', 2, 'high'))} Installed: Multi-Zone Cost`; },
     h1: 'Multi-zone mini-split cost',
-    get description() { const bs = [...new Set(systemsWhere({ type: 'mini-split', multiZone: true }).map((x) => x.brand))]; return `Listed prices for multi-zone mini-split heat pump systems from ${bs.slice(0, -1).join(', ')} and ${bs[bs.length - 1]}, the DOE-lab installed benchmark, and what drives multi-zone quotes up.`; },
+    get description() { const mz = systemsWhere({ type: 'mini-split', multiZone: true }); return `Multi-zone mini-split heat pumps list from ${usd(lowestPrice(cheapest(mz)))} to ${usd(Math.max(...mz.map(lowestPrice)))} vs ${fmtRange(fairRange('mini-split', 2, 'high'))} 2-ton installed benchmark.`; },
     updated: today,
     get related() { return { brands: [...new Set(systemsWhere({ type: 'mini-split', multiZone: true }).map((x) => x.brand))], tons: [1.5, 2, 3], systems: { type: 'mini-split' as const, multiZone: true } }; },
     audit: { systemType: 'mini-split', tons: 2, tier: 'high' },
@@ -95,9 +95,9 @@ ${sizes.map((t) => { const s = cheapest(mz.filter((x) => x.tons === t)); return 
   },
   {
     slug: 'heat-pump-condenser-only-vs-full-system-replacement',
-    title: 'Replace just the heat pump condenser or the whole system? Cost compared | TonnageCheck',
+    get title() { const c = cheapest(systemsWhere({ type: 'heat-pump-only', tons: 3 })); return `${usd(lowestPrice(c))} Condenser vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: Swap vs Full`; },
     h1: 'Heat pump condenser only vs full system replacement',
-    description: 'Listed prices for heat pump condensers alone versus matched systems, what a condenser-only swap should cost installed, and why the indoor coil match decides whether it works.',
+    get description() { const c = cheapest(systemsWhere({ type: 'heat-pump-only', tons: 3 })); return `3-ton heat pump condensers list from ${usd(lowestPrice(c))} (${fmtRange(fairRange('heat-pump-only', 3))} installed) vs ${fmtRange(fairRange('central-heat-pump', 3))} full system replacement.`; },
     updated: today,
     get related() { return { brands: [...new Set(systemsWhere({ type: 'heat-pump-only' }).map((x) => x.brand))], tons: [3, 4, 5], systems: { type: 'heat-pump-only' as const } }; },
     audit: { systemType: 'heat-pump-only', tons: 3 },
@@ -136,9 +136,9 @@ ${cond.some((s) => s.prices.length > 1) ? `<p>Several condensers are listed at t
   },
   {
     slug: 'inverter-vs-single-stage-heat-pump-cost',
-    title: 'Inverter (variable-speed) vs single-stage heat pump cost compared | TonnageCheck',
+    get title() { return `${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))} Equip vs ${fmtRange(fairRange('central-heat-pump', 3, 'mid'))} Installed: Inverter Cost`; },
     h1: 'Inverter vs single-stage heat pump: what the upgrade costs',
-    description: 'Listed price difference between variable-speed inverter and single- or two-stage heat pumps at each size, the installed benchmark gap, and when the inverter premium is worth it.',
+    get description() { return `Variable-speed inverter vs single-stage heat pump prices (${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))}+ 3-ton equipment vs ${fmtRange(fairRange('central-heat-pump', 3, 'mid'))} mid-tier installed).`; },
     updated: today,
     related: { tons: [2, 3, 4], systems: { type: 'central-heat-pump', staging: 'inverter' } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'mid' },
