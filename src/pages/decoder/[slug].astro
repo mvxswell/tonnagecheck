@@ -1,0 +1,199 @@
+---
+import Base from '../../layouts/Base.astro';
+import ModelSerialDecoder from '../../components/ModelSerialDecoder.astro';
+import ConciergeForm from '../../components/ConciergeForm.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import { DECODER_BRANDS, type DecoderBrand } from '../../data/decoder/index';
+import { brandByName } from '../../data/brands';
+import { SYSTEMS, SYSTEM_TYPE_LABEL, tonSlug, lowestPrice } from '../../data/equipment';
+import { SOURCES, type SourceId } from '../../data/sources';
+import { usd, fmtRange, seedDateLabel } from '../../lib/facts';
+import { decodeModel, decodeSerial } from '../../lib/decode';
+import { SITE } from '../../config';
+
+export function getStaticPaths() {
+  return DECODER_BRANDS.map((d) => ({ params: { slug: d.slug }, props: { d } }));
+}
+const { d } = Astro.props as { d: DecoderBrand };
+const url = `${SITE.url}/decoder/${d.slug}/`;
+
+// Every model in our price data for these brands, decoded at build time with the same code the browser uses.
+const seedSystems = SYSTEMS.filter((s) => d.seedBrands.includes(s.brand));
+const seen = new Set<string>();
+const decodedSeed = seedSystems.flatMap((s) => s.components.map((c) => ({ c, s }))).filter(({ c }) => !seen.has(c) && seen.add(c))
+  .map(({ c, s }) => ({ model: c, s, r: decodeModel(c, d.families)[0] }))
+  .filter((x) => x.r)
+  .sort((a, b) => a.r.family.name.localeCompare(b.r.family.name) || (a.r.tons ?? 0) - (b.r.tons ?? 0) || a.model.localeCompare(b.model));
+const examples = [
+  ...d.families.slice(0, 2).map((f) => ({ model: f.example, serial: d.serials[0].example.serial, brand: d.serialOptions.find((o) => o.rule === d.serials[0].id)?.label })),
+  ...decodedSeed.filter((x) => !d.families.some((f) => f.example === x.model)).slice(0, 2).map((x) => ({ model: x.model })),
+];
+const brandRows = d.seedBrands.map((n) => brandByName(n)).filter((b) => !!b);
+const serialChecks = d.serials.map((r) => ({ r, out: decodeSerial(r.example.serial, r) }));
+// Build-time self-test: every documented example must decode cleanly with the same code the browser runs.
+for (const { r, out } of serialChecks) if (!out.ok) throw new Error(`[decoder] ${d.slug}: serial example ${r.example.serial} does not decode: ${out.error}`);
+for (const f of d.families) {
+  const top = decodeModel(f.example, [f])[0];
+  if (!top || top.unknownCount) throw new Error(`[decoder] ${d.slug}: model example ${f.example} does not decode cleanly under ${f.id}`);
+}
+
+const used = new Set<SourceId>([
+  ...d.families.flatMap((f) => f.sourceIds), ...d.serials.flatMap((s) => s.sourceIds), ...d.warranty.flatMap((w) => w.sourceIds),
+  ...d.gotchas.flatMap((g) => g.sourceIds), ...d.labelLocation.sourceIds,
+]);
+const sourceList = [...used].map((id) => SOURCES[id]);
+const cite = (ids: SourceId[]) => ids.map((id) => SOURCES[id]);
+const others = DECODER_BRANDS.filter((x) => x.slug !== d.slug);
+const words = [d.lead, ...d.intro, ...d.faqs.flatMap((f) => [f.q, f.a]), ...d.warranty.map((w) => w.detail), ...d.gotchas.map((g) => g.text)].join(' ').split(/\s+/).length;
+
+const ld = [
+  {
+    '@context': 'https://schema.org', '@type': 'TechArticle', headline: d.h1, description: d.description, url,
+    datePublished: d.updated, dateModified: d.updated, wordCount: words, proficiencyLevel: 'Beginner',
+    about: d.brands.map((name) => ({ '@type': 'Brand', name })),
+    author: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+    publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+    mainEntityOfPage: url,
+    citation: sourceList.map((s) => ({ '@type': 'CreativeWork', name: s.title, url: s.url, publisher: { '@type': 'Organization', name: s.publisher } })),
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'FAQPage',
+    mainEntity: d.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE.url}/` },
+      { '@type': 'ListItem', position: 2, name: 'Model & serial decoder', item: `${SITE.url}/decoder/` },
+      { '@type': 'ListItem', position: 3, name: d.name, item: url },
+    ],
+  },
+];
+---
+<Base title={d.title} description={d.description} jsonld={ld}>
+  <p class="crumbs"><a href="/">Home</a> / <a href="/decoder/">Model &amp; serial decoder</a> / {d.name}</p>
+  <h1>{d.h1}</h1>
+  <p class="lead">{d.lead}</p>
+  <p class="small muted">Updated {d.updated} · Every code below is transcribed from the manufacturer documents listed under <a href="#sources">Sources</a>. Where a document did not define something, we leave it out.</p>
+
+  <ModelSerialDecoder brands={[d]} examples={examples} heading={`Decode a ${d.name} model or serial number`} />
+
+  <div class="prose">
+    {d.intro.map((p) => <p>{p}</p>)}
+  </div>
+
+  <h2>Where to find the model and serial number</h2>
+  <p>{d.labelLocation.text} <span class="small muted">({cite(d.labelLocation.sourceIds).map((s, i) => <>{i > 0 && ' · '}<a href={s.url}>{s.publisher}</a></>)})</span></p>
+
+  <h2>Model number layouts</h2>
+  {d.families.map((f) => (
+    <section class="fam" id={f.id}>
+      <h3>{f.name}</h3>
+      <p class="small muted">{f.kind}. Example: <code class="num">{f.example}</code></p>
+      <p class="layout num" aria-label={`Layout ${f.layout}`}>{f.layout}</p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Position</th><th>Codes (as printed by the manufacturer)</th></tr></thead>
+        <tbody>{f.fields.map((x) => (
+          <tr><td><b>{x.label}</b></td><td class="wrap">{x.tons
+            ? Object.entries(x.tons).map(([k, t], i) => <>{i > 0 && ', '}<span class="num">{k}</span> = {x.codes?.[k] ?? `${t} ton`}</>)
+            : x.codes ? Object.entries(x.codes).map(([k, v], i) => <>{i > 0 && '; '}<span class="num">{k}</span> = {v}</>) : x.describe}</td></tr>
+        ))}</tbody>
+      </table></div>
+      {f.notes?.map((n) => <p class="small note">{n}</p>)}
+      <p class="small muted">Source: {cite(f.sourceIds).map((s, i) => <>{i > 0 && ' · '}<a href={s.url}>{s.title}</a></>)}</p>
+    </section>
+  ))}
+
+  <h2>Serial number: when was it built?</h2>
+  {serialChecks.map(({ r, out }) => (
+    <section class="fam">
+      <h3>{r.title}</h3>
+      <p>{r.rule}</p>
+      <p class="small">Example: <code class="num">{r.example.serial}</code> → {r.example.reads}.</p>
+      {r.plants && (
+        <div class="tablewrap"><table><thead><tr><th>Plant / site code</th><th>Location</th></tr></thead>
+          <tbody>{Object.entries(r.plants).map(([k, v]) => <tr><td class="num"><b>{k}</b></td><td>{v}</td></tr>)}</tbody></table></div>
+      )}
+      {r.caveats?.map((c) => <p class="small note">{c}</p>)}
+      <p class="small muted">Applies to: {r.appliesTo.join(', ')}. Source: {cite(r.sourceIds).map((s, i) => <>{i > 0 && ' · '}<a href={s.url}>{s.title}</a></>)}</p>
+    </section>
+  ))}
+
+  <h2>Warranty terms the serial and registration decide</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Coverage</th><th>What the manufacturer says</th></tr></thead>
+    <tbody>{d.warranty.map((w) => (
+      <tr><td><b>{w.label}</b></td><td class="wrap">{w.detail} <span class="small muted">({cite(w.sourceIds).map((s, i) => <>{i > 0 && ' · '}<a href={s.url}>{s.publisher}</a></>)})</span></td></tr>
+    ))}</tbody>
+  </table></div>
+  <p class="small muted">Summaries of the certificates and pages cited. Your own certificate, and your state's law, control. Use the serial-number lookup on the manufacturer's site to confirm coverage for your unit.</p>
+
+  <h2>Common mistakes</h2>
+  <div class="grid">
+    {d.gotchas.map((g) => (
+      <div class="card"><b>{g.title}</b><p class="small">{g.text}</p><p class="small muted">{cite(g.sourceIds).map((s, i) => <>{i > 0 && ' · '}<a href={s.url}>{s.publisher}</a></>)}</p></div>
+    ))}
+  </div>
+
+  {decodedSeed.length > 0 && (
+    <>
+      <h2>Every {d.seedBrands.join(' / ')} model in our price data, decoded</h2>
+      <p class="small muted">These are the {d.seedBrands.join(' / ')} model numbers in our listed-equipment data (prices captured {seedDateLabel}), run through the decoder above. "Decoded size" comes from the model number. "Listed as" is the system size on the retailer listing.</p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Model</th><th>Layout</th><th class="r">Decoded size</th><th>Listed as</th><th class="r">Lowest listed price</th></tr></thead>
+        <tbody>{decodedSeed.map(({ model, s, r }) => (
+          <tr>
+            <td class="num"><b>{model}</b></td>
+            <td class="small">{r.family.kind}</td>
+            <td class="r num">{r.tons != null ? `${r.tons} T` : r.fields.find((f) => f.label.startsWith('Coil size'))?.meaning ?? '—'}</td>
+            <td class="small"><a href={`/systems/${s.slug}/`}>{s.tons}-ton {SYSTEM_TYPE_LABEL[s.systemType].toLowerCase()}</a></td>
+            <td class="r num">{usd(lowestPrice(s))}</td>
+          </tr>
+        ))}</tbody>
+      </table></div>
+      <p class="small muted">Where the decoded size and the listing disagree, it is usually an indoor unit sized larger than the system, or a ductless size code that is not a whole ton. Price is for the full listed system, not the single component. Each system page links to its retailer listing.</p>
+    </>
+  )}
+
+  {brandRows.map((b) => (
+    <>
+      <h2>Replacing it? What {b.name} equipment lists for</h2>
+      <p>If the serial says your system is near the end of its life, these are the listed {b.name} equipment prices by size, next to the DOE national-lab installed-cost benchmark. <a href="/about/#benchmarks">How the benchmark works</a></p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Size &amp; type</th><th class="r">Listed equipment</th><th class="r">Installed benchmark <span class="badge b-est">est.</span></th></tr></thead>
+        <tbody>{b.rows.map((r) => (
+          <tr><td><a href={`/tonnage/${tonSlug(r.tons)}/`}><b>{r.tons} ton</b></a> <span class="small muted">{SYSTEM_TYPE_LABEL[r.type].toLowerCase()}</span></td>
+            <td class="r num">{r.min === r.max ? usd(r.min) : `${usd(r.min)}–${usd(r.max)}`} <span class="small muted">({r.count})</span></td>
+            <td class="r num">{fmtRange(r.fair)}</td></tr>
+        ))}</tbody>
+      </table></div>
+      <p><a class="btn" href={`/auditor/?brand=${encodeURIComponent(b.name)}`}>Audit a {b.name} quote</a> <a class="btn ghost" href={`/brands/${b.slug}/`}>All {b.name} prices</a></p>
+    </>
+  ))}
+
+  <h2>Not decoded here (yet)</h2>
+  <ul class="small">{d.notCovered.map((n) => <li>{n}</li>)}</ul>
+
+  <h2>Frequently asked questions</h2>
+  <div class="prose">
+    {d.faqs.map((f) => (<><h3>{f.q}</h3><p>{f.a}</p></>))}
+  </div>
+
+  <section class="card second" id="second-opinion">
+    <ConciergeForm brandModel={d.brands[0]} />
+  </section>
+
+  <h2 id="sources">Sources</h2>
+  <ol class="small srcs">{sourceList.map((s) => <li><a href={s.url}>{s.title}</a>: {s.publisher}{s.note ? <> · <span class="muted">{s.note}</span></> : ''}</li>)}</ol>
+
+  <h2>Other decoders</h2>
+  <p><a href="/decoder/">All brands: model &amp; serial decoder</a>{others.map((o) => <> · <a href={`/decoder/${o.slug}/`}>{o.name}</a></>)}</p>
+  <Newsletter />
+</Base>
+
+<style>
+.fam{margin:1.2em 0 1.6em}
+.layout{font-size:1.15rem;letter-spacing:.12em;background:#0f2a3d;color:#fff;display:inline-block;padding:6px 12px;border-radius:8px;margin:.2em 0 .7em}
+.tablewrap td.wrap{white-space:normal;min-width:260px}
+.srcs li{margin:.3em 0}
+code{font-family:var(--mono)}
+</style>

@@ -51,6 +51,13 @@ function siteChecks() {
             if (desc && desc.length >= 160) errors.push(`${path}: description is ${desc.length} chars (must be < 160): "${desc}"`);
             if (!/\$[\d,]+(–| vs )\$[\d,]+/.test(title || '')) errors.push(`${path}: title does not include a dollar range or comparison: "${title}"`);
           }
+          if (path.startsWith('/decoder/')) {
+            // Decoder pages are reference pages: no dollar rule, but titles < 60 and descriptions 120–160.
+            if (title && title.length >= 60) errors.push(`${path}: title is ${title.length} chars (must be < 60): "${title}"`);
+            if (desc && (desc.length < 120 || desc.length > 160)) errors.push(`${path}: description is ${desc.length} chars (must be 120–160): "${desc}"`);
+            if (!html.includes('"@type":"TechArticle"') || !html.includes('"@type":"FAQPage"')) errors.push(`${path}: decoder page needs TechArticle + FAQPage JSON-LD`);
+            if (!html.includes('id="sources"')) errors.push(`${path}: decoder page needs a sources block`);
+          }
           for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
             try { JSON.parse(m[1]); } catch { errors.push(`${path}: JSON-LD does not parse`); }
           }

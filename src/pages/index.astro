@@ -22,6 +22,7 @@ const ld = [
     description: 'Grades an HVAC or heat pump installation quote A–F against listed equipment prices and DOE national-lab installed-cost benchmarks.',
   },
 ];
+import { DECODER_BRANDS } from '../data/decoder/index';
 ---
 <Base title="TonnageCheck: Is your HVAC or heat pump quote fair? Free A–F quote audit" description="Grade your HVAC or heat pump quote in 30 seconds. We compare it to real listed equipment prices and DOE-lab installed-cost benchmarks, with a source link on every number." jsonld={ld}>
   <section class="hero">
@@ -60,6 +61,15 @@ const ld = [
     <h2>Prices by system size</h2>
     <div class="tons">
       {TONNAGES.map((t) => <a class="card tonlink" href={`/tonnage/${tonSlug(t)}/`}><span class="num">{t}</span> ton<small>{(t * 12000).toLocaleString('en-US')} BTU/h</small></a>)}
+    </div>
+  </section>
+
+  <section>
+    <h2>Decode your model &amp; serial number</h2>
+    <p>Not sure what size or age your current system is? Type the model and serial number from the outdoor unit's rating plate. The decoder reads tonnage, refrigerant, staging and build date from the manufacturer's own nomenclature charts.</p>
+    <div class="tons">
+      <a class="card tonlink" href="/decoder/">All brands<small>Model &amp; serial decoder</small></a>
+      {DECODER_BRANDS.map((d) => <a class="card tonlink" href={`/decoder/${d.slug}/`}>{d.name}<small>{d.families.length} model layouts</small></a>)}
     </div>
   </section>
 

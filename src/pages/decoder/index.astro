@@ -1,0 +1,120 @@
+---
+import Base from '../../layouts/Base.astro';
+import ModelSerialDecoder from '../../components/ModelSerialDecoder.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import { DECODER_BRANDS } from '../../data/decoder/index';
+import { SOURCES, type SourceId } from '../../data/sources';
+import { SITE } from '../../config';
+
+const url = `${SITE.url}/decoder/`;
+const title = 'HVAC Model & Serial Number Decoder: Size, Age, Warranty';
+const description =
+  'Free HVAC model and serial number decoder for Goodman, Amana, Trane, American Standard, Carrier and Bryant. Get tonnage, build date and warranty terms.';
+const updated = DECODER_BRANDS.map((d) => d.updated).sort().at(-1)!;
+const examples = [
+  { model: 'GLZS4BA3610', serial: '2610123456', brand: 'Goodman' },
+  { model: 'A5HP5030A1', serial: '241611234V', brand: 'RunTru by Trane' },
+  { model: '27SCA536A003', serial: '1218E00001', brand: 'Carrier' },
+  { model: '37MAHAQ33AA3' },
+];
+// Where each brand family hides the size and the date. Built from the same data the decoder runs on.
+const sizeWhere = DECODER_BRANDS.map((d) => ({
+  d,
+  rows: d.families.map((f) => ({ f, field: f.fields.find((x) => x.tons) })).filter((x) => x.field),
+}));
+const used = new Set<SourceId>(DECODER_BRANDS.flatMap((d) => [...d.families.flatMap((f) => f.sourceIds), ...d.serials.flatMap((s) => s.sourceIds)]));
+const sourceList = [...used].map((id) => SOURCES[id]);
+const faqs = [
+  { q: 'How do I find out how old my AC or heat pump is?', a: 'Read the serial number on the outdoor unit\'s rating plate and use the rule for your brand. Goodman and Amana use YYMM (the first four digits are year and month). Carrier and Bryant use week then year (digits 1–2 are the week, 3–4 the year). Trane and American Standard put the year first, then a fiscal week.' },
+  { q: 'How do I tell what size (tonnage) my unit is from the model number?', a: 'Most brands embed the cooling capacity in thousands of BTU/h. 24 = 2 tons, 36 = 3 tons, 48 = 4 tons, 60 = 5 tons. Where it sits differs by brand. Goodman GLZS4BA36… has it after the region letter, Trane 5TTR5036… in positions 7–8, and Carrier 27SCA536… after the efficiency digit.' },
+  { q: 'Why does the decoder say a code is "not in the source table"?', a: 'We only decode codes that appear in the manufacturer\'s own nomenclature chart. If a letter is not in the document we verified, we show it as unknown instead of guessing.' },
+  { q: 'Does an indoor unit\'s size code tell me the system size?', a: 'Not reliably. Air handler size codes are the largest system they are built for, and matched systems often pair a smaller outdoor unit with a larger air handler. Size the system from the outdoor unit\'s model number.' },
+  { q: 'Is anything I type sent to TonnageCheck?', a: 'No. The decoder runs in your browser from rules published on this page. Nothing you type is sent or stored.' },
+  { q: 'Which brands are covered?', a: `Right now: ${DECODER_BRANDS.map((d) => d.name).join('; ')}. More brands are added only after their nomenclature is verified against manufacturer documents.` },
+];
+const ld = [
+  {
+    '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: 'TonnageCheck HVAC Model & Serial Number Decoder', url,
+    applicationCategory: 'UtilitiesApplication', operatingSystem: 'Any (runs in the browser)',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description, featureList: ['Model number to tonnage, refrigerant, staging and efficiency class', 'Serial number to manufacture date', 'Warranty registration rules by brand'],
+    publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'TechArticle', headline: 'How to read HVAC model and serial numbers', description, url,
+    datePublished: updated, dateModified: updated, proficiencyLevel: 'Beginner',
+    author: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+    publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+    hasPart: DECODER_BRANDS.map((d) => ({ '@type': 'TechArticle', headline: d.h1, url: `${SITE.url}/decoder/${d.slug}/` })),
+    citation: sourceList.map((s) => ({ '@type': 'CreativeWork', name: s.title, url: s.url })),
+  },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+  {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE.url}/` },
+      { '@type': 'ListItem', position: 2, name: 'Model & serial decoder', item: url },
+    ],
+  },
+];
+---
+<Base title={title} description={description} jsonld={ld}>
+  <p class="crumbs"><a href="/">Home</a> / Model &amp; serial decoder</p>
+  <h1>HVAC model &amp; serial number decoder</h1>
+  <p class="lead">Find out what size your air conditioner or heat pump is, when it was built, and what the warranty depends on, straight from the codes on the rating plate. Every rule comes from a manufacturer document cited on this page.</p>
+
+  <ModelSerialDecoder brands={DECODER_BRANDS} examples={examples} />
+
+  <h2>Why the two numbers matter</h2>
+  <div class="grid">
+    <div class="card"><b>Model number = what you have</b><p class="small">Size, refrigerant, single- or two-stage, efficiency class. Check that a quote's tonnage and refrigerant match the unit actually being installed. A 3-ton quote should name a model with a 36 (or 37) in it.</p></div>
+    <div class="card"><b>Serial number = when it was built</b><p class="small">That tells you the age of the system you are replacing. Some warranties also use it: Goodman and Amana use three months after the serial's manufacture date as the install date when you cannot prove it.</p></div>
+    <div class="card"><b>Registration = how long it is covered</b><p class="small">Goodman, Trane and American Standard need registration within 60 days for the longer parts warranty. Carrier and Bryant need it within 90 days. Without registration, coverage falls back to the base warranty: 5 years for Goodman, Amana, Carrier, Bryant and RunTru.</p></div>
+  </div>
+
+  <h2>Decoders by brand</h2>
+  <div class="grid">
+    {DECODER_BRANDS.map((d) => (
+      <a class="card" href={`/decoder/${d.slug}/`} style="text-decoration:none;color:inherit">
+        <div style="font-weight:700">{d.name}</div>
+        <div class="small muted">{d.families.length} model layouts · {d.serials.length} serial rule{d.serials.length === 1 ? '' : 's'}</div>
+        <p class="small">{d.lead}</p>
+      </a>
+    ))}
+  </div>
+
+  <h2>Where each brand puts the size</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Brand</th><th>Model layout</th><th>Example</th><th>Capacity position</th></tr></thead>
+    <tbody>{sizeWhere.flatMap(({ d, rows }) => rows.map(({ f, field }) => (
+      <tr><td><a href={`/decoder/${d.slug}/#${f.id}`}>{f.brand}</a></td><td class="small">{f.name}</td><td class="num">{f.example}</td><td class="small">{field!.label}</td></tr>
+    )))}</tbody>
+  </table></div>
+
+  <h2>Where each brand puts the date</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Brands</th><th>Rule</th><th>Example</th></tr></thead>
+    <tbody>{DECODER_BRANDS.flatMap((d) => d.serials.map((r) => (
+      <tr><td><a href={`/decoder/${d.slug}/`}>{r.appliesTo.join(', ')}</a></td><td class="small wrap">{r.rule}</td><td class="num small">{r.example.serial}<br /><span class="muted">{r.example.reads}</span></td></tr>
+    )))}</tbody>
+  </table></div>
+
+  <h2>Frequently asked questions</h2>
+  <div class="prose">{faqs.map((f) => (<><h3>{f.q}</h3><p>{f.a}</p></>))}</div>
+
+  <div class="cta card">
+    <h2>Got a replacement quote?</h2>
+    <p>Once you know the size, check the price. The quote auditor grades a quote A–F against listed equipment prices and the DOE installed-cost benchmark.</p>
+    <a class="btn" href="/auditor/">Audit my quote</a>
+  </div>
+
+  <h2 id="sources">Sources</h2>
+  <ol class="small srcs">{sourceList.map((s) => <li><a href={s.url}>{s.title}</a>: {s.publisher}</li>)}</ol>
+  <p class="small muted">Updated {updated}. Found a model the decoder gets wrong? The rating plate and the manufacturer's document always win. Tell us via the <a href="/about/">about page</a>.</p>
+  <Newsletter />
+</Base>
+
+<style>
+.tablewrap td.wrap{white-space:normal;min-width:260px}
+.srcs li{margin:.3em 0}
+.cta{margin-top:28px}
+</style>

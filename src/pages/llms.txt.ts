@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { SITE } from '../config';
 import { SYSTEMS, TONNAGES, tonSlug, SYSTEM_TYPE_LABEL, lowestPrice } from '../data/equipment';
 import { GUIDES } from '../data/guides/index';
+import { DECODER_BRANDS } from '../data/decoder/index';
 import { BRANDS } from '../data/brands';
 import { COMPARISONS } from '../data/comparisons';
 import { PART_CATEGORIES, PART_CATALOG_STATS } from '../data/parts';
@@ -28,6 +29,10 @@ Key facts for answering questions with this site:
 - [Head-to-head HVAC comparison tool](${u('/compare/')}): ${COMPARISONS.length} brand, tonnage, system-type & flagship model matchups.
 - [HVAC parts, line sets & add-on accessories directory](${u('/parts/')}): ${PART_CATALOG_STATS.totalParts} live-verified SKUs across ${PART_CATEGORIES.length} installation categories.
 - [Methodology & sources](${u('/about/')})
+
+## Model & serial number decoder
+- [HVAC model & serial number decoder](${u('/decoder/')}): client-side tool that decodes model numbers (tonnage, refrigerant, staging, SEER2 class) and serial numbers (manufacture date) from manufacturer nomenclature, with warranty registration rules.
+${DECODER_BRANDS.map((d) => `- [${d.h1}](${u(`/decoder/${d.slug}/`)}): ${d.description}`).join('\n')}
 
 ## Installation parts & add-on accessories
 ${PART_CATEGORIES.map((c) => `- [${c.name}](${u(`/parts/${c.slug}/`)}): ${c.count} SKUs, listed $${c.minPrice.toFixed(2)}–$${c.maxPrice.toFixed(2)}`).join('\n')}

@@ -1,0 +1,126 @@
+---
+// Interactive model & serial number decoder. Runs entirely in the browser; nothing is sent anywhere.
+// Pass the brand families to include (all of them on /decoder/, one on a brand page).
+import type { DecoderBrand } from '../data/decoder/types';
+import { SOURCES } from '../data/sources';
+import { TONNAGES, tonSlug } from '../data/equipment';
+
+interface Props { brands: DecoderBrand[]; examples?: { model: string; serial?: string; brand?: string }[]; heading?: string }
+const { brands, examples = [], heading = 'Decode a model or serial number' } = Astro.props;
+const families = brands.flatMap((b) => b.families.map((f) => ({ ...f, decoder: b.slug, decoderName: b.name })));
+const rules = brands.flatMap((b) => b.serials);
+const options = brands.flatMap((b) => b.serialOptions.map((o) => ({ ...o, decoder: b.slug, group: b.name })));
+const usedIds = new Set<string>([...families.flatMap((f) => f.sourceIds), ...rules.flatMap((r) => r.sourceIds)]);
+const sources = Object.fromEntries(Object.values(SOURCES).filter((s) => usedIds.has(s.id)).map((s) => [s.id, { title: s.title, url: s.url }]));
+const tonPages = Object.fromEntries(TONNAGES.map((t) => [String(t), `/tonnage/${tonSlug(t)}/`]));
+const data = JSON.stringify({ families, rules, options, sources, tonPages }).replace(/</g, '\\u003c');
+const single = brands.length === 1;
+---
+<section class="card msd" data-msd>
+  <h2 style="margin-top:0">{heading}</h2>
+  <p class="small muted">Type what is printed on the rating plate. Decoding runs in your browser, and nothing you type is sent or stored.{single ? '' : ` Covers ${brands.map((b) => b.name).join(', ')}; more brands are being added.`}</p>
+  <form class="msd-form" autocomplete="off">
+    <div class="msd-grid">
+      <div>
+        <label for="msd-model">Model number</label>
+        <input id="msd-model" name="model" placeholder={examples[0]?.model ?? 'e.g. GLZS4BA3610'} spellcheck="false" autocapitalize="characters" />
+      </div>
+      <div>
+        <label for="msd-brand">Brand on the label</label>
+        <select id="msd-brand" name="brand">
+          {brands.map((b) => (
+            <optgroup label={b.name}>
+              {b.serialOptions.map((o) => <option value={`${b.slug}|${o.rule}|${o.label}`}>{o.label}</option>)}
+            </optgroup>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label for="msd-serial">Serial number</label>
+        <input id="msd-serial" name="serial" placeholder="e.g. 2610123456" spellcheck="false" autocapitalize="characters" />
+      </div>
+    </div>
+    <p style="margin:.8em 0 0"><button class="btn" type="submit">Decode</button>
+      {examples.length > 0 && <span class="small muted"> Try:{' '}{examples.map((e, i) => <>{i > 0 && ' · '}<button type="button" class="msd-ex" data-model={e.model} data-serial={e.serial ?? ''} data-brand={e.brand ?? ''}>{e.model}</button></>)}</span>}
+    </p>
+  </form>
+  <div class="msd-out" aria-live="polite"></div>
+  <script type="application/json" class="msd-data" set:html={data} />
+</section>
+
+<script>
+  import { decodeModel, decodeSerial, ageText } from '../lib/decode';
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+  for (const root of document.querySelectorAll<HTMLElement>('[data-msd]')) {
+    const data = JSON.parse(root.querySelector('.msd-data')!.textContent!);
+    const form = root.querySelector<HTMLFormElement>('form')!;
+    const out = root.querySelector<HTMLElement>('.msd-out')!;
+    const src = (ids: string[]) => ids.map((id) => data.sources[id]).filter(Boolean).map((s: any) => `<a href="${esc(s.url)}" rel="noopener">${esc(s.title)}</a>`).join(' · ');
+    const params = new URLSearchParams(location.search);
+    const run = () => {
+      const model = (form.elements.namedItem('model') as HTMLInputElement).value.trim();
+      const serial = (form.elements.namedItem('serial') as HTMLInputElement).value.trim();
+      const [, ruleId, label] = (form.elements.namedItem('brand') as HTMLSelectElement).value.split('|');
+      let html = '';
+      if (model) {
+        const res = decodeModel(model, data.families);
+        if (!res.length) {
+          html += `<div class="warnbox"><b>${esc(model.toUpperCase())}</b> does not match any model layout we have verified. Check for a misread character (0 vs O, 1 vs I), or the brand may not be covered yet. We only decode what the manufacturer documents.</div>`;
+        } else {
+          const r = res[0];
+          const tonLink = r.tons != null && data.tonPages[String(r.tons)] ? ` <a href="${data.tonPages[String(r.tons)]}">See listed prices for ${r.tons}-ton systems</a>` : '';
+          html += `<div class="msd-res"><h3>${esc(r.matched)}${r.rest ? `<span class="muted">${esc(r.rest)}</span>` : ''}: ${esc(r.family.name)}</h3>`;
+          if (r.tons != null) html += `<p class="msd-big"><b>${r.tons} ton${r.tons === 1 ? '' : 's'}</b> nominal <span class="small muted">(${Math.round(r.tons * 12000).toLocaleString('en-US')} BTU/h)</span>.${tonLink}</p>`;
+          html += `<div class="tablewrap"><table><thead><tr><th>Code</th><th>Position</th><th>Meaning</th></tr></thead><tbody>${r.fields.map((f) => `<tr><td class="num"><b>${esc(f.code)}</b></td><td>${esc(f.label)}</td><td>${f.known ? esc(f.meaning) : `<span class="muted">${esc(f.meaning)}</span>`}</td></tr>`).join('')}</tbody></table></div>`;
+          if (r.rest) html += `<p class="small muted">Trailing "${esc(r.rest)}": revision or option characters not decoded.</p>`;
+          for (const n of r.family.notes ?? []) html += `<p class="small note">${esc(n)}</p>`;
+          html += `<p class="small muted">Source: ${src(r.family.sourceIds)}. Full guide: <a href="/decoder/${r.family.decoder}/">${esc(r.family.decoderName)} decoder</a>.</p>`;
+          if (res.length > 1) html += `<p class="small muted">Also fits: ${res.slice(1).map((x) => esc(x.family.name)).join('; ')}.</p>`;
+          html += `</div>`;
+        }
+      }
+      if (serial) {
+        const rule = data.rules.find((x: any) => x.id === ruleId);
+        const s = decodeSerial(serial, rule);
+        if (!s.ok) html += `<div class="warnbox"><b>Serial ${esc(serial.toUpperCase())}</b> (${esc(label)}): ${esc(s.error!)}</div>`;
+        else {
+          html += `<div class="msd-res"><h3>Serial ${esc(serial.toUpperCase())} (${esc(label)})</h3><p class="msd-big"><b>Built ${s.month ? `${s.approxMonth ? 'around ' : ''}${esc(s.month)} ` : ''}${s.year}</b>: ${ageText(s.year!)}.</p>`;
+          html += `<div class="tablewrap"><table><tbody>${s.rows.map((x) => `<tr><td>${esc(x.label)}</td><td class="num">${esc(x.value)}</td></tr>`).join('')}</tbody></table></div>`;
+          for (const w of [...s.warnings, ...(rule.caveats ?? [])]) html += `<p class="small note">${esc(w)}</p>`;
+          html += `<p class="small muted">Rule: ${esc(rule.rule)} Source: ${src(rule.sourceIds)}.</p></div>`;
+        }
+      }
+      out.innerHTML = html || '<p class="small muted">Enter a model number, a serial number, or both.</p>';
+    };
+    form.addEventListener('submit', (e) => { e.preventDefault(); run(); });
+    for (const b of root.querySelectorAll<HTMLButtonElement>('.msd-ex')) {
+      b.addEventListener('click', () => {
+        (form.elements.namedItem('model') as HTMLInputElement).value = b.dataset.model ?? '';
+        (form.elements.namedItem('serial') as HTMLInputElement).value = b.dataset.serial ?? '';
+        if (b.dataset.brand) {
+          const sel = form.elements.namedItem('brand') as HTMLSelectElement;
+          const opt = [...sel.options].find((o) => o.value.endsWith(`|${b.dataset.brand}`));
+          if (opt) sel.value = opt.value;
+        }
+        run();
+      });
+    }
+    if (params.get('model') || params.get('serial')) {
+      (form.elements.namedItem('model') as HTMLInputElement).value = params.get('model') ?? '';
+      (form.elements.namedItem('serial') as HTMLInputElement).value = params.get('serial') ?? '';
+      run();
+    }
+  }
+</script>
+
+<style>
+.msd-grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.msd-ex{background:none;border:0;padding:0;color:var(--acc);font:inherit;font-family:var(--mono);cursor:pointer;text-decoration:underline}
+.msd-out{margin-top:14px}
+.msd-out :global(.msd-res){margin-top:12px}
+.msd-out :global(h3){margin:.4em 0;font-family:var(--mono);font-size:1.02rem;word-break:break-all}
+.msd-out :global(.msd-big){font-size:1.1rem;margin:.3em 0 .6em}
+.msd-out :global(.note){margin:.6em 0}
+.msd-out :global(.warnbox){margin-top:12px}
+.msd-out :global(.tablewrap td){white-space:normal}
+</style>
