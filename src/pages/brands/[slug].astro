@@ -9,6 +9,7 @@ import { SYSTEM_TYPE_LABEL, tonSlug, lowestPrice } from '../../data/equipment';
 import { SOURCES } from '../../data/sources';
 import { usd, fmtRange, seedDateLabel } from '../../lib/facts';
 import { SITE } from '../../config';
+import { decoderForBrand } from '../../data/decoder/index';
 
 export function getStaticPaths() {
   return BRANDS.map((b) => ({ params: { slug: b.slug }, props: { b } }));
@@ -18,6 +19,7 @@ const auditHref = `/auditor/?brand=${encodeURIComponent(b.name)}`;
 const shortType: Record<string, string> = { 'central-heat-pump': 'ducted heat pumps', 'mini-split': 'mini-splits', 'ac-furnace': 'AC + furnace systems', 'heat-pump-only': 'heat pump condensers' };
 const cold = b.systems.filter((s) => s.energyStar?.coldClimate);
 const others = BRANDS.filter((x) => x.slug !== b.slug);
+const decoder = decoderForBrand(b.name);
 const brandCmps = comparisonsForBrand(b.name);
 const refRow = b.rows.find((r) => r.tons === 3) ?? b.rows[0];
 const title = `${usd(b.priceMin)} Equip vs ${fmtRange(refRow.fair)} Installed: ${b.name} HVAC`;
@@ -90,6 +92,14 @@ const ld = [
     {b.types.some((t) => t !== 'ac-furnace') && <div class="card"><b>HEAR / HEEHR heat pump rebate</b> <span class="badge b-over">Check eligibility</span><p class="small">{SOURCES.hearStatute.note} Since DOE Program Notice 26-2 (May 2026) it no longer covers fuel switching: it pays to replace existing electric heating or cooling, not a gas, oil or propane furnace, and insulation and air sealing come first. Run by state energy offices. <a href={SOURCES.hearStatute.url}>Statute</a> · <a href={SOURCES.doePn262.url}>Program Notice 26-2</a> · <a href="/states/">Your state</a></p></div>}
     <div class="card"><b>Utility and state programs</b> <span class="badge b-fair">Worth checking</span><p class="small">Some require ENERGY STAR or cold-climate certification for the exact pairing; ask for the AHRI certificate. <a href={SOURCES.esRebateFinder.url}>ENERGY STAR Rebate Finder</a> · <a href={SOURCES.dsire.url}>DSIRE</a></p></div>
   </div>
+
+  {decoder && (
+    <div class="card">
+      <b>Read a {b.name} model or serial number</b>
+      <p class="small">Find the size, refrigerant and build date of an existing {b.name} unit, or check that a quoted model is the size you were promised.</p>
+      <a class="btn ghost" href={`/decoder/${decoder.slug}/`}>{decoder.name} decoder</a>
+    </div>
+  )}
 
   <h2>All {b.name} systems</h2>
   <FilterableSystems systems={b.systems} label={`Search ${b.name} systems`} />
