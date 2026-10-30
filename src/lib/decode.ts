@@ -90,12 +90,12 @@ export function decodeSerial(input: string, rule: SerialRule, now = new Date()):
 
   if (rule.kind === 'goodman-yymm') {
     const m = /^(\d{2})(\d{2})/.exec(s);
-    if (!m) return fail('Goodman and Amana serials start with four digits (YYMM). This one does not, so it may be an older format we do not decode.');
+    if (!m) return fail(`${rule.appliesTo.join(' and ')} serials start with four digits (YYMM). This one does not, so it may be an older format we do not decode.`);
     const mm = +m[2];
     if (mm < 1 || mm > 12) return fail(`Digits 3–4 are "${m[2]}", which is not a month (01–12), so this is not a YYMM serial.`);
     const year = century(+m[1], now);
     rows.push({ label: 'Year (digits 1–2)', value: `${m[1]} → ${year}` }, { label: 'Month (digits 3–4)', value: `${m[2]} → ${MONTHS[mm - 1]}` });
-    if (year < 2000) warnings.push('Goodman documents YYMM on current warranty certificates. For a pre-2000 unit, confirm the date with Goodman before relying on it.');
+    if (year < 2000) warnings.push(`${rule.appliesTo[0]} documents YYMM on current warranty certificates. For a pre-2000 unit, confirm the date with ${rule.appliesTo[0]} before relying on it.`);
     return { ok: true, year, month: MONTHS[mm - 1], approxMonth: false, rows, warnings };
   }
 
