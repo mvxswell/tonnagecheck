@@ -68,9 +68,9 @@ ${systemsTable([...carrierMs, ...otherMs].sort((x, y) => x.tons - y.tons || lowe
   },
   {
     slug: 'bosch-ids-inverter-heat-pump-cost',
-    get title() { return `${usd(brandByName('Bosch')!.priceMin)} Equip vs ${fmtRange(fairRange('central-heat-pump', 3, 'high'))} Installed: Bosch IDS Cost`; },
+    get title() { return `Bosch IDS Heat Pump Cost: ${usd(brandByName('Bosch')!.priceMin)}–${usd(brandByName('Bosch')!.priceMax)} Listed`; },
     h1: 'Bosch IDS inverter heat pump cost',
-    get description() { return `Bosch IDS inverter heat pumps list from ${usd(brandByName('Bosch')!.priceMin)} to ${usd(brandByName('Bosch')!.priceMax)} vs ${fmtRange(fairRange('central-heat-pump', 3, 'high'))} 3-ton installed benchmark.`; },
+    get description() { return `What a Bosch IDS inverter heat pump should cost: equipment lists ${usd(brandByName('Bosch')!.priceMin)}–${usd(brandByName('Bosch')!.priceMax)} vs a ${fmtRange(fairRange('central-heat-pump', 3, 'high'))} 3-ton installed benchmark. Check your quote free.`; },
     updated: today,
     related: { brands: ['Bosch'], tons: [2, 3, 5], systems: { brand: 'Bosch' } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'high', brand: 'Bosch' },
@@ -108,9 +108,9 @@ ${sizes.map((t) => { const s = cheapest(bosch.filter((x) => x.tons === t)); cons
   },
   {
     slug: 'mitsubishi-hyper-heat-cost',
-    get title() { return `${usd(brandByName('Mitsubishi')!.priceMin)} Equip vs ${fmtRange(fairRange('mini-split', 2, 'high'))} Installed: Mitsubishi H2i`; },
+    get title() { return `Mitsubishi Hyper-Heat & Mini-Split Cost: ${usd(brandByName('Mitsubishi')!.priceMin)}–${usd(brandByName('Mitsubishi')!.priceMax)}`; },
     h1: 'Mitsubishi Hyper-Heat (H2i) cost',
-    get description() { return `Mitsubishi H2i Hyper-Heat heat pumps list from ${usd(brandByName('Mitsubishi')!.priceMin)} to ${usd(brandByName('Mitsubishi')!.priceMax)} vs ${fmtRange(fairRange('mini-split', 2, 'high'))} 2-ton installed benchmark.`; },
+    get description() { return `Mitsubishi heating and cooling costs: Hyper-Heat and other Mitsubishi systems list ${usd(brandByName('Mitsubishi')!.priceMin)}–${usd(brandByName('Mitsubishi')!.priceMax)} vs a ${fmtRange(fairRange('mini-split', 2, 'high'))} 2-ton installed benchmark.`; },
     updated: today,
     related: { brands: ['Mitsubishi'], tons: [2, 2.5, 3], systems: { brand: 'Mitsubishi' } },
     audit: { systemType: 'mini-split', tons: 2, tier: 'high', brand: 'Mitsubishi' },

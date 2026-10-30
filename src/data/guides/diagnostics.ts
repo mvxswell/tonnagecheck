@@ -168,16 +168,12 @@ ${bSys.slice(0, 1).map((s) => `<tr><td>${sysLink(s)} (${brandLink(s.brand)}, ${s
   },
   {
     slug: 'evaporator-coil-leak-replacement-cost-vs-full-system-swap',
-    get title() {
-      const c3 = cheapest(systemsWhere({ type: 'heat-pump-only', tons: 3 }));
-      const f3 = fairRange('central-heat-pump', 3);
-      return `${usd(lowestPrice(c3))} Condenser vs ${fmtRange(f3)} System: Coil Leak Audit`;
-    },
+    get title() { return `Evaporator Coil Leak: Coil Swap vs ${fmtRange(fairRange('central-heat-pump', 3))} System`; },
     h1: 'Evaporator coil leak replacement cost vs full condenser + coil swap',
     get description() {
       const s3 = equipmentStats('central-heat-pump', 3);
       const f3 = fairRange('central-heat-pump', 3);
-      return `Leaking evaporator coil? Compare warranty coil swaps vs ${usd(s3.min)}–${usd(s3.max)} 3-ton equipment (${fmtRange(f3)} installed) and EPA R-410A vs R-454B/R-32 rules.`;
+      return `Leaking evaporator coil? Weigh a warranty coil swap against new 3-ton equipment (${usd(s3.min)}–${usd(s3.max)} listed, ${fmtRange(f3)} installed) and EPA R-454B/R-32 rules.`;
     },
     updated: today,
     related: { tons: [2.5, 3, 3.5, 4], brands: ['Goodman', 'Trane', 'Carrier', 'Bosch'], systems: { type: 'central-heat-pump', tons: [3, 4] } },

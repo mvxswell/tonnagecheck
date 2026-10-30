@@ -1,6 +1,9 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Auditor from '../../components/Auditor.astro';
+import AuditThisQuote from '../../components/AuditThisQuote.astro';
+import { systemMeta } from '../../data/seo';
+import { decoderForBrand } from '../../data/decoder/index';
 import { SYSTEMS, SYSTEM_TYPE_LABEL, TIER_LABEL, tonSlug, lowestPrice, belowEnergyStarMinimum, type System } from '../../data/equipment';
 import { brandSlug } from '../../data/brands';
 import { comparisonsForSystem } from '../../data/comparisons';
@@ -17,8 +20,10 @@ const fair = fairRange(s.systemType, s.tons, s.tier);
 const low = lowestPrice(s);
 const kind = { 'central-heat-pump': 'heat pump system', 'mini-split': 'mini-split heat pump', 'ac-furnace': 'AC + gas furnace system', 'heat-pump-only': 'heat pump condenser' }[s.systemType];
 const name = `${s.brand} ${s.tons}-ton ${s.specs.seer2 ?? ''} SEER2 ${kind}`.replace(/\s+/g, ' ');
-const title = `${usd(low)} Equip vs ${fmtRange(fair)} Installed: ${s.brand} ${s.tons}T`;
-const description = `${usd(low)} listed equipment vs ${fmtRange(fair)} installed benchmark for ${name} (${s.components[0]})${es ? `, AHRI #${es.ahriReferenceNumber}` : ''}.`;
+const seo = systemMeta(s, low, fair);
+const decoder = decoderForBrand(s.brand);
+const title = seo?.title ?? `${usd(low)} Equip vs ${fmtRange(fair)} Installed: ${s.brand} ${s.tons}T`;
+const description = seo?.description ?? `${usd(low)} listed equipment vs ${fmtRange(fair)} installed benchmark for ${name} (${s.components[0]})${es ? `, AHRI #${es.ahriReferenceNumber}` : ''}.`;
 const fetched = new Date(s.prices[0].fetchedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
 const related = SYSTEMS.filter((x) => x.slug !== s.slug && x.tons === s.tons).slice(0, 6);
 const sysCmps = comparisonsForSystem(s.slug, s.brand, s.tons);
@@ -48,6 +53,7 @@ const ld = {
     {es?.coldClimate && <span class="badge b-es">Cold climate</span>}
     {es?.mostEfficient && <span class="badge b-es">ENERGY STAR Most Efficient</span>}
   </p>
+  <AuditThisQuote systemType={s.systemType} tons={s.tons} tier={s.tier} brand={s.brand} model={s.components[0]} heading={`Audit a quote for the ${s.brand} ${s.components[0]}`} lead={`Enter the total you were quoted and your ZIP. We compare it with this system's ${usd(low)} listed price and the ${fmtRange(fair)} installed benchmark.`} />
 
   <div class="grid">
     <div class="card">
@@ -92,7 +98,7 @@ const ld = {
   <p class="note">Quoted this exact system? The model numbers on your quote should match the outdoor unit <b class="num">{s.components[0]}</b>{s.components[1] && <> and indoor unit <b class="num">{s.components.slice(1).join(' / ')}</b></>}. A different indoor coil changes the certified rating. <a href="/guides/heat-pump-rebates-and-ahri-certificate-check/">How to check an AHRI certificate</a></p>
 
   <Auditor systemType={s.systemType} tons={s.tons} tier={s.tier} brand={s.brand} heading={`Audit a quote for this ${s.tons}-ton system`} />
-  <p>More {s.brand}: <a href={`/brands/${brandSlug(s.brand)}/`}>all {s.brand} prices by size</a> · <a href={`/auditor/?brand=${encodeURIComponent(s.brand)}`}>audit a {s.brand} quote</a></p>
+  <p>More {s.brand}: <a href={`/brands/${brandSlug(s.brand)}/`}>all {s.brand} prices by size</a> · <a href={`/auditor/?brand=${encodeURIComponent(s.brand)}`}>audit a {s.brand} quote</a>{decoder && <> · <a href={`/decoder/${decoder.slug}/?model=${encodeURIComponent(s.components[0])}`}>decode {s.components[0]} with the {decoder.name} model &amp; serial decoder</a></>}</p>
 
   {related.length > 0 && (
     <>

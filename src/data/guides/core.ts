@@ -210,10 +210,12 @@ ${r3 ? `<p>At 3 tons, then, roughly ${usd(r3.f.mid - (r3.e.median ?? 0))} of a b
   },
   {
     slug: 'independent-hvac-tech-vs-big-company',
-    get title() { return `${usd(equipmentStats('central-heat-pump', 3).min)} Equip vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: Indie vs Big Co`; },
+    // GSC: impressions for "private equity acquisition" / "backed by private equity" company queries.
+    get title() { return `Independent HVAC Tech vs PE-Backed Co: ${fmtRange(fairRange('central-heat-pump', 3))}`; },
     h1: 'Independent HVAC tech vs big HVAC company',
-    get description() { return `How independent HVAC techs and big companies compare on ${fmtRange(fairRange('central-heat-pump', 3))} 3-ton heat pump quotes (${usd(equipmentStats('central-heat-pump', 3).min)}+ equipment), warranties, and vetting.`; },
+    get description() { return `Many local HVAC brands are now owned by private equity. Compare independent techs vs big companies on ${fmtRange(fairRange('central-heat-pump', 3))} 3-ton quotes, warranties and vetting.`; },
     updated: today,
+    related: { tons: [3], systems: { type: 'central-heat-pump', tons: 3 } },
     body: () => {
       const f = fairRange('central-heat-pump', 3, 'standard');
       return `
@@ -270,10 +272,12 @@ ${r3 ? `<p>At 3 tons, then, roughly ${usd(r3.f.mid - (r3.e.median ?? 0))} of a b
   },
   {
     slug: 'heat-pump-rebates-and-ahri-certificate-check',
-    get title() { return `${usd(equipmentStats('central-heat-pump', 3).min)} Equip vs ${fmtRange(fairRange('central-heat-pump', 3, 'high'))} Installed: AHRI Rebates`; },
+    // GSC: first site click; query "ahri tax credit".
+    get title() { const s = equipmentStats('central-heat-pump', 3); return `AHRI Tax Credit Check: ${usd(s.min)}–${usd(s.max)} Heat Pumps`; },
     h1: 'Heat pump rebates after 25C, and how to check the AHRI certificate',
-    get description() { return `2026 heat pump rebates after 25C ended: HEAR rules, utility rebates, and AHRI checks on ${usd(equipmentStats('central-heat-pump', 3).min)}+ equipment (${fmtRange(fairRange('central-heat-pump', 3, 'high'))} installed).`; },
+    get description() { return `The 25C heat pump tax credit ended after 2025. See which HEAR and utility rebates still apply and how to match the AHRI certificate to the models on a quote.`; },
     updated: today,
+    related: { tons: [2, 3, 4], systems: { type: 'central-heat-pump', energyStar: true, coldClimate: true } },
     body: () => {
       const ex = SYSTEMS.find((s) => s.energyStar?.coldClimate && s.energyStar.ahriReferenceNumber && s.systemType === 'central-heat-pump');
       const esCount = SYSTEMS.filter((s) => s.energyStar).length;

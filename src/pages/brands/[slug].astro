@@ -10,6 +10,7 @@ import { SOURCES } from '../../data/sources';
 import { usd, fmtRange, seedDateLabel } from '../../lib/facts';
 import { SITE } from '../../config';
 import { decoderForBrand } from '../../data/decoder/index';
+import { brandMeta, NEAR_PAGE1_GUIDES } from '../../data/seo';
 
 export function getStaticPaths() {
   return BRANDS.map((b) => ({ params: { slug: b.slug }, props: { b } }));
@@ -22,8 +23,10 @@ const others = BRANDS.filter((x) => x.slug !== b.slug);
 const decoder = decoderForBrand(b.name);
 const brandCmps = comparisonsForBrand(b.name);
 const refRow = b.rows.find((r) => r.tons === 3) ?? b.rows[0];
-const title = `${usd(b.priceMin)} Equip vs ${fmtRange(refRow.fair)} Installed: ${b.name} HVAC`;
-const description = `${b.systems.length} ${b.name} systems listed from ${usd(b.priceMin)} to ${usd(b.priceMax)} (${b.tonnages[0]}–${b.tonnages[b.tonnages.length - 1]}T) vs ${fmtRange(refRow.fair)} installed benchmark. Audit a ${b.name} quote free.`;
+const seo = brandMeta(b, refRow.fair);
+const brandGuides = NEAR_PAGE1_GUIDES.filter((g) => g.brand === b.name);
+const title = seo?.title ?? `${usd(b.priceMin)} Equip vs ${fmtRange(refRow.fair)} Installed: ${b.name} HVAC`;
+const description = seo?.description ?? `${b.systems.length} ${b.name} systems listed from ${usd(b.priceMin)} to ${usd(b.priceMax)} (${b.tonnages[0]}–${b.tonnages[b.tonnages.length - 1]}T) vs ${fmtRange(refRow.fair)} installed benchmark. Audit a ${b.name} quote free.`;
 const ld = [
   {
     '@context': 'https://schema.org', '@type': 'CollectionPage', name: `${b.name} HVAC equipment prices`, url: `${SITE.url}/brands/${b.slug}/`, description,
@@ -50,6 +53,9 @@ const ld = [
     <div class="card"><div class="small muted">ENERGY STAR matched pairings</div><div class="v num">{b.energyStarCount} of {b.systems.length}</div><div class="small muted">{b.coldClimateCount} cold-climate certified</div></div>
   </div>
   <p><a class="btn" href={auditHref}>Audit a {b.name} quote</a> <a class="btn ghost" href="#second-opinion">Get an independent second quote</a></p>
+  {seo && (
+    <p class="small"><b>Before you sign a {b.name} quote:</b> {brandGuides.map((g) => <><a href={`/guides/${g.slug}/`}>{g.label}</a> · </>)}<a href="/guides/heat-pump-rebates-and-ahri-certificate-check/">check the AHRI certificate &amp; 2026 rebates</a> · <a href="/guides/independent-hvac-tech-vs-big-company/">independent tech vs big company</a></p>
+  )}
 
   <h2>{b.name} listed price vs installed benchmark, by size</h2>
   <p class="small muted">Listed = lowest to highest public online price for {b.name} equipment at that size. Installed benchmark = REMDB (National Laboratory of the Rockies, formerly NREL) replacement-cost range for those systems' type and efficiency, restated in today's dollars; an estimate and a national average. <a href="/about/#benchmarks">Method</a></p>

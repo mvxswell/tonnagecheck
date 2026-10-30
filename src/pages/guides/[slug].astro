@@ -1,6 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Auditor from '../../components/Auditor.astro';
+import AuditThisQuote from '../../components/AuditThisQuote.astro';
+import { NEAR_PAGE1_GUIDES } from '../../data/seo';
 import Newsletter from '../../components/Newsletter.astro';
 import { GUIDES, type Guide } from '../../data/guides/index';
 import { brandByName } from '../../data/brands';
@@ -19,6 +21,9 @@ const relSystems = systemsWhere(rel.systems ?? {}).slice(0, 6);
 const relTons = [...new Set([...(rel.tons ?? []), ...relSystems.map((s) => s.tons)])].sort((a, b) => a - b);
 const relBrands = [...new Set([...(rel.brands ?? []), ...relSystems.map((s) => s.brand)])].map((b) => brandByName(b)).filter((b) => !!b);
 const others = GUIDES.filter((x) => x.slug !== g.slug);
+const inCluster = NEAR_PAGE1_GUIDES.some((c) => c.slug === g.slug);
+const cluster = inCluster ? NEAR_PAGE1_GUIDES.filter((c) => c.slug !== g.slug) : [];
+const topAuditBox = g.slug === 'heat-pump-rebates-and-ahri-certificate-check';
 const ld = [
   {
     '@context': 'https://schema.org', '@type': 'Article', headline: g.h1, description: g.description,
@@ -40,6 +45,7 @@ const ld = [
   <p class="crumbs"><a href="/">Home</a> / <a href="/guides/">Guides</a></p>
   <article class="prose">
     <h1>{g.h1}</h1>
+    {topAuditBox && <AuditThisQuote systemType={g.audit?.systemType} tons={g.audit?.tons} tier={g.audit?.tier} askModel heading="Audit this quote" lead="Paste the outdoor model number from your quote, the total and your ZIP. We check the price against listed equipment and the installed benchmark." />}
     <p class="small muted">Updated {g.updated} · {Math.max(1, Math.round(words / 230))} min read · Figures are computed from our sourced data at publish time.</p>
     <Fragment set:html={html} />
   </article>
@@ -51,6 +57,7 @@ const ld = [
     {relSystems.length > 0 && (
       <ul class="rs">{relSystems.map((s) => <li><a href={`/systems/${s.slug}/`}>{s.brand} {s.tons}-ton {s.components[0]}</a> <span class="small muted">{s.specs.seer2 ?? '?'} SEER2 · <span class="num">{usd(lowestPrice(s))}</span></span></li>)}</ul>
     )}
+    {cluster.length > 0 && <p><b>Related guides:</b> {cluster.map((c, i) => <>{i > 0 && ' · '}<a href={`/guides/${c.slug}/`}>{c.label}</a></>)}</p>}
     <p class="small"><a href="/auditor/">Quote auditor</a> · <a href="/systems/">All equipment prices</a> · <a href="/brands/">All brands</a></p>
   </aside>
 
