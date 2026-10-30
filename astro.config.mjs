@@ -74,9 +74,18 @@ function siteChecks() {
           writeFileSync(sm, xml);
           for (const u of noindex) if (xml.includes(`<loc>${u}</loc>`)) errors.push(`noindex page still in sitemap: ${u}`);
         }
+        // Lead capture: the client bundle must carry the public Supabase URL + anon key (from .env.production),
+        // otherwise every form silently skips saving. And no secret key may ever ship.
+        const astroDir = join(root, '_astro');
+        const js = existsSync(astroDir) ? readdirSync(astroDir).filter((f) => f.endsWith('.js')).map((f) => readFileSync(join(astroDir, f), 'utf8')).join('\n') : '';
+        if (!/https:\/\/[a-z0-9]+\.supabase\.co/.test(js)) errors.push('client bundle has no Supabase URL: forms would not save leads (check .env.production)');
+        for (const m of js.matchAll(/eyJ[A-Za-z0-9_-]+\.([A-Za-z0-9_-]+)\.[A-Za-z0-9_-]+/g)) {
+          try { const c = JSON.parse(Buffer.from(m[1], 'base64url').toString('utf8')); if (c.role && c.role !== 'anon') errors.push(`client bundle contains a non-anon Supabase key (role ${c.role})`); } catch {}
+        }
+        if (/sb_secret_/.test(js)) errors.push('client bundle contains a Supabase secret key');
         console.log(`[tc] checked ${files.length} pages; sitemap URLs: ${kept}; noindex pages excluded: ${noindex.length}`);
         if (errors.length) throw new Error(`[tc] ${errors.length} build check(s) failed:\n - ${errors.join('\n - ')}`);
-        console.log('[tc] build checks passed (titles, descriptions, canonicals, JSON-LD, source links)');
+        console.log('[tc] build checks passed (titles, descriptions, canonicals, JSON-LD, source links, lead-capture config)');
       },
     },
   };
