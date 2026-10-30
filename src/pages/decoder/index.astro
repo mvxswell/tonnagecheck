@@ -15,6 +15,7 @@ const examples = [
   { model: 'GLZS4BA3610', serial: '2610123456', brand: 'Goodman' },
   { model: 'A5HP5030A1', serial: '241611234V', brand: 'RunTru by Trane' },
   { model: '27SCA536A003', serial: '1218E00001', brand: 'Carrier' },
+  { model: 'DH7TCA3610AA', serial: '2610123456', brand: 'Daikin (ducted AC / heat pump)' },
   { model: '37MAHAQ33AA3' },
 ];
 // Where each brand family hides the size and the date. Built from the same data the decoder runs on.
@@ -68,7 +69,7 @@ const ld = [
   <div class="grid">
     <div class="card"><b>Model number = what you have</b><p class="small">Size, refrigerant, single- or two-stage, efficiency class. Check that a quote's tonnage and refrigerant match the unit actually being installed. A 3-ton quote should name a model with a 36 (or 37) in it.</p></div>
     <div class="card"><b>Serial number = when it was built</b><p class="small">That tells you the age of the system you are replacing. Some warranties also use it: Goodman and Amana use three months after the serial's manufacture date as the install date when you cannot prove it.</p></div>
-    <div class="card"><b>Registration = how long it is covered</b><p class="small">Goodman, Trane and American Standard need registration within 60 days for the longer parts warranty. Carrier and Bryant need it within 90 days. Without registration, coverage falls back to the base warranty: 5 years for Goodman, Amana, Carrier, Bryant and RunTru.</p></div>
+    <div class="card"><b>Registration = how long it is covered</b><p class="small">Goodman, Daikin, Trane and American Standard need registration within 60 days for the longer parts warranty. Carrier and Bryant need it within 90 days. Without registration, coverage falls back to the base warranty: 5 years for Goodman, Amana, Daikin, Carrier, Bryant and RunTru.</p></div>
   </div>
 
   <h2>Decoders by brand</h2>
