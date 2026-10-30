@@ -1,0 +1,39 @@
+---
+// Compact, above-the-fold "Audit this quote" box. It submits a plain GET to the existing Quote Auditor
+// (/auditor/), using the same shareable permalink params the Auditor already reads on load
+// (type, tons, tier, brand, model, quote, zip). With a valid quote + ZIP the Auditor auto-renders the scorecard.
+import type { SystemType, Tier } from '../data/equipment';
+interface Props { systemType?: SystemType; tons?: number; tier?: Tier; brand?: string; model?: string; askModel?: boolean; heading?: string; lead?: string }
+const { systemType, tons, tier, brand, model, askModel = false, heading = 'Audit this quote', lead } = Astro.props;
+---
+<form class="card atq" method="get" action="/auditor/#tc-result" aria-label={heading}>
+  <div class="atq-h">
+    <h2>{heading}</h2>
+    {lead && <p class="small muted">{lead}</p>}
+  </div>
+  {systemType && <input type="hidden" name="type" value={systemType} />}
+  {tons != null && <input type="hidden" name="tons" value={String(tons)} />}
+  {tier && <input type="hidden" name="tier" value={tier} />}
+  {brand && <input type="hidden" name="brand" value={brand} />}
+  {model && !askModel && <input type="hidden" name="model" value={model} />}
+  <div class="atq-f">
+    {askModel && <div><label for="atq-model">Outdoor model # on the quote</label><input id="atq-model" name="model" maxlength="80" placeholder="optional" value={model || undefined} autocomplete="off" /></div>}
+    <div><label for="atq-quote">Total quote</label><div class="money"><span>$</span><input id="atq-quote" name="quote" type="text" inputmode="decimal" placeholder="16,500" required autocomplete="off" /></div></div>
+    <div><label for="atq-zip">ZIP code</label><input id="atq-zip" name="zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="30301" required autocomplete="postal-code" /></div>
+    <div class="atq-b"><button class="btn" type="submit">Grade my quote</button></div>
+  </div>
+  <p class="small muted atq-n">Free, instant, no email.{model && !askModel && <> Prefilled with model <b class="num">{model}</b>.</>} Want to add line items? <a href="#audit">Use the full auditor below</a>.</p>
+</form>
+
+<style>
+.atq{margin:14px 0 6px;border-left:4px solid var(--acc)}
+.atq-h h2{margin:0;font-size:1.12rem}
+.atq-h p{margin:2px 0 0}
+.atq-f{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:end;margin-top:10px}
+.atq-f label{font-size:.86rem;font-weight:600}
+.atq .money{display:flex;align-items:center;border:1px solid #c5cfd8;border-radius:9px;background:#fff;padding-left:10px}
+.atq .money span{color:var(--mut);font-family:var(--mono)}
+.atq .money input{border:0;font-family:var(--mono);outline:none;padding-left:6px}
+.atq-b .btn{width:100%}
+.atq-n{margin:8px 0 0}
+</style>

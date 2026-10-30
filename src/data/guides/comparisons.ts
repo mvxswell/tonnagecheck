@@ -95,9 +95,9 @@ ${sizes.map((t) => { const s = cheapest(mz.filter((x) => x.tons === t)); return 
   },
   {
     slug: 'heat-pump-condenser-only-vs-full-system-replacement',
-    get title() { const c = cheapest(systemsWhere({ type: 'heat-pump-only', tons: 3 })); return `${usd(lowestPrice(c))} Condenser vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: Swap vs Full`; },
+    get title() { return `Condenser Only vs Full System: ${fmtRange(fairRange('heat-pump-only', 3))} Installed`; },
     h1: 'Heat pump condenser only vs full system replacement',
-    get description() { const c = cheapest(systemsWhere({ type: 'heat-pump-only', tons: 3 })); return `3-ton heat pump condensers list from ${usd(lowestPrice(c))} (${fmtRange(fairRange('heat-pump-only', 3))} installed) vs ${fmtRange(fairRange('central-heat-pump', 3))} full system replacement.`; },
+    get description() { const c = cheapest(systemsWhere({ type: 'heat-pump-only', tons: 3 })); return `Replace just the outdoor unit or the whole system? 3-ton heat pump condensers list from ${usd(lowestPrice(c))} (${fmtRange(fairRange('heat-pump-only', 3))} installed) vs ${fmtRange(fairRange('central-heat-pump', 3))} full system.`; },
     updated: today,
     get related() { return { brands: [...new Set(systemsWhere({ type: 'heat-pump-only' }).map((x) => x.brand))], tons: [3, 4, 5], systems: { type: 'heat-pump-only' as const } }; },
     audit: { systemType: 'heat-pump-only', tons: 3 },
