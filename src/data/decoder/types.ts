@@ -75,6 +75,8 @@ export interface DecoderBrand {
   labelLocation: { text: string; sourceIds: SourceId[] };
   families: ModelFamily[];
   serials: SerialRule[];
+  /** Shown instead of serial rules when the manufacturer documents no serial date code (serials is empty). */
+  serialNote?: { text: string; sourceIds: SourceId[] };
   warranty: WarrantyFact[];
   /** Things a homeowner commonly gets wrong for this brand. */
   gotchas: { title: string; text: string; sourceIds: SourceId[] }[];

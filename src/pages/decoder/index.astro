@@ -17,6 +17,7 @@ const examples = [
   { model: '27SCA536A003', serial: '1218E00001', brand: 'Carrier' },
   { model: 'DH7TCA3610AA', serial: '2610123456', brand: 'Daikin (ducted AC / heat pump)' },
   { model: '37MAHAQ33AA3' },
+  { model: 'SUZ-AK36NLHZ' },
 ];
 // Where each brand family hides the size and the date. Built from the same data the decoder runs on.
 const sizeWhere = DECODER_BRANDS.map((d) => ({
@@ -69,7 +70,7 @@ const ld = [
   <div class="grid">
     <div class="card"><b>Model number = what you have</b><p class="small">Size, refrigerant, single- or two-stage, efficiency class. Check that a quote's tonnage and refrigerant match the unit actually being installed. A 3-ton quote should name a model with a 36 (or 37) in it.</p></div>
     <div class="card"><b>Serial number = when it was built</b><p class="small">That tells you the age of the system you are replacing. Some warranties also use it: Goodman and Amana use three months after the serial's manufacture date as the install date when you cannot prove it.</p></div>
-    <div class="card"><b>Registration = how long it is covered</b><p class="small">Goodman, Daikin, Trane and American Standard need registration within 60 days for the longer parts warranty. Carrier and Bryant need it within 90 days. Without registration, coverage falls back to the base warranty: 5 years for Goodman, Amana, Daikin, Carrier, Bryant and RunTru.</p></div>
+    <div class="card"><b>Registration = how long it is covered</b><p class="small">Goodman, Daikin, Trane and American Standard need registration within 60 days for the longer parts warranty. Carrier, Bryant and Mitsubishi Electric need it within 90 days. Without registration, coverage falls back to the base warranty: 5 years for Goodman, Amana, Daikin, Carrier, Bryant and RunTru.</p></div>
   </div>
 
   <h2>Decoders by brand</h2>
@@ -96,7 +97,9 @@ const ld = [
     <thead><tr><th>Brands</th><th>Rule</th><th>Example</th></tr></thead>
     <tbody>{DECODER_BRANDS.flatMap((d) => d.serials.map((r) => (
       <tr><td><a href={`/decoder/${d.slug}/`}>{r.appliesTo.join(', ')}</a></td><td class="small wrap">{r.rule}</td><td class="num small">{r.example.serial}<br /><span class="muted">{r.example.reads}</span></td></tr>
-    )))}</tbody>
+    )))}{DECODER_BRANDS.filter((d) => !d.serials.length && d.serialNote).map((d) => (
+      <tr><td><a href={`/decoder/${d.slug}/`}>{d.brands.join(', ')}</a></td><td class="small wrap">No published serial date code. Use the manufacture date printed on the label.</td><td class="num small">—</td></tr>
+    ))}</tbody>
   </table></div>
 
   <h2>Frequently asked questions</h2>

@@ -15,6 +15,8 @@ const sources = Object.fromEntries(Object.values(SOURCES).filter((s) => usedIds.
 const tonPages = Object.fromEntries(TONNAGES.map((t) => [String(t), `/tonnage/${tonSlug(t)}/`]));
 const data = JSON.stringify({ families, rules, options, sources, tonPages }).replace(/</g, '\\u003c');
 const single = brands.length === 1;
+// A brand with no documented serial date code (e.g. Mitsubishi) gets a model-only decoder.
+const hasSerial = options.length > 0;
 ---
 <section class="card msd" data-msd>
   <h2 style="margin-top:0">{heading}</h2>
@@ -25,20 +27,24 @@ const single = brands.length === 1;
         <label for="msd-model">Model number</label>
         <input id="msd-model" name="model" placeholder={examples[0]?.model ?? 'e.g. GLZS4BA3610'} spellcheck="false" autocapitalize="characters" />
       </div>
-      <div>
-        <label for="msd-brand">Brand on the label</label>
-        <select id="msd-brand" name="brand">
-          {brands.map((b) => (
-            <optgroup label={b.name}>
-              {b.serialOptions.map((o) => <option value={`${b.slug}|${o.rule}|${o.label}`}>{o.label}</option>)}
-            </optgroup>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label for="msd-serial">Serial number</label>
-        <input id="msd-serial" name="serial" placeholder="e.g. 2610123456" spellcheck="false" autocapitalize="characters" />
-      </div>
+      {hasSerial && (
+        <div>
+          <label for="msd-brand">Brand on the label</label>
+          <select id="msd-brand" name="brand">
+            {brands.filter((b) => b.serialOptions.length).map((b) => (
+              <optgroup label={b.name}>
+                {b.serialOptions.map((o) => <option value={`${b.slug}|${o.rule}|${o.label}`}>{o.label}</option>)}
+              </optgroup>
+            ))}
+          </select>
+        </div>
+      )}
+      {hasSerial && (
+        <div>
+          <label for="msd-serial">Serial number</label>
+          <input id="msd-serial" name="serial" placeholder="e.g. 2610123456" spellcheck="false" autocapitalize="characters" />
+        </div>
+      )}
     </div>
     <p style="margin:.8em 0 0"><button class="btn" type="submit">Decode</button>
       {examples.length > 0 && <span class="small muted"> Try:{' '}{examples.map((e, i) => <>{i > 0 && ' · '}<button type="button" class="msd-ex" data-model={e.model} data-serial={e.serial ?? ''} data-brand={e.brand ?? ''}>{e.model}</button></>)}</span>}
@@ -59,8 +65,8 @@ const single = brands.length === 1;
     const params = new URLSearchParams(location.search);
     const run = () => {
       const model = (form.elements.namedItem('model') as HTMLInputElement).value.trim();
-      const serial = (form.elements.namedItem('serial') as HTMLInputElement).value.trim();
-      const [, ruleId, label] = (form.elements.namedItem('brand') as HTMLSelectElement).value.split('|');
+      const serial = (form.elements.namedItem('serial') as HTMLInputElement | null)?.value.trim() ?? '';
+      const [, ruleId, label] = ((form.elements.namedItem('brand') as HTMLSelectElement | null)?.value ?? '').split('|');
       let html = '';
       if (model) {
         const res = decodeModel(model, data.families);
@@ -81,7 +87,7 @@ const single = brands.length === 1;
       }
       if (serial) {
         const rule = data.rules.find((x: any) => x.id === ruleId);
-        const s = decodeSerial(serial, rule);
+        const s = rule ? decodeSerial(serial, rule) : { ok: false, error: 'No documented serial date code for this brand. Use the manufacture date printed on the label.', rows: [], warnings: [] };
         if (!s.ok) html += `<div class="warnbox"><b>Serial ${esc(serial.toUpperCase())}</b> (${esc(label)}): ${esc(s.error!)}</div>`;
         else {
           html += `<div class="msd-res"><h3>Serial ${esc(serial.toUpperCase())} (${esc(label)})</h3><p class="msd-big"><b>Built ${s.month ? `${s.approxMonth ? 'around ' : ''}${esc(s.month)} ` : ''}${s.year}</b>: ${ageText(s.year!)}.</p>`;
@@ -96,9 +102,11 @@ const single = brands.length === 1;
     for (const b of root.querySelectorAll<HTMLButtonElement>('.msd-ex')) {
       b.addEventListener('click', () => {
         (form.elements.namedItem('model') as HTMLInputElement).value = b.dataset.model ?? '';
-        (form.elements.namedItem('serial') as HTMLInputElement).value = b.dataset.serial ?? '';
+        const serialIn = form.elements.namedItem('serial') as HTMLInputElement | null;
+        if (serialIn) serialIn.value = b.dataset.serial ?? '';
         if (b.dataset.brand) {
-          const sel = form.elements.namedItem('brand') as HTMLSelectElement;
+          const sel = form.elements.namedItem('brand') as HTMLSelectElement | null;
+          if (!sel) return run();
           const opt = [...sel.options].find((o) => o.value.endsWith(`|${b.dataset.brand}`));
           if (opt) sel.value = opt.value;
         }
@@ -107,7 +115,8 @@ const single = brands.length === 1;
     }
     if (params.get('model') || params.get('serial')) {
       (form.elements.namedItem('model') as HTMLInputElement).value = params.get('model') ?? '';
-      (form.elements.namedItem('serial') as HTMLInputElement).value = params.get('serial') ?? '';
+      const serialIn = form.elements.namedItem('serial') as HTMLInputElement | null;
+      if (serialIn) serialIn.value = params.get('serial') ?? '';
       run();
     }
   }
