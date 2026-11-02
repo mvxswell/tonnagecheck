@@ -25,7 +25,9 @@ const decodedSeed = seedSystems.flatMap((s) => s.components.map((c) => ({ c, s }
   .filter((x) => x.r)
   .sort((a, b) => a.r.family.name.localeCompare(b.r.family.name) || (a.r.tons ?? 0) - (b.r.tons ?? 0) || a.model.localeCompare(b.model));
 const examples = [
-  ...d.families.slice(0, 2).map((f) => ({ model: f.example, serial: d.serials[0].example.serial, brand: d.serialOptions.find((o) => o.rule === d.serials[0].id)?.label })),
+  ...d.families.slice(0, 2).map((f) => (d.serials[0]
+    ? { model: f.example, serial: d.serials[0].example.serial, brand: d.serialOptions.find((o) => o.rule === d.serials[0].id)?.label }
+    : { model: f.example })),
   ...decodedSeed.filter((x) => !d.families.some((f) => f.example === x.model)).slice(0, 2).map((x) => ({ model: x.model })),
 ];
 const brandRows = d.seedBrands.map((n) => brandByName(n)).filter((b) => !!b);
@@ -39,7 +41,7 @@ for (const f of d.families) {
 
 const used = new Set<SourceId>([
   ...d.families.flatMap((f) => f.sourceIds), ...d.serials.flatMap((s) => s.sourceIds), ...d.warranty.flatMap((w) => w.sourceIds),
-  ...d.gotchas.flatMap((g) => g.sourceIds), ...d.labelLocation.sourceIds,
+  ...d.gotchas.flatMap((g) => g.sourceIds), ...d.labelLocation.sourceIds, ...(d.serialNote?.sourceIds ?? []),
 ]);
 const sourceList = [...used].map((id) => SOURCES[id]);
 const cite = (ids: SourceId[]) => ids.map((id) => SOURCES[id]);
@@ -104,6 +106,12 @@ const ld = [
   ))}
 
   <h2>Serial number: when was it built?</h2>
+  {d.serialNote && (
+    <section class="fam">
+      <p>{d.serialNote.text}</p>
+      <p class="small muted">Source: {cite(d.serialNote.sourceIds).map((s, i) => <>{i > 0 && ' · '}<a href={s.url}>{s.title}</a></>)}</p>
+    </section>
+  )}
   {serialChecks.map(({ r, out }) => (
     <section class="fam">
       <h3>{r.title}</h3>
