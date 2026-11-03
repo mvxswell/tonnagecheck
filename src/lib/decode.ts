@@ -71,6 +71,9 @@ const TRANE_LETTER_YEAR: Record<string, number> = {
   G: 1992, H: 1993, J: 1994, K: 1995, L: 1996, M: 1997, N: 1998, P: 1999, R: 2000, Z: 2001,
 };
 
+// Lennox month letters, January–December (I is skipped).
+const LENNOX_MONTHS = 'ABCDEFGHJKLM';
+
 export interface SerialResult {
   ok: boolean;
   year?: number;
@@ -154,6 +157,21 @@ export function decodeSerial(input: string, rule: SerialRule, now = new Date()):
     const month = monthOfWeek(year, week);
     warnings.push(`Trane uses a fiscal week, so "around ${month}" is approximate.`);
     return { ok: true, year, month, approxMonth: true, rows, warnings };
+  }
+  if (rule.kind === 'lennox-plant-yy-month') {
+    const m = /^(\d{2})(\d{2})([A-Z])([0-9A-Z]{5,6})$/.exec(s);
+    if (!m) return fail('Lennox documents serials as two plant digits, two year digits, a month letter and a 5- or 6-digit number (for example 5921C05716). This one does not fit, so it may be another Lennox format whose layout Lennox does not publish.');
+    const mi = LENNOX_MONTHS.indexOf(m[3]);
+    if (mi < 0) return fail(`Character 5 is "${m[3]}", which is not a Lennox month letter (A–M, with no I).`);
+    const year = century(+m[2], now);
+    rows.push(
+      { label: 'Plant (digits 1–2)', value: rule.plants?.[m[1]] ? `${m[1]} → ${rule.plants[m[1]]}` : `${m[1]} (not listed in Lennox's charts we found)` },
+      { label: 'Year (digits 3–4)', value: `${m[2]} → ${year}` },
+      { label: 'Month (character 5)', value: `${m[3]} → ${MONTHS[mi]}` },
+      { label: 'Unique number', value: m[4] },
+    );
+    if (year < 2000) warnings.push('Lennox\'s current charts list year codes from 2019 on. For a unit built before 2000, confirm the date with a Lennox dealer before relying on it.');
+    return { ok: true, year, month: MONTHS[mi], approxMonth: false, rows, warnings };
   }
   return fail('No rule for this brand yet.');
 }
