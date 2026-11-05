@@ -2613,8 +2613,8 @@
         {
           "retailer": "HVACDirect",
           "url": "https://hvacdirect.com/lg-24000-btu-21-seer2-3-zone-wall-mount-mini-split-heat-pump-system-r32-230v-227579.html",
-          "price": 4799,
-          "fetchedAt": "2026-10-28T18:14:46.503Z"
+          "price": 4293,
+          "fetchedAt": "2026-11-05T15:40:22.870Z"
         }
       ]
     },
@@ -5828,9 +5828,9 @@
       "title": "Stealth 15 Ft EZ Connect Pre-Charged Refrigerant Line Set - 3/8\" x 3/4\" Line Ends - R454B",
       "sku": "EZ-16-3834-U",
       "url": "https://hvacdirect.com/ez-connect-precharged-refrigerant-line-set-with-3-8-and-3-4-line-ends-15-feet-r454b-ez-16-3834-u.html",
-      "price": 299,
+      "price": 339,
       "retailer": "HVACDirect",
-      "fetchedAt": "2026-10-28T18:57:40.313Z"
+      "fetchedAt": "2026-11-05T15:40:22.870Z"
     },
     {
       "label": "Style Crest Revolv 3/8 x 3/4 in. AccuCharge line set, 25 ft",
@@ -5846,9 +5846,9 @@
       "title": "Stealth 25 Ft EZ Connect Pre-Charged Refrigerant Line Set - 3/8\" x 3/4\" Line Ends - R454B",
       "sku": "EZ-25-3834-U",
       "url": "https://hvacdirect.com/ez-connect-precharged-refrigerant-line-set-with-3-8-and-3-4-line-ends-25-feet-r454b-ez-25-3834-u.html",
-      "price": 399,
+      "price": 439,
       "retailer": "HVACDirect",
-      "fetchedAt": "2026-10-28T18:57:40.313Z"
+      "fetchedAt": "2026-11-05T15:40:22.870Z"
     },
     {
       "label": "3/8 x 3/4 in. insulated copper line set, 30 ft",
