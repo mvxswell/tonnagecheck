@@ -173,6 +173,34 @@ export function decodeSerial(input: string, rule: SerialRule, now = new Date()):
     if (year < 2000) warnings.push('Lennox\'s current charts list year codes from 2019 on. For a unit built before 2000, confirm the date with a Lennox dealer before relying on it.');
     return { ok: true, year, month: MONTHS[mi], approxMonth: false, rows, warnings };
   }
+  if (rule.kind === 'rheem-letter-wwyy') {
+    // Rheem: "The first two numbers after the letter in the middle or beginning of the serial number are the week
+    // of manufacture, and the third and fourth numbers are the year." Take the first letter followed by a valid week.
+    let hit: RegExpExecArray | null = null;
+    const re = /[A-Z](\d{2})(\d{2})/g;
+    for (let x = re.exec(s); x; x = re.exec(s)) {
+      const wk = +x[1];
+      if (wk >= 1 && wk <= 53) { hit = x; break; }
+      re.lastIndex = x.index + 1;
+    }
+    if (!hit) return fail('Rheem and Ruud HVAC serials have a letter (at the start or in the middle) followed by the week and year, for example W08139999. No letter here is followed by a week 01–53 and a year.');
+    const at = hit.index;
+    const letter = s[at];
+    const week = +hit[1];
+    const year = century(+hit[2], now);
+    const month = monthOfWeek(year, week);
+    if (at > 0) rows.push({ label: 'Before the letter', value: `${s.slice(0, at)} (on older units Rheem prints a compressor identification number here)` });
+    rows.push(
+      { label: 'Plant letter', value: rule.plants?.[letter] ? `${letter} → ${rule.plants[letter]}` : `${letter} (not in the Rheem plant lists we found)` },
+      { label: 'Week (2 digits after the letter)', value: hit[1] },
+      { label: 'Year (next 2 digits)', value: `${hit[2]} → ${year}` },
+    );
+    const restNum = s.slice(at + 5);
+    if (restNum) rows.push({ label: 'Production number', value: restNum });
+    warnings.push(`Rheem dates by week of the year, so "around ${month}" is approximate.`);
+    if (at > 0) warnings.push(`The date was read after the letter "${letter}" in the middle of the serial, as Rheem describes for its older long serials.`);
+    return { ok: true, year, month, approxMonth: true, rows, warnings };
+  }
   return fail('No rule for this brand yet.');
 }
 
