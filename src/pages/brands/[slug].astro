@@ -11,6 +11,7 @@ import { usd, fmtRange, seedDateLabel } from '../../lib/facts';
 import { SITE } from '../../config';
 import { decoderForBrand } from '../../data/decoder/index';
 import { brandMeta, NEAR_PAGE1_GUIDES } from '../../data/seo';
+import { brandExtra } from '../../data/brand-extras';
 
 export function getStaticPaths() {
   return BRANDS.map((b) => ({ params: { slug: b.slug }, props: { b } }));
@@ -24,6 +25,7 @@ const decoder = decoderForBrand(b.name);
 const brandCmps = comparisonsForBrand(b.name);
 const refRow = b.rows.find((r) => r.tons === 3) ?? b.rows[0];
 const seo = brandMeta(b, refRow.fair);
+const extra = brandExtra(b, refRow.fair);
 const brandGuides = NEAR_PAGE1_GUIDES.filter((g) => g.brand === b.name);
 const title = seo?.title ?? `${usd(b.priceMin)} Equip vs ${fmtRange(refRow.fair)} Installed: ${b.name} HVAC`;
 const description = seo?.description ?? `${b.systems.length} ${b.name} systems listed from ${usd(b.priceMin)} to ${usd(b.priceMax)} (${b.tonnages[0]}–${b.tonnages[b.tonnages.length - 1]}T) vs ${fmtRange(refRow.fair)} installed benchmark. Audit a ${b.name} quote free.`;
@@ -44,7 +46,7 @@ const ld = [
 ---
 <Base title={title} description={description} jsonld={ld}>
   <p class="crumbs"><a href="/">Home</a> / <a href="/brands/">Brands</a> / {b.name}</p>
-  <h1>{b.name} HVAC prices: equipment vs installed</h1>
+  <h1>{seo?.h1 ?? `${b.name} HVAC prices: equipment vs installed`}</h1>
   <p class="lead">{b.systems.length} real {b.name} listings ({b.types.map((t) => shortType[t]).join(', ')}) with prices captured {seedDateLabel}, compared with the DOE national-lab installed-cost benchmark for the same size and efficiency.</p>
 
   <div class="grid kp">
@@ -52,12 +54,13 @@ const ld = [
     <div class="card"><div class="small muted">Efficiency range</div><div class="v num">{b.seer2Min === b.seer2Max ? b.seer2Min : `${b.seer2Min}–${b.seer2Max}`} SEER2</div><div class="small muted">{b.hspf2Max ? `Up to ${b.hspf2Max} HSPF2` : 'Heating rating not listed'}</div></div>
     <div class="card"><div class="small muted">ENERGY STAR matched pairings</div><div class="v num">{b.energyStarCount} of {b.systems.length}</div><div class="small muted">{b.coldClimateCount} cold-climate certified</div></div>
   </div>
+  {extra && <Fragment set:html={extra.summaryHtml} />}
   <p><a class="btn" href={auditHref}>Audit a {b.name} quote</a> <a class="btn ghost" href="#second-opinion">Get an independent second quote</a></p>
   {seo && (
     <p class="small"><b>Before you sign a {b.name} quote:</b> {brandGuides.map((g) => <><a href={`/guides/${g.slug}/`}>{g.label}</a> · </>)}<a href="/guides/heat-pump-rebates-and-ahri-certificate-check/">check the AHRI certificate &amp; 2026 rebates</a> · <a href="/guides/independent-hvac-tech-vs-big-company/">independent tech vs big company</a></p>
   )}
 
-  <h2>{b.name} listed price vs installed benchmark, by size</h2>
+  <h2>{extra?.sizeHeading ?? `${b.name} listed price vs installed benchmark, by size`}</h2>
   <p class="small muted">Listed = lowest to highest public online price for {b.name} equipment at that size. Installed benchmark = REMDB (National Laboratory of the Rockies, formerly NREL) replacement-cost range for those systems' type and efficiency, restated in today's dollars; an estimate and a national average. <a href="/about/#benchmarks">Method</a></p>
   <div class="tablewrap">
     <table>
@@ -76,6 +79,7 @@ const ld = [
     </table>
   </div>
   <p class="small muted">"Non-equipment at midpoint" is the benchmark midpoint minus the lowest listed {b.name} price at that size: roughly what a fairly priced install spends on labor, materials, permits, overhead and margin.</p>
+  {extra && <Fragment set:html={extra.sectionsHtml} />}
 
   <h2>Specs: SEER2, HSPF2 and cold-climate performance</h2>
   {cold.length > 0 ? (
@@ -135,6 +139,13 @@ const ld = [
     </>
   )}
 
+  {extra && extra.faq.length > 0 && (
+    <section class="faq">
+      <h2>{b.name} system cost FAQ</h2>
+      {extra.faq.map((f) => (<><h3>{f.q}</h3><p set:html={f.a} /></>))}
+    </section>
+  )}
+
   <h2>Other brands</h2>
   <p>{others.map((o, i) => <>{i > 0 && ' · '}<a href={`/brands/${o.slug}/`}>{o.name}</a> <span class="small muted">({o.systems.length})</span></>)}</p>
   <p class="small muted">Sizes we list for {b.name}: {b.tonnages.map((t, i) => <>{i > 0 && ', '}<a href={`/tonnage/${tonSlug(t)}/`}>{t} ton</a></>)}. All systems: <a href="/systems/">equipment price lookup</a>. Lowest-priced {b.name} listing: <a href={`/systems/${[...b.systems].sort((x, y) => lowestPrice(x) - lowestPrice(y))[0].slug}/`}>{SYSTEM_TYPE_LABEL[[...b.systems].sort((x, y) => lowestPrice(x) - lowestPrice(y))[0].systemType].toLowerCase()}</a>.</p>
@@ -144,6 +155,9 @@ const ld = [
 <style>
 .kp .v{font-size:1.35rem;font-weight:700;margin:6px 0 2px}
 .rbx{display:grid;gap:10px}
+.answer{margin:14px 0;border-left:4px solid var(--acc)}
+.answer p{margin:6px 0}
+.faq h3{font-size:1.02rem;margin:16px 0 4px}
 .rbx p{margin:6px 0 0}
 .cta{margin-top:28px;background:var(--navy);color:#fff;border:0}
 .cta h2{margin-top:0;color:#fff}.cta p{color:#cfdbe5}
