@@ -34,7 +34,8 @@ function sizeSpecific(t: number): string {
     case 3:
       return `<h2>3 tons: the most common replacement size</h2>
 <p>${most.t === 3 ? 'Three tons is the size with the most listings in our data, which mirrors how common it is in replacements.' : 'Three tons is one of the most common replacement sizes.'} That is good news for you: every brand and contractor quotes it constantly, prices are easy to compare, and there is no excuse for vagueness. Brands with 3-ton listings in our data: ${brandsHere.map((b) => brandLink(b)).join(', ')}.</p>
-<p>Because 3-ton quotes are so comparable, they are also where padding stands out. A standard-efficiency 3-ton ducted heat pump replacement benchmarks at ${rangeText(fairRange('central-heat-pump', 3))}. A quote well above the top of that range for a like-for-like swap needs line items that explain the difference.</p>`;
+<p>Because 3-ton quotes are so comparable, they are also where padding stands out. A standard-efficiency 3-ton ducted heat pump replacement benchmarks at ${rangeText(fairRange('central-heat-pump', 3))}. A quote well above the top of that range for a like-for-like swap needs line items that explain the difference.</p>
+<p>Comparing brands at 3 tons? Our brand pages show the listed equipment next to the installed benchmark, for example <a href="/brands/trane/">what a new Trane HVAC system costs</a> by product line.</p>`;
     case 3.5: {
       return `<h2>3.5 tons: fewer models, more upselling room</h2>
 <p>Not every product line is built in a 3.5-ton size, so choices narrow. In our data, ${brandsHere.length} brands have 3.5-ton listings (${brandsHere.map((b) => brandLink(b)).join(', ')}). A narrower field gives a salesperson more room to steer you toward a premium line "because that's what comes in your size." Ask whether a 3-ton or 4-ton unit was considered, and for the load calculation that rules them out.</p>
