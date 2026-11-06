@@ -321,6 +321,7 @@ ${ex ? `<p><b>Example from our data:</b> the <a href="/systems/${ex.slug}/">${ex
 <li><b>Mismatched coil.</b> The quote names a premium outdoor unit but a cheaper or existing indoor coil. The certified rating may not apply.</li>
 <li><b>Outdoor-only replacement.</b> Replacing just the condenser and keeping an old coil rarely produces a certified match, especially across a refrigerant change.</li>
 <li><b>"Up to" ratings.</b> Brochures quote the best pairing in a product line. Your pairing may be lower.</li>
+<li><b>Brand name vs product line.</b> One manufacturer can sell several lines with different ratings and warranties. A "Trane" quote can be a Trane-branded 5TW heat pump or a RunTru by Trane unit (outdoor model starting with A), per ${a(SOURCES.traneHandbook.url, "Trane's 2026 handbook")}. The certificate names the exact models; see <a href="/brands/trane/">what a new Trane system costs by line</a>.</li>
 <li><b>Rebate promised, certificate missing.</b> No certificate, no rebate. Ask before you sign, not after.</li>
 </ul>
 
