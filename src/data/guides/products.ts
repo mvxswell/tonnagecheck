@@ -103,7 +103,8 @@ ${sizes.map((t) => { const s = cheapest(bosch.filter((x) => x.tons === t)); cons
 </ul>
 
 <h2>Is the premium worth it?</h2>
-<p>Inverter systems run at variable speed, which usually means better comfort and part-load efficiency. Whether that pays back depends on your climate and electricity prices. What you should not pay is a premium that is mostly dealer margin. Compare the listed Bosch price with the ${brandLink('Bosch', 'Bosch brand page')} and other inverter options in <a href="/guides/inverter-vs-single-stage-heat-pump-cost/">inverter vs single-stage cost</a>, then grade your quote in the ${auditLink({ brand: 'Bosch', tons: 3, tier: 'high' })}.</p>`;
+<p>Inverter systems run at variable speed, which usually means better comfort and part-load efficiency. Whether that pays back depends on your climate and electricity prices. What you should not pay is a premium that is mostly dealer margin. Compare the listed Bosch price with the ${brandLink('Bosch', 'Bosch brand page')} and other inverter options in <a href="/guides/inverter-vs-single-stage-heat-pump-cost/">inverter vs single-stage cost</a>, then grade your quote in the ${auditLink({ brand: 'Bosch', tons: 3, tier: 'high' })}.</p>
+<p>Weighing Bosch against Mitsubishi Hyper-Heat? The <a href="/compare/bosch-vs-mitsubishi-heat-pump-cost/">Bosch vs Mitsubishi heat pump cost comparison</a> lines up their cold-weather output at 5°F and their warranties side by side.</p>`;
     },
   },
   {
