@@ -215,6 +215,7 @@ export const SOURCES = {
     url: 'https://www.alpinehomeair.com/',
   },
   // ---- Model & serial decoder (/decoder/). Every URL below was opened and read on 2026-10-29. ----
+  boschIdsWarranty: { id: 'boschIdsWarranty', title: 'Limited Warranty: Bosch Inverter Heat Pump Product Family (IDS/IDP condensers BOV**/BOH**, air handlers, BMAC cased coils), effective 11/2025', publisher: 'Bosch Thermotechnology Corp.', url: 'https://www.bosch-homecomfort.com/us/media/country_pool/documents/warranties-and-claims/bosch_inverter_heat_pump_product_family_warranty_en-frqr_11.2025.pdf', note: 'Residential: compressors and internal components "free from defects in workmanship and materials for ten (10) years from the Commencement Date"; registering within 90 days adds a 90-day labor allowance.' },
   gdmGlzs4b: { id: 'gdmGlzs4b', title: 'GLZS4B R-32 heat pump specification sheet (SS-GLZS4B-R32), nomenclature', publisher: 'Goodman Manufacturing', url: 'https://www.goodmanmfg.com/docs/librariesprovider6/default-document-library/ss-glzs4b-r32.pdf?view=true' },
   gdmGlzs5b: { id: 'gdmGlzs5b', title: 'GLZS5B R-32 heat pump specification sheet (SS-GLZS5B-R32)', publisher: 'Goodman Manufacturing', url: 'https://www.goodmanmfg.com/docs/librariesprovider6/default-document-library/ss-glzs5b-r32.pdf?view=true' },
   gdmGlzt7c: { id: 'gdmGlzt7c', title: 'GLZT7C R-32 two-stage heat pump specification sheet (SS-GLZT7C-R32)', publisher: 'Goodman Manufacturing', url: 'https://www.goodmanmfg.com/docs/librariesprovider6/default-document-library/ss-glzt7c-r32.pdf?view=true' },

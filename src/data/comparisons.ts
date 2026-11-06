@@ -47,6 +47,8 @@ export interface CompareEntry {
   modelLeft?: System;
   modelRight?: System;
   bodyHtml: string;
+  /** Skip the standalone second-opinion form (the embedded auditor already carries one). */
+  hideStandaloneConcierge?: boolean;
 }
 
 const src = (k: SourceKey, text?: string) => {
@@ -474,10 +476,73 @@ function buildModelComparison(
   };
 }
 
+/**
+ * Plan A row 2 (GSC Oct 20–Nov 2: "bosch vs mitsubishi heat pump" 37 impr @ pos 38). Query-aligned title/meta,
+ * a cold-climate section from each pairing's ENERGY STAR record, OEM warranty terms in place of the generic
+ * warranty paragraph, links to both brand guides, and one second-opinion form instead of two.
+ */
+function boschVsMitsubishiPlanA(e: CompareEntry): CompareEntry {
+  const L = e.left, R = e.right;
+  const all = [...e.systemsLeft, ...e.systemsRight];
+  const seers = all.map((s) => s.specs.seer2).filter((v): v is number => v != null);
+  const seerSpan = `${Math.min(...seers)}–${Math.max(...seers)} SEER2`;
+  const title = `Bosch vs Mitsubishi Heat Pump Cost: ${usd(L.equipMin)} vs ${usd(R.equipMin)}`;
+  const description = `Bosch vs Mitsubishi heat pump: equipment from ${usd(L.equipMin)} vs ${usd(R.equipMin)}, ${seerSpan}, cold-climate output, warranty and installed cost side by side.`;
+
+  // Only complete systems whose ENERGY STAR record is for the same indoor unit as the listing (multi-zone records
+  // carry no indoor model). Condenser-only listings and listings matched to a different coil are left out.
+  const sameIndoor = (s: System) => {
+    if (s.systemType === 'heat-pump-only') return false;
+    const ind = s.energyStar?.indoorModel?.replace(/\*+$/, '');
+    if (!ind) return s.components[0].startsWith('MXZ');
+    return s.components.slice(1).some((c) => c.startsWith(ind) || ind.startsWith(c));
+  };
+  const excluded = [...e.systemsLeft, ...e.systemsRight].filter((s) => s.energyStar && !sameIndoor(s));
+  const rated = (xs: System[]) => xs.filter((s) => sameIndoor(s) && s.energyStar?.heatingCapacity5F && s.energyStar?.heatingCapacity47F)
+    .sort((a, b) => b.energyStar!.heatingCapacity5F! - a.energyStar!.heatingCapacity5F!);
+  const rb = rated(e.systemsLeft), rm = rated(e.systemsRight);
+  const ret = (s: System) => s.energyStar!.heatingCapacity5F! / s.energyStar!.heatingCapacity47F!;
+  const btu = (n: number) => n.toLocaleString('en-US');
+  const indoorOf = (s: System) => s.components[1] ?? s.energyStar?.indoorModel ?? null;
+  const label = (s: System) => s.components[0].startsWith('MXZ') ? `${s.components[0]} multi-zone` : `${s.components[0]} + ${indoorOf(s) ?? 'indoor unit'}`;
+  const row = (s: System) => { const es = s.energyStar!; return `<tr><td>${s.brand} ${sysLink(s, label(s))}${es.coldClimate ? ' <span class="badge b-es">Cold climate</span>' : ''}</td><td class="r num">${s.tons}</td><td class="r num">${es.ahriReferenceNumber}</td><td class="r num">${btu(es.heatingCapacity47F!)}</td><td class="r num">${btu(es.heatingCapacity5F!)}</td><td class="r num">${pct(ret(s))}</td><td class="r num">${es.copAt5F ?? '—'}</td><td class="r num">${usd(lowestPrice(s))}</td></tr>`; };
+  const range = (xs: System[]) => xs.length ? `${pct(Math.min(...xs.map(ret)))}–${pct(Math.max(...xs.map(ret)))}` : '—';
+  // Listings whose certified pairing is rated well below the condenser's nominal size (e.g. a 3-ton condenser on a 2-ton air handler).
+  const under = [...rb, ...rm].filter((s) => s.energyStar!.heatingCapacity47F! < s.tons * 12000 * 0.85);
+
+  const cold = `
+<h2>Bosch vs Mitsubishi for cold climates: rated heat output at 5°F</h2>
+<p>For a heat pump that has to carry a real winter, the useful numbers are in each pairing's ${src('esApi', 'ENERGY STAR record')}: heating output at 47°F and at 5°F, and the coefficient of performance (COP) at 5°F. ENERGY STAR's cold-climate designation needs a COP of at least 1.75 at 5°F and at least 70% of rated capacity kept at 5°F (${src('esCriteria', 'criteria')}). Here are the pairings in this comparison that have a record, largest 5°F output first:</p>
+<div class="tablewrap"><table><thead><tr><th>System (outdoor + indoor)</th><th class="r">Listed tons</th><th class="r">AHRI #</th><th class="r">Heat at 47°F (BTU/h)</th><th class="r">Heat at 5°F (BTU/h)</th><th class="r">Kept at 5°F</th><th class="r">COP at 5°F</th><th class="r">Listed</th></tr></thead><tbody>
+${[...rb, ...rm].map(row).join('\n')}
+</tbody></table></div>
+<p class="small muted">Ratings: ENERGY STAR certified heat pump records matched by AHRI reference number, re-checked Nov 5, 2026; confirm any pairing in the ${src('ahri', 'AHRI Directory')}. Listed prices captured ${seedDateLabel}.${excluded.length ? ` Not shown: ${excluded.map((x) => x.components[0]).join(', ')}, whose matched record is for a different indoor unit than the listing, or which is sold as an outdoor unit only.` : ''}</p>
+<ul>
+<li><b>Capacity kept at 5°F:</b> the ${rb.length} rated Bosch pairings keep ${range(rb)} of their 47°F output; the ${rm.length} rated Mitsubishi pairings keep ${range(rm)}, and its H2i Hyper-Heating (HZ) outdoor units alone keep ${range(rm.filter((s) => s.components[0].endsWith('HZ')))}. See the <a href="/guides/mitsubishi-hyper-heat-cost/">Mitsubishi Hyper-Heat cost guide</a> for their −13°F catalog ratings.</li>
+${under.length ? `<li><b>Check the certified size, not the condenser size:</b> ${under.map((s) => `the ${s.brand} ${sysLink(s, s.components[0])} listing (${s.tons}-ton) is rated at ${btu(s.energyStar!.heatingCapacity47F!)} BTU/h at 47°F with ${indoorOf(s) ?? 'its indoor unit'}`).join('; ')}. A quote's "tons" should match the AHRI certificate for the exact indoor unit you are getting.</li>` : ''}
+</ul>`;
+
+  const warranty = `
+<h2>Warranty: Bosch vs Mitsubishi</h2>
+<div class="tablewrap"><table><thead><tr><th>Coverage</th><th>Bosch IDS (inverter family)</th><th>Mitsubishi M- and P-Series</th></tr></thead><tbody>
+<tr><td>Parts and compressor, residential</td><td>10 years on compressors and internal components</td><td>5 years parts, 7 years compressor (base)</td></tr>
+<tr><td>What registration adds</td><td>Not needed for the 10 years; registering within 90 days adds a 90-day labor allowance</td><td>10 years parts and compressor if registered within 90 days (owner-occupied home)</td></tr>
+<tr><td>Installer program</td><td>—</td><td>12 years parts and compressor if a Diamond Contractor installs and registers it within 90 days</td></tr>
+<tr><td>Labor</td><td>Only the 90-day allowance above</td><td>Not included</td></tr>
+</tbody></table></div>
+<p class="small muted">Sources: ${src('boschIdsWarranty', 'Bosch Inverter Heat Pump Product Family limited warranty (11/2025)')}; ${src('mitsuWarranty', 'Mitsubishi Electric Trane HVAC US residential limited warranty (effective Oct. 15, 2026)')}. Read the full terms for exclusions; both require installation by a licensed contractor.</p>
+<p>So a registered Mitsubishi and a Bosch IDS land at the same 10 years of parts coverage, and Mitsubishi's 12 years depends on who installs it. Neither covers labor long-term, so get the installer's labor warranty in writing. Always verify the exact outdoor + indoor model pairing on the ${src('ahri', 'AHRI Directory')} before signing: swapping a matched air handler or coil for a generic cabinet can drop SEER2/HSPF2 below utility rebate thresholds (${src('esCriteria', 'ENERGY STAR criteria')}). The federal Section 25C tax credit ended after December 31, 2025 (${src('irsObbba', 'IRS')}), and under ${src('doePn262', 'DOE Program Notice 26-2')} (May 2026) federal HEAR/HEEHRA rebates no longer fund gas-to-electric fuel switching. Check state and utility incentives on our <a href="/states/">state energy &amp; rebate pages</a>.</p>
+<p>Brand deep dives: <a href="/guides/bosch-ids-inverter-heat-pump-cost/">Bosch IDS inverter heat pump cost</a> (models, installed cost by size, what belongs on the quote) and <a href="/guides/mitsubishi-hyper-heat-cost/">Mitsubishi Hyper-Heat cost</a> (ducted vs ductless, ratings by model, warranty).</p>`;
+
+  const cut = e.bodyHtml.indexOf('<h2>Warranty, AHRI verification');
+  const bodyHtml = (cut >= 0 ? e.bodyHtml.slice(0, cut) : e.bodyHtml) + cold + warranty;
+  return { ...e, title, description, bodyHtml, hideStandaloneConcierge: true };
+}
+
 export const COMPARISONS: CompareEntry[] = [
   // 14 Brand-vs-Brand Matchups
   buildBrandComparison('goodman-vs-trane-heat-pump-cost', 'Goodman', 'Trane', 'HVAC', 'Goodman vs Trane heat pump & AC cost: equipment prices vs installed quotes'),
-  buildBrandComparison('bosch-vs-mitsubishi-heat-pump-cost', 'Bosch', 'Mitsubishi', 'Cost', 'Bosch IDS vs Mitsubishi Hyper-Heat cost: equipment vs installed quotes'),
+  boschVsMitsubishiPlanA(buildBrandComparison('bosch-vs-mitsubishi-heat-pump-cost', 'Bosch', 'Mitsubishi', 'Cost', 'Bosch IDS vs Mitsubishi Hyper-Heat cost: equipment vs installed quotes')),
   buildBrandComparison('bosch-vs-gree-flexx-heat-pump-cost', 'Bosch', 'Gree', 'Heat Pumps', 'Bosch IDS vs Gree Flexx heat pump cost: inverter specs & prices'),
   buildBrandComparison('goodman-vs-bosch-heat-pump-cost', 'Goodman', 'Bosch', 'Heat Pumps', 'Goodman vs Bosch IDS heat pump cost: fixed-stage vs inverter pricing'),
   buildBrandComparison('trane-vs-bosch-heat-pump-cost', 'Trane', 'Bosch', 'Heat Pumps', 'Trane vs Bosch heat pump cost: equipment prices, SEER2 & installed quotes'),
