@@ -140,9 +140,11 @@ const jsonld = [
     heading={`Audit a quote for ${entry.shortLabel}`}
   />
 
-  <section class="card" style="margin-top:20px;border:2px solid var(--acc)">
-    <ConciergeForm standalone idp="cmp" brandModel={entry.conciergeBrandModel} />
-  </section>
+  {!entry.hideStandaloneConcierge && (
+    <section class="card" style="margin-top:20px;border:2px solid var(--acc)">
+      <ConciergeForm standalone idp="cmp" brandModel={entry.conciergeBrandModel} />
+    </section>
+  )}
 
   <h2>Related brand, tonnage &amp; head-to-head hubs</h2>
   <div class="grid">
