@@ -5,13 +5,20 @@ import type { Brand } from './brands';
 import type { System } from './equipment';
 import { usd, fmtRange, type Range } from '../lib/facts';
 
-type Meta = { title: string; description: string };
+type Meta = { title: string; description: string; h1?: string };
 
 /** /brands/<slug>/ overrides. GSC: Mitsubishi gets "mitsubishi heating and cooling (units) cost/prices", "mitsubishi air prices". */
 export function brandMeta(b: Brand, fair: Range): Meta | undefined {
   const span = `${usd(b.priceMin)}–${usd(b.priceMax)}`;
   const sizes = `${b.tonnages[0]}–${b.tonnages[b.tonnages.length - 1]} ton`;
   switch (b.slug) {
+    case 'trane':
+      // GSC Oct 20–Nov 2: "new trane hvac system cost" 51 impr @ pos 81 (Plan A row 1).
+      return {
+        title: `New Trane HVAC System Cost: ${fmtRange(fair)} Installed`,
+        description: `New Trane HVAC system cost by size: ${b.systems.length} Trane systems list ${span} for equipment vs ${fmtRange(fair)} installed. See what drives the quote.`,
+        h1: 'New Trane HVAC system cost: equipment vs installed',
+      };
     case 'mitsubishi':
       return {
         title: `Mitsubishi Heating & Cooling Prices: ${span}`,
