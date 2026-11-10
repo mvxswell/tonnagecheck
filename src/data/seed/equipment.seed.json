@@ -1322,9 +1322,9 @@
       "prices": [
         {
           "retailer": "HVACDirect",
-          "url": "https://hvacdirect.com/4-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba4810-1.html",
+          "url": "https://hvacdirect.com/4-ton-14-3-seer2-goodman-heat-pump-r32-glzs4ba4810.html",
           "price": 3609,
-          "fetchedAt": "2026-10-28T18:14:46.503Z"
+          "fetchedAt": "2026-11-10T15:34:36.161Z"
         }
       ]
     },
