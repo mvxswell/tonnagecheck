@@ -9,8 +9,9 @@ import { daikin } from './daikin';
 import { mitsubishi } from './mitsubishi';
 import { lennox } from './lennox';
 import { rheemRuud } from './rheem-ruud';
+import { bosch } from './bosch';
 
-export const DECODER_BRANDS: DecoderBrand[] = [goodmanAmana, traneAmericanStandard, carrierBryantPayne, daikin, mitsubishi, lennox, rheemRuud];
+export const DECODER_BRANDS: DecoderBrand[] = [goodmanAmana, traneAmericanStandard, carrierBryantPayne, daikin, mitsubishi, lennox, rheemRuud, bosch];
 
 export const decoderBySlug = (slug: string) => DECODER_BRANDS.find((b) => b.slug === slug);
 

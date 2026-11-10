@@ -74,6 +74,19 @@ const TRANE_LETTER_YEAR: Record<string, number> = {
 // Lennox month letters, January–December (I is skipped).
 const LENNOX_MONTHS = 'ABCDEFGHJKLM';
 
+// Bosch Home Comfort three-character date codes, transcribed from Table 1 of the Serial Number Reference Guide
+// (BTC 310004101 K, 07.2026). The code sits in characters 5–7 of the serial. Every code in the table is unique.
+const BOSCH_DATE_CODES: Record<string, [number, number]> = (() => {
+  const out: Record<string, [number, number]> = {};
+  const months = (y: number, codes: string[]) => codes.forEach((c, i) => { out[c] = [y, i]; });
+  const pad = (n: number) => String(n).padStart(2, '0');
+  for (let y = 2010; y <= 2013; y++) months(y, Array.from({ length: 12 }, (_, i) => `${y % 10}${pad(i + 1)}`));
+  for (let y = 2014; y <= 2019; y++) months(y, [17, 18, 19, 20, 53, 54, 55, 56, 57, 58, 59, 60].map((n) => `${y % 10}${n}`));
+  for (let y = 2020; y <= 2029; y++) months(y, [37, 38, 39, 40, 73, 74, 75, 76, 77, 78, 79, 80].map((n) => `${y % 10}${n}`));
+  months(2030, ['0A1', '0A2', '0A3', '0A4', '0A5', '0A6', '0A7', '0A8', '0A9', '0AA', '0AB', '0AC']);
+  return out;
+})();
+
 export interface SerialResult {
   ok: boolean;
   year?: number;
@@ -200,6 +213,23 @@ export function decodeSerial(input: string, rule: SerialRule, now = new Date()):
     warnings.push(`Rheem dates by week of the year, so "around ${month}" is approximate.`);
     if (at > 0) warnings.push(`The date was read after the letter "${letter}" in the middle of the serial, as Rheem describes for its older long serials.`);
     return { ok: true, year, month, approxMonth: true, rows, warnings };
+  }
+  if (rule.kind === 'bosch-date-table') {
+    if (s.length < 7) return fail('Bosch serials carry a three-character date code right after the first four characters, so enter the full serial from the rating plate.');
+    const code = s.slice(4, 7);
+    const hit = BOSCH_DATE_CODES[code];
+    if (!hit) return fail(`Characters 5–7 are "${code}", which is not in Bosch's date-code table (2010–2030). This may be an older or different Bosch serial layout.`);
+    const [year, mi] = hit;
+    if (year > now.getFullYear() || (year === now.getFullYear() && mi > now.getMonth())) {
+      return fail(`Characters 5–7 are "${code}", which Bosch's table assigns to ${MONTHS[mi]} ${year}. That is in the future, so this serial probably uses a different layout.`);
+    }
+    rows.push(
+      { label: 'First four characters', value: `${s.slice(0, 4)} (Bosch does not publish what these mean)` },
+      { label: 'Date code (characters 5–7)', value: `${code} → ${MONTHS[mi]} ${year}` },
+    );
+    if (s.length > 7) rows.push({ label: 'Rest of the serial', value: s.slice(7) });
+    warnings.push('Bosch says the date code is "typically" the three characters after the first four. If your label is laid out differently, confirm the date with Bosch before relying on it.');
+    return { ok: true, year, month: MONTHS[mi], approxMonth: false, rows, warnings };
   }
   return fail('No rule for this brand yet.');
 }
