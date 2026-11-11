@@ -108,29 +108,75 @@ ${sizes.map((t) => { const s = cheapest(bosch.filter((x) => x.tons === t)); cons
   },
   {
     slug: 'mitsubishi-hyper-heat-cost',
-    get title() { return `Mitsubishi Hyper-Heat & Mini-Split Cost: ${usd(brandByName('Mitsubishi')!.priceMin)}–${usd(brandByName('Mitsubishi')!.priceMax)}`; },
-    h1: 'Mitsubishi Hyper-Heat (H2i) cost',
-    get description() { return `Mitsubishi heating and cooling costs: Hyper-Heat and other Mitsubishi systems list ${usd(brandByName('Mitsubishi')!.priceMin)}–${usd(brandByName('Mitsubishi')!.priceMax)} vs a ${fmtRange(fairRange('mini-split', 2, 'high'))} 2-ton installed benchmark.`; },
+    // Plan A row 3 (GSC Oct 20–Nov 2: 40 impr, 1 click, pos 13.5; queries "mitsubishi heat pump cost",
+    // "mitsubishi ducted heat pump cost", "mitsubishi hyper-heat h2i seer2 hspf2 ahri rating").
+    get title() { return `Mitsubishi Heat Pump Cost (Hyper-Heat): ${usd(brandByName('Mitsubishi')!.priceMin)}–${usd(brandByName('Mitsubishi')!.priceMax)}`; },
+    h1: 'Mitsubishi Hyper-Heat (H2i) heat pump cost',
+    get description() { return `Mitsubishi Hyper-Heat heat pump cost: ducted and ductless systems list ${usd(brandByName('Mitsubishi')!.priceMin)}–${usd(brandByName('Mitsubishi')!.priceMax)} vs installed benchmarks. SEER2, HSPF2 and AHRI ratings.`; },
     updated: today,
     related: { brands: ['Mitsubishi'], tons: [2, 2.5, 3], systems: { brand: 'Mitsubishi' } },
     audit: { systemType: 'mini-split', tons: 2, tier: 'high', brand: 'Mitsubishi' },
     body: () => {
+      const mb = brandByName('Mitsubishi')!;
       const mit = systemsWhere({ brand: 'Mitsubishi' });
       const h2i = mit.filter((s) => /h2i|hyper/i.test(s.title));
       const cold = mit.filter((s) => s.energyStar?.coldClimate);
+      const rated = mit.filter((s) => s.energyStar);
       const otherCold = systemsWhere({ coldClimate: true }).filter((s) => s.brand !== 'Mitsubishi');
+      const indoor = (s: (typeof mit)[number]) => s.components[1] ?? '';
+      const groups = [
+        { label: 'Ducted, M-Series', models: 'SUZ outdoor + SVZ air handler', xs: mit.filter((s) => s.components[0].startsWith('SUZ') && indoor(s).startsWith('SVZ')) },
+        { label: 'Ducted, P-Series', models: 'PUZ outdoor + PVA air handler', xs: mit.filter((s) => s.components[0].startsWith('PUZ') && indoor(s).startsWith('PVA')) },
+        { label: 'Ductless multi-zone', models: 'MXZ outdoor + MSZ wall units', xs: mit.filter((s) => s.components[0].startsWith('MXZ')) },
+      ].filter((g) => g.xs.length);
+      const ducted = groups.filter((g) => g.label.startsWith('Ducted')).flatMap((g) => g.xs);
+      const ductless = groups.filter((g) => !g.label.startsWith('Ducted')).flatMap((g) => g.xs);
+      const spanOf = (xs: typeof mit) => { const ps = xs.map(lowestPrice); return ps.length ? (Math.min(...ps) === Math.max(...ps) ? usd(ps[0]) : `${usd(Math.min(...ps))}–${usd(Math.max(...ps))}`) : '—'; };
+      const tonsOf = (xs: typeof mit) => { const ts = [...new Set(xs.map((s) => s.tons))].sort((a, b) => a - b); return ts.length > 1 ? `${ts[0]}–${ts[ts.length - 1]} ton` : `${ts[0]} ton`; };
+      // Heating capacity at -13°F from Mitsubishi Electric's M- and P-Series catalog (ME_RS_2762, 09/2025),
+      // "M-Series heating capacity" and "P-Series heating capacity" tables, pp. 141–143, for the exact pairings we list.
+      const catalogMinus13: Record<string, number> = {
+        'SUZ-AA18NLHZ|SVZ-AP18NL': 12100,
+        'SUZ-AK24NLHZ|SVZ-AP24NL': 17200,
+        'SUZ-AK30NLHZ|SVZ-AP30NL': 21300,
+        'SUZ-AK36NLHZ|SVZ-AP36NL': 30400,
+        'PUZ-AK30NLHZ|PVA-AA30NL': 21000,
+      };
+      const m13 = (s: (typeof mit)[number]) => catalogMinus13[`${s.components[0]}|${indoor(s)}`];
+      const btu = (n: number | null | undefined) => (n ? n.toLocaleString('en-US') : '—');
+      const fair2 = fairRange('mini-split', 2, 'high');
+      const fair3 = fairRange('mini-split', 3, 'high');
       return `
-<p>Mitsubishi's Hyper-Heat (H2i) heat pumps are designed to keep heating in deep cold, and they are often quoted in cold climates as a furnace replacement. Here is what the Mitsubishi systems with public prices list for (${asOf}), what their cold-weather ratings actually say, and what installing them should cost.</p>
+<div class="card answer" style="border-left:4px solid var(--acc);margin:14px 0">
+<p><b>Short answer:</b> the ${mit.length} Mitsubishi heat pump systems with public prices list <b>${usd(mb.priceMin)}–${usd(mb.priceMax)}</b> for the equipment (${tonsOf(mit)}, ${asOf}). Ducted systems (air handler on your existing ducts) list ${spanOf(ducted)} and ductless multi-zone systems ${spanOf(ductless)}. Installed, a high-efficiency mini-split benchmarks at ${fmtRange(fair2)} for 2 tons and ${fmtRange(fair3)} for 3 tons (national DOE-lab estimate). ENERGY STAR certifies ${cold.length} of the ${mit.length} as cold climate.</p>
+</div>
+<p>Mitsubishi's Hyper-Heat (H2i) heat pumps are designed to keep heating in deep cold, and they are often quoted in cold climates as a furnace replacement. Here is what the Mitsubishi systems with public prices list for, how ducted and ductless setups compare, what the cold-weather ratings say model by model, and what installing them should cost.</p>
 
 <h2>Mitsubishi listings we track</h2>
 ${systemsTable(mit, { showType: true, caption: `${mit.length} Mitsubishi systems; ${h2i.length} are H2i Hyper-Heat per their listing titles.` })}
 
-<h2>What "Hyper-Heat" means in numbers</h2>
-<p>The useful numbers for cold weather are in the ENERGY STAR record: the coefficient of performance (COP) at 5°F, and how much of its 47°F heating capacity the unit keeps at 5°F. ENERGY STAR's cold-climate designation requires a COP of at least 1.75 at 5°F and at least 70% capacity retention (${src('esCriteria', 'criteria')}).</p>
-${cold.length ? `<div class="tablewrap"><table><thead><tr><th>Mitsubishi system</th><th class="r">HSPF2</th><th class="r">COP at 5°F</th><th class="r">Capacity at 5°F vs 47°F</th><th class="r">Listed</th></tr></thead><tbody>
-${cold.map((s) => `<tr><td>${sysLink(s)}</td><td class="r num">${s.energyStar!.hspf2}</td><td class="r num">${s.energyStar!.copAt5F ?? '—'}</td><td class="r num">${s.energyStar!.heatingCapacity5F && s.energyStar!.heatingCapacity47F ? pct(s.energyStar!.heatingCapacity5F / s.energyStar!.heatingCapacity47F) : '—'}</td><td class="r num">${usd(lowestPrice(s))}</td></tr>`).join('\n')}
-</tbody></table></div>` : '<p>None of the Mitsubishi listings in our data is matched to an ENERGY STAR cold-climate record.</p>'}
-${otherCold.length ? `<p>Other brands with cold-climate certified pairings in our data include ${[...new Set(otherCold.map((s) => s.brand))].map((b) => brandLink(b)).join(', ')}. If cold-weather performance is the reason you were quoted Mitsubishi, compare those records before paying a brand premium.</p>` : ''}
+<h2>Mitsubishi ducted vs ductless heat pump cost</h2>
+<p>A ducted Mitsubishi system pairs an outdoor unit with an air handler that connects to your existing ducts, so it replaces a central system one for one. A ductless multi-zone system runs a line set from one outdoor unit to a wall unit in each room. The listings split like this:</p>
+<div class="tablewrap"><table><thead><tr><th>Setup</th><th>Model families</th><th class="r">Systems</th><th class="r">Sizes</th><th class="r">Listed equipment</th><th class="r">Median</th></tr></thead><tbody>
+${groups.map((g) => `<tr><td>${g.label}</td><td class="num">${g.models}</td><td class="r num">${g.xs.length}</td><td class="r">${tonsOf(g.xs)}</td><td class="r num">${spanOf(g.xs)}</td><td class="r num">${usd(median(g.xs.map(lowestPrice)))}</td></tr>`).join('\n')}
+</tbody></table></div>
+<p>Box prices are only part of the difference. A ducted swap reuses the existing supply and return ducts if they are sound; a multi-zone job adds a line set, condensate route and electrical run to every indoor head, so the number and size of heads on the quote matter as much as the outdoor unit. Our <a href="/guides/multi-zone-mini-split-cost/">multi-zone mini-split cost guide</a> covers how to price those extras.</p>
+
+<h2>Ratings by model: SEER2, HSPF2, AHRI number and cold-weather output</h2>
+<p>The numbers that matter in cold weather are the ENERGY STAR record's coefficient of performance (COP) at 5°F and how much of its 47°F heating capacity the system keeps at 5°F. ENERGY STAR's cold-climate designation requires a COP of at least 1.75 at 5°F and at least 70% capacity retention (${src('esCriteria', 'criteria')}). In the model number, an outdoor unit ending in <b>HZ</b> is the H2i Hyper-Heating version ("H = Base pan heater", "Z = H2i Hyper-Heating" in the model number reference of ${src('mitsuCatalog', "Mitsubishi's M- and P-Series catalog")}); our <a href="/decoder/mitsubishi/">Mitsubishi model number decoder</a> reads the rest.</p>
+${rated.length ? `<div class="tablewrap"><table><thead><tr><th>Mitsubishi system</th><th class="r">AHRI #</th><th class="r">SEER2</th><th class="r">HSPF2</th><th class="r">COP at 5°F</th><th class="r">Heat at 5°F / 47°F (BTU/h)</th><th class="r">Kept at 5°F</th><th class="r">Catalog heat at −13°F</th></tr></thead><tbody>
+${rated.map((s) => { const e = s.energyStar!; return `<tr><td>${sysLink(s, s.components[0].startsWith('MXZ') ? `${s.components[0]} multi-zone` : `${s.components[0]} + ${indoor(s)}`)}${e.coldClimate ? ' <span class="badge b-es">Cold climate</span>' : ''}</td><td class="r num">${e.ahriReferenceNumber}</td><td class="r num">${e.seer2}</td><td class="r num">${e.hspf2}</td><td class="r num">${e.copAt5F ?? '—'}</td><td class="r num">${btu(e.heatingCapacity5F)} / ${btu(e.heatingCapacity47F)}</td><td class="r num">${e.heatingCapacity5F && e.heatingCapacity47F ? pct(e.heatingCapacity5F / e.heatingCapacity47F) : '—'}</td><td class="r num">${btu(m13(s))}</td></tr>`; }).join('\n')}
+</tbody></table></div>
+<p class="small muted">SEER2, HSPF2, COP and 5°F/47°F capacities: each pairing's ${src('esApi', 'ENERGY STAR record')}, matched by AHRI reference number and re-checked Nov 5, 2026. Confirm any pairing in the ${src('ahri', 'AHRI Directory')} with the reference number. −13°F capacities: ${src('mitsuCatalog', 'Mitsubishi Electric M- and P-Series catalog')} heating capacity tables (pp. 141–143) for the same outdoor and indoor models; "—" means the catalog does not list that pairing at −13°F. ${mit.length - rated.length ? `${mit.length - rated.length} listed ${mit.length - rated.length === 1 ? 'system has' : 'systems have'} no matched ENERGY STAR record.` : ''}</p>` : '<p>None of the Mitsubishi listings in our data is matched to an ENERGY STAR record.</p>'}
+${(() => {
+  const ret = (x: (typeof mit)[number]) => x.energyStar!.heatingCapacity5F! / x.energyStar!.heatingCapacity47F!;
+  const withCap = rated.filter((x) => x.energyStar!.heatingCapacity5F && x.energyStar!.heatingCapacity47F);
+  const hz = withCap.filter((x) => x.components[0].endsWith('HZ'));
+  const non = withCap.filter((x) => !x.components[0].endsWith('HZ')).sort((x, y) => ret(x) - ret(y));
+  if (!hz.length || !non.length) return '';
+  return `<p>The pattern in the records: every H2i (HZ) pairing here keeps at least ${pct(Math.min(...hz.map(ret)))} of its 47°F heating output at 5°F, while the non-HZ ${sysLink(non[0], non[0].components[0])} keeps ${pct(ret(non[0]))}. If you heat through real winters, ask for an HZ outdoor unit and its 5°F number, not just the SEER2.</p>`;
+})()}
+${otherCold.length ? `<p>Other brands with cold-climate certified pairings in our data include ${[...new Set(otherCold.map((s) => s.brand))].map((b) => brandLink(b)).join(', ')}. If cold-weather performance is the reason you were quoted Mitsubishi, compare those records before paying a brand premium; our <a href="/compare/bosch-vs-mitsubishi-heat-pump-cost/">Bosch vs Mitsubishi heat pump comparison</a> puts the two side by side.</p>` : ''}
 
 <h2>Installed cost</h2>
 <p>Mitsubishi's ducted H2i systems are mini-split heat pumps with a ducted air handler, so we benchmark them with REMDB's mini-split class at the high-efficiency tier:</p>
@@ -139,14 +185,24 @@ ${[...new Set(mit.map((s) => s.tons))].sort((a, b) => a - b).map((t) => { const 
 </tbody></table></div>
 <p class="small muted">${remdbNote}</p>
 
+<h2>Mitsubishi warranty: 5, 10 or 12 years</h2>
+<p>Mitsubishi Electric Trane HVAC US's residential limited warranty (${src('mitsuWarranty', 'effective Oct. 15, 2026')}) covers the SUZ, PUZ and MXZ outdoor units and the SVZ, PVA and MSZ indoor units listed here, in three steps:</p>
+<ul>
+<li><b>Base:</b> 5 years on parts and 7 years on the compressor from installation.</li>
+<li><b>Registered:</b> 10 years on parts and compressor if the system is in an owner-occupied home and registered within 90 days of installation (residents of California, Connecticut, Florida and Georgia get it without registering).</li>
+<li><b>Diamond Contractor:</b> 12 years on parts and compressor if a Mitsubishi Diamond Contractor installs it and registers it within 90 days.</li>
+</ul>
+<p>The warranty does not include labor. If a quote promises "12 years," confirm the installer is a Diamond Contractor and that they will register the system; if it promises labor coverage, get the installer's own labor warranty in writing.</p>
+
 <h2>Questions to ask on a Hyper-Heat quote</h2>
 <ul>
-<li>Is it H2i Hyper-Heat or a standard Mitsubishi line? The titles differ by a few letters in the model number.</li>
+<li>Is it H2i Hyper-Heat or a standard Mitsubishi line? Look for HZ at the end of the outdoor model number.</li>
+<li>What is the AHRI reference number for this exact outdoor and indoor pairing, and what heating capacity does it list at 5°F?</li>
 <li>What is the heating capacity at your local design temperature, and is backup heat planned?</li>
 <li>For multi-zone systems: how many indoor heads, which sizes, and how long are the line sets?</li>
-<li>Is the contractor a Mitsubishi-authorized installer, and how does that affect the warranty?</li>
+<li>Are you a Diamond Contractor, and who registers the system for the 10- or 12-year warranty?</li>
 </ul>
-<p>See all ${brandLink('Mitsubishi', 'Mitsubishi prices')}, our <a href="/guides/multi-zone-mini-split-cost/">multi-zone mini-split guide</a>, and grade your quote in the ${auditLink({ type: 'mini-split', brand: 'Mitsubishi' })}.</p>`;
+<p>See all ${brandLink('Mitsubishi', 'Mitsubishi prices')}, the <a href="/compare/bosch-vs-mitsubishi-heat-pump-cost/">Bosch vs Mitsubishi cost comparison</a>, our <a href="/guides/multi-zone-mini-split-cost/">multi-zone mini-split guide</a>, and grade your quote in the ${auditLink({ type: 'mini-split', brand: 'Mitsubishi' })}.</p>`;
     },
   },
 ];
