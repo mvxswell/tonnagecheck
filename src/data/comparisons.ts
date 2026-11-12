@@ -1,7 +1,7 @@
 // Head-to-head HVAC brand, tonnage, system-type, refrigerant, staging, and model comparisons (/compare/[slug]/).
 // Every price, efficiency rating, AHRI reference number, and benchmark range is computed dynamically from
 // src/data/equipment.ts, src/data/brands.ts, and src/lib/facts.ts; non-price facts cite src/data/sources.ts.
-import { SYSTEMS, TONNAGES, SYSTEM_TYPE_LABEL, TIER_LABEL, tonSlug, lowestPrice, median, type System, type SystemType, type Tier } from './equipment';
+import { SYSTEMS, TONNAGES, SYSTEM_TYPE_LABEL, TIER_LABEL, tonSlug, lowestPrice, median, certifiedCapacity, type System, type SystemType, type Tier } from './equipment';
 import { BRANDS, brandByName, brandSlug } from './brands';
 import { SOURCES } from './sources';
 type SourceKey = keyof typeof SOURCES;
@@ -425,16 +425,24 @@ function buildModelComparison(
   const priceDiff = Math.abs(pA - pB);
   const cheaperSys = pA <= pB ? sA : sB;
   const pricierSys = pA <= pB ? sB : sA;
+  // Certified capacity from each side's AHRI record. If either is well below its label, the pages can't call the
+  // matchup like-for-like; say "sold as N-ton" and show the certified numbers.
+  const cA = certifiedCapacity(sA);
+  const cB = certifiedCapacity(sB);
+  const anyUnder = !!(cA?.under || cB?.under);
+  const capCell = (c: ReturnType<typeof certifiedCapacity>): string => !c ? '—' : c.range ? `${c.range.minCapacity.toLocaleString('en-US')}–${c.range.maxCapacity.toLocaleString('en-US')} BTU/h (by indoor unit)` : `${c.cap.toLocaleString('en-US')} BTU/h (≈${c.tonsApprox} ton)${c.under ? ` · <b>${c.pct}% of nominal</b>` : ''}`;
+  const underNotes = ([[sA, cA], [sB, cB]] as const).flatMap(([x, c]) => (c?.under ? [`the ${sysLink(x, `${x.brand} ${x.components.join(' + ')}`)} is certified at <b>${c.cap.toLocaleString('en-US')} BTU/h</b> of cooling (AHRI #${x.energyStar!.ahriReferenceNumber}), about ${Math.round((c.cap / 12000) * 10) / 10} tons, versus the ${c.nominal.toLocaleString('en-US')} BTU/h a ${x.tons}-ton label implies`] : []));
 
   const bodyHtml = `
 <h2>Direct model-vs-model spec &amp; price sheet (${seedDateLabel})</h2>
-<p>This head-to-head comparison pairs two verified ${tonLink(sA.tons, `${sA.tons}-ton`)} systems from our catalog: the ${sysLink(sA, `${sA.brand} ${sA.components.join(' + ')}`)} listed at <b>${usd(pA)}</b> (${src('hvacdirect', sA.prices[0].retailer)}) and the ${sysLink(sB, `${sB.brand} ${sB.components.join(' + ')}`)} listed at <b>${usd(pB)}</b> (${src('hvacdirect', sB.prices[0].retailer)}). In public online distributor pricing, ${cheaperSys.brand}'s ${cheaperSys.components[0]} lists <b>${usd(priceDiff)} lower</b> (${pct(priceDiff / lowestPrice(pricierSys))} less) than ${pricierSys.brand}'s ${pricierSys.components[0]}:</p>
+<p>This head-to-head comparison pairs two ${anyUnder ? `systems sold as ${tonLink(sA.tons, `${sA.tons}-ton`)}` : `verified ${tonLink(sA.tons, `${sA.tons}-ton`)} systems`} from our catalog: the ${sysLink(sA, `${sA.brand} ${sA.components.join(' + ')}`)} listed at <b>${usd(pA)}</b> (${src('hvacdirect', sA.prices[0].retailer)}) and the ${sysLink(sB, `${sB.brand} ${sB.components.join(' + ')}`)} listed at <b>${usd(pB)}</b> (${src('hvacdirect', sB.prices[0].retailer)}). In public online distributor pricing, ${cheaperSys.brand}'s ${cheaperSys.components[0]} lists <b>${usd(priceDiff)} lower</b> (${pct(priceDiff / lowestPrice(pricierSys))} less) than ${pricierSys.brand}'s ${pricierSys.components[0]}:</p>
 <div class="tablewrap"><table><thead><tr><th>Specification</th><th class="r">${sA.brand} ${sA.components[0]}</th><th class="r">${sB.brand} ${sB.components[0]}</th></tr></thead><tbody>
 <tr><td>Full model pairing</td><td class="r num"><a href="/systems/${sA.slug}/">${sA.components.join(' + ')}</a></td><td class="r num"><a href="/systems/${sB.slug}/">${sB.components.join(' + ')}</a></td></tr>
 <tr><td>Public listed equipment price (${seedDateLabel})</td><td class="r num"><b>${usd(pA)}</b> (<a href="${sA.prices[0].url}" rel="nofollow noopener" target="_blank">${sA.prices[0].retailer}</a>)</td><td class="r num"><b>${usd(pB)}</b> (<a href="${sB.prices[0].url}" rel="nofollow noopener" target="_blank">${sB.prices[0].retailer}</a>)</td></tr>
 <tr><td>DOE installed benchmark (${TIER_LABEL[sA.tier].split(' (')[0]} / ${TIER_LABEL[sB.tier].split(' (')[0]}) <span class="badge b-est">est.</span></td><td class="r num">${fmtRange(fA)} (mid ${usd(fA.mid)})</td><td class="r num">${fmtRange(fB)} (mid ${usd(fB.mid)})</td></tr>
 <tr><td>Non-equipment share at benchmark midpoint</td><td class="r num">${usd(fA.mid - pA)} (${pct((fA.mid - pA) / fA.mid)})</td><td class="r num">${usd(fB.mid - pB)} (${pct((fB.mid - pB) / fB.mid)})</td></tr>
 <tr><td>Nominal capacity</td><td class="r num">${sA.tons} ton (${(sA.tons * 12000).toLocaleString('en-US')} BTU/h)</td><td class="r num">${sB.tons} ton (${(sB.tons * 12000).toLocaleString('en-US')} BTU/h)</td></tr>
+<tr><td>Certified cooling capacity (AHRI)</td><td class="r num">${capCell(cA)}</td><td class="r num">${capCell(cB)}</td></tr>
 <tr><td>SEER2 / EER2 / HSPF2</td><td class="r num">${sA.specs.seer2 ?? '—'} / ${sA.specs.eer2 ?? '—'} / ${sA.specs.hspf2 ?? '—'}</td><td class="r num">${sB.specs.seer2 ?? '—'} / ${sB.specs.eer2 ?? '—'} / ${sB.specs.hspf2 ?? '—'}</td></tr>
 <tr><td>Compressor staging</td><td class="r">${sA.energyStar?.compressorStaging ?? sA.specs.stages ?? (isInverter(sA) ? 'Variable-speed inverter' : 'Fixed stage')}</td><td class="r">${sB.energyStar?.compressorStaging ?? sB.specs.stages ?? (isInverter(sB) ? 'Variable-speed inverter' : 'Fixed stage')}</td></tr>
 <tr><td>Refrigerant</td><td class="r">${sA.energyStar?.refrigerant ?? refrigerantOf(sA) ?? '—'}</td><td class="r">${sB.energyStar?.refrigerant ?? refrigerantOf(sB) ?? '—'}</td></tr>
@@ -442,6 +450,7 @@ function buildModelComparison(
 <tr><td>ENERGY STAR / Cold Climate</td><td class="r">${sA.energyStar ? `Yes${sA.energyStar.coldClimate ? ' · Cold Climate' : ''}` : 'Listing rating'}</td><td class="r">${sB.energyStar ? `Yes${sB.energyStar.coldClimate ? ' · Cold Climate' : ''}` : 'Listing rating'}</td></tr>
 <tr><td>AHRI reference #</td><td class="r num">${sA.energyStar?.ahriReferenceNumber ? `<a href="${SOURCES.ahri.url}" rel="noopener" target="_blank">${sA.energyStar.ahriReferenceNumber}</a>` : 'Ask contractor'}</td><td class="r num">${sB.energyStar?.ahriReferenceNumber ? `<a href="${SOURCES.ahri.url}" rel="noopener" target="_blank">${sB.energyStar.ahriReferenceNumber}</a>` : 'Ask contractor'}</td></tr>
 </tbody></table></div>
+${underNotes.length ? `<p class="note"><b>Below its nominal size:</b> ${underNotes.join('; ')}. The price comparison above is between systems sold as ${sA.tons}-ton, not between equal capacities. Compare quotes on the certified capacity of the exact pairing on the AHRI certificate, not on the label.</p>` : ''}
 <p class="small muted">${remdbNote}</p>
 
 <h2>How to use this model comparison when negotiating your quote</h2>
@@ -459,7 +468,7 @@ function buildModelComparison(
     title,
     h1,
     description,
-    lead: `Exact model-number comparison between the ${sA.tons}-ton ${sA.brand} ${sA.components.join(' + ')} (${usd(pA)} listed, ${sA.specs.seer2} SEER2) and ${sB.brand} ${sB.components.join(' + ')} (${usd(pB)} listed, ${sB.specs.seer2} SEER2), with DOE REMDB installed benchmarks and AHRI / ENERGY STAR records.`,
+    lead: `Exact model-number comparison between the ${anyUnder ? '' : `${sA.tons}-ton `}${sA.brand} ${sA.components.join(' + ')} (${usd(pA)} listed, ${sA.specs.seer2} SEER2) and ${sB.brand} ${sB.components.join(' + ')} (${usd(pB)} listed, ${sB.specs.seer2} SEER2)${anyUnder ? `, both sold as ${sA.tons}-ton` : ''}, with DOE REMDB installed benchmarks and AHRI / ENERGY STAR records.`,
     left,
     right,
     auditDefaults: { systemType: sA.systemType, tons: sA.tons, tier: sA.tier, brand: sA.brand },

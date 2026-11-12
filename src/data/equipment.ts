@@ -34,6 +34,8 @@ export interface EnergyStarMatch {
   dateCertified: string | null;
   refrigerant: string | null;
   compressorStaging: string | null;
+  /** Condenser-only listings: certified cooling capacity across every ENERGY STAR pairing of this outdoor unit. */
+  pairingRange?: { count: number; minCapacity: number; maxCapacity: number; maxCapacityAhri: string | null; maxCapacityIndoor: string | null; maxCapacitySeer2: number | null };
 }
 
 export interface System {
@@ -68,6 +70,21 @@ export type AccessoryCategorySlug = 'heat-strip-kits' | 'pads-disconnects-whips'
 export interface Accessory { category: AccessoryCategorySlug; label: string; title: string; sku: string | null; url: string; price: number; retailer: string; fetchedAt: string }
 
 export const SEED_DATE: string = seed.generatedAt;
+
+/**
+ * Certified cooling capacity from the matched ENERGY STAR (AHRI) record, compared with the nominal size.
+ * `under` is true when a full system is certified below 90% of its label. A condenser sold alone is not flagged,
+ * because its capacity depends on the indoor unit; `range` carries its certified span instead.
+ */
+export function certifiedCapacity(s: System) {
+  const es = s.energyStar;
+  const cap = es?.coolingCapacity ?? null;
+  if (!es || cap == null) return null;
+  const nominal = s.tons * 12000;
+  const pairingOnly = !es.matchedOn.includes('indoor');
+  const range = s.systemType === 'heat-pump-only' && pairingOnly ? es.pairingRange ?? null : null;
+  return { cap, nominal, pct: Math.round((cap / nominal) * 100), tonsApprox: Math.round((cap / 12000) * 100) / 100, pairingOnly, range, under: !range && cap < 0.9 * nominal };
+}
 export const SYSTEMS = seed.systems as System[];
 export const LINE_SETS = seed.lineSets as LineSet[];
 export const ACCESSORIES = ((seed as any).accessories || []) as Accessory[];
