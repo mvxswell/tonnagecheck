@@ -18,7 +18,7 @@ Node 20+. No env vars are required: without Supabase the auditor and forms work 
 
 | Data | Source | How it gets in |
 |---|---|---|
-| Equipment prices | HVACDirect listings (65 systems across 10 brands, 1 line set) and Alpine Home Air (cross-check on condensers) | `scripts/seed-sources.json` lists the URLs; `scripts/fetch-energystar-seed.mjs` reads the price from each page (`product:price:amount` / JSON-LD `offers.price`) |
+| Equipment prices | HVACDirect listings (65 systems across 10 brands, 1 line set). The seed script can also read Alpine Home Air listings (`alpineUrl`), but none are configured, so every price is from HVACDirect | `scripts/seed-sources.json` lists the URLs; `scripts/fetch-energystar-seed.mjs` reads the price from each page (`product:price:amount` / JSON-LD `offers.price`) |
 | SEER2 / EER2 / HSPF2 / COP@5°F / AHRI ref | EPA ENERGY STAR API, dataset `w7cv-9xjt` | Matched by outdoor model prefix and accepted only if the indoor model (or exact SEER2) also matches; otherwise the listing's own spec table, labelled "listing" |
 | Installed-cost ranges | REMDB, National Laboratory of the Rockies (formerly NREL), `https://remdb.nlr.gov/db.json` | Same formula as the REMDB web app; always shown with an **estimate** badge and methodology |
 | 2023$ → today | CPI-U `CPIAUCSL` via FRED | Factor stored in `benchmarks.seed.json` |

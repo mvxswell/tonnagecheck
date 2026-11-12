@@ -154,7 +154,7 @@ ${systemsTable(inv3.slice(0, 6))}
 <h2>What a new copper line set lists for in our seed data</h2>
 <div class="tablewrap"><table><thead><tr><th>Component</th><th class="r">Listed retail price (${asOf})</th><th>Retailer / Source</th></tr></thead><tbody>
 <tr><td><a href="${ls.url}" rel="noopener" target="_blank">${ls.label}</a></td><td class="r num">${usd(ls.price)}</td><td>${src('hvacdirect', 'HVACDirect')}</td></tr>
-<tr><td>${tonLink(3, '3-ton central heat pump equipment')} (${s3.count} systems)</td><td class="r num">${usd(s3.min)}–${usd(s3.max)} (median ${usd(s3.median)})</td><td>${src('hvacdirect', 'HVACDirect')} / ${src('alpine', 'Alpine')}</td></tr>
+<tr><td>${tonLink(3, '3-ton central heat pump equipment')} (${s3.count} systems)</td><td class="r num">${usd(s3.min)}–${usd(s3.max)} (median ${usd(s3.median)})</td><td>${src('hvacdirect', 'HVACDirect')}</td></tr>
 <tr><td>${tonLink(3, '3-ton full replacement, installed')} <span class="badge b-est">est.</span></td><td class="r num">${fmtRange(f3)} (mid ${usd(f3.mid)})</td><td>${src('remdb', 'DOE REMDB')}</td></tr>
 </tbody></table></div>
 <p class="small muted">${remdbNote}</p>

@@ -1,5 +1,5 @@
 // Typed access to the seed built by scripts/fetch-energystar-seed.mjs. Nothing in this file adds numbers;
-// it only reshapes what the seed recorded from HVACDirect, Alpine Home Air and data.energystar.gov.
+// it only reshapes what the seed recorded from HVACDirect and data.energystar.gov.
 import seed from './seed/equipment.seed.json';
 import bench from './seed/benchmarks.seed.json';
 
