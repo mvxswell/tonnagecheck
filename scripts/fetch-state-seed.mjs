@@ -7,11 +7,16 @@
 //   PNNL-33270 (DOE Building America)         IECC 2021 climate zone of every county
 //   Census 2020 national county list          to measure how completely PNNL covers each state
 //   NASEO state energy office directory       each state energy office's website, checked live
+//   PNNL climate-zone data files (BASC)       moisture regime for the few PNNL-33270 rows that print none
+//
+// `npm run seed:states -- --climate-only` re-reads only PNNL and the Census list and rewrites only the climate
+// fields of the existing states.seed.json (EIA prices, NASEO offices and dates are left as they are).
 //
 // Nothing is typed in. A state whose data is incomplete is written with `complete: false` and the missing
 // pieces listed; the site renders it noindex and keeps it out of the sitemap.
 import { execFileSync } from 'node:child_process';
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
+import { inflateRawSync } from 'node:zlib';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
@@ -26,7 +31,10 @@ const SRC = {
   climatePage: 'https://www.pnnl.gov/publications/guide-determining-climate-zone-county-building-america-and-iecc-2021-updates',
   counties: 'https://www2.census.gov/geo/docs/reference/codes2020/national_county2020.txt',
   naseo: 'https://www.naseo.org/state-energy-offices',
+  climateData: 'https://basc.pnnl.gov/sites/default/files/ClimateZoneDataFiles.zip',
+  climateDataPage: 'https://basc.pnnl.gov/guide-determining-climate-zone-county-data-files',
 };
+const CLIMATE_ONLY = process.argv.includes('--climate-only');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const get = (url) => execFileSync('curl', ['-sL', '--fail', '--max-time', '90', '-A', UA, url], { maxBuffer: 64 << 20 }).toString();
 const num = (s) => { const n = parseFloat(String(s ?? '').replace(/,/g, '')); return Number.isFinite(n) ? n : null; };
@@ -39,7 +47,7 @@ const codes = [...new Set(censusRows.map((r) => r[0]))].filter((c) => !['PR', 'A
 const censusCounties = Object.fromEntries(codes.map((c) => [c, censusRows.filter((r) => r[0] === c).map((r) => r[4])]));
 
 // ---------- NASEO: names, codes and office websites ----------
-const naseoList = get(SRC.naseo);
+const naseoList = CLIMATE_ONLY ? '' : get(SRC.naseo);
 const naseo = {};
 for (const m of naseoList.matchAll(/href="\/state\?State=([A-Z]{2})">([^<]+)</g)) naseo[m[1]] = { name: clean(m[2]), profile: `https://www.naseo.org/state?State=${m[1]}` };
 const nameToCode = Object.fromEntries(Object.entries(naseo).map(([c, v]) => [v.name.toLowerCase(), c]));
@@ -65,7 +73,7 @@ const STATE_OFFICE_FALLBACKS = {
 function eiaGrapherRows(html) {
   return [...html.matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/g)].map((r) => [...r[1].matchAll(/<t[hd][^>]*>([\s\S]*?)<\/t[hd]>/g)].map((c) => clean(c[1])));
 }
-const elecHtml = get(SRC.electricity);
+const elecHtml = CLIMATE_ONLY ? '' : get(SRC.electricity);
 const elecRows = eiaGrapherRows(elecHtml);
 const elecHead = elecRows.find((r) => r[0]?.startsWith('Census Division'));
 const elecPeriod = elecHead?.[1] ?? null; // e.g. "August 2026 YTD"
@@ -84,8 +92,8 @@ function dnavByArea(html) {
   }
   return { years, out };
 }
-const gasT = dnavByArea(get(SRC.gas));
-const heatT = dnavByArea(get(SRC.heatContent));
+const gasT = dnavByArea(CLIMATE_ONLY ? '' : get(SRC.gas));
+const heatT = dnavByArea(CLIMATE_ONLY ? '' : get(SRC.heatContent));
 const lastVal = (vals) => { for (let i = vals.length - 1; i >= 0; i--) if (vals[i] != null) return { v: vals[i], i }; return null; };
 
 // ---------- PNNL county climate zones ----------
@@ -93,15 +101,70 @@ const pdfBuf = execFileSync('curl', ['-sL', '--fail', '--max-time', '180', '-A',
 const pdf = await getDocument({ data: new Uint8Array(pdfBuf), verbosity: 0 }).promise;
 let text = '';
 for (let i = 1; i <= pdf.numPages; i++) text += (await (await pdf.getPage(i)).getTextContent()).items.map((x) => x.str).join(' ') + ' ';
-text = text.replace(/\s+/g, ' ').replace(/‐/g, '-').replace(/ - humid/g, ' - Humid').replace(/ - dry/g, ' - Dry').replace(/Very cold/g, 'Very Cold').replace(/ cold /g, ' Cold ');
+// Some 2021-change rows print the arrow as a private-use glyph (U+F0E0) instead of →; e.g. NJ Mercer, KS Lane.
+text = text.replace(/\s+/g, ' ').replace(/\uf0e0/g, '→').replace(/‐/g, '-').replace(/ - humid/g, ' - Humid').replace(/ - dry/g, ' - Dry').replace(/Very cold/g, 'Very Cold').replace(/ cold /g, ' Cold ');
 const BA = String.raw`(?:Hot - Humid|Mixed - Humid|Hot - Dry|Mixed - Dry|Very Cold|Cold|Subarctic|Marine)`;
 const rowRe = new RegExp(String.raw`\b([A-Z]{2}) ((?:(?!\b[A-Z]{2} )[^→])+?) (` + BA + String.raw`(?: → ` + BA + String.raw`)?) (\d(?: → \d)?)(?: ((?:A|B|C|NONE)(?: → (?:A|B|C|NONE))?))?(?= |$)`, 'g');
 const after = (x) => (x ? x.split(' → ').pop() : 'NONE'); // 2021 update shown as "old → new"
 const rawRows = [...text.matchAll(rowRe)].map((m) => ({ st: m[1], county: m[2].trim(), ba: after(m[3]), zone: Number(after(m[4])), moisture: after(m[5]) }));
 
+// A few PNNL-33270 rows print the county name again in the moisture column, so no A/B/C letter is extracted
+// (MO Boone, Buchanan, Butler; NM Sandoval through Valencia). PNNL publishes the same 2021 IECC map as data files
+// (BASC ClimateZoneDataFiles.zip, ClimateZones.dbf: State, county, IECC21, Moisture21). Fill the letter from there
+// only when that file's IECC21 zone equals the zone printed in the report; anything else is logged and left as is.
+const climateFixes = [];
+function readZipEntry(buf, suffix) {
+  for (let i = 0; i + 30 < buf.length; ) {
+    if (buf.readUInt32LE(i) !== 0x04034b50) break;
+    const method = buf.readUInt16LE(i + 8), csize = buf.readUInt32LE(i + 18), nlen = buf.readUInt16LE(i + 26), xlen = buf.readUInt16LE(i + 28);
+    const name = buf.toString('utf8', i + 30, i + 30 + nlen);
+    const start = i + 30 + nlen + xlen;
+    if (name.endsWith(suffix)) { const raw = buf.subarray(start, start + csize); return method === 8 ? inflateRawSync(raw) : raw; }
+    i = start + csize;
+  }
+  return null;
+}
+function readDbf(buf) {
+  const n = buf.readUInt32LE(4), hl = buf.readUInt16LE(8), rl = buf.readUInt16LE(10);
+  const fields = [];
+  for (let o = 32; buf[o] !== 0x0d; o += 32) fields.push({ name: buf.toString('latin1', o, o + 11).replace(/\0.*$/, ''), len: buf[o + 16] });
+  const out = [];
+  for (let r = 0; r < n; r++) {
+    let p = hl + r * rl + 1; const rec = {};
+    for (const f of fields) { rec[f.name] = buf.toString('utf8', p, p + f.len).trim(); p += f.len; }
+    out.push(rec);
+  }
+  return out;
+}
+const needsMoisture = rawRows.filter((r) => r.zone <= 6 && r.moisture === 'NONE');
+if (needsMoisture.length) {
+  const zip = execFileSync('curl', ['-sL', '--fail', '--max-time', '180', '-A', UA, SRC.climateData], { maxBuffer: 64 << 20 });
+  const dbf = readZipEntry(zip, '.dbf');
+  if (!dbf) throw new Error('PNNL climate-zone data file: no .dbf in ' + SRC.climateData);
+  const fips = Object.fromEntries(censusRows.map((r) => [r[1], r[0]])); // state FIPS -> USPS code
+  const dataRows = readDbf(dbf).map((d) => ({ st: fips[d.GEOID.slice(1, 3)], county: d.Country, zone: Number(d.IECC21), moisture: d.Moisture21 }));
+  const key = (st, c) => `${st}|${c.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z]/g, '')}`;
+  const byKey = new Map(dataRows.map((d) => [key(d.st, d.county), d]));
+  for (const r of needsMoisture) {
+    const d = byKey.get(key(r.st, r.county));
+    if (d && d.zone === r.zone && /^[ABC]$/.test(d.moisture)) {
+      climateFixes.push(`${r.county} (${r.st}): PNNL-33270 prints no moisture letter; ${r.zone}${d.moisture} from PNNL's climate-zone data file (IECC21 ${d.zone}, Moisture21 ${d.moisture})`);
+      r.moisture = d.moisture;
+    } else {
+      climateFixes.push(`${r.county} (${r.st}): PNNL-33270 prints no moisture letter and the data file ${d ? `says ${d.zone}${d.moisture}` : 'has no match'}; left without a letter`);
+    }
+  }
+}
+
+// Counties renamed after PNNL-33270's source list, mapped to the Census 2020 name.
+const renames = { SD: { Shannon: 'Oglala Lakota' } };
+for (const r of rawRows) {
+  const to = renames[r.st]?.[r.county];
+  if (to) { climateFixes.push(`${r.county} (${r.st}): renamed ${to} County in 2015; counted under the Census 2020 name`); r.county = to; }
+}
+
 // Source-typo correction, logged: the table lists each state's counties as one alphabetical block, so a short
 // run labelled X inside state Y's block (shorter than both neighbours, alphabetically in sequence) belongs to Y.
-const climateFixes = [];
 const runs = [];
 for (const r of rawRows) { const L = runs[runs.length - 1]; if (L && L.st === r.st) L.rows.push(r); else runs.push({ st: r.st, rows: [r] }); }
 const cmp = (a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' });
@@ -148,12 +211,45 @@ for (const r of rows) {
   m.set(r.county, r);
 }
 
-const normCounty = (s) => s.toLowerCase()
+const normCounty = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
   .replace(/\(ca\)/g, '')
   .replace(/\bcity\s*\(city\)/g, 'city')
   .replace(/\(city\)/g, 'city')
   .replace(/\b(county|parish|borough|census area|municipality|city and borough)\b/g, '')
   .replace(/^st\.? /, 'saint ').replace(/ st\.? /, ' saint ').replace(/[^a-z]/g, '');
+
+function climateFor(code) {
+  const missing = [];
+  const listed = [...(climateByState[code]?.values() ?? [])];
+  const census = censusCounties[code] ?? [];
+  const listedNorm = new Set(listed.map((r) => normCounty(r.county)));
+  const notListed = census.filter((c) => !listedNorm.has(normCounty(c)));
+  const coverage = census.length ? (census.length - notListed.length) / census.length : 0;
+  if (!listed.length) missing.push('PNNL county climate zones');
+  else if (coverage < 0.95) missing.push(`PNNL lists ${census.length - notListed.length} of ${census.length} Census 2020 counties`);
+  const zones = {};
+  for (const r of listed) { const k = `${r.zone}${r.moisture === 'NONE' ? '' : r.moisture}`; zones[k] = (zones[k] ?? 0) + 1; }
+  // IECC zones 1-6 always carry a moisture letter; 7 and 8 never do. Anything else is a parse error.
+  const bad = Object.keys(zones).filter((k) => !/^([1-6][ABC]|[78])$/.test(k));
+  if (bad.length) throw new Error(`${code}: climate zone keys without a valid moisture letter: ${bad.join(', ')}`);
+  return { climate: { zones, countiesListed: listed.length, censusCounties: census.length, coverage: Math.round(coverage * 1000) / 1000, notListed }, missing };
+}
+const climateSource = { url: SRC.climatePage, pdf: SRC.climatePdf, title: 'Guide to Determining Climate Zone by County: Building America and IECC 2021 Updates (PNNL-33270)', moistureData: SRC.climateData, moistureDataPage: SRC.climateDataPage, corrections: climateFixes, duplicatesDropped: duplicates };
+
+if (CLIMATE_ONLY) {
+  const seedPath = join(ROOT, 'src', 'data', 'seed', 'states.seed.json');
+  const seed = JSON.parse(readFileSync(seedPath, 'utf8'));
+  for (const st of seed.states) {
+    const { climate, missing } = climateFor(st.code);
+    st.missing = [...st.missing.filter((m) => !/^PNNL /.test(m)), ...missing];
+    st.complete = st.missing.length === 0;
+    st.climate = climate;
+  }
+  seed.sources.climate = climateSource;
+  writeFileSync(seedPath, JSON.stringify(seed, null, 2) + '\n');
+  console.log(`Climate-only: ${seed.states.length} states updated. Climate fixes: ${climateFixes.length}, duplicates dropped: ${duplicates.length}.`);
+  process.exit(0);
+}
 
 // ---------- assemble ----------
 const states = [];
@@ -169,15 +265,8 @@ for (const code of codes.sort()) {
   const h = lastVal(heatT.out[name] ?? []);
   if (!h) missing.push('EIA natural gas heat content');
 
-  const listed = [...(climateByState[code]?.values() ?? [])];
-  const census = censusCounties[code] ?? [];
-  const listedNorm = new Set(listed.map((r) => normCounty(r.county)));
-  const notListed = census.filter((c) => !listedNorm.has(normCounty(c)));
-  const coverage = census.length ? (census.length - notListed.length) / census.length : 0;
-  if (!listed.length) missing.push('PNNL county climate zones');
-  else if (coverage < 0.95) missing.push(`PNNL lists ${census.length - notListed.length} of ${census.length} Census 2020 counties`);
-  const zones = {};
-  for (const r of listed) { const k = `${r.zone}${r.moisture === 'NONE' ? '' : r.moisture}`; zones[k] = (zones[k] ?? 0) + 1; }
+  const cf = climateFor(code);
+  missing.push(...cf.missing);
 
   // State energy office: NASEO profile -> office website, which must load (2xx) and not be a WAF/error page.
   let office = null;
@@ -246,7 +335,7 @@ for (const code of codes.sort()) {
     electricity: e ? { ...e, period: elecPrior ? `${elecPeriod} (prior: ${elecPrior})` : elecPeriod } : null,
     gas: g ? { dollarsPerMcf: g.v, year: gasT.years[g.i] ?? null, priorDollarsPerMcf: gPrev ?? null } : null,
     gasHeatContentBtuPerCf: h ? { value: h.v, year: heatT.years[h.i] ?? null } : null,
-    climate: { zones, countiesListed: listed.length, censusCounties: census.length, coverage: Math.round(coverage * 1000) / 1000, notListed },
+    climate: cf.climate,
     energyOffice: { naseoProfile: naseo[code]?.profile ?? null, website: officeOk ? office.finalUrl : null, checked: office },
   });
   process.stdout.write(`${code} ${missing.length ? 'INCOMPLETE ' + missing.join('; ') : 'ok'}\n`);
@@ -258,7 +347,7 @@ const out = {
     electricity: { url: SRC.electricity, table: 'EIA Electric Power Monthly Table 5.6.B, residential sector', period: elecPeriod, usCentsPerKwh: num(usElec?.[1]) },
     gas: { url: SRC.gas, table: 'EIA Price of Natural Gas Delivered to Residential Consumers (annual)', years: gasT.years },
     heatContent: { url: SRC.heatContent, table: 'EIA Heat Content of Natural Gas Delivered to Consumers (annual)' },
-    climate: { url: SRC.climatePage, pdf: SRC.climatePdf, title: 'Guide to Determining Climate Zone by County: Building America and IECC 2021 Updates (PNNL-33270)', corrections: climateFixes, duplicatesDropped: duplicates },
+    climate: climateSource,
     counties: { url: SRC.counties, title: 'Census Bureau 2020 national county list' },
     energyOffices: { url: SRC.naseo, title: 'NASEO State Energy Offices directory' },
   },

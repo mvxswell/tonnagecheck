@@ -27,7 +27,21 @@
       "url": "https://www.pnnl.gov/publications/guide-determining-climate-zone-county-building-america-and-iecc-2021-updates",
       "pdf": "https://www.pnnl.gov/main/publications/external/technical_reports/PNNL-33270.pdf",
       "title": "Guide to Determining Climate Zone by County: Building America and IECC 2021 Updates (PNNL-33270)",
+      "moistureData": "https://basc.pnnl.gov/sites/default/files/ClimateZoneDataFiles.zip",
+      "moistureDataPage": "https://basc.pnnl.gov/guide-determining-climate-zone-county-data-files",
       "corrections": [
+        "Boone (MO): PNNL-33270 prints no moisture letter; 4A from PNNL's climate-zone data file (IECC21 4, Moisture21 A)",
+        "Buchanan (MO): PNNL-33270 prints no moisture letter; 4A from PNNL's climate-zone data file (IECC21 4, Moisture21 A)",
+        "Butler (MO): PNNL-33270 prints no moisture letter; 4A from PNNL's climate-zone data file (IECC21 4, Moisture21 A)",
+        "Sandoval (NM): PNNL-33270 prints no moisture letter; 5B from PNNL's climate-zone data file (IECC21 5, Moisture21 B)",
+        "Santa Fe (NM): PNNL-33270 prints no moisture letter; 5B from PNNL's climate-zone data file (IECC21 5, Moisture21 B)",
+        "Sierra (NM): PNNL-33270 prints no moisture letter; 3B from PNNL's climate-zone data file (IECC21 3, Moisture21 B)",
+        "Socorro (NM): PNNL-33270 prints no moisture letter; 4B from PNNL's climate-zone data file (IECC21 4, Moisture21 B)",
+        "Taos (NM): PNNL-33270 prints no moisture letter; 5B from PNNL's climate-zone data file (IECC21 5, Moisture21 B)",
+        "Torrance (NM): PNNL-33270 prints no moisture letter; 5B from PNNL's climate-zone data file (IECC21 5, Moisture21 B)",
+        "Union (NM): PNNL-33270 prints no moisture letter; 4B from PNNL's climate-zone data file (IECC21 4, Moisture21 B)",
+        "Valencia (NM): PNNL-33270 prints no moisture letter; 4B from PNNL's climate-zone data file (IECC21 4, Moisture21 B)",
+        "Shannon (SD): renamed Oglala Lakota County in 2015; counted under the Census 2020 name",
         "O'Brien: labelled IN in the source, inside the IA block; counted as IA",
         "Osceola: labelled IN in the source, inside the IA block; counted as IA",
         "Page: labelled IN in the source, inside the IA block; counted as IA",
@@ -791,16 +805,13 @@
       },
       "climate": {
         "zones": {
-          "5": 1,
-          "4A": 87,
+          "4A": 88,
           "5A": 17
         },
         "countiesListed": 105,
         "censusCounties": 105,
-        "coverage": 0.99,
-        "notListed": [
-          "Lane County"
-        ]
+        "coverage": 1,
+        "notListed": []
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=KS",
@@ -1123,9 +1134,8 @@
       },
       "climate": {
         "zones": {
-          "4": 3,
           "5A": 26,
-          "4A": 84,
+          "4A": 87,
           "3A": 2
         },
         "countiesListed": 115,
@@ -1415,16 +1425,13 @@
       },
       "climate": {
         "zones": {
-          "5": 1,
-          "4A": 13,
+          "4A": 14,
           "5A": 7
         },
         "countiesListed": 21,
         "censusCounties": 21,
-        "coverage": 0.952,
-        "notListed": [
-          "Mercer County"
-        ]
+        "coverage": 1,
+        "notListed": []
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=NJ",
@@ -1459,19 +1466,14 @@
       },
       "climate": {
         "zones": {
-          "3": 1,
-          "4": 3,
-          "5": 4,
-          "4B": 10,
-          "3B": 7,
-          "5B": 8
+          "4B": 13,
+          "3B": 8,
+          "5B": 12
         },
         "countiesListed": 33,
         "censusCounties": 33,
-        "coverage": 0.97,
-        "notListed": [
-          "Doña Ana County"
-        ]
+        "coverage": 1,
+        "notListed": []
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=NM",
@@ -1844,10 +1846,8 @@
         },
         "countiesListed": 66,
         "censusCounties": 66,
-        "coverage": 0.985,
-        "notListed": [
-          "Oglala Lakota County"
-        ]
+        "coverage": 1,
+        "notListed": []
       },
       "energyOffice": {
         "naseoProfile": "https://www.naseo.org/state?State=SD",
