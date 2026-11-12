@@ -197,7 +197,12 @@ for (const src of sources.systems) {
   const tier = es?.coldClimate || (seer2 ?? 0) >= 18 ? 'high' : (seer2 ?? 0) >= 16 ? 'mid' : 'standard';
   const brand = brandFrom(es?.outdoorBrand) || p.brand;
   if (!brand) { failures.push({ url: src.url, reason: 'brand not identifiable from title, URL or ENERGY STAR record' }); console.log('  (dropped: no brand)'); continue; }
-  const slug = slugify(`${brand} ${p.tons} ton ${seer2 ?? ''} seer2 ${src.systemType === 'ac-furnace' ? 'ac furnace' : src.systemType === 'mini-split' ? 'mini split' : src.systemType === 'heat-pump-only' ? 'heat pump condenser' : 'heat pump system'} ${outdoor}`);
+  // A few retailer listings carry the wrong size in their title. `sizeCorrection` in seed-sources.json records the
+  // manufacturer-documented size (with the source ids that back it) and pins the existing URL so the page does not move.
+  const fix = src.sizeCorrection || null;
+  const listingTons = p.tons;
+  if (fix) p.tons = fix.tons;
+  const slug = fix?.keepSlug || slugify(`${brand} ${p.tons} ton ${seer2 ?? ''} seer2 ${src.systemType === 'ac-furnace' ? 'ac furnace' : src.systemType === 'mini-split' ? 'mini split' : src.systemType === 'heat-pump-only' ? 'heat pump condenser' : 'heat pump system'} ${outdoor}`);
   systems.push({
     slug,
     systemType: src.systemType,
@@ -217,6 +222,7 @@ for (const src of sources.systems) {
     energyStar: es,
     energyStarQuery: esApi,
     ahriCertificateUrl: p.ahriCertificateUrl,
+    ...(fix ? { sizeCorrection: { listingTons, reason: fix.reason, sourceIds: fix.sourceIds || [] } } : {}),
     prices: [
       { retailer: 'HVACDirect', url: p.url, price: p.price, fetchedAt },
       ...(alpine ? [{ retailer: 'Alpine Home Air', url: alpine.url, price: alpine.price, fetchedAt }] : []),

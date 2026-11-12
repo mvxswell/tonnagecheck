@@ -46,6 +46,9 @@ const ld = {
   <p class="crumbs"><a href="/">Home</a> / <a href="/brands/">Brands</a> / <a href={`/brands/${brandSlug(s.brand)}/`}>{s.brand}</a> / <a href={`/tonnage/${tonSlug(s.tons)}/`}>{s.tons} ton</a> / {s.components[0]}</p>
   <h1>{name}</h1>
   <p class="lead">{s.title}</p>
+  {s.sizeCorrection && (
+    <p class="note"><b>Size corrected:</b> {s.sizeCorrection.reason} We list it as {s.tons}-ton. {s.sizeCorrection.sourceIds.map((id) => SOURCES[id as keyof typeof SOURCES]).filter(Boolean).map((src, i) => <>{i > 0 && ' · '}<a href={src.url} rel="noopener" target="_blank">{src.title}</a></>)}{es && <> · <a href={es.apiUrl} rel="noopener" target="_blank">ENERGY STAR record</a></>}</p>
+  )}
   <p>
     <span class="badge b-est">{SYSTEM_TYPE_LABEL[s.systemType]}</span>
     <span class="badge b-est">{TIER_LABEL[s.tier]}</span>

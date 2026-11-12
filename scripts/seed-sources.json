@@ -47,7 +47,15 @@
     },
     {
       "systemType": "central-heat-pump",
-      "url": "https://hvacdirect.com/lg-3-ton-19-seer2-high-efficiency-heat-pump-split-system-lgred-series-r32-inverter-multi-positional-231991.html"
+      "url": "https://hvacdirect.com/lg-3-ton-19-seer2-high-efficiency-heat-pump-split-system-lgred-series-r32-inverter-multi-positional-231991.html",
+      "sizeCorrection": {
+        "tons": 3.5,
+        "keepSlug": "lg-3-ton-19-seer2-heat-pump-system-kusxa422a",
+        "reason": "The retailer listing title says 3 ton, but LG's LGRED° air-handler engineering manual lists this pairing (KSSLA421A = KNSLB421A + KUSXA422A) at 42,000 Btu/h rated cooling and the KUSXA422A at 3-1/2 nominal tons, and its ENERGY STAR record (AHRI 215735573) is 42,000 Btu/h.",
+        "sourceIds": [
+          "lgEmAhuRed"
+        ]
+      }
     },
     {
       "systemType": "central-heat-pump",
@@ -351,7 +359,15 @@
     },
     {
       "systemType": "central-heat-pump",
-      "url": "https://hvacdirect.com/lg-3-5-ton-18-2-seer2-high-efficiency-heat-pump-split-system-lgred-series-r32-inverter-multi-positional-231990.html"
+      "url": "https://hvacdirect.com/lg-3-5-ton-18-2-seer2-high-efficiency-heat-pump-split-system-lgred-series-r32-inverter-multi-positional-231990.html",
+      "sizeCorrection": {
+        "tons": 3,
+        "keepSlug": "lg-3-5-ton-18-2-seer2-heat-pump-system-kusxa361a",
+        "reason": "The retailer listing title says 3.5 ton, but LG's LGRED° air-handler engineering manual lists the KUSXA361A at 3 nominal tons and this pairing (KSSLA361A = KNSLA361A + KUSXA361A) at 33,000 Btu/h rated cooling, and its ENERGY STAR record (AHRI 215588576) is 33,000 Btu/h.",
+        "sourceIds": [
+          "lgEmAhuRed"
+        ]
+      }
     },
     {
       "systemType": "central-heat-pump",
