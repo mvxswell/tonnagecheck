@@ -231,6 +231,25 @@ export function decodeSerial(input: string, rule: SerialRule, now = new Date()):
     warnings.push('Bosch says the date code is "typically" the three characters after the first four. If your label is laid out differently, confirm the date with Bosch before relying on it.');
     return { ok: true, year, month: MONTHS[mi], approxMonth: false, rows, warnings };
   }
+  if (rule.kind === 'lg-ymm') {
+    // LG: "First digit represents the year; second and third digits represent the month" (outdoor units).
+    const m = /^(\d)(\d{2})/.exec(s);
+    if (!m) return fail('LG dates its outdoor units by the first three digits of the serial: one year digit, then a two-digit month (for example 503…). This serial does not start with three digits, so it does not fit LG\'s rule.');
+    const mm = +m[2];
+    if (mm < 1 || mm > 12) return fail(`Digits 2–3 are "${m[2]}", which is not a month (01–12), so this does not fit LG's rule.`);
+    // Only the last digit of the year is printed: take the most recent year ending in it that is not in the future.
+    const cur = now.getFullYear();
+    let year = cur - (((cur - +m[1]) % 10) + 10) % 10;
+    if (year === cur && mm > now.getMonth() + 1) year -= 10;
+    const month = MONTHS[mm - 1];
+    rows.push(
+      { label: 'Year (digit 1)', value: `${m[1]} → ${year} (or ${year - 10})` },
+      { label: 'Month (digits 2–3)', value: `${m[2]} → ${month}` },
+    );
+    if (s.length > 3) rows.push({ label: 'Rest of the serial', value: `${s.slice(3)} (LG does not publish what these characters mean)` });
+    warnings.push(`LG prints only the last digit of the year, so ${month} ${year} could also be ${month} ${year - 10}. Settle the decade with the install paperwork or the model: K-prefix models are LG's R32 line.`);
+    return { ok: true, year, month, approxMonth: false, rows, warnings };
+  }
   return fail('No rule for this brand yet.');
 }
 

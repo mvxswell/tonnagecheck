@@ -33,7 +33,7 @@ export interface ModelFamily {
   notes?: string[];
 }
 
-export type SerialKind = 'goodman-yymm' | 'trane-acin3' | 'carrier-wwyy' | 'payne-style1' | 'lennox-plant-yy-month' | 'rheem-letter-wwyy' | 'bosch-date-table';
+export type SerialKind = 'goodman-yymm' | 'trane-acin3' | 'carrier-wwyy' | 'payne-style1' | 'lennox-plant-yy-month' | 'rheem-letter-wwyy' | 'bosch-date-table' | 'lg-ymm';
 
 export interface SerialRule {
   id: string;
