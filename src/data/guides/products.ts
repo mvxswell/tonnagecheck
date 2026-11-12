@@ -90,7 +90,12 @@ ${es.length ? `<p>${es.length} of these pairings ${es.length === 1 ? 'is' : 'are
 <h2>Installed cost</h2>
 <p>An inverter heat pump is benchmarked at the high-efficiency tier. For a 3-ton high-efficiency ducted heat pump the benchmark is ${rangeText(f3)}. By size:</p>
 <div class="tablewrap"><table><thead><tr><th>Size</th><th class="r">Lowest listed Bosch</th><th class="r">Installed benchmark <span class="badge b-est">est.</span></th><th class="r">Non-equipment at midpoint</th></tr></thead><tbody>
-${sizes.map((t) => { const s = cheapest(bosch.filter((x) => x.tons === t)); const f = fairRange('central-heat-pump', t, s.tier); return `<tr><td>${tonLink(t, `${t} ton`)}</td><td class="r num">${sysLink(s, usd(lowestPrice(s)))}</td><td class="r num">${fmtRange(f)}</td><td class="r num">${usd(f.mid - lowestPrice(s))}</td></tr>`; }).join('\n')}
+${(() => {
+  // Full systems only: a condenser-only price against a full-system benchmark would overstate the non-equipment share.
+  // Every row uses the high-efficiency tier stated above.
+  const full = bosch.filter((x) => x.systemType !== 'heat-pump-only');
+  return [...new Set(full.map((x) => x.tons))].sort((a, b) => a - b).map((t) => { const s = cheapest(full.filter((x) => x.tons === t)); const f = fairRange('central-heat-pump', t, 'high'); return `<tr><td>${tonLink(t, `${t} ton`)}</td><td class="r num">${sysLink(s, usd(lowestPrice(s)))}</td><td class="r num">${fmtRange(f)}</td><td class="r num">${usd(f.mid - lowestPrice(s))}</td></tr>`; }).join('\n');
+})()}
 </tbody></table></div>
 <p class="small muted">${remdbNote}</p>
 

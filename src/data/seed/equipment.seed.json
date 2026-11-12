@@ -5119,7 +5119,15 @@
         "mostEfficient": true,
         "dateCertified": "2026-04-22",
         "refrigerant": "R-454B (GWP:470 | Lower GWP)",
-        "compressorStaging": "Continuously variable"
+        "compressorStaging": "Continuously variable",
+        "pairingRange": {
+          "count": 40,
+          "minCapacity": 23000,
+          "maxCapacity": 34200,
+          "maxCapacityAhri": "214771711",
+          "maxCapacityIndoor": "BIVA-36RCB-M20X",
+          "maxCapacitySeer2": 19
+        }
       },
       "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'BOVA-36RTB-M20S%25'&$limit=200",
       "ahriCertificateUrl": null,

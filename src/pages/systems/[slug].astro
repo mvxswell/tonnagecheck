@@ -4,7 +4,7 @@ import Auditor from '../../components/Auditor.astro';
 import AuditThisQuote from '../../components/AuditThisQuote.astro';
 import { systemMeta } from '../../data/seo';
 import { decoderForBrand } from '../../data/decoder/index';
-import { SYSTEMS, SYSTEM_TYPE_LABEL, TIER_LABEL, tonSlug, lowestPrice, belowEnergyStarMinimum, type System } from '../../data/equipment';
+import { SYSTEMS, SYSTEM_TYPE_LABEL, TIER_LABEL, tonSlug, lowestPrice, belowEnergyStarMinimum, certifiedCapacity, type System } from '../../data/equipment';
 import { brandSlug } from '../../data/brands';
 import { comparisonsForSystem } from '../../data/comparisons';
 import { fairRange, usd, fmtRange } from '../../lib/facts';
@@ -26,10 +26,16 @@ const title = seo?.title ?? `${usd(low)} Equip vs ${fmtRange(fair)} Installed: $
 const description = seo?.description ?? `${usd(low)} listed equipment vs ${fmtRange(fair)} installed benchmark for ${name} (${s.components[0]})${es ? `, AHRI #${es.ahriReferenceNumber}` : ''}.`;
 // Certified capacity comes from the matched ENERGY STAR (AHRI) record. When it is well below the nominal size the
 // page says so, because a homeowner comparing "3-ton" quotes would otherwise be misled.
-const certCap = es?.coolingCapacity ?? null;
+const cc = certifiedCapacity(s);
+const certCap = cc?.cap ?? null;
 const nominalBtu = s.tons * 12000;
-const underCap = certCap != null && certCap < 0.9 * nominalBtu;
-const pairingOnly = !!es && !es.matchedOn.includes('indoor');
+const underCap = !!cc?.under;
+const pairingOnly = !!cc?.pairingOnly;
+const capRange = cc?.range ?? null;
+// Some retailer bundle SKUs name an outdoor model the manufacturer doesn't publish; the listing's spec table and the
+// AHRI record name the real one. Quotes and certificates carry the AHRI model, so that is what readers should match.
+const normModel = (m: string) => m.toUpperCase().replace(/[^A-Z0-9]/g, '');
+const ahriOutdoor = es && !normModel(es.outdoorModel).startsWith(normModel(s.components[0])) && !normModel(s.components[0]).startsWith(normModel(es.outdoorModel)) ? es.outdoorModel.replace(/\*+$/, '') : null;
 const fetched = new Date(s.prices[0].fetchedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
 const related = SYSTEMS.filter((x) => x.slug !== s.slug && x.tons === s.tons).slice(0, 6);
 const sysCmps = comparisonsForSystem(s.slug, s.brand, s.tons);
@@ -87,9 +93,9 @@ const ld = {
   <div class="tablewrap">
     <table>
       <tbody>
-        <tr><th>Model numbers</th><td class="num">{s.components.join(' + ')}</td></tr>
+        <tr><th>Model numbers</th><td class="num">{ahriOutdoor ? <>{s.components[0]}{' '}<span class="small muted">(retailer SKU; outdoor unit {ahriOutdoor} on the AHRI record)</span>{s.components.length > 1 && <> + {s.components.slice(1).join(' + ')}</>}</> : s.components.join(' + ')}</td></tr>
         <tr><th>Nominal capacity</th><td class="num">{s.tons} ton ({(s.tons * 12000).toLocaleString('en-US')} BTU/h)</td></tr>
-        {certCap != null && <tr><th>Certified cooling capacity</th><td class="num">{certCap.toLocaleString('en-US')} BTU/h (≈{Math.round((certCap / 12000) * 100) / 100} ton{pairingOnly && es?.indoorModel ? `, with ${es.indoorModel}` : ''}){underCap && <> · <b>{Math.round((certCap / nominalBtu) * 100)}% of nominal</b></>}</td></tr>}
+        {capRange ? <tr><th>Certified cooling capacity</th><td class="num">{capRange.minCapacity.toLocaleString('en-US')}–{capRange.maxCapacity.toLocaleString('en-US')} BTU/h depending on the indoor unit ({capRange.count} ENERGY STAR pairings)</td></tr> : certCap != null && <tr><th>Certified cooling capacity</th><td class="num">{certCap.toLocaleString('en-US')} BTU/h (≈{Math.round((certCap / 12000) * 100) / 100} ton{pairingOnly && es?.indoorModel ? `, with ${es.indoorModel}` : ''}){underCap && <> · <b>{Math.round((certCap / nominalBtu) * 100)}% of nominal</b></>}</td></tr>}
         <tr><th>SEER2</th><td class="num">{s.specs.seer2 ?? '—'}</td></tr>
         <tr><th>EER2</th><td class="num">{s.specs.eer2 ?? '—'}</td></tr>
         {s.systemType !== 'ac-furnace' && <tr><th>HSPF2</th><td class="num">{s.specs.hspf2 ?? '—'}</td></tr>}
@@ -107,8 +113,11 @@ const ld = {
   {underCap && certCap != null && (
     <p class="note"><b>Below its nominal size:</b> this {pairingOnly ? 'outdoor unit\'s ENERGY STAR record' : 'pairing'} is certified at <b class="num">{certCap.toLocaleString('en-US')} BTU/h</b> of cooling{pairingOnly && es?.indoorModel ? <> with the {es.indoorModel} indoor unit</> : ''} (AHRI #{es?.ahriReferenceNumber}), about {Math.round((certCap / 12000) * 10) / 10} tons, versus the {nominalBtu.toLocaleString('en-US')} BTU/h a {s.tons}-ton label implies. Compare quotes on the certified capacity of the exact pairing on the AHRI certificate, not on the label.</p>
   )}
+  {capRange && es && (
+    <p class="note"><b>Sold as a condenser only:</b> ENERGY STAR certifies this outdoor unit with {capRange.count} indoor units, at {capRange.minCapacity.toLocaleString('en-US')}–{capRange.maxCapacity.toLocaleString('en-US')} BTU/h of cooling.{capRange.maxCapacityIndoor && <> With the {capRange.maxCapacityIndoor} it is certified at <b class="num">{capRange.maxCapacity.toLocaleString('en-US')} BTU/h</b>{capRange.maxCapacitySeer2 != null && <> / {capRange.maxCapacitySeer2} SEER2</>}{capRange.maxCapacityAhri && <> (AHRI #{capRange.maxCapacityAhri})</>}.</>} The ratings above ({es.seer2} SEER2, {certCap?.toLocaleString('en-US')} BTU/h) apply only with the {es.indoorModel} (AHRI #{es.ahriReferenceNumber}). Check the AHRI certificate for the indoor unit on your quote.</p>
+  )}
   {s.ahriCertificateUrl && <p class="small"><a href={s.ahriCertificateUrl} rel="nofollow noopener" target="_blank">Retailer's AHRI certificate (PDF)</a></p>}
-  <p class="note">Quoted this exact system? The model numbers on your quote should match the outdoor unit <b class="num">{s.components[0]}</b>{s.components[1] && <> and indoor unit <b class="num">{s.components.slice(1).join(' / ')}</b></>}. A different indoor coil changes the certified rating. <a href="/guides/heat-pump-rebates-and-ahri-certificate-check/">How to check an AHRI certificate</a></p>
+  <p class="note">Quoted this exact system? The model numbers on your quote should match the outdoor unit <b class="num">{ahriOutdoor ?? s.components[0]}</b>{s.components[1] && <> and indoor unit <b class="num">{s.components.slice(1).join(' / ')}</b></>}.{ahriOutdoor && <> {s.prices[0].retailer} lists this bundle as {s.components[0]}, a retailer SKU; the condenser in its spec table, and on the AHRI certificate (#{es?.ahriReferenceNumber}), is {ahriOutdoor}.</>} A different indoor coil changes the certified rating. <a href="/guides/heat-pump-rebates-and-ahri-certificate-check/">How to check an AHRI certificate</a></p>
 
   <Auditor systemType={s.systemType} tons={s.tons} tier={s.tier} brand={s.brand} heading={`Audit a quote for this ${s.tons}-ton system`} />
   <p>More {s.brand}: <a href={`/brands/${brandSlug(s.brand)}/`}>all {s.brand} prices by size</a> · <a href={`/auditor/?brand=${encodeURIComponent(s.brand)}`}>audit a {s.brand} quote</a>{decoder && <> · <a href={`/decoder/${decoder.slug}/?model=${encodeURIComponent(s.components[0])}`}>decode {s.components[0]} with the {decoder.name} model &amp; serial decoder</a></>}</p>

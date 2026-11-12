@@ -180,6 +180,22 @@ for (const src of sources.systems) {
         refrigerant: r.refrigerant_with_gwp || null,
         compressorStaging: r.compressor_staging || null,
       };
+      // A condenser sold alone has no single rating: its capacity depends on the indoor unit it is paired with.
+      // Keep the certified range across all its ENERGY STAR pairings so pages don't present one pairing as its size.
+      if (src.systemType === 'heat-pump-only' && !pick.matchedOn.includes('indoor')) {
+        const caps = q.rows.map((x) => ({ x, c: num(x.cooling_capacity_btu_h) })).filter((o) => o.c != null);
+        if (caps.length) {
+          const top = caps.filter((o) => o.c === Math.max(...caps.map((o) => o.c))).sort((a, b) => String(a.x.ahri_reference_number).localeCompare(String(b.x.ahri_reference_number)))[0].x;
+          es.pairingRange = {
+            count: caps.length,
+            minCapacity: Math.min(...caps.map((o) => o.c)),
+            maxCapacity: Math.max(...caps.map((o) => o.c)),
+            maxCapacityAhri: top.ahri_reference_number || null,
+            maxCapacityIndoor: top.indoor_unit_model_number || null,
+            maxCapacitySeer2: num(top.seer2_btu_wh),
+          };
+        }
+      }
     }
   }
 
