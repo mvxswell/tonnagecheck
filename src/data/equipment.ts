@@ -58,6 +58,8 @@ export interface System {
   energyStar: EnergyStarMatch | null;
   energyStarQuery: string | null;
   ahriCertificateUrl: string | null;
+  /** Set when the retailer listing title carries the wrong size; `tons` above is the manufacturer-documented size. */
+  sizeCorrection?: { listingTons: number; reason: string; sourceIds: string[] };
   prices: PricePoint[];
 }
 

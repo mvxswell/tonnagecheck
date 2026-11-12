@@ -33,10 +33,10 @@ export const lg: DecoderBrand = {
   slug: 'lg',
   name: 'LG',
   brands: ['LG'],
-  // Empty on purpose: two LG listings in our price data carry the wrong size on the retailer page. The KUSXA422A
-  // system (a 42 code, which LG rates at 42,000 Btu/h) is listed as 3-ton, and the KUSXA361A system (a 36 code,
-  // rated 33,000 Btu/h) as 3.5-ton. Until the seed is corrected in a separate audit batch, this page does not
-  // repeat those sizes or prices.
+  // Empty on purpose. The KUSXA422A/KUSXA361A size swap on the retailer listings is now corrected in the seed
+  // (sizeCorrection), but the seed table's "Listed as" column describes the retailer listing, and two LG Multi F
+  // SEER2 values (KUMXB481A, KUMXB241A) are still awaiting AHRI verification, so this page still does not repeat
+  // LG sizes or prices.
   seedBrands: [],
   title: 'LG Heat Pump & Mini-Split Model and Serial Decoder',
   description:
