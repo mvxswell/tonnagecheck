@@ -186,13 +186,20 @@ for (const src of sources.systems) {
         const caps = q.rows.map((x) => ({ x, c: num(x.cooling_capacity_btu_h) })).filter((o) => o.c != null);
         if (caps.length) {
           const top = caps.filter((o) => o.c === Math.max(...caps.map((o) => o.c))).sort((a, b) => String(a.x.ahri_reference_number).localeCompare(String(b.x.ahri_reference_number)))[0].x;
+          // Other indoor units whose record carries exactly the rating shown (capacity, SEER2, EER2, HSPF2).
+          const same = q.rows.filter((x) => x !== r && x.indoor_unit_model_number !== r.indoor_unit_model_number
+            && num(x.cooling_capacity_btu_h) === es.coolingCapacity && num(x.seer2_btu_wh) === es.seer2 && num(x.eer2_btu_wh) === es.eer2 && num(x.hspf2_btu_wh) === es.hspf2);
+          const tops = caps.filter((o) => o.c === Math.max(...caps.map((o) => o.c))).map((o) => o.x).sort((a, b) => String(a.ahri_reference_number).localeCompare(String(b.ahri_reference_number)));
           es.pairingRange = {
             count: caps.length,
+            indoorCount: new Set(caps.map((o) => o.x.indoor_unit_model_number || '')).size,
             minCapacity: Math.min(...caps.map((o) => o.c)),
             maxCapacity: Math.max(...caps.map((o) => o.c)),
             maxCapacityAhri: top.ahri_reference_number || null,
             maxCapacityIndoor: top.indoor_unit_model_number || null,
             maxCapacitySeer2: num(top.seer2_btu_wh),
+            maxCapacityPairings: tops.map((x) => ({ indoor: x.indoor_unit_model_number || null, ahri: x.ahri_reference_number || null })),
+            sameRatingPairings: same.map((x) => ({ indoor: x.indoor_unit_model_number || null, ahri: x.ahri_reference_number || null })),
           };
         }
       }

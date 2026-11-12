@@ -35,7 +35,19 @@ export interface EnergyStarMatch {
   refrigerant: string | null;
   compressorStaging: string | null;
   /** Condenser-only listings: certified cooling capacity across every ENERGY STAR pairing of this outdoor unit. */
-  pairingRange?: { count: number; minCapacity: number; maxCapacity: number; maxCapacityAhri: string | null; maxCapacityIndoor: string | null; maxCapacitySeer2: number | null };
+  pairingRange?: {
+    count: number;
+    /** Distinct indoor-model entries (a coil with and without a blower kit counts twice, as ENERGY STAR lists them). */
+    indoorCount: number;
+    minCapacity: number;
+    maxCapacity: number;
+    maxCapacityAhri: string | null;
+    maxCapacityIndoor: string | null;
+    maxCapacitySeer2: number | null;
+    maxCapacityPairings: { indoor: string | null; ahri: string | null }[];
+    /** Other pairings rated exactly like the matched record (same capacity, SEER2, EER2, HSPF2). */
+    sameRatingPairings: { indoor: string | null; ahri: string | null }[];
+  };
 }
 
 export interface System {
