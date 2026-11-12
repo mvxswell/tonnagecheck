@@ -208,12 +208,6 @@ export const SOURCES = {
     publisher: 'HVACDirect',
     url: 'https://hvacdirect.com/',
   },
-  alpine: {
-    id: 'alpine',
-    title: 'Alpine Home Air Products listings',
-    publisher: 'Alpine Home Air Products',
-    url: 'https://www.alpinehomeair.com/',
-  },
   // ---- Model & serial decoder (/decoder/). Every URL below was opened and read on 2026-10-29. ----
   gdmGlzs4b: { id: 'gdmGlzs4b', title: 'GLZS4B R-32 heat pump specification sheet (SS-GLZS4B-R32), nomenclature', publisher: 'Goodman Manufacturing', url: 'https://www.goodmanmfg.com/docs/librariesprovider6/default-document-library/ss-glzs4b-r32.pdf?view=true' },
   gdmGlzs5b: { id: 'gdmGlzs5b', title: 'GLZS5B R-32 heat pump specification sheet (SS-GLZS5B-R32)', publisher: 'Goodman Manufacturing', url: 'https://www.goodmanmfg.com/docs/librariesprovider6/default-document-library/ss-glzs5b-r32.pdf?view=true' },

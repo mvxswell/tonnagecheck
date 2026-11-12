@@ -1,7 +1,7 @@
 // The quote audit. Pure functions, run both at build time (tonnage pages) and in the browser (auditor).
 //
 // Where each number comes from:
-//   equipment value   median listed price of matching systems in the seed (HVACDirect / Alpine Home Air)
+//   equipment value   median listed price of matching systems in the seed (HVACDirect)
 //   fair installed    REMDB installed-cost regression (NREL/NLR, 2023$), restated with CPI-U from FRED
 //   scope adders      REMDB 200A panel and smart thermostat; line set = its listed price
 // Anything that is a modelling choice rather than a published number is marked `estimate: true` and
