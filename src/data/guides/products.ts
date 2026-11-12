@@ -1,6 +1,6 @@
 // Brand and product-line guides. Claims about a brand are limited to what its seeded listings and ENERGY STAR
 // records show; where a product line the homeowner may be quoted is not in our data, the guide says so.
-import { lowestPrice, median } from '../equipment';
+import { lowestPrice, median, TIER_LABEL } from '../equipment';
 import { brandByName } from '../brands';
 import { fairRange, systemsWhere, usd, fmtRange, pct } from '../../lib/facts';
 import { today, src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
@@ -89,14 +89,19 @@ ${es.length ? `<p>${es.length} of these pairings ${es.length === 1 ? 'is' : 'are
 
 <h2>Installed cost</h2>
 <p>An inverter heat pump is benchmarked at the high-efficiency tier. For a 3-ton high-efficiency ducted heat pump the benchmark is ${rangeText(f3)}. By size:</p>
-<div class="tablewrap"><table><thead><tr><th>Size</th><th class="r">Lowest listed Bosch</th><th class="r">Installed benchmark <span class="badge b-est">est.</span></th><th class="r">Non-equipment at midpoint</th></tr></thead><tbody>
+<div class="tablewrap"><table><thead><tr><th>Size</th><th class="r">Lowest listed Bosch full system</th><th>Tier</th><th class="r">Installed benchmark <span class="badge b-est">est.</span></th><th class="r">Non-equipment at midpoint</th></tr></thead><tbody>
 ${(() => {
   // Full systems only: a condenser-only price against a full-system benchmark would overstate the non-equipment share.
-  // Every row uses the high-efficiency tier stated above.
+  // Each row uses the linked system's own tier, so the benchmark matches that system's page.
   const full = bosch.filter((x) => x.systemType !== 'heat-pump-only');
-  return [...new Set(full.map((x) => x.tons))].sort((a, b) => a - b).map((t) => { const s = cheapest(full.filter((x) => x.tons === t)); const f = fairRange('central-heat-pump', t, 'high'); return `<tr><td>${tonLink(t, `${t} ton`)}</td><td class="r num">${sysLink(s, usd(lowestPrice(s)))}</td><td class="r num">${fmtRange(f)}</td><td class="r num">${usd(f.mid - lowestPrice(s))}</td></tr>`; }).join('\n');
+  return [...new Set(full.map((x) => x.tons))].sort((a, b) => a - b).map((t) => { const s = cheapest(full.filter((x) => x.tons === t)); const f = fairRange('central-heat-pump', t, s.tier); return `<tr><td>${tonLink(t, `${t} ton`)}</td><td class="r num">${sysLink(s, usd(lowestPrice(s)))}</td><td>${TIER_LABEL[s.tier].split(' (')[0]}</td><td class="r num">${fmtRange(f)}</td><td class="r num">${usd(f.mid - lowestPrice(s))}</td></tr>`; }).join('\n');
 })()}
 </tbody></table></div>
+${(() => {
+  const full = bosch.filter((x) => x.systemType !== 'heat-pump-only');
+  const notHigh = [...new Set(full.map((x) => x.tons))].map((t) => cheapest(full.filter((x) => x.tons === t))).filter((x) => x.tier !== 'high');
+  return notHigh.length ? `<p class="small muted">Each row uses the listed system's own efficiency tier, as on its page. ${notHigh.map((x) => `The ${x.tons}-ton ${x.components[0]} is rated ${x.specs.seer2 ?? '?'} SEER2${x.energyStar ? '' : ' (from its listing; no ENERGY STAR match)'}, so it benchmarks at the ${TIER_LABEL[x.tier].split(' (')[0].toLowerCase()} tier, not the high-efficiency tier above.`).join(' ')}</p>` : '';
+})()}
 <p class="small muted">${remdbNote}</p>
 
 <h2>What should be on a Bosch IDS quote</h2>

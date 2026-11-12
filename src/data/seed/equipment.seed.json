@@ -5122,11 +5122,28 @@
         "compressorStaging": "Continuously variable",
         "pairingRange": {
           "count": 40,
+          "indoorCount": 19,
           "minCapacity": 23000,
           "maxCapacity": 34200,
           "maxCapacityAhri": "214771711",
           "maxCapacityIndoor": "BIVA-36RCB-M20X",
-          "maxCapacitySeer2": 19
+          "maxCapacitySeer2": 19,
+          "maxCapacityPairings": [
+            {
+              "indoor": "BIVA-36RCB-M20X",
+              "ahri": "214771711"
+            },
+            {
+              "indoor": "BIVB-36RCB-M20X",
+              "ahri": "217895245"
+            }
+          ],
+          "sameRatingPairings": [
+            {
+              "indoor": "BIVB-24RCB-M20X",
+              "ahri": "217895243"
+            }
+          ]
         }
       },
       "energyStarQuery": "https://data.energystar.gov/resource/w7cv-9xjt.json?$where=upper(model_number)%20like%20'BOVA-36RTB-M20S%25'&$limit=200",
