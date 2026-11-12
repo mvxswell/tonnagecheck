@@ -1,9 +1,14 @@
 ---
 import { auditPayload, SYSTEM_TYPE_LABEL, TIER_LABEL, TONNAGES, type SystemType, type Tier } from '../data/equipment';
 import ConciergeForm from './ConciergeForm.astro';
+import { adderRange } from '../lib/facts';
+import { usd } from '../lib/audit';
 interface Props { systemType?: SystemType; tons?: number; tier?: Tier; heading?: string; brand?: string }
 const { systemType = 'central-heat-pump', tons = 3, tier = 'standard', heading = 'Audit your HVAC quote', brand = '' } = Astro.props;
 const payload = auditPayload();
+// Scope labels come from the same data the audit math uses, so they cannot drift from it.
+const tstat = adderRange('smartThermostat');
+const ad = payload.addons;
 ---
 <section class="auditor" id="audit" aria-labelledby="audit-h">
   <form class="card aform" id="tc-form" novalidate>
@@ -64,14 +69,14 @@ const payload = auditPayload();
               <div class="money"><span>$</span><input id="f-ductamt" name="ductworkAmount" type="text" inputmode="decimal" placeholder="optional" autocomplete="off" /></div>
             </div>
             <label class="check"><input type="checkbox" name="panel" />200A electrical panel upgrade (REMDB benchmark)</label>
-            <label class="check"><input type="checkbox" name="lineSet" />New copper refrigerant line set ($289 material)</label>
-            <label class="check"><input type="checkbox" name="thermostat" />Smart thermostat ($542 installed benchmark)</label>
+            <label class="check"><input type="checkbox" name="lineSet" />New copper refrigerant line set ({usd(payload.lineSet?.price)} material)</label>
+            <label class="check"><input type="checkbox" name="thermostat" />Smart thermostat ({usd(tstat.low)}–{usd(tstat.high)} installed benchmark, mid {usd(tstat.mid)})</label>
           </div>
           <div>
-            <label class="check"><input type="checkbox" name="heatStrip" />Aux electric heat strip kit 5–15 kW ($155 material)</label>
-            <label class="check"><input type="checkbox" name="padWhipDisconnect" />Outdoor pad + 60A disconnect + whip ($196 material)</label>
-            <label class="check"><input type="checkbox" name="surgeProtector" />HVAC 120/240V surge protector ($148 material)</label>
-            <label class="check"><input type="checkbox" name="condensatePump" />Condensate pump + SS1 float switch ($130 material)</label>
+            <label class="check"><input type="checkbox" name="heatStrip" />Aux electric heat strip kit 5–15 kW ({usd(ad.heatStrip.price)} material)</label>
+            <label class="check"><input type="checkbox" name="padWhipDisconnect" />Outdoor pad + 60A disconnect + whip ({usd(ad.padWhipDisconnect.price)} material)</label>
+            <label class="check"><input type="checkbox" name="surgeProtector" />HVAC 120/240V surge protector ({usd(ad.surgeProtector.price)} material)</label>
+            <label class="check"><input type="checkbox" name="condensatePump" />Condensate pump + SS1 float switch ({usd(ad.condensatePump.price)} material)</label>
           </div>
         </div>
         <p class="small muted" style="margin:6px 0 4px">See all 60 verified wholesale accessory SKUs in the <a href="/parts/">HVAC Parts &amp; Add-On Price Directory</a>.</p>
