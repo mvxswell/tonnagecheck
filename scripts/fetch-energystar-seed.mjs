@@ -151,9 +151,13 @@ for (const src of sources.systems) {
   let es = null;
   let esApi = null;
   for (const ds of src.systemType === 'ac-furnace' ? [ES_CAC] : [ES_ASHP]) {
-    const q = esQuery(ds, outdoor);
+    // `energyStarOutdoorModel` (seed-sources.json) is for listings whose SKU string names a model the manufacturer
+    // does not publish while the listing's own spec table names the real outdoor unit; the indoor match still applies.
+    const esOutdoor = src.energyStarOutdoorModel || outdoor;
+    const q = esQuery(ds, esOutdoor);
     esApi = q.api;
-    const pick = pickEsRow(q.rows, p.components, p.retailerSpecs.seer2);
+    const pick = pickEsRow(q.rows, [esOutdoor, ...p.components.slice(1)], p.retailerSpecs.seer2);
+    if (pick && src.energyStarOutdoorModel) pick.matchedOn = `outdoor (${esOutdoor}, per the listing's spec table) + indoor model`;
     if (pick) {
       const r = pick.row;
       es = {

@@ -63,7 +63,8 @@
     },
     {
       "systemType": "central-heat-pump",
-      "url": "https://hvacdirect.com/bosch-ids-light-series-3-ton-20-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237614.html"
+      "url": "https://hvacdirect.com/bosch-ids-light-series-3-ton-20-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237614.html",
+      "energyStarOutdoorModel": "BOVB-36RTB-M15S"
     },
     {
       "systemType": "central-heat-pump",
@@ -195,11 +196,20 @@
     },
     {
       "systemType": "central-heat-pump",
-      "url": "https://hvacdirect.com/bosch-ids-light-series-3-ton-15-2-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237591.html"
+      "url": "https://hvacdirect.com/bosch-ids-light-series-3-ton-15-2-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237591.html",
+      "sizeCorrection": {
+        "tons": 2,
+        "keepSlug": "bosch-3-ton-15-2-seer2-heat-pump-system-bovb-36rtb-m15s",
+        "reason": "The retailer listing title says 3 ton, but this pairing uses Bosch's 2-ton BIVA-24RXB-M15X air handler, and both Bosch's IDS Light AHRI performance table and the ENERGY STAR record (AHRI 217895302) rate BOVB-36RTB-M15S + BIVA-24RXB-M15X at 24,000 Btu/h of cooling, a 2-ton system.",
+        "sourceIds": [
+          "boschLightOdu"
+        ]
+      }
     },
     {
       "systemType": "central-heat-pump",
-      "url": "https://hvacdirect.com/bosch-ids-ligh-series-5-ton-17-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237616.html"
+      "url": "https://hvacdirect.com/bosch-ids-ligh-series-5-ton-17-seer2-ducted-central-air-inverter-heat-pump-split-system-r454b-237616.html",
+      "energyStarOutdoorModel": "BOVB-60RTB-M15S"
     },
     {
       "systemType": "central-heat-pump",
@@ -507,7 +517,15 @@
     },
     {
       "systemType": "central-heat-pump",
-      "url": "https://hvacdirect.com/bosch-3-ton-18-seer2-80-000-btu-ids-premium-connected-series-furnace-and-heat-pump-system-r454b-upflow-horizontal-237554.html"
+      "url": "https://hvacdirect.com/bosch-3-ton-18-seer2-80-000-btu-ids-premium-connected-series-furnace-and-heat-pump-system-r454b-upflow-horizontal-237554.html",
+      "sizeCorrection": {
+        "tons": 2,
+        "keepSlug": "bosch-3-ton-18-seer2-heat-pump-system-bovb-36rtb-m20s",
+        "reason": "The retailer listing title says 3 ton, but the certified rating for this exact pairing (ENERGY STAR / AHRI 217895269: BOVB-36RTB-M20S + BMAC2430ABTA coil + BGH96M080B3C furnace) is 23,800 Btu/h of cooling, a 2-ton system. Bosch's IDS Premium Connected AHRI table also rates the BOVB-36RTB-M20S with the BMAC2430ABTA coil at 23,800 Btu/h.",
+        "sourceIds": [
+          "boschPremiumOdu"
+        ]
+      }
     },
     {
       "systemType": "central-heat-pump",

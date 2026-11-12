@@ -34,9 +34,11 @@ export const bosch: DecoderBrand = {
   slug: 'bosch',
   name: 'Bosch',
   brands: ['Bosch'],
-  // Empty on purpose: several Bosch listings in our price data are labelled "3-ton" but pair a 36 outdoor unit with
-  // a 24 air handler, which Bosch's own AHRI table rates at 24,000 Btu/h. Until that seed data is corrected in a
-  // separate audit batch, this page does not repeat those sizes or prices.
+  // Empty on purpose. Two of the "3-ton" Bosch listings that pair a 36 outdoor unit with a 24 indoor unit are now
+  // listed at their certified 2-ton size (sizeCorrection in the seed), but the BOVB-36RXB and BOVB-60RXB systems and
+  // the BOVA-36RTB-M20S condenser still carry their retailer size (their head-to-head compare pages are built on
+  // it), with a certified-capacity warning on the system page. Until those are relabelled, this page does not
+  // repeat Bosch sizes or prices.
   seedBrands: [],
   title: 'Bosch Heat Pump Model & Serial Number Decoder (IDS)',
   description:
