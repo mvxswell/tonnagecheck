@@ -518,6 +518,16 @@ function boschVsMitsubishiPlanA(e: CompareEntry): CompareEntry {
   const range = (xs: System[]) => xs.length ? `${pct(Math.min(...xs.map(ret)))}–${pct(Math.max(...xs.map(ret)))}` : '—';
   // Listings whose certified pairing is rated well below the condenser's nominal size (e.g. a 3-ton condenser on a 2-ton air handler).
   const under = [...rb, ...rm].filter((s) => s.energyStar!.heatingCapacity47F! < s.tons * 12000 * 0.85);
+  // Retailer bundle SKUs that name a different outdoor model than the ENERGY STAR / AHRI record (same rule as system pages).
+  const normModel = (m: string) => m.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  const ahriOutdoor = (s: System) => {
+    const out = s.energyStar?.outdoorModel;
+    if (!out) return null;
+    const listed = s.components[0];
+    if (!normModel(out).startsWith(normModel(listed)) && !normModel(listed).startsWith(normModel(out))) return out.replace(/\*+$/, '');
+    return null;
+  };
+  const outdoorMismatch = [...rb, ...rm].filter((s) => ahriOutdoor(s));
 
   const cold = `
 <h2>Bosch vs Mitsubishi for cold climates: rated heat output at 5°F</h2>
@@ -525,10 +535,11 @@ function boschVsMitsubishiPlanA(e: CompareEntry): CompareEntry {
 <div class="tablewrap"><table><thead><tr><th>System (outdoor + indoor)</th><th class="r">Listed tons</th><th class="r">AHRI #</th><th class="r">Heat at 47°F (BTU/h)</th><th class="r">Heat at 5°F (BTU/h)</th><th class="r">Kept at 5°F</th><th class="r">COP at 5°F</th><th class="r">Listed</th></tr></thead><tbody>
 ${[...rb, ...rm].map(row).join('\n')}
 </tbody></table></div>
-<p class="small muted">Ratings: ENERGY STAR certified heat pump records matched by AHRI reference number, re-checked Nov 5, 2026; confirm any pairing in the ${src('ahri', 'AHRI Directory')}. Listed prices captured ${seedDateLabel}.${excluded.length ? ` Not shown: ${excluded.map((x) => x.components[0]).join(', ')}, whose matched record is for a different indoor unit than the listing, or which is sold as an outdoor unit only.` : ''}</p>
+<p class="small muted">Ratings: ENERGY STAR certified heat pump records matched by AHRI reference number, re-checked Nov 15, 2026; confirm any pairing in the ${src('ahri', 'AHRI Directory')}. Listed prices captured ${seedDateLabel}.${excluded.length ? ` Not shown: ${excluded.map((x) => x.components[0]).join(', ')}, whose matched record is for a different indoor unit than the listing, or which is sold as an outdoor unit only.` : ''}</p>
 <ul>
 <li><b>Capacity kept at 5°F:</b> the ${rb.length} rated Bosch pairings keep ${range(rb)} of their 47°F output; the ${rm.length} rated Mitsubishi pairings keep ${range(rm)}, and its H2i Hyper-Heating (HZ) outdoor units alone keep ${range(rm.filter((s) => s.components[0].endsWith('HZ')))}. See the <a href="/guides/mitsubishi-hyper-heat-cost/">Mitsubishi Hyper-Heat cost guide</a> for their −13°F catalog ratings.</li>
 ${under.length ? `<li><b>Check the certified size, not the condenser size:</b> ${under.map((s) => `the ${s.brand} ${sysLink(s, s.components[0])} listing (${s.tons}-ton) is rated at ${btu(s.energyStar!.heatingCapacity47F!)} BTU/h at 47°F with ${indoorOf(s) ?? 'its indoor unit'}`).join('; ')}. A quote's "tons" should match the AHRI certificate for the exact indoor unit you are getting.</li>` : ''}
+${outdoorMismatch.length ? `<li><b>AHRI outdoor model vs retailer SKU:</b> ${outdoorMismatch.map((s) => `${sysLink(s, s.components[0])} is the retailer SKU; the outdoor unit on AHRI #${s.energyStar!.ahriReferenceNumber} is ${ahriOutdoor(s)}`).join('; ')}. Match the model on the certificate, not only the bundle name.</li>` : ''}
 </ul>`;
 
   const warranty = `
@@ -539,7 +550,7 @@ ${under.length ? `<li><b>Check the certified size, not the condenser size:</b> $
 <tr><td>Installer program</td><td>—</td><td>12 years parts and compressor if a Diamond Contractor installs and registers it within 90 days</td></tr>
 <tr><td>Labor</td><td>Only the 90-day allowance above</td><td>Not included</td></tr>
 </tbody></table></div>
-<p class="small muted">Sources: ${src('boschIdsWarranty', 'Bosch Inverter Heat Pump Product Family limited warranty (11/2025)')}; ${src('mitsuWarranty', 'Mitsubishi Electric Trane HVAC US residential limited warranty (effective Oct. 15, 2026)')}. Read the full terms for exclusions; both require installation by a licensed contractor.</p>
+<p class="small muted">Sources: ${src('boschWarranty', 'Bosch Inverter Heat Pump Product Family limited warranty (11/2025)')}; ${src('mitsuWarranty', 'Mitsubishi Electric Trane HVAC US residential limited warranty (effective Oct. 15, 2026)')}. Read the full terms for exclusions; both require installation by a licensed contractor.</p>
 <p>So a registered Mitsubishi and a Bosch IDS land at the same 10 years of parts coverage, and Mitsubishi's 12 years depends on who installs it. Neither covers labor long-term, so get the installer's labor warranty in writing. Always verify the exact outdoor + indoor model pairing on the ${src('ahri', 'AHRI Directory')} before signing: swapping a matched air handler or coil for a generic cabinet can drop SEER2/HSPF2 below utility rebate thresholds (${src('esCriteria', 'ENERGY STAR criteria')}). The federal Section 25C tax credit ended after December 31, 2025 (${src('irsObbba', 'IRS')}), and under ${src('doePn262', 'DOE Program Notice 26-2')} (May 2026) federal HEAR/HEEHRA rebates no longer fund gas-to-electric fuel switching. Check state and utility incentives on our <a href="/states/">state energy &amp; rebate pages</a>.</p>
 <p>Brand deep dives: <a href="/guides/bosch-ids-inverter-heat-pump-cost/">Bosch IDS inverter heat pump cost</a> (models, installed cost by size, what belongs on the quote) and <a href="/guides/mitsubishi-hyper-heat-cost/">Mitsubishi Hyper-Heat cost</a> (ducted vs ductless, ratings by model, warranty).</p>`;
 
