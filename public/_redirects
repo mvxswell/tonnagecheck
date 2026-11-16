@@ -1,0 +1,6 @@
+# Audit S3-4 / S1-1: 301 old size-mismatched LG system slugs to the corrected URLs.
+# Trailing-slash and bare paths both included so either request form lands on the canonical URL.
+/systems/lg-3-ton-19-seer2-heat-pump-system-kusxa422a /systems/lg-3-5-ton-19-seer2-heat-pump-system-kusxa422a/ 301
+/systems/lg-3-ton-19-seer2-heat-pump-system-kusxa422a/ /systems/lg-3-5-ton-19-seer2-heat-pump-system-kusxa422a/ 301
+/systems/lg-3-5-ton-18-2-seer2-heat-pump-system-kusxa361a /systems/lg-3-ton-18-2-seer2-heat-pump-system-kusxa361a/ 301
+/systems/lg-3-5-ton-18-2-seer2-heat-pump-system-kusxa361a/ /systems/lg-3-ton-18-2-seer2-heat-pump-system-kusxa361a/ 301
