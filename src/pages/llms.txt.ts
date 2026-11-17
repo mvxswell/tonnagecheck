@@ -1,12 +1,12 @@
 import type { APIRoute } from 'astro';
 import { SITE } from '../config';
-import { SYSTEMS, TONNAGES, SYSTEM_TYPE_LABEL, lowestPrice } from '../data/equipment';
+import { SYSTEMS, SYSTEM_TYPE_LABEL, lowestPrice } from '../data/equipment';
 import { GUIDES } from '../data/guides/index';
 import { DECODER_BRANDS } from '../data/decoder/index';
 import { BRANDS } from '../data/brands';
 import { PART_CATEGORIES, PART_CATALOG_STATS } from '../data/parts';
 import { SOURCES } from '../data/sources';
-import { isSystemIndexed, sizeGuidePath } from '../data/prune';
+import { isSystemIndexed } from '../data/prune';
 import { seedDateLabel, cpi } from '../lib/facts';
 
 export const GET: APIRoute = () => {
@@ -41,7 +41,7 @@ ${PART_CATEGORIES.map((c) => `- [${c.name}](${u(`/parts/${c.slug}/`)}): ${c.coun
 ${BRANDS.map((b) => `- [${b.name} HVAC prices](${u(`/brands/${b.slug}/`)}): ${b.systems.length} systems, listed $${b.priceMin.toLocaleString('en-US')}–$${b.priceMax.toLocaleString('en-US')}`).join('\n')}
 
 ## Cost by tonnage
-${TONNAGES.map((t) => `- [${t}-ton heat pump & AC cost](${u(sizeGuidePath(t))})`).join('\n')}
+- [Heat pump & AC replacement cost by size, 1.5 to 5 tons](${u('/guides/3-ton-heat-pump-ac-replacement-cost/')})
 
 ## Head-to-head comparisons
 - [HVAC comparison workbench](${u('/compare/')}): pick two systems or brands and compare listed prices and ratings.

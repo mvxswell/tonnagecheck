@@ -1,8 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
 import ModelSerialDecoder from '../../components/ModelSerialDecoder.astro';
-import ConciergeForm from '../../components/ConciergeForm.astro';
-import Newsletter from '../../components/Newsletter.astro';
 import { DECODER_BRANDS, type DecoderBrand } from '../../data/decoder/index';
 import { brandByName } from '../../data/brands';
 import { SYSTEMS, SYSTEM_TYPE_LABEL, lowestPrice } from '../../data/equipment';
@@ -11,6 +9,7 @@ import { usd, fmtRange, seedDateLabel } from '../../lib/facts';
 import { decodeModel, decodeSerial } from '../../lib/decode';
 import { SITE } from '../../config';
 import { sizeGuidePath } from '../../data/prune';
+import QuoteCta from '../../components/QuoteCta.astro';
 
 export function getStaticPaths() {
   return DECODER_BRANDS.map((d) => ({ params: { slug: d.slug }, props: { d } }));
@@ -187,16 +186,12 @@ const ld = [
     {d.faqs.map((f) => (<><h3>{f.q}</h3><p>{f.a}</p></>))}
   </div>
 
-  <section class="card second" id="second-opinion">
-    <ConciergeForm brandModel={d.brands[0]} />
-  </section>
-
-  <h2 id="sources">Sources</h2>
+<h2 id="sources">Sources</h2>
   <ol class="small srcs">{sourceList.map((s) => <li><a href={s.url}>{s.title}</a>: {s.publisher}{s.note ? <> · <span class="muted">{s.note}</span></> : ''}</li>)}</ol>
 
   <h2>Other decoders</h2>
   <p><a href="/decoder/">All brands: model &amp; serial decoder</a>{others.map((o) => <> · <a href={`/decoder/${o.slug}/`}>{o.name}</a></>)}</p>
-  <Newsletter />
+  <QuoteCta />
 </Base>
 
 <style>

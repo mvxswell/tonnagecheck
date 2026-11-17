@@ -1,14 +1,12 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Auditor from '../../components/Auditor.astro';
-import ConciergeForm from '../../components/ConciergeForm.astro';
-import Newsletter from '../../components/Newsletter.astro';
 import { STATES, STATE_SEED_DATE, EFFICIENCY, heatingCosts, climateSummary, recommendedSystems, type StateRecord } from '../../data/states';
 import { TONNAGES, lowestPrice } from '../../data/equipment';
 import { SOURCES } from '../../data/sources';
 import { fairRange, usd, fmtRange } from '../../lib/facts';
 import { SITE } from '../../config';
 import { sizeGuidePath } from '../../data/prune';
+import QuoteCta from '../../components/QuoteCta.astro';
 
 export function getStaticPaths() {
   return STATES.map((s) => ({ params: { slug: s.slug }, props: { s } }));
@@ -131,15 +129,9 @@ const pctChange = (a: number, b: number | null) => (b ? `${a >= b ? '+' : ''}${M
     <div class="card"><b>{s.name} state energy office</b><p class="small">{s.energyOffice.website ? <><a href={s.energyOffice.website} rel="noopener">{new URL(s.energyOffice.website).host}</a> (listed in the NASEO directory; link checked {checkedOn}). </> : <>We could not verify the office's website automatically. </>}{s.energyOffice.naseoProfile && <><a href={s.energyOffice.naseoProfile} rel="noopener">NASEO contact profile</a>. </>}For utility and local programs: <a href={`${SOURCES.dsire.url}`} rel="noopener">DSIRE</a> · <a href={SOURCES.esRebateFinder.url} rel="noopener">ENERGY STAR Rebate Finder</a>.</p></div>
   </div>
 
-  <Auditor tier={clim.kind === 'heating' ? 'high' : 'standard'} heading={`Audit a ${s.name} HVAC quote`} />
-
-  <section class="card second" id="second-opinion">
-    <ConciergeForm idp="s" />
-  </section>
-
-  <h2>Other states</h2>
+<h2>Other states</h2>
   <p>{nearby.map((n, i) => <>{i > 0 && ' · '}<a href={`/states/${n.slug}/`}>{n.name}</a></>)} · <a href="/states/">All states</a></p>
-  <Newsletter />
+  <QuoteCta />
 </Base>
 
 <style>

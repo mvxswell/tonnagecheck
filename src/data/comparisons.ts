@@ -141,7 +141,7 @@ ${overlapRows}
 <li><b>${bA.name} efficiency &amp; staging:</b> ${left.seer2Span}${left.hspf2Span !== '—' ? ` (${left.hspf2Span})` : ''}; ${left.staging}; ${left.energyStarCount} of ${left.count} pairings matched in the ${src('esApi', 'EPA ENERGY STAR database')} (${left.coldClimateCount} Cold Climate certified). Refrigerants: <b>${left.refrigerants}</b>. Lowest-priced entry: ${sysLink(left.sampleSystem)} (${usd(lowestPrice(left.sampleSystem))}).</li>
 <li><b>${bB.name} efficiency &amp; staging:</b> ${right.seer2Span}${right.hspf2Span !== '—' ? ` (${right.hspf2Span})` : ''}; ${right.staging}; ${right.energyStarCount} of ${right.count} pairings matched in ${src('esApi', 'ENERGY STAR')} (${right.coldClimateCount} Cold Climate certified). Refrigerants: <b>${right.refrigerants}</b>. Lowest-priced entry: ${sysLink(right.sampleSystem)} (${usd(lowestPrice(right.sampleSystem))}).</li>
 </ul>
-<p>Under the EPA's AIM Act Technology Transitions rule (${src('epaTechTransitions', 'EPA HFC restrictions')}), residential systems have transitioned from R-410A (GWP 2,088) to lower-GWP A2L refrigerants—primarily <b>R-32</b> (GWP 675) and <b>R-454B</b> (GWP 466). Both meet the federal 700-GWP limit; neither requires paying an inflated "new refrigerant surcharge" beyond normal installation procedures.</p>
+<p>Under the EPA's AIM Act Technology Transitions rule (${src('epaTechTransitions', 'EPA HFC restrictions')}), residential systems have transitioned from R-410A (GWP 2,088) to lower-GWP A2L refrigerants—primarily <b>R-32</b> (GWP 675) and <b>R-454B</b> (GWP 470). Both meet the federal 700-GWP limit; neither requires paying an inflated "new refrigerant surcharge" beyond normal installation procedures.</p>
 
 <h2>Warranty, AHRI verification &amp; 2026 rebate rules</h2>
 <p>Standard residential factory parts coverage across major manufacturers provides 10-year limited parts protection when registered within 60–90 days of installation, while labor coverage depends on the installing contractor. Always verify the exact outdoor + indoor model pairing on the ${src('ahri', 'AHRI Directory')} before signing—swapping a matched air handler or coil for a generic cabinet can drop SEER2/HSPF2 below utility rebate thresholds (${src('esCriteria', 'ENERGY STAR criteria')}). Note that the federal Section 25C tax credit expired after December 31, 2025 (${src('irsObbba', 'IRS')}), and under ${src('doePn262', 'DOE Program Notice 26-2')} (May 2026) federal HEAR/HEEHRA rebates no longer fund gas-to-electric fuel switching. Check state-specific utility incentives on our <a href="/states/">state energy &amp; rebate pages</a>.</p>`;
@@ -305,7 +305,7 @@ function buildRefrigerantComparison(): CompareEntry {
   const r32 = SYSTEMS.filter((s) => refrigerantOf(s) === 'R-32');
   const r454b = SYSTEMS.filter((s) => refrigerantOf(s) === 'R-454B');
   const left = summarizeSystems('R-32 Systems (GWP 675)', `${r32.length} seeded systems`, r32, '/guides/r410a-vs-r454b-r32-refrigerant-transition-quotes/');
-  const right = summarizeSystems('R-454B Systems (GWP 466)', `${r454b.length} seeded systems`, r454b, '/guides/r410a-vs-r454b-r32-refrigerant-transition-quotes/');
+  const right = summarizeSystems('R-454B Systems (GWP 470)', `${r454b.length} seeded systems`, r454b, '/guides/r410a-vs-r454b-r32-refrigerant-transition-quotes/');
   const f3 = fairRange('central-heat-pump', 3, 'standard');
   left.fair = f3;
   right.fair = f3;
@@ -324,7 +324,7 @@ function buildRefrigerantComparison(): CompareEntry {
 <p>Under the EPA's AIM Act Technology Transitions rule (${src('epaTechTransitions', 'EPA HFC restrictions')}), residential split and packaged HVAC systems manufactured from January 1, 2025 must use refrigerants with a Global Warming Potential (GWP) below 700, replacing legacy R-410A (GWP 2,088). Manufacturers split into two ASHRAE A2L refrigerant camps across our catalog (${seedDateLabel}):</p>
 <ul>
 <li><b>R-32 (single-component HFC, GWP 675 — ${r32.length} systems listed from ${usd(left.equipMin)} to ${usd(left.equipMax)}, median ${usd(left.equipMedian)}):</b> Used by ${r32Brands.map((b) => brandLink(b)).join(', ')}. Because R-32 is a single-component refrigerant rather than a blend, it has zero temperature glide and can be topped off in either liquid or vapor state without fractionation. Sample system: ${sysLink(left.sampleSystem)} (${usd(lowestPrice(left.sampleSystem))}).</li>
-<li><b>R-454B (zeotropic blend of 68.9% R-32 and 31.1% R-1234yf, GWP 466 — ${r454b.length} systems listed from ${usd(right.equipMin)} to ${usd(right.equipMax)}, median ${usd(right.equipMedian)}):</b> Used by ${r454bBrands.map((b) => brandLink(b)).join(', ')}. Sample system: ${sysLink(right.sampleSystem)} (${usd(lowestPrice(right.sampleSystem))}).</li>
+<li><b>R-454B (zeotropic blend of 68.9% R-32 and 31.1% R-1234yf, GWP 470 — ${r454b.length} systems listed from ${usd(right.equipMin)} to ${usd(right.equipMax)}, median ${usd(right.equipMedian)}):</b> Used by ${r454bBrands.map((b) => brandLink(b)).join(', ')}. Sample system: ${sysLink(right.sampleSystem)} (${usd(lowestPrice(right.sampleSystem))}).</li>
 </ul>
 
 <h2>3-ton head-to-head price check: R-32 vs R-454B</h2>

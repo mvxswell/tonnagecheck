@@ -1,15 +1,12 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Auditor from '../../components/Auditor.astro';
-import AuditThisQuote from '../../components/AuditThisQuote.astro';
-import { NEAR_PAGE1_GUIDES } from '../../data/seo';
-import Newsletter from '../../components/Newsletter.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
 import { GUIDES, type Guide } from '../../data/guides/index';
 import { brandByName } from '../../data/brands';
-import { lowestPrice } from '../../data/equipment';
-import { systemsWhere, usd } from '../../lib/facts';
+import { systemsWhere } from '../../lib/facts';
 import { SITE } from '../../config';
-import { sizeGuidePath } from '../../data/prune';
+import { COMBINED_SIZE_GUIDE_PATH } from '../../data/prune';
+import { relatedGuidePicks } from '../../data/guides/related';
 
 export function getStaticPaths() {
   return GUIDES.map((g) => ({ params: { slug: g.slug }, props: { g } }));
@@ -18,13 +15,10 @@ const { g } = Astro.props as { g: Guide };
 const html = g.body();
 const words = html.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
 const rel = g.related ?? {};
-const relSystems = systemsWhere(rel.systems ?? {}).slice(0, 6);
-const relTons = [...new Set([...(rel.tons ?? []), ...relSystems.map((s) => s.tons)])].sort((a, b) => a - b);
-const relBrands = [...new Set([...(rel.brands ?? []), ...relSystems.map((s) => s.brand)])].map((b) => brandByName(b)).filter((b) => !!b);
-const others = GUIDES.filter((x) => x.slug !== g.slug);
-const inCluster = NEAR_PAGE1_GUIDES.some((c) => c.slug === g.slug);
-const cluster = inCluster ? NEAR_PAGE1_GUIDES.filter((c) => c.slug !== g.slug) : [];
-const topAuditBox = g.slug === 'heat-pump-rebates-and-ahri-certificate-check';
+const relSystems = systemsWhere(rel.systems ?? {}).slice(0, 4);
+const relBrands = [...new Set([...(rel.brands ?? []), ...relSystems.map((s) => s.brand)])].map((b) => brandByName(b)).filter((b) => !!b).slice(0, 4);
+const related = relatedGuidePicks(g, GUIDES, 5);
+const isSizeGuide = g.slug === '3-ton-heat-pump-ac-replacement-cost';
 const ld = [
   {
     '@context': 'https://schema.org', '@type': 'Article', headline: g.h1, description: g.description,
@@ -46,27 +40,22 @@ const ld = [
   <p class="crumbs"><a href="/">Home</a> / <a href="/guides/">Guides</a></p>
   <article class="prose">
     <h1>{g.h1}</h1>
-    {topAuditBox && <AuditThisQuote systemType={g.audit?.systemType} tons={g.audit?.tons} tier={g.audit?.tier} askModel heading="Audit this quote" lead="Paste the outdoor model number from your quote, the total and your ZIP. We check the price against listed equipment and the installed benchmark." />}
     <p class="small muted">Updated {g.updated} · {Math.max(1, Math.round(words / 230))} min read · Figures are computed from our sourced data at publish time.</p>
     <Fragment set:html={html} />
   </article>
 
-  <aside class="card related" aria-labelledby="rel-h">
-    <h2 id="rel-h">Related prices</h2>
-    {relTons.length > 0 && <p><b>By size:</b> {relTons.map((t, i) => <>{i > 0 && ' · '}<a href={sizeGuidePath(t)}>{t}-ton cost</a></>)}</p>}
-    {relBrands.length > 0 && <p><b>By brand:</b> {relBrands.map((b, i) => <>{i > 0 && ' · '}<a href={`/brands/${b!.slug}/`}>{b!.name}</a></>)}</p>}
-    {relSystems.length > 0 && (
-      <ul class="rs">{relSystems.map((s) => <li><a href={`/systems/${s.slug}/`}>{s.brand} {s.tons}-ton {s.components[0]}</a> <span class="small muted">{s.specs.seer2 ?? '?'} SEER2 · <span class="num">{usd(lowestPrice(s))}</span></span></li>)}</ul>
-    )}
-    {cluster.length > 0 && <p><b>Related guides:</b> {cluster.map((c, i) => <>{i > 0 && ' · '}<a href={`/guides/${c.slug}/`}>{c.label}</a></>)}</p>}
-    <p class="small"><a href="/auditor/">Quote auditor</a> · <a href="/systems/">All equipment prices</a> · <a href="/brands/">All brands</a></p>
-  </aside>
+  {(related.length > 0 || relBrands.length > 0 || relSystems.length > 0) && (
+    <aside class="card related" aria-labelledby="rel-h">
+      <h2 id="rel-h">Related reading</h2>
+      {related.length > 0 && (
+        <ul class="rs">{related.map((o) => <li><a href={`/guides/${o.slug}/`}>{o.h1}</a></li>)}</ul>
+      )}
+      {!isSizeGuide && <p class="small"><a href={COMBINED_SIZE_GUIDE_PATH}>Replacement cost by size, 1.5 to 5 tons</a></p>}
+      {relBrands.length > 0 && <p class="small"><b>Brands:</b> {relBrands.map((b, i) => <>{i > 0 && ' · '}<a href={`/brands/${b!.slug}/`}>{b!.name}</a></>)}</p>}
+    </aside>
+  )}
 
-  <Auditor systemType={g.audit?.systemType} tons={g.audit?.tons} tier={g.audit?.tier} brand={g.audit?.brand} heading="Have a quote in hand? Grade it" />
-
-  <h2>More guides</h2>
-  <ul class="more">{others.map((o) => <li><a href={`/guides/${o.slug}/`}>{o.h1}</a></li>)}</ul>
-  <Newsletter />
+  <QuoteCta />
 </Base>
 
 <style>
@@ -75,7 +64,4 @@ article :global(.tablewrap){margin:12px 0}
 .related h2{margin-top:0;font-size:1.1rem}
 .related p{margin:6px 0}
 .rs{margin:6px 0;padding-left:18px}
-.more{columns:2;column-gap:28px}
-.more li{break-inside:avoid;margin:4px 0}
-@media (max-width:640px){.more{columns:1}}
 </style>

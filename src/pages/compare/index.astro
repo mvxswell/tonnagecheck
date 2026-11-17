@@ -1,16 +1,21 @@
 ---
 import Base from '../../layouts/Base.astro';
 import CompareWorkbench from '../../components/CompareWorkbench.astro';
-import Auditor from '../../components/Auditor.astro';
 import { COMPARISONS } from '../../data/comparisons';
-import { isCompareMerged, isCompareIndexed } from '../../data/prune';
+import { isCompareMerged, isCompareIndexed, COMPARE_MERGED } from '../../data/prune';
 import { SYSTEMS } from '../../data/equipment';
 import { statsOf, usd, seedDateLabel } from '../../lib/facts';
+import QuoteCta from '../../components/QuoteCta.astro';
 
 const allStats = statsOf(SYSTEMS)!;
 // Featured matchups now live inside guides (301s in public/_redirects). Noindexed template matchups stay listed at the end for visitors.
 const live = COMPARISONS.filter((c) => !isCompareMerged(c.slug));
 const more = live.filter((c) => !isCompareIndexed(c.slug));
+const foldedCount = Object.keys(COMPARE_MERGED).length;
+const leftoverCount = more.length;
+const destGuideCount = new Set(Object.values(COMPARE_MERGED)).size;
+const compareSlugCount = COMPARISONS.length;
+
 const folded = [
   { href: '/guides/bosch-ids-inverter-heat-pump-cost/', label: 'Bosch vs Mitsubishi', note: 'Bosch IDS inverter cost guide' },
   { href: '/guides/mitsubishi-hyper-heat-cost/', label: 'LG vs Mitsubishi', note: 'Mitsubishi Hyper-Heat guide' },
@@ -18,32 +23,34 @@ const folded = [
   { href: '/guides/inverter-vs-single-stage-heat-pump-cost/', label: 'ACiQ vs MRCOOL and inverter vs single-stage', note: 'Inverter vs single-stage guide' },
   { href: '/guides/heat-pump-vs-ac-and-furnace-replacement-cost/', label: 'Heat pump vs AC + furnace, Trane vs Goodman furnaces', note: 'Heat pump vs AC + furnace guide' },
   { href: '/guides/r410a-vs-r454b-r32-refrigerant-transition-quotes/', label: 'R-32 vs R-454B systems', note: 'Refrigerant transition guide' },
-  { href: '/guides/2-ton-heat-pump-ac-replacement-cost/', label: '2-ton model matchups (and 1.5-ton listings)', note: '2-ton replacement cost guide' },
-  { href: '/guides/3-ton-heat-pump-ac-replacement-cost/', label: '3-ton model matchups', note: '3-ton replacement cost guide' },
-  { href: '/guides/4-ton-heat-pump-ac-replacement-cost/', label: '4-ton model matchups', note: '4-ton replacement cost guide' },
-  { href: '/guides/5-ton-heat-pump-ac-replacement-cost/', label: '5-ton model matchups', note: '5-ton replacement cost guide' },
+  { href: '/guides/3-ton-heat-pump-ac-replacement-cost/', label: 'Cost by size, 1.5 to 5 tons (model matchups included)', note: 'Combined size guide — 2, 2.5, 3.5, 4 and 5-ton pages redirect here' },
 ];
 
 const title = `${usd(allStats.min)}–${usd(allStats.max)} HVAC Comparison Workbench`;
-const description = `Compare HVAC brands, sizes and refrigerants (${usd(allStats.min)}–${usd(allStats.max)} listed equipment vs DOE installed-cost benchmarks). Matchups now live in the guides.`;
+const description = `Pick any two of ${SYSTEMS.length} listed HVAC systems and compare equipment prices, SEER2 and DOE installed-cost benchmarks. Saved brand matchups now live in the guides.`;
 
 const jsonld = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  name: 'Head-to-Head HVAC Brand, Tonnage & System Comparisons',
+  name: 'HVAC equipment comparison workbench',
   description,
   url: 'https://tonnagechecker.com/compare/',
 };
 ---
 <Base title={title} description={description} jsonld={jsonld}>
   <p class="crumbs"><a href="/">Home</a> / Comparisons</p>
-  <h1>Head-to-head HVAC brand, tonnage &amp; system comparisons</h1>
-  <p class="lead">Compare public distributor equipment prices ({usd(allStats.min)}–{usd(allStats.max)} across {SYSTEMS.length} systems as of {seedDateLabel}), DOE national-lab installed replacement benchmarks, SEER2/HSPF2 efficiency, refrigerant (R-32 vs R-454B), and contractor markup spreads side by side.</p>
+  <h1>HVAC equipment comparison workbench ({SYSTEMS.length} systems)</h1>
+  <p class="lead">This page is the comparison tool: pick any two of the {SYSTEMS.length} listed systems in the workbench below ({seedDateLabel}). It starts on a like-for-like 3-ton pair — the Goodman GLZT7CA3610 versus the Trane A5HL5036A1000A — so the default is not a capacity-mismatched “same tonnage” pairing. Saved brand, refrigerant and model matchups now live in the guides listed after the tool.</p>
+
+  <div class="card" style="margin:18px 0">
+    <h2 style="margin-top:0">What this comparison catalog holds</h2>
+    <p class="small">These counts are the inventory of this hub, not prices: <b class="num">{compareSlugCount}</b> original comparison slugs, of which <b class="num">{foldedCount}</b> now 301 to <b class="num">{destGuideCount}</b> guides, and <b class="num">{leftoverCount}</b> leftover templates stay published with <code>noindex, follow</code>. The workbench below can pair any two listed systems.</p>
+  </div>
 
   <CompareWorkbench />
 
   <h2>Head-to-head matchups, now in the guides</h2>
-  <p class="small muted">The brand, refrigerant and flagship model comparisons used to be separate template pages. Each one now sits inside the guide that answers the same question, with the same sourced prices and ratings. Size-by-size cost is on the <a href="/tonnage/">tonnage index</a> (each row opens the size guide).</p>
+  <p class="small muted">The brand, refrigerant and flagship model comparisons used to be separate template pages. Each one now sits inside the guide that answers the same question, with the same sourced prices and ratings. Size-by-size cost and the flagship model matchups now live in the <a href="/guides/3-ton-heat-pump-ac-replacement-cost/">combined size guide</a>; the <a href="/tonnage/">tonnage index</a> has the step-up cost from one size to the next.</p>
   <div class="grid">
     {folded.map((f) => (
       <a class="card" href={f.href} style="text-decoration:none;color:inherit">
@@ -60,5 +67,5 @@ const jsonld = {
     </>
   )}
 
-  <Auditor heading="Audit your contractor quote" />
+  <QuoteCta />
 </Base>

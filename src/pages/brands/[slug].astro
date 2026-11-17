@@ -1,8 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
 import FilterableSystems from '../../components/FilterableSystems.astro';
-import ConciergeForm from '../../components/ConciergeForm.astro';
-import Newsletter from '../../components/Newsletter.astro';
 import { BRANDS, type Brand } from '../../data/brands';
 import { comparisonsForBrand } from '../../data/comparisons';
 import { isCompareMerged, isCompareIndexed, sizeGuidePath, comparePath } from '../../data/prune';
@@ -13,6 +11,7 @@ import { SITE } from '../../config';
 import { decoderForBrand } from '../../data/decoder/index';
 import { brandMeta, NEAR_PAGE1_GUIDES } from '../../data/seo';
 import { brandExtra } from '../../data/brand-extras';
+import QuoteCta from '../../components/QuoteCta.astro';
 
 export function getStaticPaths() {
   return BRANDS.map((b) => ({ params: { slug: b.slug }, props: { b } }));
@@ -23,7 +22,17 @@ const shortType: Record<string, string> = { 'central-heat-pump': 'ducted heat pu
 const cold = b.systems.filter((s) => s.energyStar?.coldClimate);
 const others = BRANDS.filter((x) => x.slug !== b.slug);
 const decoder = decoderForBrand(b.name);
-const brandCmps = comparisonsForBrand(b.name).sort((x, y) => Number(!isCompareMerged(x.slug) && isCompareIndexed(x.slug)) - Number(!isCompareMerged(y.slug) && isCompareIndexed(y.slug)));
+const brandCmps = comparisonsForBrand(b.name)
+  .filter((c) => !isCompareMerged(c.slug) || c.category === 'brand' || c.category === 'model')
+  .sort((x, y) => Number(!isCompareMerged(x.slug) && isCompareIndexed(x.slug)) - Number(!isCompareMerged(y.slug) && isCompareIndexed(y.slug)));
+// Dedupe by href so two merged slugs that still share a target don't render twice.
+const seenHref = new Set<string>();
+const brandCmpCards = brandCmps.filter((c) => {
+  const href = comparePath(c.slug);
+  if (seenHref.has(href)) return false;
+  seenHref.add(href);
+  return true;
+});
 const refRow = b.rows.find((r) => r.tons === 3) ?? b.rows[0];
 const seo = brandMeta(b, refRow.fair);
 const extra = brandExtra(b, refRow.fair);
@@ -56,7 +65,7 @@ const ld = [
     <div class="card"><div class="small muted">ENERGY STAR matched pairings</div><div class="v num">{b.energyStarCount} of {b.systems.length}</div><div class="small muted">{b.coldClimateCount} cold-climate certified</div></div>
   </div>
   {extra && <Fragment set:html={extra.summaryHtml} />}
-  <p><a class="btn" href={auditHref}>Audit a {b.name} quote</a> <a class="btn ghost" href="#second-opinion">Get an independent second quote</a></p>
+  <p><a class="btn" href={auditHref}>Audit a {b.name} quote</a> <a class="btn ghost" href="/partners/">Get an independent second quote</a></p>
   {seo && (
     <p class="small"><b>Before you sign a {b.name} quote:</b> {brandGuides.map((g) => <><a href={`/guides/${g.slug}/`}>{g.label}</a> · </>)}<a href="/guides/heat-pump-rebates-and-ahri-certificate-check/">check the AHRI certificate &amp; 2026 rebates</a> · <a href="/guides/independent-hvac-tech-vs-big-company/">independent tech vs big company</a></p>
   )}
@@ -121,15 +130,11 @@ const ld = [
     <a class="btn" href={auditHref}>Audit my {b.name} quote</a>
   </div>
 
-  <section class="card second" id="second-opinion">
-    <ConciergeForm brandModel={b.name} />
-  </section>
-
-  {brandCmps.length > 0 && (
+{brandCmpCards.length > 0 && (
     <>
       <h2>{b.name} head-to-head comparisons</h2>
       <div class="grid">
-        {brandCmps.map((c) => (
+        {brandCmpCards.map((c) => (
           <a class="card" href={comparePath(c.slug)} style="text-decoration:none;color:inherit">
             <div class="small muted">{c.shortLabel}</div>
             <div style="font-weight:700;margin:4px 0">{c.h1}</div>
@@ -150,7 +155,7 @@ const ld = [
   <h2>Other brands</h2>
   <p>{others.map((o, i) => <>{i > 0 && ' · '}<a href={`/brands/${o.slug}/`}>{o.name}</a> <span class="small muted">({o.systems.length})</span></>)}</p>
   <p class="small muted">Sizes we list for {b.name}: {b.tonnages.map((t, i) => <>{i > 0 && ', '}<a href={sizeGuidePath(t)}>{t} ton</a></>)}. All systems: <a href="/systems/">equipment price lookup</a>. Lowest-priced {b.name} listing: <a href={`/systems/${[...b.systems].sort((x, y) => lowestPrice(x) - lowestPrice(y))[0].slug}/`}>{SYSTEM_TYPE_LABEL[[...b.systems].sort((x, y) => lowestPrice(x) - lowestPrice(y))[0].systemType].toLowerCase()}</a>.</p>
-  <Newsletter />
+  <QuoteCta />
 </Base>
 
 <style>

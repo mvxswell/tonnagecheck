@@ -1,10 +1,9 @@
 ---
 import Base from '../../layouts/Base.astro';
-import ConciergeForm from '../../components/ConciergeForm.astro';
-import Newsletter from '../../components/Newsletter.astro';
 import { PART_CATEGORIES, type PartCategoryWithStats } from '../../data/parts';
 import { usd, seedDateLabel } from '../../lib/facts';
 import { SITE } from '../../config';
+import QuoteCta from '../../components/QuoteCta.astro';
 
 export function getStaticPaths() {
   return PART_CATEGORIES.map((cat) => ({
@@ -93,7 +92,7 @@ const ld = [
 
   <p style="margin:14px 0 24px">
     <a class="btn" href="/auditor/">Audit a quote with {cat.shortName.toLowerCase()}</a>
-    <a class="btn ghost" href="#second-opinion">Get an independent second quote</a>
+    <a class="btn ghost" href="/partners/">Get an independent second quote</a>
   </p>
 
   <h2>Price summary by specification group</h2>
@@ -206,11 +205,7 @@ const ld = [
     <a class="btn" href="/auditor/">Audit my HVAC quote</a>
   </div>
 
-  <section class="card second" id="second-opinion">
-    <ConciergeForm brandModel={cat.shortName} />
-  </section>
-
-  <h2>Explore other HVAC installation part categories</h2>
+<h2>Explore other HVAC installation part categories</h2>
   <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:12px 0 24px">
     {otherCategories.map((o) => (
       <a class="card" href={`/parts/${o.slug}/`} style="text-decoration:none;color:inherit">
@@ -221,5 +216,5 @@ const ld = [
     ))}
   </div>
 
-  <Newsletter />
+  <QuoteCta />
 </Base>

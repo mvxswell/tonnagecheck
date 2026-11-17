@@ -2,16 +2,29 @@
 import Base from '../../layouts/Base.astro';
 import { TONNAGES } from '../../data/equipment';
 import { fairRange, equipmentStats, usd, fmtRange } from '../../lib/facts';
-import { sizeGuidePath } from '../../data/prune';
+import { sizeGuidePath, COMBINED_SIZE_GUIDE_PATH } from '../../data/prune';
+
 const rows = TONNAGES.map((t) => ({ t, hp: equipmentStats('central-heat-pump', t), fair: fairRange('central-heat-pump', t, 'standard'), fairHi: fairRange('central-heat-pump', t, 'high') }));
 const r3 = rows.find((r) => r.t === 3)!;
 const title = `${usd(r3.hp.min)} Equip vs ${fmtRange(r3.fair)} Installed: 1.5–5 Ton HVAC`;
 const description = `Compare 1.5 to 5-ton heat pump & AC costs (${usd(r3.hp.min)}–${usd(r3.hp.max)} 3-ton equipment vs ${fmtRange(r3.fair)} installed benchmark) with sourced prices by size.`;
+
+const signed = (n: number | null) => {
+  if (n == null || !Number.isFinite(n)) return '—';
+  return `${n >= 0 ? '+' : '−'}${usd(Math.abs(n))}`;
+};
+const steps = rows.slice(0, -1).map((from, i) => {
+  const to = rows[i + 1];
+  const listed = from.hp.median != null && to.hp.median != null ? to.hp.median - from.hp.median : null;
+  const std = to.fair.mid - from.fair.mid;
+  const high = to.fairHi.mid - from.fairHi.mid;
+  return { from: from.t, to: to.t, listed, std, high };
+});
 ---
 <Base title={title} description={description}>
   <p class="crumbs"><a href="/">Home</a> / By tonnage</p>
   <h1>HVAC &amp; heat pump cost by tonnage</h1>
-  <p class="lead">One ton of cooling is 12,000 BTU per hour. Pick a size to see real listed systems and the installed-cost benchmark.</p>
+  <p class="lead">One ton of cooling is 12,000 BTU per hour. Each size links to its section of the <a href={COMBINED_SIZE_GUIDE_PATH}>combined 1.5-to-5-ton replacement-cost guide</a>. The table below is the listed range and the DOE installed-cost benchmark at that size. The second table is the dollar step from one size to the next — those step-up figures appear only on this page.</p>
   <div class="tablewrap">
     <table>
       <thead><tr><th>Size</th><th class="r">Listed ducted heat pump systems</th><th class="r">Installed, standard <span class="badge b-est">est.</span></th><th class="r">Installed, high-eff. <span class="badge b-est">est.</span></th></tr></thead>
@@ -27,5 +40,23 @@ const description = `Compare 1.5 to 5-ton heat pump & AC costs (${usd(r3.hp.min)
       </tbody>
     </table>
   </div>
-  <p class="small muted">Installed ranges: REMDB ducted air-source heat pump replacement regression, restated in today's dollars. <a href="/about/#benchmarks">Method</a>. Each size links to the replacement-cost guide for that tonnage, which now holds the listings and any model matchups that used to have their own pages.</p>
+  <p class="small muted">Installed ranges: REMDB ducted air-source heat pump replacement regression, restated in today's dollars. <a href="/about/#benchmarks">Method</a>.</p>
+
+  <h2>What it costs to step up one size</h2>
+  <p>Each row is the adjacent-size difference, not the absolute price. Listed-median is the change in the median public online retail price for a ducted heat pump (equipment only). Installed figures are the change in the REMDB midpoint. A negative listed step means the median listing at the larger size is cheaper than at the smaller size in our current catalog — listings are not a smooth curve.</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Step</th><th class="r">Listed median, ducted heat pump</th><th class="r">Installed midpoint, standard <span class="badge b-est">est.</span></th><th class="r">Installed midpoint, high-eff. <span class="badge b-est">est.</span></th></tr></thead>
+      <tbody>
+        {steps.map((s) => (
+          <tr>
+            <td>{s.from} → {s.to} ton</td>
+            <td class="r num">{signed(s.listed)}</td>
+            <td class="r num">{signed(s.std)}</td>
+            <td class="r num">{signed(s.high)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
 </Base>

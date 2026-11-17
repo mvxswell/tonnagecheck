@@ -24,13 +24,18 @@ export const STATES_INDEXED = new Set<string>(['district-of-columbia']);
  */
 export const COMPARE_INDEXED = new Set<string>([]);
 
-/** Destination size-guide path for a tonnage (1.5-ton has no guide of its own; it folds into 2-ton). */
+/** All sizes now live in one guide. Keep the 3-ton URL: /tonnage/3-ton/ had 87 GSC impressions
+ *  in 28 days, more than any other size page, and the 3-ton guide is the natural merge target. */
+export const COMBINED_SIZE_GUIDE_SLUG = '3-ton-heat-pump-ac-replacement-cost';
+export const COMBINED_SIZE_GUIDE_PATH = `/guides/${COMBINED_SIZE_GUIDE_SLUG}/`;
+
+export function sizeAnchor(tons: number): string {
+  return `${String(tons).replace('.', '-')}-ton`;
+}
+
+/** In-page href to the combined size guide (hash jumps to that size's section). */
 export function sizeGuidePath(tons: number): string {
-  const slug =
-    tons === 1.5
-      ? '2-ton-heat-pump-ac-replacement-cost'
-      : `${String(tons).replace('.', '-')}-ton-heat-pump-ac-replacement-cost`;
-  return `/guides/${slug}/`;
+  return `${COMBINED_SIZE_GUIDE_PATH}#${sizeAnchor(tons)}`;
 }
 
 /** Comparison slugs folded into a guide and 301-redirected (see public/_redirects). Not built. */
@@ -51,17 +56,17 @@ export const COMPARE_MERGED: Record<string, string> = {
   // Refrigerant dataset
   'r32-vs-r454b-heat-pump-systems-compared': '/guides/r410a-vs-r454b-r32-refrigerant-transition-quotes/',
   // Model-vs-model flagship pairs, folded into the matching size guide
-  'mitsubishi-suz-ak24nlhz-vs-daikin-rxm24wvju9-2-ton': sizeGuidePath(2),
-  'bosch-bovb-36rxb-vs-trane-a5hl5036a-3-ton': sizeGuidePath(3),
-  'goodman-glzt7ca3610-vs-bosch-bovb-36rxb-3-ton': sizeGuidePath(3),
-  'gree-fxu36hp-vs-mrcool-central-36-3-ton': sizeGuidePath(3),
-  'goodman-glzs4ba4810-vs-trane-a5hl5048a-4-ton': sizeGuidePath(4),
-  'goodman-glzs5ba6010-vs-bosch-bovb-60rxb-5-ton': sizeGuidePath(5),
+  'mitsubishi-suz-ak24nlhz-vs-daikin-rxm24wvju9-2-ton': COMBINED_SIZE_GUIDE_PATH,
+  'bosch-bovb-36rxb-vs-trane-a5hl5036a-3-ton': COMBINED_SIZE_GUIDE_PATH,
+  'goodman-glzt7ca3610-vs-bosch-bovb-36rxb-3-ton': COMBINED_SIZE_GUIDE_PATH,
+  'gree-fxu36hp-vs-mrcool-central-36-3-ton': COMBINED_SIZE_GUIDE_PATH,
+  'goodman-glzs4ba4810-vs-trane-a5hl5048a-4-ton': COMBINED_SIZE_GUIDE_PATH,
+  'goodman-glzs5ba6010-vs-bosch-bovb-60rxb-5-ton': COMBINED_SIZE_GUIDE_PATH,
 };
 
 /** /tonnage/{size}/ pages folded into the matching size guide. The /tonnage/ hub stays. */
 export const TONNAGE_MERGED: Record<string, string> = Object.fromEntries(
-  [1.5, 2, 2.5, 3, 3.5, 4, 5].map((t) => [tonSlug(t), sizeGuidePath(t)]),
+  [1.5, 2, 2.5, 3, 3.5, 4, 5].map((t) => [tonSlug(t), COMBINED_SIZE_GUIDE_PATH]),
 );
 
 const seg = (path: string, section: string) => {
@@ -88,10 +93,18 @@ export const isTonnageMerged = (slug: string) => slug in TONNAGE_MERGED;
 
 /** Live href for a comparison slug: the merge target if folded, otherwise the compare page. */
 export function comparePath(slug: string): string {
-  return COMPARE_MERGED[slug] ?? `/compare/${slug}/`;
+  const dest = COMPARE_MERGED[slug];
+  // Redirects stay hash-free; in-page links jump to the folded section.
+  return dest ? `${dest}#${slug}` : `/compare/${slug}/`;
 }
 
 /** Live href for a size: the size guide after the tonnage-page merge. */
 export function tonnagePath(tons: number): string {
   return sizeGuidePath(tons);
 }
+
+/** Old per-size guide slugs that now 301 to the combined 3-ton URL. */
+export const SIZE_GUIDES_MERGED: Record<string, string> = Object.fromEntries(
+  [2, 2.5, 3.5, 4, 5].map((t) => [`${String(t).replace('.', '-')}-ton-heat-pump-ac-replacement-cost`, COMBINED_SIZE_GUIDE_PATH]),
+);
+

@@ -150,7 +150,7 @@ ${c3.count && c4.count ? `<p>If only the outdoor condenser is being replaced, th
 </ul>
 
 <h2>Bottom line</h2>
-<p>Expect the equipment for a 4-ton system to cost somewhat more than a comparable 3-ton, and the installed benchmark to rise by roughly the midpoint difference shown above. Get the load calculation, compare like-for-like model numbers, and run both sizes through the ${auditLink} to see whether the quote's size step is priced fairly. Size pages: <a href="/guides/3-ton-heat-pump-ac-replacement-cost/">3-ton</a>, <a href="/guides/4-ton-heat-pump-ac-replacement-cost/">4-ton</a>.</p>`;
+<p>Expect the equipment for a 4-ton system to cost somewhat more than a comparable 3-ton, and the installed benchmark to rise by roughly the midpoint difference shown above. Get the load calculation, compare like-for-like model numbers, and run both sizes through the ${auditLink} to see whether the quote's size step is priced fairly. Size-by-size prices: <a href="/guides/3-ton-heat-pump-ac-replacement-cost/">1.5 to 5 tons</a> (<a href="/guides/3-ton-heat-pump-ac-replacement-cost/#4-ton">jump to 4-ton</a>).</p>`;
     },
   },
   {

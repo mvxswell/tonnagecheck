@@ -1,10 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro';
 import ModelSerialDecoder from '../../components/ModelSerialDecoder.astro';
-import Newsletter from '../../components/Newsletter.astro';
 import { DECODER_BRANDS } from '../../data/decoder/index';
 import { SOURCES, type SourceId } from '../../data/sources';
 import { SITE } from '../../config';
+import QuoteCta from '../../components/QuoteCta.astro';
 
 const url = `${SITE.url}/decoder/`;
 const title = 'HVAC Model & Serial Number Decoder: Size, Age, Warranty';
@@ -118,7 +118,7 @@ const ld = [
   <h2 id="sources">Sources</h2>
   <ol class="small srcs">{sourceList.map((s) => <li><a href={s.url}>{s.title}</a>: {s.publisher}</li>)}</ol>
   <p class="small muted">Updated {updated}. Found a model the decoder gets wrong? The rating plate and the manufacturer's document always win. Tell us via the <a href="/about/">about page</a>.</p>
-  <Newsletter />
+  <QuoteCta />
 </Base>
 
 <style>

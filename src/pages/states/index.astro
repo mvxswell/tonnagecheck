@@ -1,11 +1,11 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Newsletter from '../../components/Newsletter.astro';
 import { isStateIndexed } from '../../data/prune';
 import { STATES, EFFICIENCY, heatingCosts, climateSummary, STATE_SEED_DATE } from '../../data/states';
 import { SOURCES } from '../../data/sources';
 import { fairRange, usd } from '../../lib/facts';
 import { SITE } from '../../config';
+import QuoteCta from '../../components/QuoteCta.astro';
 const f3 = fairRange('central-heat-pump', 3);
 const rows = STATES.map((s) => {
   const c = heatingCosts(s);
@@ -38,5 +38,5 @@ const ld = { '@context': 'https://schema.org', '@type': 'ItemList', name: 'Heat 
   </div>
   <p class="small muted">Electricity: <a href={SOURCES.eiaElectricity.url}>EIA Table 5.6.B</a> (residential, year to date). Gas: <a href={SOURCES.eiaGas.url}>EIA residential price</a> (annual). Heat cost per million Btu delivered uses each state's EIA gas heat content, a heat pump at the median HSPF2 of the systems we list ({EFFICIENCY.hspf2Median}), and a {EFFICIENCY.afueLow}% AFUE furnace. Climate zones: <a href={SOURCES.pnnlClimateZones.url}>PNNL-33270</a>. {indexed} of {STATES.length} state pages have every data point verified. This table carries each state's figures; the individual state pages are kept for reference.</p>
   <p>Installed cost is a national benchmark in every state: {usd(f3.low)}–{usd(f3.high)} for a standard 3-ton heat pump (midpoint {usd(f3.mid)}). <a href="/auditor/">Grade your own quote</a>.</p>
-  <Newsletter />
+  <QuoteCta />
 </Base>

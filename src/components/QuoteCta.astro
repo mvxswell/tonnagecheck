@@ -1,0 +1,11 @@
+---
+/**
+ * Short stand-in for the site-wide auditor, concierge and newsletter embeds,
+ * which repeated ~870 words of the same forms on almost every page.
+ */
+import { NEWSLETTER_URL } from '../config';
+---
+<p class="small muted qcta">Have a contractor quote? <a href="/auditor/"><b>Grade it in the quote auditor</b></a>. Want a second bid from an independent tech? <a href="/partners/">See the partners page</a>.{NEWSLETTER_URL && <> Weekly red-flag email: <a href={NEWSLETTER_URL}>subscribe</a>.</>}</p>
+<style>
+.qcta{margin:24px 0 8px}
+</style>

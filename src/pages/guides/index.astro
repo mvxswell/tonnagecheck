@@ -1,8 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Newsletter from '../../components/Newsletter.astro';
 import { GUIDES } from '../../data/guides/index';
 import { fairRange, equipmentStats, usd, fmtRange } from '../../lib/facts';
+import QuoteCta from '../../components/QuoteCta.astro';
 const eq3 = equipmentStats('central-heat-pump', 3);
 const f3 = fairRange('central-heat-pump', 3);
 const title = `${usd(eq3.min)} Equip vs ${fmtRange(f3)} Installed: ${GUIDES.length} HVAC Guides`;
@@ -15,6 +15,6 @@ const description = `${GUIDES.length} HVAC quote & line-item guides comparing ${
   <div class="grid">
     {GUIDES.map((g) => <a class="card gl" href={`/guides/${g.slug}/`}><b>{g.h1}</b><span class="small muted">{g.description}</span></a>)}
   </div>
-  <Newsletter />
+  <QuoteCta />
 </Base>
 <style>.gl{text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:6px}.gl:hover{border-color:var(--acc)}</style>

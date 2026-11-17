@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import Auditor from '../components/Auditor.astro';
-import Newsletter from '../components/Newsletter.astro';
+import QuoteCta from '../components/QuoteCta.astro';
 import { SITE } from '../config';
 import { SYSTEMS, TONNAGES } from '../data/equipment';
 import { GUIDES } from '../data/guides/index';
@@ -11,6 +10,17 @@ import { PART_CATEGORIES, PART_CATALOG_STATS } from '../data/parts';
 import { STATES } from '../data/states';
 import { fairRange, equipmentStats, seedDateLabel, usd, fmtRange } from '../lib/facts';
 
+const FEATURED_GUIDE_SLUGS = [
+  '3-ton-heat-pump-ac-replacement-cost',
+  'manual-j-load-calculation-vs-rule-of-thumb-sizing',
+  'inverter-vs-single-stage-heat-pump-cost',
+  'heat-pump-vs-ac-and-furnace-replacement-cost',
+  'r410a-vs-r454b-r32-refrigerant-transition-quotes',
+  'how-to-tell-if-hvac-quote-is-ripoff',
+  'heat-pump-rebates-and-ahri-certificate-check',
+  'bosch-ids-inverter-heat-pump-cost',
+];
+const featuredGuides = FEATURED_GUIDE_SLUGS.map((slug) => GUIDES.find((g) => g.slug === slug)).filter((g): g is NonNullable<typeof g> => !!g);
 const esCount = SYSTEMS.filter((s) => s.energyStar).length;
 const three = equipmentStats('central-heat-pump', 3);
 const threeFair = fairRange('central-heat-pump', 3, 'standard');
@@ -34,11 +44,10 @@ import { DECODER_BRANDS } from '../data/decoder/index';
       <li><b class="num">{esCount}</b> matched to their EPA ENERGY STAR / AHRI record</li>
       <li><b>0</b> made-up numbers. Every figure links to its source.</li>
     </ul>
+    <p><a class="btn" href="/auditor/">Grade my quote</a> <a class="btn ghost" href="/partners/">Get a second opinion</a></p>
   </section>
 
-  <Auditor heading="Grade my quote" />
-
-  <section>
+<section>
     <h2>What a 3-ton heat pump really costs</h2>
     <div class="grid">
       <div class="card"><div class="muted small">Listed equipment price, 3-ton ducted heat pump systems</div><div class="big num">{usd(three.min)}–{usd(three.max)}</div><p class="small muted">{three.count} systems in our data. <a href={sizeGuidePath(3)}>See them all</a></p></div>
@@ -108,13 +117,14 @@ import { DECODER_BRANDS } from '../data/decoder/index';
   </section>
 
   <section>
-    <h2>Buyer guides</h2>
+    <h2>Featured buyer guides</h2>
     <div class="grid">
-      {GUIDES.map((g) => <a class="card glink" href={`/guides/${g.slug}/`}><b>{g.h1}</b><span class="small muted">{g.description}</span></a>)}
+      {featuredGuides.map((g) => <a class="card glink" href={`/guides/${g.slug}/`}><b>{g.h1}</b><span class="small muted">{g.description}</span></a>)}
     </div>
+    <p><a href="/guides/"><b>All {GUIDES.length} guides →</b></a></p>
   </section>
 
-  <Newsletter />
+  <QuoteCta />
 </Base>
 
 <style>
