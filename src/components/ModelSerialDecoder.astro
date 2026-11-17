@@ -3,7 +3,8 @@
 // Pass the brand families to include (all of them on /decoder/, one on a brand page).
 import type { DecoderBrand } from '../data/decoder/types';
 import { SOURCES } from '../data/sources';
-import { TONNAGES, tonSlug } from '../data/equipment';
+import { TONNAGES } from '../data/equipment';
+import { sizeGuidePath } from '../data/prune';
 
 interface Props { brands: DecoderBrand[]; examples?: { model: string; serial?: string; brand?: string }[]; heading?: string }
 const { brands, examples = [], heading = 'Decode a model or serial number' } = Astro.props;
@@ -12,7 +13,7 @@ const rules = brands.flatMap((b) => b.serials);
 const options = brands.flatMap((b) => b.serialOptions.map((o) => ({ ...o, decoder: b.slug, group: b.name })));
 const usedIds = new Set<string>([...families.flatMap((f) => f.sourceIds), ...rules.flatMap((r) => r.sourceIds)]);
 const sources = Object.fromEntries(Object.values(SOURCES).filter((s) => usedIds.has(s.id)).map((s) => [s.id, { title: s.title, url: s.url }]));
-const tonPages = Object.fromEntries(TONNAGES.map((t) => [String(t), `/tonnage/${tonSlug(t)}/`]));
+const tonPages = Object.fromEntries(TONNAGES.map((t) => [String(t), sizeGuidePath(t)]));
 const data = JSON.stringify({ families, rules, options, sources, tonPages }).replace(/</g, '\\u003c');
 const single = brands.length === 1;
 // A brand with no documented serial date code (e.g. Mitsubishi) gets a model-only decoder.

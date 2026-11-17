@@ -6,6 +6,7 @@ import { BRANDS, brandByName, brandSlug } from './brands';
 import { SOURCES } from './sources';
 type SourceKey = keyof typeof SOURCES;
 import { fairRange, systemsWhere, statsOf, refrigerantOf, isInverter, seedDateLabel, cpi, usd, fmtRange, pct, type Range } from '../lib/facts';
+import { sizeGuidePath } from './prune';
 
 export type CompareCategory = 'brand' | 'tonnage' | 'type' | 'model';
 
@@ -53,7 +54,7 @@ const src = (k: SourceKey, text?: string) => {
   const s = SOURCES[k];
   return `<a href="${s.url}" rel="noopener" target="_blank">${text ?? s.title}</a>`;
 };
-const tonLink = (t: number, text?: string) => `<a href="/tonnage/${tonSlug(t)}/">${text ?? `${t}-ton`}</a>`;
+const tonLink = (t: number, text?: string) => `<a href="${sizeGuidePath(t)}">${text ?? `${t}-ton`}</a>`;
 const brandLink = (b: string, text?: string) => `<a href="/brands/${brandSlug(b)}/">${text ?? b}</a>`;
 const sysLink = (s: System, text?: string) => `<a href="/systems/${s.slug}/">${text ?? `${s.brand} ${s.tons}-ton ${s.components[0]}`}</a>`;
 const remdbNote = `Installed ranges are ${src('remdb', 'DOE REMDB')} (National Laboratory of the Rockies) regressions restated from ${cpi.baseMonth} to ${cpi.latestMonth} dollars (×${cpi.factor} ${src('fredCpi', 'BLS CPI-U')}).`;
@@ -174,8 +175,8 @@ function buildTonnageComparison(tonsA: number, tonsB: number): CompareEntry {
   const xsB = systemsWhere({ type: 'central-heat-pump', tons: tonsB });
   const allA = systemsWhere({ tons: tonsA });
   const allB = systemsWhere({ tons: tonsB });
-  const left = summarizeSystems(`${tonsA}-Ton Heat Pump`, `${(tonsA * 12000).toLocaleString('en-US')} BTU/h`, xsA.length ? xsA : allA, `/tonnage/${tonSlug(tonsA)}/`, 'central-heat-pump', tonsA);
-  const right = summarizeSystems(`${tonsB}-Ton Heat Pump`, `${(tonsB * 12000).toLocaleString('en-US')} BTU/h`, xsB.length ? xsB : allB, `/tonnage/${tonSlug(tonsB)}/`, 'central-heat-pump', tonsB);
+  const left = summarizeSystems(`${tonsA}-Ton Heat Pump`, `${(tonsA * 12000).toLocaleString('en-US')} BTU/h`, xsA.length ? xsA : allA, sizeGuidePath(tonsA), 'central-heat-pump', tonsA);
+  const right = summarizeSystems(`${tonsB}-Ton Heat Pump`, `${(tonsB * 12000).toLocaleString('en-US')} BTU/h`, xsB.length ? xsB : allB, sizeGuidePath(tonsB), 'central-heat-pump', tonsB);
   const fairAStd = fairRange('central-heat-pump', tonsA, 'standard');
   const fairBStd = fairRange('central-heat-pump', tonsB, 'standard');
   const fairAMid = fairRange('central-heat-pump', tonsA, 'mid');
@@ -251,8 +252,8 @@ function buildSystemTypeComparison(
   const fairB = fairRange(typeB, tons, 'standard');
   const fairAHigh = fairRange(typeA, tons, 'high');
   const fairBHigh = fairRange(typeB, tons, 'high');
-  const left = summarizeSystems(`${tons}-Ton ${SYSTEM_TYPE_LABEL[typeA].split(' (')[0]}`, `${(tons * 12000).toLocaleString('en-US')} BTU/h`, fallbackA, `/tonnage/${tonSlug(tons)}/`, typeA, tons);
-  const right = summarizeSystems(`${tons}-Ton ${SYSTEM_TYPE_LABEL[typeB].split(' (')[0]}`, `${(tons * 12000).toLocaleString('en-US')} BTU/h`, fallbackB, `/tonnage/${tonSlug(tons)}/`, typeB, tons);
+  const left = summarizeSystems(`${tons}-Ton ${SYSTEM_TYPE_LABEL[typeA].split(' (')[0]}`, `${(tons * 12000).toLocaleString('en-US')} BTU/h`, fallbackA, sizeGuidePath(tons), typeA, tons);
+  const right = summarizeSystems(`${tons}-Ton ${SYSTEM_TYPE_LABEL[typeB].split(' (')[0]}`, `${(tons * 12000).toLocaleString('en-US')} BTU/h`, fallbackB, sizeGuidePath(tons), typeB, tons);
   left.fair = fairA;
   right.fair = fairB;
   left.markupMid = fairA.mid - left.equipMedian;
@@ -355,8 +356,8 @@ function buildStagingComparison(tons: number): CompareEntry {
   const inv = systemsWhere({ type: 'central-heat-pump', tons, staging: 'inverter' });
   const fairStd = fairRange('central-heat-pump', tons, 'standard');
   const fairHigh = fairRange('central-heat-pump', tons, 'high');
-  const left = summarizeSystems(`${tons}-Ton Single / Two-Stage`, `${fixed.length} fixed-stage systems`, fixed, `/tonnage/${tonSlug(tons)}/`, 'central-heat-pump', tons, 'standard');
-  const right = summarizeSystems(`${tons}-Ton Inverter (Variable)`, `${inv.length} inverter systems`, inv, `/tonnage/${tonSlug(tons)}/`, 'central-heat-pump', tons, 'high');
+  const left = summarizeSystems(`${tons}-Ton Single / Two-Stage`, `${fixed.length} fixed-stage systems`, fixed, sizeGuidePath(tons), 'central-heat-pump', tons, 'standard');
+  const right = summarizeSystems(`${tons}-Ton Inverter (Variable)`, `${inv.length} inverter systems`, inv, sizeGuidePath(tons), 'central-heat-pump', tons, 'high');
   left.fair = fairStd;
   right.fair = fairHigh;
   left.markupMid = fairStd.mid - left.equipMedian;

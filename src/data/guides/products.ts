@@ -4,6 +4,7 @@ import { lowestPrice, median, TIER_LABEL } from '../equipment';
 import { brandByName } from '../brands';
 import { fairRange, systemsWhere, usd, fmtRange, pct } from '../../lib/facts';
 import { today, src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
+import { foldedMatchup } from './fold-comparisons';
 import type { Guide } from './types';
 
 export const PRODUCT_GUIDES: Guide[] = [
@@ -63,7 +64,10 @@ ${systemsTable([...carrierMs, ...otherMs].sort((x, y) => x.tons - y.tons || lowe
 <li>Subtract it from your quote. That remainder is labor, materials, overhead and margin.</li>
 <li>Compare the total with the benchmark range. A brand-name quote within the range is reasonable; one far above it is paying for something other than the equipment.</li>
 </ol>
-<p>Run it in the ${auditLink({ brand: 'Trane', tons: 3 })} (it highlights the brand you enter), or browse ${brandLink('Goodman', 'Goodman')}, ${brandLink('Trane', 'Trane')} and ${brandLink('Carrier', 'Carrier')} prices by size.</p>`;
+<h2>LG vs Trane heat pump cost</h2>
+<p>The LG vs Trane comparison page now lives here, next to the other brand-name equipment prices. Figures are the same listed prices and ratings (${asOf}).</p>
+${foldedMatchup('lg-vs-trane-heat-pump-cost')}
+<p>Run it in the ${auditLink({ brand: 'Trane', tons: 3 })} (it highlights the brand you enter), or browse ${brandLink('Goodman', 'Goodman')}, ${brandLink('Trane', 'Trane')}, ${brandLink('LG', 'LG')} and ${brandLink('Carrier', 'Carrier')} prices by size.</p>`;
     },
   },
   {
@@ -113,6 +117,9 @@ ${(() => {
 </ul>
 
 <h2>Is the premium worth it?</h2>
+<h2>Bosch IDS vs Mitsubishi Hyper-Heat</h2>
+<p>The Bosch vs Mitsubishi comparison page now lives here. Figures are the same listed prices and ratings (${asOf}).</p>
+${foldedMatchup('bosch-vs-mitsubishi-heat-pump-cost')}
 <p>Inverter systems run at variable speed, which usually means better comfort and part-load efficiency. Whether that pays back depends on your climate and electricity prices. What you should not pay is a premium that is mostly dealer margin. Compare the listed Bosch price with the ${brandLink('Bosch', 'Bosch brand page')} and other inverter options in <a href="/guides/inverter-vs-single-stage-heat-pump-cost/">inverter vs single-stage cost</a>, then grade your quote in the ${auditLink({ brand: 'Bosch', tons: 3, tier: 'high' })}.</p>`;
     },
   },
@@ -186,7 +193,7 @@ ${(() => {
   if (!hz.length || !non.length) return '';
   return `<p>The pattern in the records: every H2i (HZ) pairing here keeps at least ${pct(Math.min(...hz.map(ret)))} of its 47°F heating output at 5°F, while the non-HZ ${sysLink(non[0], non[0].components[0])} keeps ${pct(ret(non[0]))}. If you heat through real winters, ask for an HZ outdoor unit and its 5°F number, not just the SEER2.</p>`;
 })()}
-${otherCold.length ? `<p>Other brands with cold-climate certified pairings in our data include ${[...new Set(otherCold.map((s) => s.brand))].map((b) => brandLink(b)).join(', ')}. If cold-weather performance is the reason you were quoted Mitsubishi, compare those records before paying a brand premium; our <a href="/compare/bosch-vs-mitsubishi-heat-pump-cost/">Bosch vs Mitsubishi heat pump comparison</a> puts the two side by side.</p>` : ''}
+${otherCold.length ? `<p>Other brands with cold-climate certified pairings in our data include ${[...new Set(otherCold.map((s) => s.brand))].map((b) => brandLink(b)).join(', ')}. If cold-weather performance is the reason you were quoted Mitsubishi, compare those records before paying a brand premium; our <a href="/guides/bosch-ids-inverter-heat-pump-cost/">Bosch vs Mitsubishi heat pump comparison</a> puts the two side by side.</p>` : ''}
 
 <h2>Installed cost</h2>
 <p>Mitsubishi's ducted H2i systems are mini-split heat pumps with a ducted air handler, so we benchmark them with REMDB's mini-split class at the high-efficiency tier:</p>
@@ -212,7 +219,10 @@ ${[...new Set(mit.map((s) => s.tons))].sort((a, b) => a - b).map((t) => { const 
 <li>For multi-zone systems: how many indoor heads, which sizes, and how long are the line sets?</li>
 <li>Are you a Diamond Contractor, and who registers the system for the 10- or 12-year warranty?</li>
 </ul>
-<p>See all ${brandLink('Mitsubishi', 'Mitsubishi prices')}, the <a href="/compare/bosch-vs-mitsubishi-heat-pump-cost/">Bosch vs Mitsubishi cost comparison</a>, our <a href="/guides/multi-zone-mini-split-cost/">multi-zone mini-split guide</a>, and grade your quote in the ${auditLink({ type: 'mini-split', brand: 'Mitsubishi' })}.</p>`;
+<h2>LG RED vs Mitsubishi Hyper-Heat</h2>
+<p>The LG vs Mitsubishi comparison page now lives here. Figures are the same listed prices and ratings (${asOf}). For Bosch IDS vs Mitsubishi, see the <a href="/guides/bosch-ids-inverter-heat-pump-cost/">Bosch IDS cost guide</a>.</p>
+${foldedMatchup('lg-vs-mitsubishi-heat-pump-cost')}
+<p>See all ${brandLink('Mitsubishi', 'Mitsubishi prices')}, our <a href="/guides/multi-zone-mini-split-cost/">multi-zone mini-split guide</a>, and grade your quote in the ${auditLink({ type: 'mini-split', brand: 'Mitsubishi' })}.</p>`;
     },
   },
 ];

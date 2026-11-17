@@ -7,7 +7,7 @@ import { decoderForBrand } from '../../data/decoder/index';
 import { SYSTEMS, SYSTEM_TYPE_LABEL, TIER_LABEL, tonSlug, lowestPrice, belowEnergyStarMinimum, certifiedCapacity, type System } from '../../data/equipment';
 import { brandSlug } from '../../data/brands';
 import { comparisonsForSystem } from '../../data/comparisons';
-import { isCompareMerged } from '../../data/prune';
+import { comparePath, sizeGuidePath } from '../../data/prune';
 import { fairRange, usd, fmtRange } from '../../lib/facts';
 import { SOURCES } from '../../data/sources';
 import { SITE } from '../../config';
@@ -40,7 +40,7 @@ const normModel = (m: string) => m.toUpperCase().replace(/[^A-Z0-9]/g, '');
 const ahriOutdoor = es && !normModel(es.outdoorModel).startsWith(normModel(s.components[0])) && !normModel(s.components[0]).startsWith(normModel(es.outdoorModel)) ? es.outdoorModel.replace(/\*+$/, '') : null;
 const fetched = new Date(s.prices[0].fetchedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
 const related = SYSTEMS.filter((x) => x.slug !== s.slug && x.tons === s.tons).slice(0, 6);
-const sysCmps = comparisonsForSystem(s.slug, s.brand, s.tons).filter((c) => !isCompareMerged(c.slug));
+const sysCmps = comparisonsForSystem(s.slug, s.brand, s.tons);
 const ld = {
   '@context': 'https://schema.org', '@type': 'Product', name, brand: { '@type': 'Brand', name: s.brand }, mpn: s.components[0], model: s.components.join(' / '),
   url: `${SITE.url}/systems/${s.slug}/`,
@@ -57,7 +57,7 @@ const ld = {
 };
 ---
 <Base title={title} description={description} jsonld={ld}>
-  <p class="crumbs"><a href="/">Home</a> / <a href="/brands/">Brands</a> / <a href={`/brands/${brandSlug(s.brand)}/`}>{s.brand}</a> / <a href={`/tonnage/${tonSlug(s.tons)}/`}>{s.tons} ton</a> / {s.components[0]}</p>
+  <p class="crumbs"><a href="/">Home</a> / <a href="/brands/">Brands</a> / <a href={`/brands/${brandSlug(s.brand)}/`}>{s.brand}</a> / <a href={sizeGuidePath(s.tons)}>{s.tons} ton</a> / {s.components[0]}</p>
   <h1>{name}</h1>
   <p class="lead">{s.sizeCorrection ? <><b>Retailer listing title:</b> {s.title}</> : s.title}</p>
   {s.sizeCorrection && (
@@ -133,7 +133,7 @@ const ld = {
   {sysCmps.length > 0 && (
     <>
       <h2>Head-to-head comparisons for {s.brand} &amp; {s.tons}-ton systems</h2>
-      <ul class="rel">{sysCmps.map((c) => <li><a href={`/compare/${c.slug}/`}>{c.shortLabel}: {c.h1}</a></li>)}</ul>
+      <ul class="rel">{sysCmps.map((c) => <li><a href={comparePath(c.slug)}>{c.shortLabel}: {c.h1}</a></li>)}</ul>
     </>
   )}
 </Base>

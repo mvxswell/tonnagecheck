@@ -6,9 +6,10 @@ import { NEAR_PAGE1_GUIDES } from '../../data/seo';
 import Newsletter from '../../components/Newsletter.astro';
 import { GUIDES, type Guide } from '../../data/guides/index';
 import { brandByName } from '../../data/brands';
-import { tonSlug, lowestPrice } from '../../data/equipment';
+import { lowestPrice } from '../../data/equipment';
 import { systemsWhere, usd } from '../../lib/facts';
 import { SITE } from '../../config';
+import { sizeGuidePath } from '../../data/prune';
 
 export function getStaticPaths() {
   return GUIDES.map((g) => ({ params: { slug: g.slug }, props: { g } }));
@@ -52,7 +53,7 @@ const ld = [
 
   <aside class="card related" aria-labelledby="rel-h">
     <h2 id="rel-h">Related prices</h2>
-    {relTons.length > 0 && <p><b>By size:</b> {relTons.map((t, i) => <>{i > 0 && ' · '}<a href={`/tonnage/${tonSlug(t)}/`}>{t}-ton cost</a></>)}</p>}
+    {relTons.length > 0 && <p><b>By size:</b> {relTons.map((t, i) => <>{i > 0 && ' · '}<a href={sizeGuidePath(t)}>{t}-ton cost</a></>)}</p>}
     {relBrands.length > 0 && <p><b>By brand:</b> {relBrands.map((b, i) => <>{i > 0 && ' · '}<a href={`/brands/${b!.slug}/`}>{b!.name}</a></>)}</p>}
     {relSystems.length > 0 && (
       <ul class="rs">{relSystems.map((s) => <li><a href={`/systems/${s.slug}/`}>{s.brand} {s.tons}-ton {s.components[0]}</a> <span class="small muted">{s.specs.seer2 ?? '?'} SEER2 · <span class="num">{usd(lowestPrice(s))}</span></span></li>)}</ul>

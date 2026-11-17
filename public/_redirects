@@ -21,3 +21,44 @@
 /compare/4-ton-heat-pump-vs-ac-furnace-cost/ /guides/heat-pump-vs-ac-and-furnace-replacement-cost/ 301
 /compare/5-ton-heat-pump-vs-ac-furnace-cost /guides/heat-pump-vs-ac-and-furnace-replacement-cost/ 301
 /compare/5-ton-heat-pump-vs-ac-furnace-cost/ /guides/heat-pump-vs-ac-and-furnace-replacement-cost/ 301
+
+# Preview-merge (Nov 17, 2026): remaining indexable /compare/ pages and /tonnage/{size}/ pages
+# folded into guides (see src/data/prune.ts COMPARE_MERGED and TONNAGE_MERGED).
+/compare/bosch-vs-mitsubishi-heat-pump-cost /guides/bosch-ids-inverter-heat-pump-cost/ 301
+/compare/bosch-vs-mitsubishi-heat-pump-cost/ /guides/bosch-ids-inverter-heat-pump-cost/ 301
+/compare/lg-vs-mitsubishi-heat-pump-cost /guides/mitsubishi-hyper-heat-cost/ 301
+/compare/lg-vs-mitsubishi-heat-pump-cost/ /guides/mitsubishi-hyper-heat-cost/ 301
+/compare/lg-vs-trane-heat-pump-cost /guides/goodman-vs-trane-vs-carrier-equipment-markup/ 301
+/compare/lg-vs-trane-heat-pump-cost/ /guides/goodman-vs-trane-vs-carrier-equipment-markup/ 301
+/compare/aciq-vs-mrcool-heat-pump-cost /guides/inverter-vs-single-stage-heat-pump-cost/ 301
+/compare/aciq-vs-mrcool-heat-pump-cost/ /guides/inverter-vs-single-stage-heat-pump-cost/ 301
+/compare/trane-vs-goodman-ac-furnace-cost /guides/heat-pump-vs-ac-and-furnace-replacement-cost/ 301
+/compare/trane-vs-goodman-ac-furnace-cost/ /guides/heat-pump-vs-ac-and-furnace-replacement-cost/ 301
+/compare/r32-vs-r454b-heat-pump-systems-compared /guides/r410a-vs-r454b-r32-refrigerant-transition-quotes/ 301
+/compare/r32-vs-r454b-heat-pump-systems-compared/ /guides/r410a-vs-r454b-r32-refrigerant-transition-quotes/ 301
+/compare/mitsubishi-suz-ak24nlhz-vs-daikin-rxm24wvju9-2-ton /guides/2-ton-heat-pump-ac-replacement-cost/ 301
+/compare/mitsubishi-suz-ak24nlhz-vs-daikin-rxm24wvju9-2-ton/ /guides/2-ton-heat-pump-ac-replacement-cost/ 301
+/compare/bosch-bovb-36rxb-vs-trane-a5hl5036a-3-ton /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/compare/bosch-bovb-36rxb-vs-trane-a5hl5036a-3-ton/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/compare/goodman-glzt7ca3610-vs-bosch-bovb-36rxb-3-ton /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/compare/goodman-glzt7ca3610-vs-bosch-bovb-36rxb-3-ton/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/compare/gree-fxu36hp-vs-mrcool-central-36-3-ton /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/compare/gree-fxu36hp-vs-mrcool-central-36-3-ton/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/compare/goodman-glzs4ba4810-vs-trane-a5hl5048a-4-ton /guides/4-ton-heat-pump-ac-replacement-cost/ 301
+/compare/goodman-glzs4ba4810-vs-trane-a5hl5048a-4-ton/ /guides/4-ton-heat-pump-ac-replacement-cost/ 301
+/compare/goodman-glzs5ba6010-vs-bosch-bovb-60rxb-5-ton /guides/5-ton-heat-pump-ac-replacement-cost/ 301
+/compare/goodman-glzs5ba6010-vs-bosch-bovb-60rxb-5-ton/ /guides/5-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/1-5-ton /guides/2-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/1-5-ton/ /guides/2-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/2-ton /guides/2-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/2-ton/ /guides/2-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/2-5-ton /guides/2-5-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/2-5-ton/ /guides/2-5-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/3-ton /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/3-ton/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/3-5-ton /guides/3-5-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/3-5-ton/ /guides/3-5-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/4-ton /guides/4-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/4-ton/ /guides/4-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/5-ton /guides/5-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/5-ton/ /guides/5-ton-heat-pump-ac-replacement-cost/ 301

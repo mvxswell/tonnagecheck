@@ -5,6 +5,7 @@ import { BRANDS } from '../brands';
 import { fairRange, systemsWhere, adderRange, newCircuitAdder, refrigerantGwp, refrigerantOf, usd, fmtRange, pct } from '../../lib/facts';
 import { SOURCES } from '../sources';
 import { today, src, tonLink, brandLink, sysLink, auditLink, asOf, rangeText, remdbNote } from './helpers';
+import { foldedMatchup } from './fold-comparisons';
 import type { Guide } from './types';
 
 export const TECHNICAL_GUIDES: Guide[] = [
@@ -46,6 +47,9 @@ ${groups.map((g) => `<tr><td>${g.r}</td><td class="r num">${g.xs.length}</td><td
 
 <h2>Line sets and the new refrigerants</h2>
 <p>Whether an existing line set can be reused with a new system depends on its size, condition and the manufacturer's installation instructions. If a quote replaces it, the line should be itemized; if it reuses it, ask whether it was checked against the new unit's instructions. Our <a href="/guides/heat-pump-condenser-only-vs-full-system-replacement/">condenser-only vs full system guide</a> covers matching the indoor coil.</p>
+<h2>R-32 vs R-454B systems in our catalog</h2>
+<p>The R-32 vs R-454B systems comparison page now lives here. Brand lists, listed price bands and GWP figures are the same ones that page used (${asOf}).</p>
+${foldedMatchup('r32-vs-r454b-heat-pump-systems-compared')}
 <p>The standard-efficiency installed benchmark for a 3-ton heat pump is ${rangeText(fairRange('central-heat-pump', 3))}, whichever refrigerant it uses. ${remdbNote} Check your quote in the ${auditLink({ tons: 3 })}.</p>`;
     },
   },

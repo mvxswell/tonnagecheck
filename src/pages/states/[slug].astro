@@ -4,10 +4,11 @@ import Auditor from '../../components/Auditor.astro';
 import ConciergeForm from '../../components/ConciergeForm.astro';
 import Newsletter from '../../components/Newsletter.astro';
 import { STATES, STATE_SEED_DATE, EFFICIENCY, heatingCosts, climateSummary, recommendedSystems, type StateRecord } from '../../data/states';
-import { TONNAGES, tonSlug, lowestPrice } from '../../data/equipment';
+import { TONNAGES, lowestPrice } from '../../data/equipment';
 import { SOURCES } from '../../data/sources';
 import { fairRange, usd, fmtRange } from '../../lib/facts';
 import { SITE } from '../../config';
+import { sizeGuidePath } from '../../data/prune';
 
 export function getStaticPaths() {
   return STATES.map((s) => ({ params: { slug: s.slug }, props: { s } }));
@@ -76,7 +77,7 @@ const pctChange = (a: number, b: number | null) => (b ? `${a >= b ? '+' : ''}${M
       <thead><tr><th>Size</th><th class="r">Heat pump, standard <span class="badge b-est">est.</span></th><th class="r">Heat pump, high-eff. / cold-climate <span class="badge b-est">est.</span></th><th class="r">AC + gas furnace <span class="badge b-est">est.</span></th></tr></thead>
       <tbody>
         {TONNAGES.map((t) => { const a = fairRange('central-heat-pump', t, 'standard'); const b = fairRange('central-heat-pump', t, 'high'); const c = fairRange('ac-furnace', t, 'standard'); return (
-          <tr><td><a href={`/tonnage/${tonSlug(t)}/`}><b>{t} ton</b></a></td><td class="r num">{usd(a.mid)}<br /><span class="small muted">{fmtRange(a)}</span></td><td class="r num">{usd(b.mid)}<br /><span class="small muted">{fmtRange(b)}</span></td><td class="r num">{usd(c.mid)}<br /><span class="small muted">{fmtRange(c)}</span></td></tr>
+          <tr><td><a href={sizeGuidePath(t)}><b>{t} ton</b></a></td><td class="r num">{usd(a.mid)}<br /><span class="small muted">{fmtRange(a)}</span></td><td class="r num">{usd(b.mid)}<br /><span class="small muted">{fmtRange(b)}</span></td><td class="r num">{usd(c.mid)}<br /><span class="small muted">{fmtRange(c)}</span></td></tr>
         ); })}
       </tbody>
     </table>

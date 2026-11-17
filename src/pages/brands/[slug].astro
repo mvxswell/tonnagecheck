@@ -5,8 +5,8 @@ import ConciergeForm from '../../components/ConciergeForm.astro';
 import Newsletter from '../../components/Newsletter.astro';
 import { BRANDS, type Brand } from '../../data/brands';
 import { comparisonsForBrand } from '../../data/comparisons';
-import { isCompareMerged, isCompareIndexed } from '../../data/prune';
-import { SYSTEM_TYPE_LABEL, tonSlug, lowestPrice } from '../../data/equipment';
+import { isCompareMerged, isCompareIndexed, sizeGuidePath, comparePath } from '../../data/prune';
+import { SYSTEM_TYPE_LABEL, lowestPrice } from '../../data/equipment';
 import { SOURCES } from '../../data/sources';
 import { usd, fmtRange, seedDateLabel } from '../../lib/facts';
 import { SITE } from '../../config';
@@ -23,7 +23,7 @@ const shortType: Record<string, string> = { 'central-heat-pump': 'ducted heat pu
 const cold = b.systems.filter((s) => s.energyStar?.coldClimate);
 const others = BRANDS.filter((x) => x.slug !== b.slug);
 const decoder = decoderForBrand(b.name);
-const brandCmps = comparisonsForBrand(b.name).filter((c) => !isCompareMerged(c.slug)).sort((x, y) => Number(isCompareIndexed(y.slug)) - Number(isCompareIndexed(x.slug)));
+const brandCmps = comparisonsForBrand(b.name).sort((x, y) => Number(!isCompareMerged(x.slug) && isCompareIndexed(x.slug)) - Number(!isCompareMerged(y.slug) && isCompareIndexed(y.slug)));
 const refRow = b.rows.find((r) => r.tons === 3) ?? b.rows[0];
 const seo = brandMeta(b, refRow.fair);
 const extra = brandExtra(b, refRow.fair);
@@ -69,7 +69,7 @@ const ld = [
       <tbody>
         {b.rows.map((r) => (
           <tr>
-            <td><a href={`/tonnage/${tonSlug(r.tons)}/`}><b>{r.tons} ton</b></a> <span class="small muted">{shortType[r.type]}</span></td>
+            <td><a href={sizeGuidePath(r.tons)}><b>{r.tons} ton</b></a> <span class="small muted">{shortType[r.type]}</span></td>
             <td class="r num">{r.min === r.max ? usd(r.min) : `${usd(r.min)}–${usd(r.max)}`} <span class="small muted">({r.count})</span></td>
             <td class="r num">{fmtRange(r.fair)}</td>
             <td class="r num">{usd(r.fair.mid)}</td>
@@ -130,7 +130,7 @@ const ld = [
       <h2>{b.name} head-to-head comparisons</h2>
       <div class="grid">
         {brandCmps.map((c) => (
-          <a class="card" href={`/compare/${c.slug}/`} style="text-decoration:none;color:inherit">
+          <a class="card" href={comparePath(c.slug)} style="text-decoration:none;color:inherit">
             <div class="small muted">{c.shortLabel}</div>
             <div style="font-weight:700;margin:4px 0">{c.h1}</div>
             <div class="small muted">{usd(c.left.equipMin)} vs {usd(c.right.equipMin)} lowest listed</div>
@@ -149,7 +149,7 @@ const ld = [
 
   <h2>Other brands</h2>
   <p>{others.map((o, i) => <>{i > 0 && ' · '}<a href={`/brands/${o.slug}/`}>{o.name}</a> <span class="small muted">({o.systems.length})</span></>)}</p>
-  <p class="small muted">Sizes we list for {b.name}: {b.tonnages.map((t, i) => <>{i > 0 && ', '}<a href={`/tonnage/${tonSlug(t)}/`}>{t} ton</a></>)}. All systems: <a href="/systems/">equipment price lookup</a>. Lowest-priced {b.name} listing: <a href={`/systems/${[...b.systems].sort((x, y) => lowestPrice(x) - lowestPrice(y))[0].slug}/`}>{SYSTEM_TYPE_LABEL[[...b.systems].sort((x, y) => lowestPrice(x) - lowestPrice(y))[0].systemType].toLowerCase()}</a>.</p>
+  <p class="small muted">Sizes we list for {b.name}: {b.tonnages.map((t, i) => <>{i > 0 && ', '}<a href={sizeGuidePath(t)}>{t} ton</a></>)}. All systems: <a href="/systems/">equipment price lookup</a>. Lowest-priced {b.name} listing: <a href={`/systems/${[...b.systems].sort((x, y) => lowestPrice(x) - lowestPrice(y))[0].slug}/`}>{SYSTEM_TYPE_LABEL[[...b.systems].sort((x, y) => lowestPrice(x) - lowestPrice(y))[0].systemType].toLowerCase()}</a>.</p>
   <Newsletter />
 </Base>
 

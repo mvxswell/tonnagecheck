@@ -5,6 +5,7 @@ import { BRANDS } from '../brands';
 import { fairRange, systemsWhere, statsOf, adderRange, lineSet, usd, fmtRange, pct } from '../../lib/facts';
 import { roughTonnage } from '../../lib/audit';
 import { today, src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, benchmarkTable, rangeText, cheapest, remdbNote } from './helpers';
+import { foldedModelMatchups, foldedTonnageSize } from './fold-comparisons';
 import type { Guide } from './types';
 
 const word = (t: number) => (t === 2.5 ? '2.5' : t === 3.5 ? '3.5' : String(t));
@@ -102,6 +103,8 @@ ${lineSet ? `<tr><td>New line set, material (${lineSet.label})</td><td class="r 
 <p>${hpMed != null ? `At the midpoint, equipment is about ${pct(hpMed / f.mid)} of a fairly priced ${w}-ton install.` : ''} If your quote's non-equipment portion is far above the row above, ask for it itemized. Panel and thermostat lines should only appear if the work is actually needed; a 200A panel is not part of a routine like-for-like replacement.</p>
 
 ${sizeSpecific(t)}
+${t === 2 ? foldedTonnageSize(1.5) : ''}
+${foldedModelMatchups(t)}
 
 <h2>Is ${w} tons actually right for your house?</h2>
 <p>A common contractor rule of thumb is 400–600 square feet per ton, which would put ${w} tons at roughly ${(t * 400).toLocaleString('en-US')}–${(t * 600).toLocaleString('en-US')} sq ft (a ${(t * 500).toLocaleString('en-US')} sq ft house works out to ${lo === hi ? `${lo}` : `${lo}–${hi}`} tons). Treat that as a sanity check only. The real answer is an ACCA Manual J load calculation, which accounts for insulation, windows, air leakage and your local design temperatures. See <a href="/guides/manual-j-load-calculation-vs-rule-of-thumb-sizing/">Manual J vs rule of thumb</a>.</p>
@@ -115,7 +118,7 @@ ${sizeSpecific(t)}
 <li>A federal tax credit subtracted for a 2026 install. The IRS ended 25C for property placed in service after Dec. 31, 2025 (${src('irsObbba', 'IRS')}).</li>
 <li>Panel, duct or "system upgrade" lines without measurements or explanation.</li>
 </ul>
-<p>Run your exact numbers through the ${auditLink({ tons: t })}, browse every ${tonLink(t, `${w}-ton listing`)}, or request a second quote from an independent master tech below.</p>`;
+<p>Run your exact numbers through the ${auditLink({ tons: t })}, or request a second quote from an independent master tech below.</p>`;
     },
   };
 }

@@ -5,11 +5,12 @@ import ConciergeForm from '../../components/ConciergeForm.astro';
 import Newsletter from '../../components/Newsletter.astro';
 import { DECODER_BRANDS, type DecoderBrand } from '../../data/decoder/index';
 import { brandByName } from '../../data/brands';
-import { SYSTEMS, SYSTEM_TYPE_LABEL, tonSlug, lowestPrice } from '../../data/equipment';
+import { SYSTEMS, SYSTEM_TYPE_LABEL, lowestPrice } from '../../data/equipment';
 import { SOURCES, type SourceId } from '../../data/sources';
 import { usd, fmtRange, seedDateLabel } from '../../lib/facts';
 import { decodeModel, decodeSerial } from '../../lib/decode';
 import { SITE } from '../../config';
+import { sizeGuidePath } from '../../data/prune';
 
 export function getStaticPaths() {
   return DECODER_BRANDS.map((d) => ({ params: { slug: d.slug }, props: { d } }));
@@ -169,7 +170,7 @@ const ld = [
       <div class="tablewrap"><table>
         <thead><tr><th>Size &amp; type</th><th class="r">Listed equipment</th><th class="r">Installed benchmark <span class="badge b-est">est.</span></th></tr></thead>
         <tbody>{b.rows.map((r) => (
-          <tr><td><a href={`/tonnage/${tonSlug(r.tons)}/`}><b>{r.tons} ton</b></a> <span class="small muted">{SYSTEM_TYPE_LABEL[r.type].toLowerCase()}</span></td>
+          <tr><td><a href={sizeGuidePath(r.tons)}><b>{r.tons} ton</b></a> <span class="small muted">{SYSTEM_TYPE_LABEL[r.type].toLowerCase()}</span></td>
             <td class="r num">{r.min === r.max ? usd(r.min) : `${usd(r.min)}–${usd(r.max)}`} <span class="small muted">({r.count})</span></td>
             <td class="r num">{fmtRange(r.fair)}</td></tr>
         ))}</tbody>

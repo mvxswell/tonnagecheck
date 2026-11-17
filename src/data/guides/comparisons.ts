@@ -2,6 +2,7 @@
 import { lowestPrice, median, type System } from '../equipment';
 import { fairRange, systemsWhere, isInverter, usd, fmtRange, pct } from '../../lib/facts';
 import { today, src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, priceOf, remdbNote } from './helpers';
+import { foldedMatchup } from './fold-comparisons';
 import type { Guide } from './types';
 
 const med = (xs: System[]) => (xs.length ? usd(median(xs.map(lowestPrice))) : '—');
@@ -56,7 +57,11 @@ ${systemsTable([...r3.hpX.slice(0, 4), ...r3.afX.slice(0, 3)], { showType: true 
 <li>Compare each to its own benchmark in the ${auditLink({ type: 'ac-furnace', tons: 3 }, 'auditor')}: run the AC + furnace quote as "Central AC + gas furnace" and the heat pump quote as "Central heat pump."</li>
 <li>List the add-ons separately: electrical, gas, venting, ductwork, backup heat.</li>
 <li>Subtract only rebates you have been approved for.</li>
-</ol>`;
+</ol>
+
+<h2>Trane vs Goodman AC + furnace equipment</h2>
+<p>The only AC + gas furnace brand matchup in our catalog previously had its own /compare/ page. The table below uses the same listed prices and ratings (${asOf}).</p>
+${foldedMatchup('trane-vs-goodman-ac-furnace-cost')}`;
     },
   },
   {
@@ -196,6 +201,9 @@ ${[3, 4, 5].map((t) => {
 <li>Whether a specific thermostat or control is required to get full variable-speed operation, and whether it is included.</li>
 <li>The price difference from the fixed-speed option on the same quote. Compare it with the listed difference above.</li>
 </ul>
+<h2>ACiQ vs MRCOOL: two value-brand inverter lines</h2>
+<p>The ACiQ vs MRCOOL comparison page now lives here, next to the inverter vs single-stage price tables. Figures are the same listed prices and ratings (${asOf}).</p>
+${foldedMatchup('aciq-vs-mrcool-heat-pump-cost')}
 <p>Related: <a href="/guides/bosch-ids-inverter-heat-pump-cost/">Bosch IDS inverter cost</a>, <a href="/guides/mitsubishi-hyper-heat-cost/">Mitsubishi Hyper-Heat</a>, and ${brandLink('LG', 'LG')}, ${brandLink('Trane', 'Trane')} and ${brandLink('Gree', 'Gree')} prices. Grade your quote in the ${auditLink({ tons: 3, tier: 'mid' })}.</p>`;
     },
   },

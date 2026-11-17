@@ -1,13 +1,12 @@
 import type { APIRoute } from 'astro';
 import { SITE } from '../config';
-import { SYSTEMS, TONNAGES, tonSlug, SYSTEM_TYPE_LABEL, lowestPrice } from '../data/equipment';
+import { SYSTEMS, TONNAGES, SYSTEM_TYPE_LABEL, lowestPrice } from '../data/equipment';
 import { GUIDES } from '../data/guides/index';
 import { DECODER_BRANDS } from '../data/decoder/index';
 import { BRANDS } from '../data/brands';
-import { COMPARISONS } from '../data/comparisons';
 import { PART_CATEGORIES, PART_CATALOG_STATS } from '../data/parts';
 import { SOURCES } from '../data/sources';
-import { isCompareIndexed, isSystemIndexed } from '../data/prune';
+import { isSystemIndexed, sizeGuidePath } from '../data/prune';
 import { seedDateLabel, cpi } from '../lib/facts';
 
 export const GET: APIRoute = () => {
@@ -42,10 +41,11 @@ ${PART_CATEGORIES.map((c) => `- [${c.name}](${u(`/parts/${c.slug}/`)}): ${c.coun
 ${BRANDS.map((b) => `- [${b.name} HVAC prices](${u(`/brands/${b.slug}/`)}): ${b.systems.length} systems, listed $${b.priceMin.toLocaleString('en-US')}–$${b.priceMax.toLocaleString('en-US')}`).join('\n')}
 
 ## Cost by tonnage
-${TONNAGES.map((t) => `- [${t}-ton heat pump & AC cost](${u(`/tonnage/${tonSlug(t)}/`)})`).join('\n')}
+${TONNAGES.map((t) => `- [${t}-ton heat pump & AC cost](${u(sizeGuidePath(t))})`).join('\n')}
 
 ## Head-to-head comparisons
-${COMPARISONS.filter((c) => isCompareIndexed(c.slug)).map((c) => `- [${c.h1}](${u(`/compare/${c.slug}/`)}): ${c.description}`).join('\n')}
+- [HVAC comparison workbench](${u('/compare/')}): pick two systems or brands and compare listed prices and ratings.
+Head-to-head brand, refrigerant and flagship model matchups now live in the relevant guides listed below.
 
 ## Guides
 ${GUIDES.map((g) => `- [${g.h1}](${u(`/guides/${g.slug}/`)}): ${g.description}`).join('\n')}

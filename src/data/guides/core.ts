@@ -4,6 +4,7 @@ import { fairRange, equipmentStats, usd, fmtRange, seedDateLabel, cpi } from '..
 import { SYSTEMS, lowestPrice } from '../equipment';
 import { SOURCES } from '../sources';
 import type { Guide } from './types';
+import { sizeGuidePath } from '../prune';
 
 
 const a = (url: string, text: string) => `<a href="${url}" rel="noopener" target="_blank">${text}</a>`;
@@ -149,7 +150,7 @@ ${c3.count && c4.count ? `<p>If only the outdoor condenser is being replaced, th
 </ul>
 
 <h2>Bottom line</h2>
-<p>Expect the equipment for a 4-ton system to cost somewhat more than a comparable 3-ton, and the installed benchmark to rise by roughly the midpoint difference shown above. Get the load calculation, compare like-for-like model numbers, and run both sizes through the ${auditLink} to see whether the quote's size step is priced fairly. Size pages: <a href="/tonnage/3-ton/">3-ton</a>, <a href="/tonnage/4-ton/">4-ton</a>.</p>`;
+<p>Expect the equipment for a 4-ton system to cost somewhat more than a comparable 3-ton, and the installed benchmark to rise by roughly the midpoint difference shown above. Get the load calculation, compare like-for-like model numbers, and run both sizes through the ${auditLink} to see whether the quote's size step is priced fairly. Size pages: <a href="/guides/3-ton-heat-pump-ac-replacement-cost/">3-ton</a>, <a href="/guides/4-ton-heat-pump-ac-replacement-cost/">4-ton</a>.</p>`;
     },
   },
   {
@@ -173,7 +174,7 @@ ${c3.count && c4.count ? `<p>If only the outdoor condenser is being replaced, th
 
 <h2>The gap, by size</h2>
 <div class="tablewrap"><table><thead><tr><th>Ducted heat pump, standard efficiency</th><th class="r">Median listed equipment</th><th class="r">Installed benchmark (mid)</th><th class="r">Everything else</th><th class="r">Equipment share</th></tr></thead><tbody>
-${rows.map((r) => `<tr><td><a href="/tonnage/${String(r.t).replace('.', '-')}-ton/">${r.t} ton</a> <span class="small muted">(${r.e.count} listed)</span></td><td class="r num">${usd(r.e.median)}</td><td class="r num">${usd(r.f.mid)}</td><td class="r num">${usd(r.f.mid - (r.e.median ?? 0))}</td><td class="r num">${Math.round(((r.e.median ?? 0) / r.f.mid) * 100)}%</td></tr>`).join('')}
+${rows.map((r) => `<tr><td><a href="${sizeGuidePath(r.t)}">${r.t} ton</a> <span class="small muted">(${r.e.count} listed)</span></td><td class="r num">${usd(r.e.median)}</td><td class="r num">${usd(r.f.mid)}</td><td class="r num">${usd(r.f.mid - (r.e.median ?? 0))}</td><td class="r num">${Math.round(((r.e.median ?? 0) / r.f.mid) * 100)}%</td></tr>`).join('')}
 </tbody></table></div>
 <p class="small muted">Equipment medians mix efficiency levels and brands, and the installed benchmark is a national average and an estimate. Read the share as a rough guide, not a rule.</p>
 ${r3 ? `<p>At 3 tons, then, roughly ${usd(r3.f.mid - (r3.e.median ?? 0))} of a benchmark-priced install is not equipment. That is the money that pays for the work below.</p>` : ''}

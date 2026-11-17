@@ -5,11 +5,13 @@ import Newsletter from '../../components/Newsletter.astro';
 import SystemTable from '../../components/SystemTable.astro';
 import { TONNAGES, tonSlug, systemsFor, SYSTEM_TYPE_LABEL, TIER_LABEL, type SystemType, type Tier } from '../../data/equipment';
 import { comparisonsForTonnage } from '../../data/comparisons';
+import { isTonnageMerged } from '../../data/prune';
 import { fairRange, equipmentStats, usd, fmtRange, seedDateLabel } from '../../lib/facts';
 import { SITE } from '../../config';
 
 export function getStaticPaths() {
-  return TONNAGES.map((t) => ({ params: { slug: tonSlug(t) }, props: { tons: t } }));
+  // Merged size pages are not built; public/_redirects 301s them to the size guide.
+  return TONNAGES.filter((t) => !isTonnageMerged(tonSlug(t))).map((t) => ({ params: { slug: tonSlug(t) }, props: { tons: t } }));
 }
 const { tons } = Astro.props as { tons: number };
 const btu = tons * 12000;
