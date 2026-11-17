@@ -12,8 +12,8 @@ import {
   TIER_LABEL,
   SYSTEMS,
 } from '../equipment';
-import { fairRange, systemsWhere, usd, fmtRange, refrigerantOf, equipmentStats, statsOf } from '../../lib/facts';
-import { asOf, remdbNote, sysLink, brandLink, systemsTable, rangeText, cheapest } from './helpers';
+import { fairRange, systemsWhere, usd, fmtRange, listedSpan, refrigerantOf, equipmentStats, statsOf } from '../../lib/facts';
+import { asOf, remdbNote, src, sysLink, brandLink, systemsTable, rangeText, cheapest } from './helpers';
 
 function entry(slug: string) {
   const c = COMPARISONS.find((x) => x.slug === slug);
@@ -23,7 +23,7 @@ function entry(slug: string) {
 
 function sideRow(label: string, href: string | undefined, count: number, equipMin: number, equipMax: number, equipMedian: number, seer2: string, refrigerants: string, fairLow: number, fairHigh: number) {
   const name = href ? `<a href="${href}">${label}</a>` : label;
-  return `<tr><td>${name}${count ? ` <span class="small muted">(${count})</span>` : ''}</td><td class="r num">${usd(equipMin)}–${usd(equipMax)}</td><td class="r num">${usd(equipMedian)}</td><td class="r num">${seer2 || '—'}</td><td>${refrigerants || '—'}</td><td class="r num">${usd(fairLow)}–${usd(fairHigh)}</td></tr>`;
+  return `<tr><td>${name}${count ? ` <span class="small muted">(${count})</span>` : ''}</td><td class="r num">${listedSpan(equipMin, equipMax)}</td><td class="r num">${usd(equipMedian)}</td><td class="r num">${seer2 || '—'}</td><td>${refrigerants || '—'}</td><td class="r num">${listedSpan(fairLow, fairHigh)}</td></tr>`;
 }
 
 function capCell(s: System): string {
@@ -97,7 +97,10 @@ ${slugs.map((s) => foldedMatchup(s)).join('\n')}`;
  * plus the condenser-only (heat pump only) estimate.
  */
 export function foldedInstalledBenchmarks(tons: number): string {
-  const types: SystemType[] = ['central-heat-pump', 'mini-split', 'ac-furnace', 'heat-pump-only'];
+  // Production hid AC + furnace and heat-pump-only installed rows at ≤1.5 tons; keep that exclusion until the REMDB regression is confirmed at this size.
+  const types: SystemType[] = tons <= 1.5
+    ? ['central-heat-pump', 'mini-split']
+    : ['central-heat-pump', 'mini-split', 'ac-furnace', 'heat-pump-only'];
   const tiers: Tier[] = ['standard', 'mid', 'high'];
   const rows = types.map((ty) => ({
     ty,
@@ -106,9 +109,13 @@ export function foldedInstalledBenchmarks(tons: number): string {
   }));
   const listed = (s: { count: number; min: number | null; max: number | null }) =>
     s.count ? (s.min === s.max ? usd(s.min) : `${usd(s.min)}–${usd(s.max)}`) : '—';
+  const hideNote = tons <= 1.5
+    ? `<p class="small muted">At ${tons} tons this table shows the same two system types previously published: ducted heat pump and mini-split. The catalog also has AC + furnace and condenser-only listings in the table below; we do not publish a REMDB installed range for those two types at this size.</p>`
+    : '';
   return `
 <h3>Installed-cost benchmark by system type and efficiency</h3>
 <p class="small muted">REMDB replacement-cost regressions, restated from 2023 dollars with CPI-U. National averages; high-cost metros run above them. Ductwork, extra permits and panel work are not included. <a href="/about/#benchmarks">Method</a>. "Heat pump only" assumes the outdoor unit alone is replaced; its range is anchored on listed condenser prices, not REMDB, and is an estimate. AC + furnace assumes an 80,000 BTU/h, 80% AFUE furnace.</p>
+${hideNote}
 <div class="tablewrap"><table><thead><tr><th>System type</th>${tiers.map((t) => `<th class="r">${TIER_LABEL[t].split(' (')[0]}</th>`).join('')}<th class="r">Listed equipment</th></tr></thead><tbody>
 ${rows.map((r) => `<tr><td>${SYSTEM_TYPE_LABEL[r.ty]}</td>${r.ranges.map((x) => `<td class="r num">${usd(x.mid)}<br /><span class="small muted">${fmtRange(x)}</span></td>`).join('')}<td class="r num">${listed(r.stats)}</td></tr>`).join('\n')}
 </tbody></table></div>`;
@@ -123,7 +130,7 @@ export function foldedTonnageSize(tons: number): string {
   const cond = systemsWhere({ type: 'heat-pump-only', tons });
   const f = fairRange('central-heat-pump', tons, 'standard');
   const fh = fairRange('central-heat-pump', tons, 'high');
-  const span = (xs: System[]) => (xs.length ? `${usd(Math.min(...xs.map(lowestPrice)))}–${usd(Math.max(...xs.map(lowestPrice)))}` : 'no listings yet');
+  const span = (xs: System[]) => (xs.length ? listedSpan(Math.min(...xs.map(lowestPrice)), Math.max(...xs.map(lowestPrice))) : 'no listings yet');
   const cheapestHp = hp.length ? cheapest(hp) : undefined;
   const parts = [
     `${hp.length} ducted heat pump systems (${span(hp)})`,
@@ -135,7 +142,7 @@ export function foldedTonnageSize(tons: number): string {
   const list = parts.length ? `${parts.join(', ')} and ${last}` : last;
   return `
 <h2 id="1-5-ton">${tons}-ton equipment and installed cost</h2>
-<p>There is no separate ${tons}-ton replacement-cost guide, so the listings and the installed-cost-by-system-type benchmarks that used to live on the ${tons}-ton size page are here. We track ${all.length} ${tons}-ton systems: ${list}.${cheapestHp ? ` Lowest listed ducted ${tons}-ton heat pump: ${sysLink(cheapestHp)} at ${usd(lowestPrice(cheapestHp))}.` : ''}</p>
+<p>This guide covers every size from 1.5 to 5 tons, including ${tons} tons. We track ${all.length} ${tons}-ton systems: ${list}.${cheapestHp ? ` Lowest listed ducted ${tons}-ton heat pump: ${sysLink(cheapestHp)} at ${usd(lowestPrice(cheapestHp))}.` : ''}</p>
 <p>The standard-efficiency installed benchmark for a ${tons}-ton ducted heat pump is ${rangeText(f)}; high-efficiency is ${rangeText(fh)}.</p>
 ${foldedInstalledBenchmarks(tons)}
 ${systemsTable(all, { showType: true, caption: `Public online retail prices for ${tons}-ton equipment only, ${asOf}.` })}`;
@@ -152,6 +159,6 @@ export function foldedRefrigerantBrandLists(): string {
   return `
 <ul>
 <li><b>R-32 (GWP 675 — ${r32.length} systems listed from ${usd(r32S.min)} to ${usd(r32S.max)}, median ${usd(r32S.median)}):</b> Used by ${r32Brands.map((b) => brandLink(b)).join(', ')}.</li>
-<li><b>R-454B (GWP 470, as published in the ENERGY STAR records we cite — ${r454b.length} systems listed from ${usd(r454bS.min)} to ${usd(r454bS.max)}, median ${usd(r454bS.median)}):</b> Used by ${r454bBrands.map((b) => brandLink(b)).join(', ')}. Legacy R-410A is listed in those records at GWP 2,088.</li>
+<li><b>R-454B (GWP 470, as published in the ENERGY STAR records we cite — ${r454b.length} systems listed from ${usd(r454bS.min)} to ${usd(r454bS.max)}, median ${usd(r454bS.median)}):</b> Used by ${r454bBrands.map((b) => brandLink(b)).join(', ')}. R-410A's GWP is 2,088 (${src('epaTechTransitions', 'EPA')}).</li>
 </ul>`;
 }

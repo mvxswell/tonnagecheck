@@ -29,13 +29,22 @@ export const TECHNICAL_GUIDES: Guide[] = [
 <p>The rule is about new systems. It does not require you to replace a working R-410A system, and R-410A remains available for servicing existing equipment.</p>
 
 <h2>The new refrigerants, by the numbers</h2>
-${gwp.length ? `<p>GWP values as published in the ENERGY STAR records of systems we track: ${gwp.map((g) => `<b>${g.name}</b> ${g.gwp}`).join(', ')}. Both R-32 and R-454B are classed as mildly flammable (A2L), which is why installation instructions for new systems include specific requirements, such as leak detection or minimum room sizes for some indoor units.</p>` : ''}
+${gwp.length ? `<p>GWP values as published in the ENERGY STAR records of systems we track: ${gwp.map((g) => `<b>${g.name}</b> ${g.gwp}`).join(', ')}. R-410A's GWP is 2,088 (${src('epaTechTransitions', 'EPA')}). Both R-32 and R-454B are classed as mildly flammable (A2L), which is why installation instructions for new systems include specific requirements, such as leak detection or minimum room sizes for some indoor units.</p>` : ''}
 
 <h2>Does the refrigerant change the price?</h2>
 <div class="tablewrap"><table><thead><tr><th>Refrigerant</th><th class="r">Systems in our data</th><th class="r">Median listed price</th></tr></thead><tbody>
 ${groups.map((g) => `<tr><td>${g.r}</td><td class="r num">${g.xs.length}</td><td class="r num">${g.xs.length ? usd(median(g.xs.map(lowestPrice))) : '—'}</td></tr>`).join('\n')}
 </tbody></table></div>
-<p>That mix covers many sizes and types, so compare like for like. For 3-ton ducted heat pumps only: ${three.map((g) => `${g.r} ${g.xs.length ? `${usd(median(g.xs.map(lowestPrice)))} median across ${g.xs.length} systems` : 'no listings'}`).join('; ')}. Brands differ in which refrigerant they chose, so the refrigerant itself is not a reliable reason for a large price difference.</p>
+<p>That mix covers many sizes and types, so compare systems of the same size and type. For 3-ton ducted heat pumps only: ${three.map((g) => `${g.r} ${g.xs.length ? `${usd(median(g.xs.map(lowestPrice)))} median across ${g.xs.length} systems` : 'no listings'}`).join('; ')}. Brands differ in which refrigerant they chose, so the refrigerant itself is not a reliable reason for a large price difference.</p>
+${(() => {
+  const leftover = systemsWhere().filter((s) => refrigerantOf(s) === 'R-410A');
+  if (leftover.length < 2) return '';
+  const priced = leftover.map((s) => ({ s, p: lowestPrice(s) })).sort((a, b) => a.p - b.p);
+  const spread = priced[priced.length - 1].p - priced[0].p;
+  const combined = priced.reduce((a, x) => a + x.p, 0);
+  const aciq = leftover.find((s) => s.brand === 'ACiQ');
+  return `<p>The ${leftover.length} leftover R-410A systems in this catalog are both 2.5-ton AC + furnace units: ${priced.map((x) => `${sysLink(x.s)} at ${usd(x.p)}`).join(' and ')}. The listed spread between them is ${usd(spread)}, and the two listings combined are ${usd(combined)}.${aciq && aciq.specs.eer2 != null ? ` The ${sysLink(aciq, 'ACiQ')} unit is listed at ${aciq.specs.seer2} SEER2 and ${aciq.specs.eer2} EER2.` : ''}</p>`;
+})()}
 
 <h2>Refrigerant claims to question on a quote</h2>
 <ul>
@@ -48,7 +57,7 @@ ${groups.map((g) => `<tr><td>${g.r}</td><td class="r num">${g.xs.length}</td><td
 <h2>Line sets and the new refrigerants</h2>
 <p>Whether an existing line set can be reused with a new system depends on its size, condition and the manufacturer's installation instructions. If a quote replaces it, the line should be itemized; if it reuses it, ask whether it was checked against the new unit's instructions. Our <a href="/guides/heat-pump-condenser-only-vs-full-system-replacement/">condenser-only vs full system guide</a> covers matching the indoor coil.</p>
 <h2>R-32 vs R-454B systems in our catalog</h2>
-<p>The R-32 vs R-454B systems comparison page now lives here. Brand lists, listed price bands and GWP figures are computed from the same catalog (${asOf}). This page uses the ENERGY STAR GWP for R-454B (470) throughout, including the folded table.</p>
+<p>Brand lists, listed price bands and GWP figures below are computed from the same catalog (${asOf}). This page uses the ENERGY STAR GWP for R-454B (470) throughout, including the folded table, and cites the EPA for R-410A's GWP of 2,088.</p>
 ${foldedRefrigerantBrandLists()}
 ${foldedMatchup('r32-vs-r454b-heat-pump-systems-compared')}
 <p>The standard-efficiency installed benchmark for a 3-ton heat pump is ${rangeText(fairRange('central-heat-pump', 3))}, whichever refrigerant it uses. Check your quote in the ${auditLink({ tons: 3 })}.</p>`;

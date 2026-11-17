@@ -8,9 +8,12 @@ interface Props {
 }
 
 const {
-  defaultLeftSlug = 'goodman-3-ton-17-2-seer2-heat-pump-system-glzt7ca3610',
+  defaultLeftSlug = 'goodman-3-ton-15-2-seer2-heat-pump-system-glzs5ba3610',
   defaultRightSlug = 'trane-3-ton-16-seer2-heat-pump-system-a5hl5036a1000a',
 } = Astro.props;
+
+/** Lowercase, strip spaces and hyphens so "Two Stage" and "Two-stage" compare equal. */
+const normStage = (s: string | null | undefined) => (s ?? '').toLowerCase().replace(/[\s-]+/g, '');
 
 const serialized = SYSTEMS.map((s) => {
   const equip = lowestPrice(s);
@@ -146,7 +149,7 @@ const types = [...new Set(SYSTEMS.map((s) => s.systemType))];
           <td>Compressor staging</td>
           <td class="r" data-a-stage>{leftInit.staging}</td>
           <td class="r" data-b-stage>{rightInit.staging}</td>
-          <td class="r" data-diff-stage>{leftInit.staging === rightInit.staging ? 'Matched' : 'Different staging'}</td>
+          <td class="r" data-diff-stage>{normStage(leftInit.staging) === normStage(rightInit.staging) ? 'Matched' : 'Different staging'}</td>
         </tr>
         <tr>
           <td>Refrigerant</td>
@@ -188,6 +191,7 @@ const types = [...new Set(SYSTEMS.map((s) => s.systemType))];
     const raw = root.querySelector('[data-wb-json]')?.textContent ?? '[]';
     const items: any[] = JSON.parse(raw);
     const bySlug = new Map(items.map((x) => [x.slug, x]));
+    const normStage = (s: string | null | undefined) => (s ?? '').toLowerCase().replace(/[\s-]+/g, '');
     const selTons = root.querySelector('[data-wb-tons]') as HTMLSelectElement;
     const selType = root.querySelector('[data-wb-type]') as HTMLSelectElement;
     const selLeft = root.querySelector('[data-wb-left]') as HTMLSelectElement;
@@ -249,7 +253,7 @@ const types = [...new Set(SYSTEMS.map((s) => s.systemType))];
       setCell('[data-diff-seer]', typeof a.seer2 === 'number' && typeof b.seer2 === 'number' ? `${(a.seer2 - b.seer2).toFixed(1)} SEER2` : '—');
       setCell('[data-a-stage]', a.staging);
       setCell('[data-b-stage]', b.staging);
-      setCell('[data-diff-stage]', a.staging === b.staging ? 'Matched' : 'Different staging');
+      setCell('[data-diff-stage]', normStage(a.staging) === normStage(b.staging) ? 'Matched' : 'Different staging');
       setCell('[data-a-ref]', a.refrigerant);
       setCell('[data-b-ref]', b.refrigerant);
       setCell('[data-diff-ref]', a.refrigerant === b.refrigerant ? 'Same refrigerant' : `${a.refrigerant} vs ${b.refrigerant}`);

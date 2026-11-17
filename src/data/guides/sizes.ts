@@ -1,12 +1,12 @@
-// Combined 1.5–5 ton replacement-cost guide, published at the 3-ton URL (highest GSC impressions).
+// Combined 1.5–5 ton replacement-cost guide. The 3-ton URL is kept; Maxwell decides any slug change.
 // Per-size unique prose is preserved in sizeSpecific(); step-up dollar deltas stay on /tonnage/ only.
 import { lowestPrice, median, TONNAGES, type System } from '../equipment';
-import { fairRange, systemsWhere, statsOf, adderRange, lineSet, usd, fmtRange, pct } from '../../lib/facts';
+import { fairRange, systemsWhere, statsOf, adderRange, lineSet, usd, fmtRange, listedSpan, pct } from '../../lib/facts';
 import { today, src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
 import { foldedModelMatchups, foldedTonnageSize, foldedInstalledBenchmarks } from './fold-comparisons';
 import type { Guide } from './types';
 
-const span = (xs: System[]) => (xs.length ? `${usd(Math.min(...xs.map(lowestPrice)))}–${usd(Math.max(...xs.map(lowestPrice)))}` : 'no listings yet');
+const span = (xs: System[]) => (xs.length ? listedSpan(Math.min(...xs.map(lowestPrice)), Math.max(...xs.map(lowestPrice))) : 'no listings yet');
 
 function sizeSpecific(t: number): string {
   const here = systemsWhere({ tons: t });
@@ -56,15 +56,19 @@ export const SIZE_GUIDES: Guide[] = [
   {
     slug: '3-ton-heat-pump-ac-replacement-cost',
     get title() {
-      const eq = statsOf(systemsWhere({ type: 'central-heat-pump', tons: 3 }));
-      const f = fairRange('central-heat-pump', 3);
-      return `${usd(eq.min)}–${usd(eq.max)} Equip vs ${fmtRange(f)} Installed, by Size`;
+      const sizes = [1.5, 2, 2.5, 3, 3.5, 4, 5];
+      const eq = statsOf(systemsWhere({ type: 'central-heat-pump' }));
+      const instLow = Math.min(...sizes.map((t) => fairRange('central-heat-pump', t, 'standard').low));
+      const instHigh = Math.max(...sizes.map((t) => fairRange('central-heat-pump', t, 'high').high));
+      return `${usd(eq.min)}–${usd(eq.max)} vs ${usd(instLow)}–${usd(instHigh)}: Cost by Size`;
     },
     h1: 'Heat pump & AC replacement cost by size, 1.5 to 5 tons',
     get description() {
-      const eq = statsOf(systemsWhere({ type: 'central-heat-pump', tons: 3 }));
-      const f = fairRange('central-heat-pump', 3);
-      return `Listed heat pump & AC equipment and DOE installed benchmarks from 1.5 to 5 tons. 3-ton ducted systems list ${usd(eq.min)}–${usd(eq.max)} vs ${fmtRange(f)} installed.`;
+      const sizes = [1.5, 2, 2.5, 3, 3.5, 4, 5];
+      const eq = statsOf(systemsWhere({ type: 'central-heat-pump' }));
+      const instLow = Math.min(...sizes.map((t) => fairRange('central-heat-pump', t, 'standard').low));
+      const instHigh = Math.max(...sizes.map((t) => fairRange('central-heat-pump', t, 'high').high));
+      return `Listed heat pump & AC equipment and DOE installed benchmarks from 1.5 to 5 tons: ${usd(eq.min)}–${usd(eq.max)} listed vs ${usd(instLow)}–${usd(instHigh)} installed.`;
     },
     updated: today,
     related: { tons: [1.5, 2, 2.5, 3, 3.5, 4, 5], systems: { type: 'central-heat-pump' } },
@@ -87,14 +91,15 @@ export const SIZE_GUIDES: Guide[] = [
       const panel = adderRange('panel200A');
       const stat = adderRange('smartThermostat');
       const cell = (s: { count: number; min: number | null; max: number | null; median: number | null }) =>
-        s.count ? `${usd(s.median)} <span class="small muted">${usd(s.min)}–${usd(s.max)} (${s.count})</span>` : '—';
+        s.count ? `${usd(s.median)} <span class="small muted">${listedSpan(s.min, s.max)} (${s.count})</span>` : '—';
       const sections = rows.map((r) => {
         const extra = r.t === 1.5 ? foldedTonnageSize(1.5) : sizeSpecific(r.t);
         const benches = r.t === 1.5 ? '' : foldedInstalledBenchmarks(r.t);
         const matchups = foldedModelMatchups(r.t);
+        const only = systemsWhere({ type: 'heat-pump-only', tons: r.t });
         const listings = r.t === 1.5 ? '' : systemsTable(
-          [...r.hp, ...r.acf, ...r.ms],
-          { showType: true, caption: `${r.t}-ton public online retail prices, equipment only (${asOf}).` },
+          [...r.hp, ...r.acf, ...r.ms, ...only],
+          { showType: true, caption: `${r.t}-ton public online retail prices, equipment only (${asOf}), including condenser-only units.` },
         );
         return `${extra}
 ${benches}
@@ -102,7 +107,7 @@ ${listings}
 ${matchups}`;
       }).join('\n');
       return `
-<p>This page is the size-by-size replacement-cost guide for 1.5 through 5 tons. We kept the 3-ton URL because 3 tons is the most common replacement size and had the most search impressions; the other per-size guides now redirect here. Every figure is computed from our catalog (${asOf}) or the DOE REMDB installed-cost benchmark.</p>
+<p>This guide covers every size from 1.5 to 5 tons. Every figure is computed from our catalog (${asOf}) or the DOE REMDB installed-cost benchmark.</p>
 
 <h2>Listed equipment and installed benchmarks, every size</h2>
 <p>Each row is one nominal size (12,000 BTU/h per ton). Listed columns are public online retail prices for the equipment only; the installed columns are national-lab regressions, not a quote. ${remdbNote}</p>
@@ -135,7 +140,7 @@ ${sections}
 <li>A federal tax credit subtracted for a 2026 install. The IRS ended 25C for property placed in service after Dec. 31, 2025 (${src('irsObbba', 'IRS')}).</li>
 <li>Panel, duct or "system upgrade" lines without measurements or explanation.</li>
 </ul>
-<p>Run your exact numbers through the ${auditLink({ tons: 3 })}, or request a second quote from an independent master tech on the <a href="/partners/">partners page</a>.</p>`;
+<p>Run your exact numbers through the ${auditLink({ tons: 3 })}, or <a href="/auditor/#audit">grade it, then request a second opinion</a>.</p>`;
     },
   },
 ];

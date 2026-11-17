@@ -98,10 +98,309 @@ ${row('Trane Premier (WeatherGuard top)', '5TWV0', '22.4', 'TruComfort variable 
   return { sizeHeading: 'New Trane HVAC system cost by size: listed equipment vs installed', summaryHtml, sectionsHtml, faq };
 }
 
+function countEs(xs: System[]) {
+  return xs.filter((s) => s.energyStar).length;
+}
+function countCold(xs: System[]) {
+  return xs.filter((s) => s.energyStar?.coldClimate).length;
+}
+const moneyExact = (n: number) => {
+  const cents = Math.round(n * 100) / 100;
+  const hasCents = !Number.isInteger(cents);
+  return `$${cents.toLocaleString('en-US', { minimumFractionDigits: hasCents ? 2 : 0, maximumFractionDigits: 2 })}`;
+};
+const meanListed = (xs: System[]) => xs.reduce((a, s) => a + lowestPrice(s), 0) / xs.length;
+
+function catalogRows(groups: { label: string; xs: System[]; note?: string }[]) {
+  return groups.filter((g) => g.xs.length).map((g) => {
+    const types = [...new Set(g.xs.map((s) => s.systemType))].join(', ');
+    return `<tr><td>${g.label}</td><td class="r num">${g.xs.length}</td><td>${types}</td><td class="r num">${span(g.xs)}</td><td class="r num">${countEs(g.xs)}</td><td class="r num">${countCold(g.xs)}</td><td>${g.note ?? '—'}</td></tr>`;
+  }).join('\n');
+}
+const catalogHead = `<thead><tr><th>Line in this catalog</th><th class="r">Count</th><th>Type</th><th class="r">Listed range</th><th class="r">ENERGY STAR pairings</th><th class="r">Cold-climate</th><th>Note</th></tr></thead>`;
+
+function daikin(b: Brand, fair3: Range): BrandExtra {
+  const rxf = fam(b, ['RXF']);
+  const rxt = fam(b, ['RXT']);
+  const rxm = fam(b, ['RXM']);
+  const mxm = b.systems.filter((s) => /^[34]MXM/.test(s.components[0]));
+  const es = b.systems.filter((s) => s.energyStar);
+  const mean = meanListed(b.systems);
+  const summaryHtml = `
+<div class="card answer">
+<p><b>What we can price:</b> every public Daikin listing in this catalog is a <b>ductless mini-split</b> (RXF, RXT, RXM and multi-zone MXM outdoor units), ${b.systems.length} systems from ${usd(b.priceMin)} to ${usd(b.priceMax)}, mean listed ${moneyExact(mean)} (${seedDateLabel}). We do not have public prices for Daikin's ducted R-32 splits (DH4SE, DH6VS, DH7TC, DH9VS and the matching air handlers in the ${a('daikinCatalog', 'residential R-32 catalog')}), so a ducted Daikin quote has to be checked against the installed benchmark, not against a Daikin box price we can link to.</p>
+<p>A 3-ton ducted heat pump, any brand, still benchmarks at ${fmtRange(fair3)} installed (midpoint ${usd(fair3.mid)}). ${es.length} of the ${b.systems.length} Daikin listings have an ENERGY STAR / AHRI record.</p>
+</div>`;
+  const sectionsHtml = `
+<h2>Daikin lines we actually list, and the ones we don't</h2>
+<p>The ${a('daikinCatalog', 'Daikin CT-DAIKIN catalog (02/26)')} covers both ducted R-32 splits and ductless OTERRA / MXM systems. The table below is only the outdoor units with a public online price in our data.</p>
+<div class="tablewrap"><table>
+${catalogHead}
+<tbody>
+${catalogRows([
+    { label: 'RXF (OTERRA-class wall outdoor)', xs: rxf, note: a('daikinOterraSm', 'OTERRA service manual') },
+    { label: 'RXT', xs: rxt },
+    { label: 'RXM', xs: rxm },
+    { label: 'MXM multi-zone (3MXM / 4MXM)', xs: mxm },
+  ])}
+</tbody></table></div>
+<p>Specification sheets for the ducted R-32 families (${a('daikinDh4se', 'DH4SE')}, ${a('daikinDh6vs', 'DH6VS')}, ${a('daikinDh7tc', 'DH7TC')}, ${a('daikinDh9vs', 'DH9VS')}) and air handlers (${a('daikinDmvt', 'DMVT')}, ${a('daikinDfve', 'DFVE')}) are cited on our <a href="/decoder/daikin/">Daikin model decoder</a>. Those documents do not include a retail price, so they are not in the table.</p>
+<h2>Warranty documents, not a term we inferred</h2>
+<p>Daikin publishes separate limited-warranty PDFs for ducted R-32 single-phase equipment (${a('daikinWarrantyBeo', 'PWDACHPR3BEO')}, ${a('daikinWarrantyBeob', 'PWDACHPR3BEOB')}) and for ductless systems (${a('daikinWarrantyDms', 'PWDDMSTWZS')}). The first four digits of the serial number (YYMM) are the manufacture date (${a('daikinWarrantyBeo', 'PWDACHPR3BEO')}). Read the PDF that matches the model on your quote, and register the system at ${a('daikinRegistration', 'Daikin product registration')}. ${a('daikinWarrantyInfo', 'Registration and transfer rules')} vary by state; look a policy up at ${a('daikinWarrantyLookup', 'Daikin warranty lookup')}.</p>`;
+  const faq = [
+    {
+      q: 'Why is there no Daikin ducted heat pump price on this page?',
+      a: `The online retailers we track list Daikin ductless outdoor units, not the DH-series ducted R-32 splits in the ${a('daikinCatalog', 'residential catalog')}. A ducted Daikin quote should be graded against the installed benchmark for its size and against the exact model numbers, not against a mini-split listing.`,
+    },
+    {
+      q: 'Where do I find the official Daikin warranty term?',
+      a: `In the limited-warranty PDF that names your model family: ${a('daikinWarrantyBeo', 'PWDACHPR3BEO')} or ${a('daikinWarrantyBeob', 'PWDACHPR3BEOB')} for ducted R-32, and ${a('daikinWarrantyDms', 'PWDDMSTWZS')} for ductless. We do not restate a year count here because the term depends on the document and on registration. Start at ${a('daikinWarrantyInfo', 'Daikin warranty information')}.`,
+    },
+  ];
+  return { sizeHeading: 'Daikin mini-split listed prices vs the installed benchmark by size', summaryHtml, sectionsHtml, faq };
+}
+
+function mitsubishi(b: Brand, fair3: Range): BrandExtra {
+  const suz = fam(b, ['SUZ-AK', 'SUZ-AA']);
+  const puz = fam(b, ['PUZ-AK']);
+  const mxz = b.systems.filter((s) => s.components[0].startsWith('MXZ-'));
+  const hyper = b.systems.filter((s) => /NLHZ|Hyper/i.test(`${s.components[0]} ${s.title}`));
+  const mean = meanListed(b.systems);
+  const summaryHtml = `
+<div class="card answer">
+<p><b>What we can price:</b> all ${b.systems.length} Mitsubishi listings in this catalog are ductless (SUZ, PUZ and MXZ outdoor units), listed ${usd(b.priceMin)}–${usd(b.priceMax)}, mean ${moneyExact(mean)} (${seedDateLabel}). ${hyper.length} of them are Hyper-Heating (H2i) models — the catalog marks that with a <b>Z</b> in the nomenclature (${a('mitsuCatalog', 'M- and P-Series catalog, ME_RS_2762')}). ${countEs(b.systems)} have an ENERGY STAR record; ${countCold(b.systems)} are flagged cold-climate.</p>
+<p>Mitsubishi does not sell a 3-ton ducted split through the retailers we track, so the ${fmtRange(fair3)} 3-ton ducted installed benchmark is a comparison point for a ducted quote, not a box price for these mini-splits. Cold-climate cost for the Hyper-Heat line is in the <a href="/guides/mitsubishi-hyper-heat-cost/">Hyper-Heat guide</a>.</p>
+</div>`;
+  const sectionsHtml = `
+<h2>SUZ, PUZ and MXZ: the outdoor units in this catalog</h2>
+<p>Per the ${a('mitsuCatalog', 'September 2025 catalog')}, current R-454B nomenclature uses L for R-454B, H for a base-pan heater, and Z for H2i Hyper-Heating. The table is built from our listings, not from the full catalog.</p>
+<div class="tablewrap"><table>
+${catalogHead}
+<tbody>
+${catalogRows([
+    { label: 'SUZ-AK / SUZ-AA single-zone', xs: suz, note: 'M-Series outdoor' },
+    { label: 'PUZ-AK', xs: puz, note: a('mitsuPuzAk', 'PUZ-AK service manual') },
+    { label: 'MXZ multi-zone', xs: mxz },
+  ])}
+</tbody></table></div>
+<h2>The 120-day installation-date rule</h2>
+<p>Mitsubishi's residential limited warranty (${a('mitsuWarranty', 'effective Oct 15, 2026')}) says that if the installation date is not documented, "the date of installation shall be deemed to be the date which is one hundred twenty (120) days after the date of manufacture stamped on the Product." Register the system at ${a('mitsuRegister', 'Mitsubishi product registration')} and keep the install invoice. Current and earlier statements are collected at ${a('mitsuWarranties', 'Mitsubishi warranties')}.</p>`;
+  const faq = [
+    {
+      q: 'What does the Z in a Mitsubishi model like SUZ-AK36NLHZ mean?',
+      a: `In the current R-454B nomenclature, Z marks H2i Hyper-Heating (${a('mitsuCatalog', 'ME_RS_2762')}). L is R-454B and H is a base-pan heater. Confirm the exact outdoor and indoor pair on the AHRI certificate; the suffix alone is not a capacity rating.`,
+    },
+    {
+      q: 'When does the Mitsubishi warranty clock start if I lose the install date?',
+      a: `The ${a('mitsuWarranty', 'limited warranty (effective Oct 15, 2026)')} deems installation to be 120 days after the manufacture date stamped on the product when the install date is not documented. That is why the serial and the invoice both matter. Register at ${a('mitsuRegister', 'mitsubishicomfort.com/register-your-product')}.`,
+    },
+  ];
+  return { sizeHeading: 'Mitsubishi mini-split listed prices vs the installed benchmark by size', summaryHtml, sectionsHtml, faq };
+}
+
+function carrier(b: Brand, fair3: Range): BrandExtra {
+  const maha = fam(b, ['37MAHA']);
+  const mpra = fam(b, ['37MPRA']);
+  const mean = meanListed(b.systems);
+  const summaryHtml = `
+<div class="card answer">
+<p><b>What we can price:</b> Carrier appears in this catalog only as ductless systems — ${b.systems.length} outdoor units in the 37MAHA and 37MPRA families, all R-454B, all ENERGY STAR cold-climate pairings, listed ${usd(b.priceMin)}–${usd(b.priceMax)}, mean ${moneyExact(mean)} (${seedDateLabel}). The ${a('carrier37maha', '37MAHA product data')} is the document for the single-zone line we list.</p>
+<p>We have no public price for Carrier or Bryant ducted splits (27SCA5, 26SCA5 and related families). A ducted Carrier quote should be graded against the ${fmtRange(fair3)} 3-ton installed benchmark and the model numbers on the quote, not against these mini-split listings.</p>
+</div>`;
+  const sectionsHtml = `
+<h2>Carrier ductless lines we list</h2>
+<div class="tablewrap"><table>
+${catalogHead}
+<tbody>
+${catalogRows([
+    { label: '37MAHA single-zone', xs: maha, note: a('carrier37maha', '37MAHA-03PD') },
+    { label: '37MPRA', xs: mpra },
+  ])}
+</tbody></table></div>
+<p>Ducted product data we cite for identification, not for a retail price: ${a('carrier27sca5', '27SCA5 heat pump')}, ${a('carrier26sca5', '26SCA5 air conditioner')}, and the ${a('carrier2425sm', '24-25-2SM application guideline')}. Nomenclature for Infinity 24VNA / 25VNA is in the ${a('carrier24vnaSm', '24VNA6-25VNA4 service manual')}.</p>
+<h2>Warranty lookup, not a term we invented</h2>
+<p>Carrier publishes a ${a('carrierWarrantyLookup', 'warranty lookup and coverage guide')} and Bryant has its own ${a('bryantWarranty', 'warranty information and lookup')}. We do not restate a year count here because we do not have a limited-warranty PDF with a single term that covers every 37MAHA / ducted family in our source list. Look up the serial on Carrier's tool and get labor coverage in writing from the installer.</p>`;
+  const faq = [
+    {
+      q: 'Can I use these Carrier mini-split prices to check a ducted Carrier or Bryant quote?',
+      a: `No. The listings are 37MAHA and 37MPRA ductless systems only. Grade a ducted quote in the auditor against the installed benchmark for its size, and identify the family from the product data (${a('carrier27sca5', '27SCA5')}, ${a('carrier26sca5', '26SCA5')}) or the model decoder.`,
+    },
+    {
+      q: 'Where do I check Carrier warranty coverage?',
+      a: `Use ${a('carrierWarrantyLookup', 'Carrier warranty lookup')}. For Bryant-branded equipment, use ${a('bryantWarranty', 'Bryant warranty information')}.`,
+    },
+  ];
+  return { sizeHeading: 'Carrier ductless listed prices vs the installed benchmark by size', summaryHtml, sectionsHtml, faq };
+}
+
+function lg(b: Brand, fair3: Range): BrandExtra {
+  const kusxa = fam(b, ['KUSXA']);
+  const kusxe = fam(b, ['KUSXE']);
+  const kusxb = fam(b, ['KUSXB']);
+  const kumx = fam(b, ['KUMXA', 'KUMXB']);
+  const kss = fam(b, ['KSSAC', 'KSSLA']);
+  const mean = meanListed(b.systems);
+  const summaryHtml = `
+<div class="card answer">
+<p><b>What we can price:</b> LG listings in this catalog are R-32 ducted (KUSX) and multi-zone (KUMX) outdoor units, ${b.systems.length} systems from ${usd(b.priceMin)} to ${usd(b.priceMax)}, mean listed ${moneyExact(mean)} (${seedDateLabel}). ${countEs(b.systems)} have an ENERGY STAR record and ${countCold(b.systems)} are flagged cold-climate. A 3-ton ducted heat pump benchmarks at ${fmtRange(fair3)} installed (midpoint ${usd(fair3.mid)}).</p>
+<p>LG's ${a('lgR32ModelMap', 'R-410A to R-32 model map')} is the document that matches older LSU / LUU / LV / LMU models to the KUSA / KUSX / KUMX replacements we list. The current R-32 limited warranty card (${a('lgWarrantyR32', 'WD_LG_Res_Lgt_Comm_LTD_EXT_R32_12_2025')}) names those KUS* / KUM* families and is valid for systems installed from September 1, 2024.</p>
+</div>`;
+  const sectionsHtml = `
+<h2>KUSX, KUMX and related outdoor units in this catalog</h2>
+<p>Engineering manuals we cite for nomenclature: ${a('lgEmSzMega', 'standard / Mega')}, ${a('lgEmSzHighEff', 'high efficiency')}, and ${a('lgEmAhuRed', 'multi-position AHU with LGRED°')}.</p>
+<div class="tablewrap"><table>
+${catalogHead}
+<tbody>
+${catalogRows([
+    { label: 'KUSXA', xs: kusxa, note: 'R-32 ducted outdoor' },
+    { label: 'KUSXE', xs: kusxe },
+    { label: 'KUSXB', xs: kusxb },
+    { label: 'KUMXA / KUMXB multi-zone', xs: kumx },
+    { label: 'KSSAC / KSSLA indoor or matched', xs: kss },
+  ])}
+</tbody></table></div>
+<h2>Warranty card and registration</h2>
+<p>Read the ${a('lgWarrantyR32', 'R-32 warranty card')} that covers KUSA / KUSX / KUMX outdoor units, KNS / KNU / KNM indoor units, LKMMA A-coils and PMBD branch boxes, for systems installed from September 1, 2024. Older R-410A systems use a ${a('lgWarranty410', 'separate card valid from April 1, 2017')}. Register at ${a('lgRegister', 'LG HVAC residential product registration')}; LG also keeps a ${a('lgWarrantyPage', 'warranty page')} for current documents. We do not restate a year count beyond what those cards say, because the term depends on the card and on registration.</p>`;
+  const faq = [
+    {
+      q: 'My quote still uses an LSU or LMU model number. Is that the same as a KUSX or KUMX?',
+      a: `Not automatically. LG's ${a('lgR32ModelMap', 'R-410A to R-32 cross-reference')} maps each older model to its R-32 replacement. Confirm the exact outdoor and indoor pair on the AHRI certificate and on the ${a('lgWarrantyR32', 'R-32 warranty card')}.`,
+    },
+    {
+      q: 'Which LG warranty card applies to a 2026 install?',
+      a: `For current R-32 KUS* / KUM* systems installed from September 1, 2024, use ${a('lgWarrantyR32', 'WD_LG_Res_Lgt_Comm_LTD_EXT_R32_12_2025')}. Register at ${a('lgRegister', 'lg-dfs-warranty.com/register')}.`,
+    },
+  ];
+  return { sizeHeading: 'LG R-32 heat pump listed prices vs the installed benchmark by size', summaryHtml, sectionsHtml, faq };
+}
+
+function aciq(b: Brand, fair3: Range): BrandExtra {
+  const hpE = b.systems.filter((s) => /HP-E-32|HPD/.test(s.components[0]));
+  const k = fam(b, ['ACIQ-K']);
+  const esLine = fam(b, ['ES-']);
+  const r410 = b.systems.filter((s) => /R-?410A/i.test(`${s.specs.refrigerant ?? ''} ${s.energyStar?.refrigerant ?? ''} ${s.title}`));
+  const mean = meanListed(b.systems);
+  const summaryHtml = `
+<div class="card answer">
+<p><b>What we can price:</b> ACiQ is the most mixed catalog on this site — ducted heat pumps, mini-splits, one AC + furnace and one condenser-only unit, ${b.systems.length} systems from ${usd(b.priceMin)} to ${usd(b.priceMax)}, mean listed ${moneyExact(mean)} (${seedDateLabel}). ${countEs(b.systems)} have an ENERGY STAR record; ${countCold(b.systems)} are flagged cold-climate. A 3-ton ducted heat pump benchmarks at ${fmtRange(fair3)} installed (midpoint ${usd(fair3.mid)}).</p>
+<p>We do not have an official ACiQ limited-warranty PDF in our source list, so this page does not state a warranty term. Ask the seller which document applies and whether labor is included.</p>
+</div>`;
+  const sectionsHtml = `
+<h2>ACiQ families with a public price</h2>
+<div class="tablewrap"><table>
+${catalogHead}
+<tbody>
+${catalogRows([
+    { label: 'ACIQ-*-HP-E-32 / HPD ducted', xs: hpE, note: 'R-32 ducted heat pumps' },
+    { label: 'ACIQ-K single-zone', xs: k },
+    { label: 'ES- multi-zone', xs: esLine },
+    { label: 'Leftover R-410A AC + furnace', xs: r410, note: 'Not a current A2L system' },
+  ])}
+</tbody></table></div>
+<p>One listing, the ${r410.length ? r410[0].components[0] : 'R-410A unit'}, is still an R-410A AC + furnace. It is in the catalog because it has a public price, not because it is a current A2L replacement. For how the refrigerant transition affects a quote, see <a href="/guides/r410a-vs-r454b-r32-refrigerant-transition-quotes/">R-410A vs R-454B vs R-32</a>.</p>`;
+  const faq = [
+    {
+      q: 'Does ACiQ publish a warranty term we can cite here?',
+      a: 'Not in the official documents we already cite on this site. We do not invent a year count. Get the warranty document that names the model on your quote, and get labor coverage in writing from the installer.',
+    },
+    {
+      q: 'Why is there an R-410A ACiQ system next to R-32 and R-454B units?',
+      a: `Because it still has a public listed price in the catalog we captured on ${seedDateLabel}. New equipment built from newer components uses R-32 or R-454B under the EPA GWP limit. Treat that R-410A row as a leftover listing, not as the going replacement.`,
+    },
+  ];
+  return { sizeHeading: 'ACiQ listed prices vs the installed benchmark by size', summaryHtml, sectionsHtml, faq };
+}
+
+function gree(b: Brand, fair3: Range): BrandExtra {
+  const fxu = fam(b, ['FXU']);
+  const mul = fam(b, ['MUL']);
+  const mean = meanListed(b.systems);
+  const summaryHtml = `
+<div class="card answer">
+<p><b>What we can price:</b> every Gree system in this catalog is an R-32 unit with an ENERGY STAR record, and every one is flagged cold-climate — ${b.systems.length} systems (FXU ducted and MUL mini-split) listed ${usd(b.priceMin)}–${usd(b.priceMax)}, mean ${moneyExact(mean)} (${seedDateLabel}). A 3-ton ducted heat pump benchmarks at ${fmtRange(fair3)} installed (midpoint ${usd(fair3.mid)}).</p>
+<p>We do not have an official Gree limited-warranty PDF in our source list, so this page does not state a warranty term. Use the AHRI number on the ENERGY STAR record and ask the seller for the warranty document that names the model.</p>
+</div>`;
+  const sectionsHtml = `
+<h2>FXU ducted and MUL ductless, all R-32</h2>
+<div class="tablewrap"><table>
+${catalogHead}
+<tbody>
+${catalogRows([
+    { label: 'FXU ducted heat pump', xs: fxu, note: 'All ENERGY STAR, cold-climate, R-32' },
+    { label: 'MUL mini-split', xs: mul, note: 'All ENERGY STAR, cold-climate, R-32' },
+  ])}
+</tbody></table></div>
+<p>Because every Gree pairing we list is in the ENERGY STAR dataset, compare a Gree quote on the certified capacity and the AHRI reference, not only on the nameplate tons. Several 3-ton-labeled systems across brands are certified below 36,000 BTU/h; that check is on the <a href="/guides/3-ton-heat-pump-ac-replacement-cost/#3-ton">size guide</a>.</p>`;
+  const faq = [
+    {
+      q: 'Does Gree publish a warranty term we can cite here?',
+      a: 'Not in the official documents already in our source list. We do not invent a year count. Ask for the warranty document that names the FXU or MUL model on your quote, and confirm labor coverage with the installer.',
+    },
+    {
+      q: 'Are these Gree systems actually cold-climate rated?',
+      a: `In our catalog, all ${b.systems.length} Gree pairings are ENERGY STAR records flagged cold-climate. Still verify the exact outdoor and indoor combination on the AHRI certificate attached to your quote.`,
+    },
+  ];
+  return { sizeHeading: 'Gree R-32 listed prices vs the installed benchmark by size', summaryHtml, sectionsHtml, faq };
+}
+
+function mrcool(b: Brand, fair3: Range): BrandExtra {
+  const uhp = fam(b, ['UHP']);
+  const central = fam(b, ['CENTRAL-']);
+  const diy = b.systems.filter((s) => s.components[0].startsWith('DIY-'));
+  const mdph = fam(b, ['MDPH']);
+  const aLine = fam(b, ['A-']);
+  const mean = meanListed(b.systems);
+  const summaryHtml = `
+<div class="card answer">
+<p><b>What we can price:</b> MRCOOL listings in this catalog span several outdoor-unit families — UHP and CENTRAL ducted heat pumps, DIY multi-zone, MDPH and a single-zone A- line — ${b.systems.length} systems from ${usd(b.priceMin)} to ${usd(b.priceMax)}, mean listed ${moneyExact(mean)} (${seedDateLabel}). ${countEs(b.systems)} have an ENERGY STAR record; ${countCold(b.systems)} are flagged cold-climate. A 3-ton ducted heat pump benchmarks at ${fmtRange(fair3)} installed (midpoint ${usd(fair3.mid)}).</p>
+<p>We do not have an official MRCOOL limited-warranty PDF in our source list, so this page does not state a warranty term. DIY and professionally installed families can carry different documents; get the one that names the model on your quote.</p>
+</div>`;
+  const sectionsHtml = `
+<h2>MRCOOL families with a public price</h2>
+<div class="tablewrap"><table>
+${catalogHead}
+<tbody>
+${catalogRows([
+    { label: 'UHP ducted', xs: uhp },
+    { label: 'CENTRAL ducted', xs: central },
+    { label: 'DIY multi-zone', xs: diy, note: 'Ductless DIY family' },
+    { label: 'MDPH', xs: mdph },
+    { label: 'A- single-zone', xs: aLine },
+  ])}
+</tbody></table></div>
+<p>Refrigerant is not the same across these families: most ENERGY STAR records in this catalog are R-454B, one is R-32, and two DIY listings have no refrigerant in the ENERGY STAR or listing fields we captured. Read the rating plate and the AHRI certificate, not the brand name, when a quote calls the refrigerant a reason for a surcharge. See <a href="/guides/r410a-vs-r454b-r32-refrigerant-transition-quotes/">R-410A vs R-454B vs R-32</a>.</p>`;
+  const faq = [
+    {
+      q: 'Does MRCOOL publish a warranty term we can cite here?',
+      a: 'Not in the official documents already in our source list. We do not invent a year count, and we do not assume the DIY document applies to a CENTRAL or UHP system. Ask for the warranty that names the exact model, and get labor coverage in writing.',
+    },
+    {
+      q: 'Is a DIY MRCOOL multi-zone priced the same way as a CENTRAL ducted system?',
+      a: `No. They are different families in the table above, with different listed ranges. Grade each quote against the listed price of that family and the installed benchmark for its size, not against a mixed "MRCOOL" average.`,
+    },
+  ];
+  return { sizeHeading: 'MRCOOL listed prices vs the installed benchmark by size', summaryHtml, sectionsHtml, faq };
+}
+
 export function brandExtra(b: Brand, fair3: Range): BrandExtra | undefined {
   switch (b.slug) {
     case 'trane':
       return trane(b, fair3);
+    case 'daikin':
+      return daikin(b, fair3);
+    case 'mitsubishi':
+      return mitsubishi(b, fair3);
+    case 'carrier':
+      return carrier(b, fair3);
+    case 'lg':
+      return lg(b, fair3);
+    case 'aciq':
+      return aciq(b, fair3);
+    case 'gree':
+      return gree(b, fair3);
+    case 'mrcool':
+      return mrcool(b, fair3);
   }
   return undefined;
 }

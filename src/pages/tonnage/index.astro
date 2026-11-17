@@ -1,10 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { TONNAGES } from '../../data/equipment';
-import { fairRange, equipmentStats, usd, fmtRange } from '../../lib/facts';
+import { fairRange, equipmentStats, usd, fmtRange, listedSpan } from '../../lib/facts';
 import { sizeGuidePath, COMBINED_SIZE_GUIDE_PATH } from '../../data/prune';
 
-const rows = TONNAGES.map((t) => ({ t, hp: equipmentStats('central-heat-pump', t), fair: fairRange('central-heat-pump', t, 'standard'), fairHi: fairRange('central-heat-pump', t, 'high') }));
+const rows = TONNAGES.map((t) => ({ t, hp: equipmentStats('central-heat-pump', t), ac: equipmentStats('ac-furnace', t), ms: equipmentStats('mini-split', t), fair: fairRange('central-heat-pump', t, 'standard'), fairHi: fairRange('central-heat-pump', t, 'high') }));
 const r3 = rows.find((r) => r.t === 3)!;
 const title = `${usd(r3.hp.min)} Equip vs ${fmtRange(r3.fair)} Installed: 1.5–5 Ton HVAC`;
 const description = `Compare 1.5 to 5-ton heat pump & AC costs (${usd(r3.hp.min)}–${usd(r3.hp.max)} 3-ton equipment vs ${fmtRange(r3.fair)} installed benchmark) with sourced prices by size.`;
@@ -16,9 +16,11 @@ const signed = (n: number | null) => {
 const steps = rows.slice(0, -1).map((from, i) => {
   const to = rows[i + 1];
   const listed = from.hp.median != null && to.hp.median != null ? to.hp.median - from.hp.median : null;
+  const acListed = from.ac.median != null && to.ac.median != null ? to.ac.median - from.ac.median : null;
+  const msListed = from.ms.median != null && to.ms.median != null ? to.ms.median - from.ms.median : null;
   const std = to.fair.mid - from.fair.mid;
   const high = to.fairHi.mid - from.fairHi.mid;
-  return { from: from.t, to: to.t, listed, std, high };
+  return { from: from.t, to: to.t, listed, acListed, msListed, std, high };
 });
 ---
 <Base title={title} description={description}>
@@ -32,7 +34,7 @@ const steps = rows.slice(0, -1).map((from, i) => {
         {rows.map((r) => (
           <tr>
             <td><a href={sizeGuidePath(r.t)}><b>{r.t} ton</b></a> <span class="small muted">{(r.t * 12000).toLocaleString('en-US')} BTU/h</span></td>
-            <td class="r num">{r.hp.count ? `${usd(r.hp.min)}–${usd(r.hp.max)}` : '—'} <span class="small muted">({r.hp.count})</span></td>
+            <td class="r num">{r.hp.count ? listedSpan(r.hp.min, r.hp.max) : '—'} <span class="small muted">({r.hp.count})</span></td>
             <td class="r num">{fmtRange(r.fair)}</td>
             <td class="r num">{fmtRange(r.fairHi)}</td>
           </tr>
@@ -43,15 +45,17 @@ const steps = rows.slice(0, -1).map((from, i) => {
   <p class="small muted">Installed ranges: REMDB ducted air-source heat pump replacement regression, restated in today's dollars. <a href="/about/#benchmarks">Method</a>.</p>
 
   <h2>What it costs to step up one size</h2>
-  <p>Each row is the adjacent-size difference, not the absolute price. Listed-median is the change in the median public online retail price for a ducted heat pump (equipment only). Installed figures are the change in the REMDB midpoint. A negative listed step means the median listing at the larger size is cheaper than at the smaller size in our current catalog — listings are not a smooth curve.</p>
+  <p>Each row is the adjacent-size difference, not the absolute price. Listed-median columns are the change in the median public online retail price (equipment only) for a ducted heat pump, an AC + furnace system, and a mini-split. Installed figures are the change in the REMDB midpoint. A negative listed step means the median listing at the larger size is cheaper than at the smaller size in our current catalog — listings are not a smooth curve.</p>
   <div class="tablewrap">
     <table>
-      <thead><tr><th>Step</th><th class="r">Listed median, ducted heat pump</th><th class="r">Installed midpoint, standard <span class="badge b-est">est.</span></th><th class="r">Installed midpoint, high-eff. <span class="badge b-est">est.</span></th></tr></thead>
+      <thead><tr><th>Step</th><th class="r">Listed median, ducted heat pump</th><th class="r">Listed median, AC + furnace</th><th class="r">Listed median, mini-split</th><th class="r">Installed midpoint, standard <span class="badge b-est">est.</span></th><th class="r">Installed midpoint, high-eff. <span class="badge b-est">est.</span></th></tr></thead>
       <tbody>
         {steps.map((s) => (
           <tr>
             <td>{s.from} → {s.to} ton</td>
             <td class="r num">{signed(s.listed)}</td>
+            <td class="r num">{signed(s.acListed)}</td>
+            <td class="r num">{signed(s.msListed)}</td>
             <td class="r num">{signed(s.std)}</td>
             <td class="r num">{signed(s.high)}</td>
           </tr>

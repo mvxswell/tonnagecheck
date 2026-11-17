@@ -65,7 +65,7 @@ const ld = [
     <div class="card"><div class="small muted">ENERGY STAR matched pairings</div><div class="v num">{b.energyStarCount} of {b.systems.length}</div><div class="small muted">{b.coldClimateCount} cold-climate certified</div></div>
   </div>
   {extra && <Fragment set:html={extra.summaryHtml} />}
-  <p><a class="btn" href={auditHref}>Audit a {b.name} quote</a> <a class="btn ghost" href="/partners/">Get an independent second quote</a></p>
+  <p><a class="btn" href={auditHref}>Audit a {b.name} quote</a> <a class="btn ghost" href="/auditor/#audit">Grade it, then request a second opinion</a></p>
   {seo && (
     <p class="small"><b>Before you sign a {b.name} quote:</b> {brandGuides.map((g) => <><a href={`/guides/${g.slug}/`}>{g.label}</a> · </>)}<a href="/guides/heat-pump-rebates-and-ahri-certificate-check/">check the AHRI certificate &amp; 2026 rebates</a> · <a href="/guides/independent-hvac-tech-vs-big-company/">independent tech vs big company</a></p>
   )}

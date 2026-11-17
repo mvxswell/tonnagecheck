@@ -3,18 +3,29 @@ import Base from '../../layouts/Base.astro';
 import CompareWorkbench from '../../components/CompareWorkbench.astro';
 import { COMPARISONS } from '../../data/comparisons';
 import { isCompareMerged, isCompareIndexed, COMPARE_MERGED } from '../../data/prune';
-import { SYSTEMS } from '../../data/equipment';
-import { statsOf, usd, seedDateLabel } from '../../lib/facts';
+import { SYSTEMS, lowestPrice } from '../../data/equipment';
+import { statsOf, systemsWhere, usd, seedDateLabel } from '../../lib/facts';
 import QuoteCta from '../../components/QuoteCta.astro';
 
 const allStats = statsOf(SYSTEMS)!;
-// Featured matchups now live inside guides (301s in public/_redirects). Noindexed template matchups stay listed at the end for visitors.
 const live = COMPARISONS.filter((c) => !isCompareMerged(c.slug));
 const more = live.filter((c) => !isCompareIndexed(c.slug));
-const foldedCount = Object.keys(COMPARE_MERGED).length;
-const leftoverCount = more.length;
-const destGuideCount = new Set(Object.values(COMPARE_MERGED)).size;
-const compareSlugCount = COMPARISONS.length;
+
+const moneyExact = (n: number) => {
+  const cents = Math.round(n * 100) / 100;
+  const hasCents = !Number.isInteger(cents);
+  return `$${cents.toLocaleString('en-US', { minimumFractionDigits: hasCents ? 2 : 0, maximumFractionDigits: 2 })}`;
+};
+const meanOf = (xs: typeof SYSTEMS) => xs.reduce((sum, s) => sum + lowestPrice(s), 0) / xs.length;
+
+const hp = systemsWhere({ type: 'central-heat-pump' });
+const ms = systemsWhere({ type: 'mini-split' });
+const acf = systemsWhere({ type: 'ac-furnace' });
+const cond = systemsWhere({ type: 'heat-pump-only' });
+const hpMed = statsOf(hp).median!;
+const msMed = statsOf(ms).median!;
+const acfMean = meanOf(acf);
+const condMed = statsOf(cond).median!;
 
 const folded = [
   { href: '/guides/bosch-ids-inverter-heat-pump-cost/', label: 'Bosch vs Mitsubishi', note: 'Bosch IDS inverter cost guide' },
@@ -23,7 +34,7 @@ const folded = [
   { href: '/guides/inverter-vs-single-stage-heat-pump-cost/', label: 'ACiQ vs MRCOOL and inverter vs single-stage', note: 'Inverter vs single-stage guide' },
   { href: '/guides/heat-pump-vs-ac-and-furnace-replacement-cost/', label: 'Heat pump vs AC + furnace, Trane vs Goodman furnaces', note: 'Heat pump vs AC + furnace guide' },
   { href: '/guides/r410a-vs-r454b-r32-refrigerant-transition-quotes/', label: 'R-32 vs R-454B systems', note: 'Refrigerant transition guide' },
-  { href: '/guides/3-ton-heat-pump-ac-replacement-cost/', label: 'Cost by size, 1.5 to 5 tons (model matchups included)', note: 'Combined size guide — 2, 2.5, 3.5, 4 and 5-ton pages redirect here' },
+  { href: '/guides/3-ton-heat-pump-ac-replacement-cost/', label: 'Cost by size, 1.5 to 5 tons (model matchups included)', note: 'Combined size guide, every size from 1.5 to 5 tons' },
 ];
 
 const title = `${usd(allStats.min)}–${usd(allStats.max)} HVAC Comparison Workbench`;
@@ -40,17 +51,50 @@ const jsonld = {
 <Base title={title} description={description} jsonld={jsonld}>
   <p class="crumbs"><a href="/">Home</a> / Comparisons</p>
   <h1>HVAC equipment comparison workbench ({SYSTEMS.length} systems)</h1>
-  <p class="lead">This page is the comparison tool: pick any two of the {SYSTEMS.length} listed systems in the workbench below ({seedDateLabel}). It starts on a like-for-like 3-ton pair — the Goodman GLZT7CA3610 versus the Trane A5HL5036A1000A — so the default is not a capacity-mismatched “same tonnage” pairing. Saved brand, refrigerant and model matchups now live in the guides listed after the tool.</p>
+  <p class="lead">This page is the comparison tool: pick any two of the {SYSTEMS.length} listed systems in the workbench below ({seedDateLabel}). It starts on two 3-ton ducted heat pumps that both have ENERGY STAR / AHRI records: the Goodman GLZS5BA3610, certified at 35,400 BTU/h (AHRI #215381162), and the Trane A5HL5036A1000A, certified at 34,000 BTU/h (AHRI #216439108). Saved brand, refrigerant and model matchups now live in the guides listed after the tool.</p>
 
   <div class="card" style="margin:18px 0">
-    <h2 style="margin-top:0">What this comparison catalog holds</h2>
-    <p class="small">These counts are the inventory of this hub, not prices: <b class="num">{compareSlugCount}</b> original comparison slugs, of which <b class="num">{foldedCount}</b> now 301 to <b class="num">{destGuideCount}</b> guides, and <b class="num">{leftoverCount}</b> leftover templates stay published with <code>noindex, follow</code>. The workbench below can pair any two listed systems.</p>
+    <h2 style="margin-top:0">Listed-price snapshot of this catalog</h2>
+    <p class="small muted">These catalog-wide figures are computed from the {SYSTEMS.length} public listings on this page ({seedDateLabel}) and are shown only here. The workbench below can pair any two of them.</p>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>System type</th>
+            <th class="r">Count</th>
+            <th class="r">Catalog figure (equipment only)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Ducted heat pump, median listed</td>
+            <td class="r num">{hp.length}</td>
+            <td class="r num">{moneyExact(hpMed)}</td>
+          </tr>
+          <tr>
+            <td>Mini-split, median listed</td>
+            <td class="r num">{ms.length}</td>
+            <td class="r num">{moneyExact(msMed)}</td>
+          </tr>
+          <tr>
+            <td>AC + furnace, mean listed</td>
+            <td class="r num">{acf.length}</td>
+            <td class="r num">{moneyExact(acfMean)}</td>
+          </tr>
+          <tr>
+            <td>Condenser-only, median listed</td>
+            <td class="r num">{cond.length}</td>
+            <td class="r num">{moneyExact(condMed)}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <CompareWorkbench />
 
   <h2>Head-to-head matchups, now in the guides</h2>
-  <p class="small muted">The brand, refrigerant and flagship model comparisons used to be separate template pages. Each one now sits inside the guide that answers the same question, with the same sourced prices and ratings. Size-by-size cost and the flagship model matchups now live in the <a href="/guides/3-ton-heat-pump-ac-replacement-cost/">combined size guide</a>; the <a href="/tonnage/">tonnage index</a> has the step-up cost from one size to the next.</p>
+  <p class="small muted">The brand, refrigerant and flagship model comparisons now sit inside the guide that answers the same question, with the same sourced prices and ratings. Size-by-size cost and the flagship model matchups live in the <a href="/guides/3-ton-heat-pump-ac-replacement-cost/">combined size guide</a>; the <a href="/tonnage/">tonnage index</a> has the step-up cost from one size to the next.</p>
   <div class="grid">
     {folded.map((f) => (
       <a class="card" href={f.href} style="text-decoration:none;color:inherit">

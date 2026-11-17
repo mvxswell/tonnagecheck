@@ -6,7 +6,7 @@ import { DECODER_BRANDS } from '../data/decoder/index';
 import { BRANDS } from '../data/brands';
 import { PART_CATEGORIES, PART_CATALOG_STATS } from '../data/parts';
 import { SOURCES } from '../data/sources';
-import { isSystemIndexed } from '../data/prune';
+import { isSystemIndexed, COMBINED_SIZE_GUIDE_PATH } from '../data/prune';
 import { seedDateLabel, cpi } from '../lib/facts';
 
 export const GET: APIRoute = () => {
@@ -48,7 +48,7 @@ ${BRANDS.map((b) => `- [${b.name} HVAC prices](${u(`/brands/${b.slug}/`)}): ${b.
 Head-to-head brand, refrigerant and flagship model matchups now live in the relevant guides listed below.
 
 ## Guides
-${GUIDES.map((g) => `- [${g.h1}](${u(`/guides/${g.slug}/`)}): ${g.description}`).join('\n')}
+${GUIDES.filter((g) => `/guides/${g.slug}/` !== COMBINED_SIZE_GUIDE_PATH).map((g) => `- [${g.h1}](${u(`/guides/${g.slug}/`)}): ${g.description}`).join('\n')}
 
 ## Systems
 Every system's listed price and ratings are in the [equipment price lookup](${u('/systems/')}) and the brand pages above.

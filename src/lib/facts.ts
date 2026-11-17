@@ -70,6 +70,8 @@ export function refrigerantOf(s: System): string | null {
 export const lineSet = payload.lineSet;
 export const seedDateLabel = new Date(SEED_DATE).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 export const cpi = BENCHMARKS.cpi;
-export const fmtRange = (r: Range) => `${usd(r.low)}–${usd(r.high)}`;
+export const fmtRange = (r: Range) => r.low === r.high ? usd(r.low) : `${usd(r.low)}–${usd(r.high)}`;
+export const listedSpan = (min: number | null | undefined, max: number | null | undefined) =>
+  min == null || max == null ? '—' : min === max ? usd(min) : `${usd(min)}–${usd(max)}`;
 export const pct = (n: number) => `${Math.round(n * 100)}%`;
 export { usd, isInverter };

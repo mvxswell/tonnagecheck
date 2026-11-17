@@ -268,7 +268,7 @@ ${r3 ? `<p>At 3 tons, then, roughly ${usd(r3.f.mid - (r3.e.median ?? 0))} of a b
 </ul>
 
 <h2>Get a second quote the easy way</h2>
-<p>Run your existing quote through the ${auditLink} first, so you know where it stands. If it grades poorly, request a second opinion: we pass your request to an independent, owner-operated company serving your ZIP. Independent techs who want to receive these requests can <a href="/partners/">apply here</a>.</p>`;
+<p>Run your existing quote through the ${auditLink} first, so you know where it stands. If it grades poorly, <a href="/auditor/#audit">grade it, then request a second opinion</a>: we pass your request to an independent, owner-operated company serving your ZIP. Independent techs who want to receive these requests can <a href="/partners/">apply here</a>.</p>`;
     },
   },
   {

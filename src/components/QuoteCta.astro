@@ -1,11 +1,11 @@
 ---
 /**
- * Short stand-in for the site-wide auditor, concierge and newsletter embeds,
+ * Short stand-in for the site-wide auditor and concierge embeds,
  * which repeated ~870 words of the same forms on almost every page.
+ * Newsletter signup is only on the homepage and /about/, not here.
  */
-import { NEWSLETTER_URL } from '../config';
 ---
-<p class="small muted qcta">Have a contractor quote? <a href="/auditor/"><b>Grade it in the quote auditor</b></a>. Want a second bid from an independent tech? <a href="/partners/">See the partners page</a>.{NEWSLETTER_URL && <> Weekly red-flag email: <a href={NEWSLETTER_URL}>subscribe</a>.</>}</p>
+<p class="small muted qcta">Have a contractor quote? <a href="/auditor/#audit"><b>Grade it, then request a second opinion</b></a> from the result. Independent techs who want those requests can <a href="/partners/">apply on the partners page</a>.</p>
 <style>
 .qcta{margin:24px 0 8px}
 </style>

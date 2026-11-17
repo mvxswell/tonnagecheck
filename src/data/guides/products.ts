@@ -46,6 +46,34 @@ ${(() => {
   return both.length ? `<p>Two things stand out. First, at the ${both.length} sizes where both brands are listed, the gap between the cheapest Goodman and cheapest Trane is ${usd(Math.min(...gaps))} to ${usd(Math.max(...gaps))}, partly because of efficiency differences. Second, the installed benchmark midpoint sits ${usd(Math.min(...nonEq))} to ${usd(Math.max(...nonEq))} above even the pricier of the two. A quote that is thousands of dollars more for "the better brand" is mostly not paying for the brand.</p>` : '';
 })()}
 
+${(() => {
+  const moneyExact = (n: number) => {
+    const cents = Math.round(n * 100) / 100;
+    const hasCents = !Number.isInteger(cents);
+    return `$${cents.toLocaleString('en-US', { minimumFractionDigits: hasCents ? 2 : 0, maximumFractionDigits: 2 })}`;
+  };
+  const brands = [
+    { name: 'Goodman', type: 'central-heat-pump' as const },
+    { name: 'Trane', type: 'central-heat-pump' as const },
+    { name: 'Carrier', type: 'mini-split' as const },
+  ];
+  const lines = brands.map((b) => {
+    const xs = systemsWhere({ brand: b.name, type: b.type });
+    if (!xs.length) return '';
+    const listed = xs.map(lowestPrice);
+    const meanListed = listed.reduce((a, n) => a + n, 0) / listed.length;
+    const markups = xs.map((s) => fairRange(s.systemType, s.tons, s.tier).mid - lowestPrice(s));
+    const meanMarkup = markups.reduce((a, n) => a + n, 0) / markups.length;
+    const meanPct = markups.reduce((a, n, i) => a + n / fairRange(xs[i].systemType, xs[i].tons, xs[i].tier).mid, 0) / markups.length;
+    return `<tr><td>${brandLink(b.name)}</td><td>${b.type === 'mini-split' ? 'Mini-split (all Carrier listings)' : 'Ducted heat pump'}</td><td class="r num">${xs.length}</td><td class="r num">${moneyExact(meanListed)}</td><td class="r num">${moneyExact(meanMarkup)}</td><td class="r num">${(Math.round(meanPct * 1000) / 10).toFixed(1)}%</td></tr>`;
+  }).join('\n');
+  return `<h2>Catalog-wide mean listed price and leftover at the benchmark midpoint</h2>
+<p>Each row is the mean public listed price for that brand's systems of the stated type, and the mean leftover when you subtract that listed price from the REMDB midpoint for the same size and tier. These means are computed only on this page (${asOf}).</p>
+<div class="tablewrap"><table><thead><tr><th>Brand</th><th>System type</th><th class="r">Count</th><th class="r">Mean listed (equipment)</th><th class="r">Mean leftover at midpoint <span class="badge b-est">est.</span></th><th class="r">Mean leftover share</th></tr></thead><tbody>
+${lines}
+</tbody></table></div>`;
+})()}
+
 <h2>Where brand-name markup comes from</h2>
 <ul>
 <li><b>Dealer programs.</b> Brands that sell mostly through authorized dealers let those dealers price to the brand's reputation. That is a dealer margin, not an equipment cost.</li>
@@ -65,7 +93,7 @@ ${systemsTable([...carrierMs, ...otherMs].sort((x, y) => x.tons - y.tons || lowe
 <li>Compare the total with the benchmark range. A brand-name quote within the range is reasonable; one far above it is paying for something other than the equipment.</li>
 </ol>
 <h2>LG vs Trane heat pump cost</h2>
-<p>The LG vs Trane comparison page now lives here, next to the other brand-name equipment prices. Figures are the same listed prices and ratings (${asOf}).</p>
+<p>LG vs Trane is the other brand pairing in this catalog with a full listed-price table. Figures are the same listed prices and ratings (${asOf}).</p>
 ${foldedMatchup('lg-vs-trane-heat-pump-cost')}
 <p>Run it in the ${auditLink({ brand: 'Trane', tons: 3 })} (it highlights the brand you enter), or browse ${brandLink('Goodman', 'Goodman')}, ${brandLink('Trane', 'Trane')}, ${brandLink('LG', 'LG')} and ${brandLink('Carrier', 'Carrier')} prices by size.</p>`;
     },
@@ -117,8 +145,22 @@ ${(() => {
 </ul>
 
 <h2>Is the premium worth it?</h2>
+<p>One reason a quote puts a premium on an inverter IDS system is cold-weather heating. For Bosch complete systems that have an ENERGY STAR record with a 5°F test, here is the certified heating capacity and COP at 5°F, the capacity at 47°F, and how much of the 47°F capacity remains at 5°F. These 5°F figures come from the same ENERGY STAR fields (${src('esApi', 'ENERGY STAR dataset')}) and appear only in this guide.</p>
+${(() => {
+  const rows = bosch.filter((s) => s.systemType !== 'heat-pump-only' && s.energyStar?.heatingCapacity5F != null && s.energyStar?.heatingCapacity47F != null);
+  if (!rows.length) return '';
+  const body = rows.map((s) => {
+    const es = s.energyStar!;
+    const retain = Math.round((es.heatingCapacity5F! / es.heatingCapacity47F!) * 1000) / 10;
+    return `<tr><td>${sysLink(s, `${s.components[0]}`)}</td><td class="r num">${s.tons}</td><td class="r num">${es.heatingCapacity5F!.toLocaleString('en-US')}</td><td class="r num">${es.heatingCapacity47F!.toLocaleString('en-US')}</td><td class="r num">${es.copAt5F ?? '—'}</td><td class="r num">${retain}%</td><td>AHRI #${es.ahriReferenceNumber}</td></tr>`;
+  }).join('\n');
+  return `<div class="tablewrap"><table><thead><tr><th>Bosch complete system</th><th class="r">Label tons</th><th class="r">Heating at 5°F (BTU/h)</th><th class="r">Heating at 47°F (BTU/h)</th><th class="r">COP at 5°F</th><th class="r">5°F as % of 47°F</th><th>AHRI</th></tr></thead><tbody>
+${body}
+</tbody></table></div>`;
+})()}
+<p class="small muted">Complete systems only (condenser-only pairings are omitted). Compare these 5°F numbers with the Mitsubishi figures on the <a href="/guides/mitsubishi-hyper-heat-cost/">Hyper-Heat guide</a>; the two catalogs are not interchangeable at a given nameplate size. Several Bosch pairings sold as 3-ton are certified well below 36,000 BTU/h of cooling, which is noted on the <a href="/guides/3-ton-heat-pump-ac-replacement-cost/#3-ton">size guide</a>.</p>
 <h2>Bosch IDS vs Mitsubishi Hyper-Heat</h2>
-<p>The Bosch vs Mitsubishi comparison page now lives here. Figures are the same listed prices and ratings (${asOf}).</p>
+<p>Bosch IDS and Mitsubishi Hyper-Heat are the two inverter lines compared below. Figures are the same listed prices and ratings (${asOf}).</p>
 ${foldedMatchup('bosch-vs-mitsubishi-heat-pump-cost')}
 <p>Inverter systems run at variable speed, which usually means better comfort and part-load efficiency. Whether that pays back depends on your climate and electricity prices. What you should not pay is a premium that is mostly dealer margin. Compare the listed Bosch price with the ${brandLink('Bosch', 'Bosch brand page')} and other inverter options in <a href="/guides/inverter-vs-single-stage-heat-pump-cost/">inverter vs single-stage cost</a>, then grade your quote in the ${auditLink({ brand: 'Bosch', tons: 3, tier: 'high' })}.</p>`;
     },
@@ -220,7 +262,7 @@ ${[...new Set(mit.map((s) => s.tons))].sort((a, b) => a - b).map((t) => { const 
 <li>Are you a Diamond Contractor, and who registers the system for the 10- or 12-year warranty?</li>
 </ul>
 <h2>LG RED vs Mitsubishi Hyper-Heat</h2>
-<p>The LG vs Mitsubishi comparison page now lives here. Figures are the same listed prices and ratings (${asOf}). For Bosch IDS vs Mitsubishi, see the <a href="/guides/bosch-ids-inverter-heat-pump-cost/">Bosch IDS cost guide</a>.</p>
+<p>LG and Mitsubishi are the other cold-climate mini-split pairing in this catalog. Figures are the same listed prices and ratings (${asOf}). For Bosch IDS vs Mitsubishi, see the <a href="/guides/bosch-ids-inverter-heat-pump-cost/">Bosch IDS cost guide</a>.</p>
 ${foldedMatchup('lg-vs-mitsubishi-heat-pump-cost')}
 <p>See all ${brandLink('Mitsubishi', 'Mitsubishi prices')}, our <a href="/guides/multi-zone-mini-split-cost/">multi-zone mini-split guide</a>, and grade your quote in the ${auditLink({ type: 'mini-split', brand: 'Mitsubishi' })}.</p>`;
     },

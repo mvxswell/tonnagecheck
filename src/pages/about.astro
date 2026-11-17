@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Newsletter from '../components/Newsletter.astro';
 import { SOURCES } from '../data/sources';
 import { SYSTEMS, LINE_SETS, BENCHMARKS } from '../data/equipment';
 import { seedDateLabel, cpi } from '../lib/facts';
@@ -63,5 +64,6 @@ const priceCount = SYSTEMS.reduce((n, s) => n + s.prices.length, 0);
 
     <h2 id="all-sources">All sources</h2>
     <ul>{Object.values(SOURCES).map((s) => <li><a href={s.url}>{s.title}</a> ({s.publisher})</li>)}</ul>
+    <Newsletter />
   </article>
 </Base>

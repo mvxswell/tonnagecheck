@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import QuoteCta from '../components/QuoteCta.astro';
+import Newsletter from '../components/Newsletter.astro';
 import { SITE } from '../config';
 import { SYSTEMS, TONNAGES } from '../data/equipment';
 import { GUIDES } from '../data/guides/index';
@@ -44,7 +45,7 @@ import { DECODER_BRANDS } from '../data/decoder/index';
       <li><b class="num">{esCount}</b> matched to their EPA ENERGY STAR / AHRI record</li>
       <li><b>0</b> made-up numbers. Every figure links to its source.</li>
     </ul>
-    <p><a class="btn" href="/auditor/">Grade my quote</a> <a class="btn ghost" href="/partners/">Get a second opinion</a></p>
+    <p><a class="btn" href="/auditor/#audit">Grade my quote</a> <a class="btn ghost" href="/auditor/#audit">Grade it, then request a second opinion</a></p>
   </section>
 
 <section>
@@ -124,6 +125,7 @@ import { DECODER_BRANDS } from '../data/decoder/index';
     <p><a href="/guides/"><b>All {GUIDES.length} guides →</b></a></p>
   </section>
 
+  <Newsletter />
   <QuoteCta />
 </Base>
 
