@@ -10,7 +10,7 @@ import { COMPARISONS } from '../data/comparisons';
 import { isCompareIndexed } from '../data/prune';
 import { PART_CATEGORIES, PART_CATALOG_STATS } from '../data/parts';
 import { STATES } from '../data/states';
-import { fairRange, equipmentStats, seedDateLabel, usd, fmtRange } from '../lib/facts';
+import { fairRange, equipmentStats, catalogDateLabel, usd, fmtRange } from '../lib/facts';
 
 const esCount = SYSTEMS.filter((s) => s.energyStar).length;
 const three = equipmentStats('central-heat-pump', 3);
@@ -31,7 +31,7 @@ import { DECODER_BRANDS } from '../data/decoder/index';
     <h1>Find out if your HVAC quote is fair before you sign.</h1>
     <p class="lead">Enter the size, the efficiency and the price you were quoted. TonnageCheck shows what the equipment actually sells for online, what a DOE national-lab benchmark says installation should cost, and how much of your quote is markup.</p>
     <ul class="proof">
-      <li><b class="num">{SYSTEMS.length}</b> real systems with listed prices, captured {seedDateLabel}</li>
+      <li><b class="num">{SYSTEMS.length}</b> real systems with listed prices, captured {catalogDateLabel}</li>
       <li><b class="num">{esCount}</b> matched to their EPA ENERGY STAR / AHRI record</li>
       <li><b>0</b> made-up numbers. Every figure links to its source.</li>
     </ul>

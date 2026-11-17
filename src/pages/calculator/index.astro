@@ -6,7 +6,7 @@ import { SITE } from '../../config';
 import { STATES, STATE_SEED_DATE, EFFICIENCY, heatingCosts, climateSummary } from '../../data/states';
 import { SYSTEMS, TONNAGES, SYSTEM_TYPE_LABEL, lowestPrice } from '../../data/equipment';
 import { SOURCES } from '../../data/sources';
-import { fairRange, usd, fmtRange, seedDateLabel } from '../../lib/facts';
+import { fairRange, usd, fmtRange, catalogDateLabel } from '../../lib/facts';
 
 const allCosts = STATES.flatMap((s) => heatingCosts(s).map((c) => ({ state: s.name, code: s.code, ...c })));
 const hpCosts = allCosts.filter((c) => c.label.startsWith('Heat pump,')).sort((a, b) => a.dollarsPerMMBtu - b.dollarsPerMMBtu);
@@ -93,7 +93,7 @@ const ld = [
 <Base title={title} description={description} jsonld={ld}>
   <p class="crumbs"><a href="/">Home</a> / Operating cost &amp; payback calculator</p>
   <h1>Heat pump vs. gas furnace operating cost, dual-fuel balance point &amp; SEER2 payback calculator</h1>
-  <p class="lead">Compare exact delivered heating fuel cost (<code>$/MMBtu</code>), dual-fuel economic crossover COP, and real-equipment SEER2/HSPF2 upgrade payback across all 50 states and D.C. Every rate comes from the U.S. Energy Information Administration ({stateDateLabel}) and every equipment price comes from our verified {SYSTEMS.length}-system catalog ({seedDateLabel}).</p>
+  <p class="lead">Compare exact delivered heating fuel cost (<code>$/MMBtu</code>), dual-fuel economic crossover COP, and real-equipment SEER2/HSPF2 upgrade payback across all 50 states and D.C. Every rate comes from the U.S. Energy Information Administration ({stateDateLabel}) and every equipment price comes from our verified {SYSTEMS.length}-system catalog ({catalogDateLabel}).</p>
 
   <section class="card calc-box" id="calc-root" aria-labelledby="calc-h1">
     <div class="calc-head">
@@ -195,7 +195,7 @@ const ld = [
 
   <section class="card calc-box" style="margin-top:22px" aria-labelledby="payback-h2">
     <h2 id="payback-h2" style="margin-top:0">2. Real-equipment SEER2 &amp; HSPF2 upgrade payback calculator</h2>
-    <p class="small muted">Pick a tonnage and compare any two verified systems in our catalog ({seedDateLabel}). We use their actual listed wholesale/online price delta and rated SEER2 / HSPF2 efficiencies—never invented price tiers—to show how many cooling and heating million BTUs per year it takes to pay back the higher-efficiency unit at your state's electricity rate.</p>
+    <p class="small muted">Pick a tonnage and compare any two verified systems in our catalog ({catalogDateLabel}). We use their actual listed wholesale/online price delta and rated SEER2 / HSPF2 efficiencies—never invented price tiers—to show how many cooling and heating million BTUs per year it takes to pay back the higher-efficiency unit at your state's electricity rate.</p>
 
     <div class="calc-grid">
       <div>

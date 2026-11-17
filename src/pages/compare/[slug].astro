@@ -8,7 +8,7 @@ import { COMPARISONS, type CompareEntry } from '../../data/comparisons';
 import { isCompareMerged, isCompareIndexed } from '../../data/prune';
 import { tonSlug } from '../../data/equipment';
 import { brandSlug } from '../../data/brands';
-import { usd, fmtRange, pct, seedDateLabel } from '../../lib/facts';
+import { usd, fmtRange, pct, captureDateLabel } from '../../lib/facts';
 
 export function getStaticPaths() {
   // Merged comparisons are not built; public/_redirects 301s them to their guide.
@@ -73,7 +73,7 @@ const jsonld = [
     <table>
       <thead>
         <tr>
-          <th>Metric ({seedDateLabel})</th>
+          <th>Metric ({captureDateLabel(combinedSystems)})</th>
           <th class="r">{left.href ? <a href={left.href}>{left.label}</a> : left.label}</th>
           <th class="r">{right.href ? <a href={right.href}>{right.label}</a> : right.label}</th>
         </tr>
