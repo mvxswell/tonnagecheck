@@ -3,7 +3,7 @@
 import { lowestPrice, median, TONNAGES } from '../equipment';
 import { BRANDS } from '../brands';
 import { fairRange, systemsWhere, equipmentStats, adderRange, newCircuitAdder, lineSet, usd, fmtRange, pct } from '../../lib/facts';
-import { today, src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
+import { src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
 import type { Guide } from './types';
 
 export const SALES_TACTICS_GUIDES: Guide[] = [
@@ -20,7 +20,8 @@ export const SALES_TACTICS_GUIDES: Guide[] = [
       const f = fairRange('central-heat-pump', 3);
       return `How 0% APR promotional HVAC financing hides dealer buy-down fees inside ${fmtRange(f)} 3-ton quotes (${usd(s.min)}–${usd(s.max)} equipment)—and CFPB deferred-interest traps.`;
     },
-    updated: today,
+    // updated 2026-11-12: last source edit of sales-tactics.ts
+    updated: '2026-11-12',
     related: { tons: [3, 4, 5], brands: ['Goodman', 'Trane', 'Bosch', 'Carrier'], systems: { type: 'central-heat-pump', tons: [3, 4] } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -74,7 +75,8 @@ export const SALES_TACTICS_GUIDES: Guide[] = [
       const f = fairRange('central-heat-pump', 3);
       return `How to counter today-only HVAC sales pressure using ${usd(s.min)}–${usd(s.max)} 3-ton equipment prices, ${fmtRange(f)} DOE benchmarks, and the 3-day FTC Cooling-Off Rule.`;
     },
-    updated: today,
+    // updated 2026-11-12: last source edit of sales-tactics.ts
+    updated: '2026-11-12',
     related: { tons: [2.5, 3, 4], brands: ['Goodman', 'Trane', 'Bosch', 'LG'], systems: { type: 'central-heat-pump', tons: 3 } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -122,7 +124,8 @@ ${systemsTable(top3)}
       const f = fairRange('central-heat-pump', 3);
       return `Free 10-year OEM parts registration vs extended labor plans, Magnuson-Moss warranty rules, and auditing ${fmtRange(f)} (${usd(s.min)}+ equip) 3-ton quotes.`;
     },
-    updated: today,
+    // updated 2026-11-12: last source edit of sales-tactics.ts
+    updated: '2026-11-12',
     related: { tons: [2, 3, 4], brands: ['Goodman', 'Trane', 'Bosch', 'Mitsubishi', 'LG'], systems: { type: 'central-heat-pump', tons: 3 } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -173,7 +176,8 @@ ${systemsTable(top3)}
       const f = fairRange('central-heat-pump', 3);
       return `Audit municipal mechanical/electrical permit fees, HERS duct testing, and Manual J charges on ${fmtRange(f)} 3-ton quotes (${usd(s.min)}–${usd(s.max)} equipment).`;
     },
-    updated: today,
+    // updated 2026-11-12: last source edit of sales-tactics.ts
+    updated: '2026-11-12',
     related: { tons: [2.5, 3, 4], brands: ['Goodman', 'Trane', 'Bosch', 'Mitsubishi'], systems: { type: 'central-heat-pump', tons: 3 } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -223,7 +227,8 @@ ${systemsTable(top3)}
       const f = fairRange('central-heat-pump', 3);
       return `EPA asbestos duct rules, 400 CFM/ton return-air drop sizing for ECM blowers, and auditing duct add-ons on ${fmtRange(f)} (${usd(s.min)}+ equip) 3-ton quotes.`;
     },
-    updated: today,
+    // updated 2026-11-12: last source edit of sales-tactics.ts
+    updated: '2026-11-12',
     related: { tons: [3, 3.5, 4, 5], brands: ['Goodman', 'Trane', 'Bosch', 'LG'], systems: { type: 'central-heat-pump', tons: [3, 4] } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -273,7 +278,8 @@ ${sizes.map((r) => `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">
       const f = fairRange('central-heat-pump', 3);
       return `3-ton heat pumps list at ${usd(s.min)}–${usd(s.max)} while installed quotes run ${fmtRange(f)}. How to hire an EPA-608 certified independent tech and protect OEM warranties.`;
     },
-    updated: today,
+    // updated 2026-11-12: last source edit of sales-tactics.ts
+    updated: '2026-11-12',
     related: { tons: [2, 3, 4, 5], brands: ['Goodman', 'ACiQ', 'MRCOOL', 'Gree', 'Bosch'], systems: { type: 'central-heat-pump', tons: 3 } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {

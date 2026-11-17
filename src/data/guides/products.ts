@@ -3,7 +3,7 @@
 import { lowestPrice, median, TIER_LABEL } from '../equipment';
 import { brandByName } from '../brands';
 import { fairRange, systemsWhere, usd, fmtRange, pct } from '../../lib/facts';
-import { today, src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
+import { src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
 import { foldedMatchup } from './fold-comparisons';
 import type { Guide } from './types';
 
@@ -13,7 +13,8 @@ export const PRODUCT_GUIDES: Guide[] = [
     get title() { return `${usd(brandByName('Goodman')!.priceMin)} Equip vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: Goodman vs Trane`; },
     h1: 'Goodman vs Trane vs Carrier: what the equipment costs and how much is markup',
     get description() { return `Goodman (${usd(brandByName('Goodman')!.priceMin)}+), Trane (${usd(brandByName('Trane')!.priceMin)}+) & Carrier equipment prices vs ${fmtRange(fairRange('central-heat-pump', 3))} 3-ton installed benchmarks.`; },
-    updated: today,
+    // updated 2026-11-17: per-size Goodman vs Trane leftovers; Carrier held out of that table
+    updated: '2026-11-17',
     related: { brands: ['Goodman', 'Trane', 'Carrier'], tons: [3], systems: { brand: ['Goodman', 'Trane', 'Carrier'] } },
     audit: { systemType: 'central-heat-pump', tons: 3, brand: 'Trane' },
     body: () => {
@@ -47,30 +48,25 @@ ${(() => {
 })()}
 
 ${(() => {
-  const moneyExact = (n: number) => {
-    const cents = Math.round(n * 100) / 100;
-    const hasCents = !Number.isInteger(cents);
-    return `$${cents.toLocaleString('en-US', { minimumFractionDigits: hasCents ? 2 : 0, maximumFractionDigits: 2 })}`;
+  const sizes = [1.5, 2, 2.5, 3, 3.5, 4, 5];
+  const rowFor = (brand: 'Goodman' | 'Trane', t: number) => {
+    const xs = systemsWhere({ brand, type: 'central-heat-pump', tons: t });
+    if (!xs.length) return null;
+    const listed = lowestPrice(cheapest(xs));
+    const mid = fairRange('central-heat-pump', t).mid;
+    return { t, n: xs.length, listed, mid, leftover: mid - listed };
   };
-  const brands = [
-    { name: 'Goodman', type: 'central-heat-pump' as const },
-    { name: 'Trane', type: 'central-heat-pump' as const },
-    { name: 'Carrier', type: 'mini-split' as const },
-  ];
-  const lines = brands.map((b) => {
-    const xs = systemsWhere({ brand: b.name, type: b.type });
-    if (!xs.length) return '';
-    const listed = xs.map(lowestPrice);
-    const meanListed = listed.reduce((a, n) => a + n, 0) / listed.length;
-    const markups = xs.map((s) => fairRange(s.systemType, s.tons, s.tier).mid - lowestPrice(s));
-    const meanMarkup = markups.reduce((a, n) => a + n, 0) / markups.length;
-    const meanPct = markups.reduce((a, n, i) => a + n / fairRange(xs[i].systemType, xs[i].tons, xs[i].tier).mid, 0) / markups.length;
-    return `<tr><td>${brandLink(b.name)}</td><td>${b.type === 'mini-split' ? 'Mini-split (all Carrier listings)' : 'Ducted heat pump'}</td><td class="r num">${xs.length}</td><td class="r num">${moneyExact(meanListed)}</td><td class="r num">${moneyExact(meanMarkup)}</td><td class="r num">${(Math.round(meanPct * 1000) / 10).toFixed(1)}%</td></tr>`;
+  const body = sizes.map((t) => {
+    const g = rowFor('Goodman', t);
+    const tr = rowFor('Trane', t);
+    if (!g && !tr) return '';
+    const cell = (r: NonNullable<ReturnType<typeof rowFor>> | null) => r ? `${usd(r.listed)} listed, ${usd(r.leftover)} leftover <span class="small muted">(${r.n})</span>` : '—';
+    return `<tr><td>${tonLink(t, `${t} ton`)}</td><td class="r num">${cell(g)}</td><td class="r num">${cell(tr)}</td></tr>`;
   }).join('\n');
-  return `<h2>Catalog-wide mean listed price and leftover at the benchmark midpoint</h2>
-<p>Each row is the mean public listed price for that brand's systems of the stated type, and the mean leftover when you subtract that listed price from the REMDB midpoint for the same size and tier. These means are computed only on this page (${asOf}).</p>
-<div class="tablewrap"><table><thead><tr><th>Brand</th><th>System type</th><th class="r">Count</th><th class="r">Mean listed (equipment)</th><th class="r">Mean leftover at midpoint <span class="badge b-est">est.</span></th><th class="r">Mean leftover share</th></tr></thead><tbody>
-${lines}
+  return `<h2>Goodman vs Trane leftover at the 3-ton-style midpoint, size by size</h2>
+<p>Each cell is the cheapest listed ducted heat pump of that brand and size, subtracted from the REMDB standard-tier midpoint for a ducted heat pump of the same size. These leftovers are computed only on this page (${asOf}), in whole dollars. Carrier is not in this table: every Carrier listing we have is a ductless mini-split, and comparing those leftovers with ducted midpoints would mix system types.</p>
+<div class="tablewrap"><table><thead><tr><th>Size</th><th class="r">Goodman ducted heat pump</th><th class="r">Trane ducted heat pump</th></tr></thead><tbody>
+${body}
 </tbody></table></div>`;
 })()}
 
@@ -103,7 +99,8 @@ ${foldedMatchup('lg-vs-trane-heat-pump-cost')}
     get title() { return `Bosch IDS Heat Pump Cost: ${usd(brandByName('Bosch')!.priceMin)}–${usd(brandByName('Bosch')!.priceMax)} Listed`; },
     h1: 'Bosch IDS inverter heat pump cost',
     get description() { return `What a Bosch IDS inverter heat pump should cost: equipment lists ${usd(brandByName('Bosch')!.priceMin)}–${usd(brandByName('Bosch')!.priceMax)} vs a ${fmtRange(fairRange('central-heat-pump', 3, 'high'))} 3-ton installed benchmark. Check your quote free.`; },
-    updated: today,
+    // updated 2026-11-17: Sold as vs certified cooling columns on the 5°F table
+    updated: '2026-11-17',
     related: { brands: ['Bosch'], tons: [2, 3, 5], systems: { brand: 'Bosch' } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'high', brand: 'Bosch' },
     body: () => {
@@ -149,16 +146,21 @@ ${(() => {
 ${(() => {
   const rows = bosch.filter((s) => s.systemType !== 'heat-pump-only' && s.energyStar?.heatingCapacity5F != null && s.energyStar?.heatingCapacity47F != null);
   if (!rows.length) return '';
+  const soldAs = (s: typeof rows[number]) => {
+    const m = s.title.match(/(\d+(?:\.\d+)?)\s*Ton/i);
+    return m ? Number(m[1]) : s.tons;
+  };
   const body = rows.map((s) => {
     const es = s.energyStar!;
     const retain = Math.round((es.heatingCapacity5F! / es.heatingCapacity47F!) * 1000) / 10;
-    return `<tr><td>${sysLink(s, `${s.components[0]}`)}</td><td class="r num">${s.tons}</td><td class="r num">${es.heatingCapacity5F!.toLocaleString('en-US')}</td><td class="r num">${es.heatingCapacity47F!.toLocaleString('en-US')}</td><td class="r num">${es.copAt5F ?? '—'}</td><td class="r num">${retain}%</td><td>AHRI #${es.ahriReferenceNumber}</td></tr>`;
+    const cool = es.coolingCapacity;
+    return `<tr><td>${sysLink(s, `${s.components[0]}`)}</td><td class="r num">${soldAs(s)}</td><td class="r num">${cool != null ? cool.toLocaleString('en-US') : '—'}</td><td class="r num">${es.heatingCapacity5F!.toLocaleString('en-US')}</td><td class="r num">${es.heatingCapacity47F!.toLocaleString('en-US')}</td><td class="r num">${es.copAt5F ?? '—'}</td><td class="r num">${retain}%</td><td>AHRI #${es.ahriReferenceNumber}</td></tr>`;
   }).join('\n');
-  return `<div class="tablewrap"><table><thead><tr><th>Bosch complete system</th><th class="r">Label tons</th><th class="r">Heating at 5°F (BTU/h)</th><th class="r">Heating at 47°F (BTU/h)</th><th class="r">COP at 5°F</th><th class="r">5°F as % of 47°F</th><th>AHRI</th></tr></thead><tbody>
+  return `<div class="tablewrap"><table><thead><tr><th>Bosch complete system</th><th class="r">Sold as</th><th class="r">Certified cooling (BTU/h)</th><th class="r">Heating at 5°F (BTU/h)</th><th class="r">Heating at 47°F (BTU/h)</th><th class="r">COP at 5°F</th><th class="r">5°F as % of 47°F</th><th>AHRI</th></tr></thead><tbody>
 ${body}
 </tbody></table></div>`;
 })()}
-<p class="small muted">Complete systems only (condenser-only pairings are omitted). Compare these 5°F numbers with the Mitsubishi figures on the <a href="/guides/mitsubishi-hyper-heat-cost/">Hyper-Heat guide</a>; the two catalogs are not interchangeable at a given nameplate size. Several Bosch pairings sold as 3-ton are certified well below 36,000 BTU/h of cooling, which is noted on the <a href="/guides/3-ton-heat-pump-ac-replacement-cost/#3-ton">size guide</a>.</p>
+<p class="small muted">Complete systems only (condenser-only pairings are omitted). "Sold as" is the tonnage in the retailer title; "Certified cooling" is the ENERGY STAR cooling capacity for the matched pair, which can be well below the nameplate. The BOVB-60RXB-M15S is sold as a 5-ton system but is certified at 34,200 BTU/h of cooling (AHRI #217895321), about 2.85 tons, so its 100% 5°F heating retention is relative to that smaller certified pairing. Compare these 5°F numbers with the Mitsubishi figures on the <a href="/guides/mitsubishi-hyper-heat-cost/">Hyper-Heat guide</a>; the two catalogs are not interchangeable at a given nameplate size. Several Bosch pairings sold as 3-ton are also certified well below 36,000 BTU/h of cooling, which is noted on the <a href="/guides/3-ton-heat-pump-ac-replacement-cost/#3-ton">size guide</a>.</p>
 <h2>Bosch IDS vs Mitsubishi Hyper-Heat</h2>
 <p>Bosch IDS and Mitsubishi Hyper-Heat are the two inverter lines compared below. Figures are the same listed prices and ratings (${asOf}).</p>
 ${foldedMatchup('bosch-vs-mitsubishi-heat-pump-cost')}
@@ -172,7 +174,8 @@ ${foldedMatchup('bosch-vs-mitsubishi-heat-pump-cost')}
     get title() { return `Mitsubishi Heat Pump Cost (Hyper-Heat): ${usd(brandByName('Mitsubishi')!.priceMin)}–${usd(brandByName('Mitsubishi')!.priceMax)}`; },
     h1: 'Mitsubishi Hyper-Heat (H2i) heat pump cost',
     get description() { return `Mitsubishi Hyper-Heat heat pump cost: ducted and ductless systems list ${usd(brandByName('Mitsubishi')!.priceMin)}–${usd(brandByName('Mitsubishi')!.priceMax)} vs installed benchmarks. SEER2, HSPF2 and AHRI ratings.`; },
-    updated: today,
+    // updated 2026-11-17: last source edit of products.ts
+    updated: '2026-11-17',
     related: { brands: ['Mitsubishi'], tons: [2, 2.5, 3], systems: { brand: 'Mitsubishi' } },
     audit: { systemType: 'mini-split', tons: 2, tier: 'high', brand: 'Mitsubishi' },
     body: () => {

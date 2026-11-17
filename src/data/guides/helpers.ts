@@ -6,7 +6,7 @@ import { brandSlug } from '../brands';
 import { fairRange, usd, fmtRange, seedDateLabel, type Range } from '../../lib/facts';
 import { SOURCES, type SourceId } from '../sources';
 
-export const today = new Date().toISOString().slice(0, 10);
+// Guide `updated` / dateModified must be a hand-set literal on each guide, not the build date.
 export const a = (url: string, text: string) => `<a href="${url}" rel="noopener" target="_blank">${text}</a>`;
 export const src = (id: SourceId, text?: string) => a(SOURCES[id].url, text ?? SOURCES[id].title);
 export const tonLink = (t: number, text?: string) => `<a href="${sizeGuidePath(t)}">${text ?? `${t}-ton`}</a>`;

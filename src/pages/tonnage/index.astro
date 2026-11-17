@@ -20,8 +20,18 @@ const steps = rows.slice(0, -1).map((from, i) => {
   const msListed = from.ms.median != null && to.ms.median != null ? to.ms.median - from.ms.median : null;
   const std = to.fair.mid - from.fair.mid;
   const high = to.fairHi.mid - from.fairHi.mid;
-  return { from: from.t, to: to.t, listed, acListed, msListed, std, high };
+  return {
+    from: from.t, to: to.t, listed, acListed, msListed, std, high,
+    hpN: [from.hp.count, to.hp.count] as [number, number],
+    acN: [from.ac.count, to.ac.count] as [number, number],
+    msN: [from.ms.count, to.ms.count] as [number, number],
+  };
 });
+const listedStep = (delta: number | null, n: [number, number]) => {
+  const counts = `<span class="small muted">(${n[0]}→${n[1]})</span>`;
+  if (n[0] < 3 || n[1] < 3 || delta == null) return `— ${counts}`;
+  return `${signed(delta)} ${counts}`;
+};
 ---
 <Base title={title} description={description}>
   <p class="crumbs"><a href="/">Home</a> / By tonnage</p>
@@ -45,17 +55,17 @@ const steps = rows.slice(0, -1).map((from, i) => {
   <p class="small muted">Installed ranges: REMDB ducted air-source heat pump replacement regression, restated in today's dollars. <a href="/about/#benchmarks">Method</a>.</p>
 
   <h2>What it costs to step up one size</h2>
-  <p>Each row is the adjacent-size difference, not the absolute price. Listed-median columns are the change in the median public online retail price (equipment only) for a ducted heat pump, an AC + furnace system, and a mini-split. Installed figures are the change in the REMDB midpoint. A negative listed step means the median listing at the larger size is cheaper than at the smaller size in our current catalog — listings are not a smooth curve.</p>
+  <p>Each row is the adjacent-size difference, not the absolute price. Listed-median columns are the change in the median public online retail price (equipment only) for a ducted heat pump, an AC + furnace system, and a mini-split; the listing counts for the two sizes are in each cell. A listed step is shown only when both sizes have at least 3 listings — thinner cells are blanked so a two-listing median cannot look like a market step. Installed figures are the change in the REMDB midpoint for a ducted heat pump. A negative listed step means the median listing at the larger size is cheaper than at the smaller size in our current catalog — listings are not a smooth curve.</p>
   <div class="tablewrap">
     <table>
-      <thead><tr><th>Step</th><th class="r">Listed median, ducted heat pump</th><th class="r">Listed median, AC + furnace</th><th class="r">Listed median, mini-split</th><th class="r">Installed midpoint, standard <span class="badge b-est">est.</span></th><th class="r">Installed midpoint, high-eff. <span class="badge b-est">est.</span></th></tr></thead>
+      <thead><tr><th>Step</th><th class="r">Listed median, ducted heat pump</th><th class="r">Listed median, AC + furnace</th><th class="r">Listed median, mini-split</th><th class="r">Installed midpoint, ducted heat pump, standard <span class="badge b-est">est.</span></th><th class="r">Installed midpoint, ducted heat pump, high-eff. <span class="badge b-est">est.</span></th></tr></thead>
       <tbody>
         {steps.map((s) => (
           <tr>
             <td>{s.from} → {s.to} ton</td>
-            <td class="r num">{signed(s.listed)}</td>
-            <td class="r num">{signed(s.acListed)}</td>
-            <td class="r num">{signed(s.msListed)}</td>
+            <td class="r num" set:html={listedStep(s.listed, s.hpN)} />
+            <td class="r num" set:html={listedStep(s.acListed, s.acN)} />
+            <td class="r num" set:html={listedStep(s.msListed, s.msN)} />
             <td class="r num">{signed(s.std)}</td>
             <td class="r num">{signed(s.high)}</td>
           </tr>

@@ -2,7 +2,7 @@
 // Per-size unique prose is preserved in sizeSpecific(); step-up dollar deltas stay on /tonnage/ only.
 import { lowestPrice, median, TONNAGES, type System } from '../equipment';
 import { fairRange, systemsWhere, statsOf, adderRange, lineSet, usd, fmtRange, listedSpan, pct } from '../../lib/facts';
-import { today, src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
+import { src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
 import { foldedModelMatchups, foldedTonnageSize, foldedInstalledBenchmarks } from './fold-comparisons';
 import type { Guide } from './types';
 
@@ -62,15 +62,16 @@ export const SIZE_GUIDES: Guide[] = [
       const instHigh = Math.max(...sizes.map((t) => fairRange('central-heat-pump', t, 'high').high));
       return `${usd(eq.min)}–${usd(eq.max)} vs ${usd(instLow)}–${usd(instHigh)}: Cost by Size`;
     },
-    h1: 'Heat pump & AC replacement cost by size, 1.5 to 5 tons',
+    h1: 'Ducted heat pump replacement cost by size, 1.5 to 5 tons',
     get description() {
       const sizes = [1.5, 2, 2.5, 3, 3.5, 4, 5];
       const eq = statsOf(systemsWhere({ type: 'central-heat-pump' }));
       const instLow = Math.min(...sizes.map((t) => fairRange('central-heat-pump', t, 'standard').low));
       const instHigh = Math.max(...sizes.map((t) => fairRange('central-heat-pump', t, 'high').high));
-      return `Listed heat pump & AC equipment and DOE installed benchmarks from 1.5 to 5 tons: ${usd(eq.min)}–${usd(eq.max)} listed vs ${usd(instLow)}–${usd(instHigh)} installed.`;
+      return `Ducted heat pump: ${usd(eq.min)}–${usd(eq.max)} listed vs ${usd(instLow)}–${usd(instHigh)} installed, 1.5 to 5 tons (DOE-lab benchmark). AC + furnace and mini-splits are in the tables.`;
     },
-    updated: today,
+    // updated 2026-11-17: title/meta limited to ducted heat pump ranges; dropped repeated leads
+    updated: '2026-11-17',
     related: { tons: [1.5, 2, 2.5, 3, 3.5, 4, 5], systems: { type: 'central-heat-pump' } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -107,7 +108,7 @@ ${listings}
 ${matchups}`;
       }).join('\n');
       return `
-<p>This guide covers every size from 1.5 to 5 tons. Every figure is computed from our catalog (${asOf}) or the DOE REMDB installed-cost benchmark.</p>
+<p>Every figure is computed from our catalog (${asOf}) or the DOE REMDB installed-cost benchmark. The listed and installed ranges in the title are ducted heat pumps only.</p>
 
 <h2>Listed equipment and installed benchmarks, every size</h2>
 <p>Each row is one nominal size (12,000 BTU/h per ton). Listed columns are public online retail prices for the equipment only; the installed columns are national-lab regressions, not a quote. ${remdbNote}</p>

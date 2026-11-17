@@ -4,7 +4,7 @@ import { lowestPrice, median, TONNAGES } from '../equipment';
 import { fairRange, systemsWhere, adderRange, newCircuitAdder, lineSet, equipmentStats, refrigerantOf, usd, fmtRange, pct } from '../../lib/facts';
 const ls = lineSet!;
 import { STATES, heatingCosts, EFFICIENCY } from '../states';
-import { today, src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
+import { src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
 import type { Guide } from './types';
 
 export const ADDON_GUIDES: Guide[] = [
@@ -21,7 +21,8 @@ export const ADDON_GUIDES: Guide[] = [
       const f = fairRange('central-heat-pump', 3);
       return `How to audit UV light, air scrubber, and bipolar ionization add-ons against ${usd(s.min)}–${usd(s.max)} 3-ton equipment and ${fmtRange(f)} installed benchmarks.`;
     },
-    updated: today,
+    // updated 2026-11-12: last source edit of addons.ts
+    updated: '2026-11-12',
     related: { tons: [2, 3, 4], brands: ['Goodman', 'Trane', 'Bosch'], systems: { type: 'central-heat-pump', tons: 3 } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -85,7 +86,8 @@ ${b3 ? `<tr><td>${sysLink(b3)} (${brandLink('Bosch')})</td><td class="r num">${u
       const f = fairRange('central-heat-pump', 3);
       return `DOE REMDB benchmarks an installed smart thermostat at ${fmtRange(t)} (mid ${usd(t.mid)}). How to spot thermostat markups on ${fmtRange(f)} 3-ton heat pump quotes.`;
     },
-    updated: today,
+    // updated 2026-11-12: last source edit of addons.ts
+    updated: '2026-11-12',
     related: { tons: [2, 3, 4], brands: ['Bosch', 'Goodman', 'Trane', 'Mitsubishi'], systems: { type: 'central-heat-pump', staging: 'inverter' } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'mid' },
     body: () => {
@@ -141,7 +143,8 @@ ${systemsTable(inv3.slice(0, 6))}
       const f = fairRange('central-heat-pump', 3);
       return `A 30-ft insulated copper line set lists at ${usd(ls.price)}. When you can flush and reuse existing copper vs replace it on a ${fmtRange(f)} 3-ton heat pump quote.`;
     },
-    updated: today,
+    // updated 2026-11-12: last source edit of addons.ts
+    updated: '2026-11-12',
     related: { tons: [2, 3, 4], brands: ['Goodman', 'Trane', 'LG', 'ACiQ'], systems: { type: 'central-heat-pump', tons: 3 } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -194,7 +197,8 @@ ${systemsTable(inv3.slice(0, 6))}
       const f = fairRange('central-heat-pump', 3);
       return `DOE REMDB values a new 240V circuit at ${usd(c)}. How to audit pad, disconnect box, whip, and surge protector add-ons on ${fmtRange(f)} 3-ton quotes.`;
     },
-    updated: today,
+    // updated 2026-11-12: last source edit of addons.ts
+    updated: '2026-11-12',
     related: { tons: [2, 3, 4], brands: ['Goodman', 'Bosch', 'Mitsubishi', 'Gree'], systems: { type: 'central-heat-pump', tons: 3, staging: 'inverter' } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -251,7 +255,8 @@ ${systemsTable(inv3.slice(0, 6))}
       const f = fairRange('central-heat-pump', 3);
       return `Secondary drain pans, SS2 overflow float switches, and condensate pumps on ${fmtRange(f)} 3-ton HVAC quotes (${usd(s.min)}–${usd(s.max)} equipment): what should be standard.`;
     },
-    updated: today,
+    // updated 2026-11-12: last source edit of addons.ts
+    updated: '2026-11-12',
     related: { tons: [2.5, 3, 4], brands: ['Goodman', 'Trane', 'Carrier'], systems: { type: 'central-heat-pump', tons: 3 } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -301,7 +306,8 @@ ${g3 ? `<tr><td>Lowest listed 3-ton heat pump: ${sysLink(g3)} (${brandLink('Good
       const f = fairRange('central-heat-pump', 3);
       return `How 5kW, 8kW, 10kW, and 15kW electric aux heat strips affect breaker size, ${usd(c)} circuit adders, operating bills, and ${fmtRange(f)} 3-ton heat pump quotes.`;
     },
-    updated: today,
+    // updated 2026-11-12: last source edit of addons.ts
+    updated: '2026-11-12',
     related: { tons: [2.5, 3, 4], brands: ['Goodman', 'Bosch', 'Mitsubishi', 'LG'], systems: { type: 'central-heat-pump', coldClimate: true } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {

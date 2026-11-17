@@ -1,7 +1,7 @@
 // Side-by-side cost comparisons. Every number is computed from the seed and REMDB at build time.
 import { lowestPrice, median, type System } from '../equipment';
 import { fairRange, systemsWhere, isInverter, usd, fmtRange, pct } from '../../lib/facts';
-import { today, src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, priceOf, remdbNote } from './helpers';
+import { src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, priceOf, remdbNote } from './helpers';
 import { foldedMatchup } from './fold-comparisons';
 import type { Guide } from './types';
 
@@ -13,7 +13,8 @@ export const COMPARISON_GUIDES: Guide[] = [
     get title() { return `${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))} Equip vs ${fmtRange(fairRange('ac-furnace', 3))} Installed: HP vs AC+Furnace`; },
     h1: 'Heat pump vs AC + gas furnace: replacement cost compared',
     get description() { return `Compare heat pump (${fmtRange(fairRange('central-heat-pump', 3))}) vs AC + gas furnace (${fmtRange(fairRange('ac-furnace', 3))}) installed benchmarks and ${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))}+ equipment by size.`; },
-    updated: today,
+    // updated 2026-11-17: last source edit of comparisons.ts
+    updated: '2026-11-17',
     related: { tons: [2, 3, 4, 5], systems: { type: ['central-heat-pump', 'ac-furnace'], tons: [3, 4] } },
     audit: { systemType: 'ac-furnace', tons: 3 },
     body: () => {
@@ -85,7 +86,8 @@ ${foldedMatchup('trane-vs-goodman-ac-furnace-cost')}`;
     get title() { const mz = systemsWhere({ type: 'mini-split', multiZone: true }); return `${usd(lowestPrice(cheapest(mz)))} Equip vs ${fmtRange(fairRange('mini-split', 2, 'high'))} Installed: Multi-Zone Cost`; },
     h1: 'Multi-zone mini-split cost',
     get description() { const mz = systemsWhere({ type: 'mini-split', multiZone: true }); return `Multi-zone mini-split heat pumps list from ${usd(lowestPrice(cheapest(mz)))} to ${usd(Math.max(...mz.map(lowestPrice)))} vs ${fmtRange(fairRange('mini-split', 2, 'high'))} 2-ton installed benchmark.`; },
-    updated: today,
+    // updated 2026-11-17: last source edit of comparisons.ts
+    updated: '2026-11-17',
     get related() { return { brands: [...new Set(systemsWhere({ type: 'mini-split', multiZone: true }).map((x) => x.brand))], tons: [1.5, 2, 3], systems: { type: 'mini-split' as const, multiZone: true } }; },
     audit: { systemType: 'mini-split', tons: 2, tier: 'high' },
     body: () => {
@@ -129,7 +131,8 @@ ${sizes.map((t) => { const s = cheapest(mz.filter((x) => x.tons === t)); return 
     get title() { return `Condenser Only vs Full System: ${fmtRange(fairRange('heat-pump-only', 3))} Installed`; },
     h1: 'Heat pump condenser only vs full system replacement',
     get description() { const c = cheapest(systemsWhere({ type: 'heat-pump-only', tons: 3 })); return `Replace just the outdoor unit or the whole system? 3-ton heat pump condensers list from ${usd(lowestPrice(c))} (${fmtRange(fairRange('heat-pump-only', 3))} installed) vs ${fmtRange(fairRange('central-heat-pump', 3))} full system.`; },
-    updated: today,
+    // updated 2026-11-17: last source edit of comparisons.ts
+    updated: '2026-11-17',
     get related() { return { brands: [...new Set(systemsWhere({ type: 'heat-pump-only' }).map((x) => x.brand))], tons: [3, 4, 5], systems: { type: 'heat-pump-only' as const } }; },
     audit: { systemType: 'heat-pump-only', tons: 3 },
     body: () => {
@@ -170,7 +173,8 @@ ${cond.some((s) => s.prices.length > 1) ? `<p>Several condensers are listed at t
     get title() { return `${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))} Equip vs ${fmtRange(fairRange('central-heat-pump', 3, 'mid'))} Installed: Inverter Cost`; },
     h1: 'Inverter vs single-stage heat pump: what the upgrade costs',
     get description() { return `Variable-speed inverter vs single-stage heat pump prices (${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))}+ 3-ton equipment vs ${fmtRange(fairRange('central-heat-pump', 3, 'mid'))} mid-tier installed).`; },
-    updated: today,
+    // updated 2026-11-17: last source edit of comparisons.ts
+    updated: '2026-11-17',
     related: { tons: [2, 3, 4], systems: { type: 'central-heat-pump', staging: 'inverter' } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'mid' },
     body: () => {

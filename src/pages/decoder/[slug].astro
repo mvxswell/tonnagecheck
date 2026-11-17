@@ -77,7 +77,7 @@ const ld = [
   <h1>{d.h1}</h1>
   <p class="lead">{d.lead}</p>
   {d.slug === 'lg' && catalogForBrand.length > 0 && (
-    <p>The median listed price of the {catalogForBrand.length} LG systems in our catalog is {usd(statsOf(catalogForBrand).median)} (equipment only, {seedDateLabel}). That figure is the midpoint of the listings this decoder is meant to help you identify on a quote.</p>
+    <p>Listed LG equipment in our catalog ({seedDateLabel}), by system type — these are separate medians, not a mixed all-types average: ducted heat pumps {usd(statsOf(catalogForBrand.filter((s) => s.systemType === 'central-heat-pump')).median)} ({catalogForBrand.filter((s) => s.systemType === 'central-heat-pump').length} listings), mini-splits {usd(statsOf(catalogForBrand.filter((s) => s.systemType === 'mini-split')).median)} ({catalogForBrand.filter((s) => s.systemType === 'mini-split').length} listings).</p>
   )}
   <p class="small muted">Updated {d.updated} · Every code below is transcribed from the manufacturer documents listed under <a href="#sources">Sources</a>. Where a document did not define something, we leave it out.</p>
 

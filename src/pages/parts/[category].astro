@@ -14,7 +14,6 @@ export function getStaticPaths() {
 
 const { cat } = Astro.props as { cat: PartCategoryWithStats };
 
-const meanPrice = cat.items.reduce((sum, item) => sum + item.price, 0) / cat.count;
 const fmtExact = (n: number) =>
   Number.isInteger(n)
     ? `$${n.toLocaleString('en-US')}`
@@ -84,13 +83,6 @@ const ld = [
       <div class="v num">{fmtExact(cat.medianPrice)}</div>
       <div class="small muted">Public online hardware price (before labor)</div>
     </div>
-    {cat.slug === 'mini-split-brackets-covers' && (
-    <div class="card">
-      <div class="small muted">Category mean listed price</div>
-      <div class="v num">{fmtExact(meanPrice)}</div>
-      <div class="small muted">Average of the {cat.count} live-verified SKUs in this category</div>
-    </div>
-    )}
     <div class="card">
       <div class="small muted">Sub-categories covered</div>
       <div class="v num">{cat.subGroups.length} groups</div>

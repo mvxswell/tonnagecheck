@@ -52,6 +52,23 @@ const coldSentence = clim.kind === 'heating'
   : `Part of ${s.name} (${clim.coldCounties} of ${s.climate.countiesListed} counties) is in climate zone 4 or colder.`;
 const checkedOn = new Date(STATE_SEED_DATE).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 const pctChange = (a: number, b: number | null) => (b ? `${a >= b ? '+' : ''}${Math.round(((a - b) / b) * 100)}%` : '');
+const moneyDelta = (n: number, digits = 2) => `${n >= 0 ? '+' : ''}${n.toFixed(digits)}`;
+const elecRates = STATES.map((x) => x.electricity?.centsPerKwh).filter((n): n is number => n != null).sort((a, b) => a - b);
+const gasRates = STATES.map((x) => x.gas?.dollarsPerMcf).filter((n): n is number => n != null).sort((a, b) => a - b);
+const midOf = (xs: number[]) => {
+  const i = (xs.length - 1) / 2;
+  const lo = Math.floor(i), hi = Math.ceil(i);
+  return lo === hi ? xs[lo] : (xs[lo] + xs[hi]) / 2;
+};
+const elecMedian = midOf(elecRates);
+const gasMedian = midOf(gasRates);
+const vsElecMedian = e ? e.centsPerKwh - elecMedian : null;
+const vsElecPct = e ? ((e.centsPerKwh / elecMedian) - 1) * 100 : null;
+const vsElecLow = e ? e.centsPerKwh - elecRates[0] : null;
+const vsGasMedian = g ? g.dollarsPerMcf - gasMedian : null;
+const vsGasPct = g ? ((g.dollarsPerMcf / gasMedian) - 1) * 100 : null;
+const elecYoYPts = e?.priorCentsPerKwh != null ? e.centsPerKwh - e.priorCentsPerKwh : null;
+const gasYoYPts = g?.priorDollarsPerMcf != null ? g.dollarsPerMcf - g.priorDollarsPerMcf : null;
 ---
 <Base title={title} description={description} jsonld={ld} noindex={!s.complete}>
   <p class="crumbs"><a href="/">Home</a> / <a href="/states/">States</a> / {s.name}</p>
@@ -67,6 +84,21 @@ const pctChange = (a: number, b: number | null) => (b ? `${a >= b ? '+' : ''}${M
     <div class="card"><div class="small muted">Residential natural gas</div><div class="v num">{g ? `$${g.dollarsPerMcf}/Mcf` : '—'}</div><div class="small muted">{g ? <>{g.year} average{g.priorDollarsPerMcf ? `, ${pctChange(g.dollarsPerMcf, g.priorDollarsPerMcf)} vs prior year` : ''}. <a href={SOURCES.eiaGas.url}>EIA</a></> : 'Not reported'}</div></div>
     <div class="card"><div class="small muted">IECC climate zones</div><div class="v num">{clim.zoneList || '—'}</div><div class="small muted">{s.climate.countiesListed} counties listed by <a href={SOURCES.pnnlClimateZones.url}>PNNL</a></div></div>
   </div>
+
+  {(vsElecMedian != null || vsGasMedian != null) && (
+    <section>
+      <h2>How {s.name} energy prices sit against the 51-state set</h2>
+      <p>These gaps are computed from the same EIA rates already on this page, measured against the other 50 states plus DC in our seed, and the point changes versus last year. The 51-state medians themselves are already on the <a href="/states/">state comparison table</a>, so this section reports only the {s.name} gaps.</p>
+      <ul>
+        {vsElecMedian != null && vsElecPct != null && vsElecLow != null && e && (
+          <li><b>Electricity:</b> {moneyDelta(vsElecMedian)}¢ per kWh versus the 51-state median ({moneyDelta(vsElecPct, 1)}%), and {vsElecLow.toFixed(1)}¢ above the lowest reported state rate. {e.priorCentsPerKwh != null && elecYoYPts != null && <>A year earlier that rate was {e.priorCentsPerKwh}¢/kWh, a {moneyDelta(elecYoYPts)}¢ change.</>}</li>
+        )}
+        {vsGasMedian != null && vsGasPct != null && g && (
+          <li><b>Natural gas:</b> {moneyDelta(vsGasMedian)} versus the 51-state median $/Mcf ({moneyDelta(vsGasPct, 1)}%). {g.priorDollarsPerMcf != null && gasYoYPts != null && <>The prior-year average was ${g.priorDollarsPerMcf.toFixed(2)}/Mcf, a ${moneyDelta(gasYoYPts)} change.</>}</li>
+        )}
+      </ul>
+    </section>
+  )}
 
   <h2>Installed cost by size in {s.name}</h2>
   <p class="small muted">REMDB (National Laboratory of the Rockies, formerly NREL) replacement-cost benchmark, restated from 2023 dollars with CPI-U. It is a national average: there is no public, citable state adjustment, so expect higher-cost metros to run above the midpoint. <a href="/about/#benchmarks">Method</a></p>

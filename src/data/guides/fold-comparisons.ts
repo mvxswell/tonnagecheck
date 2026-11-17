@@ -110,7 +110,7 @@ export function foldedInstalledBenchmarks(tons: number): string {
   const listed = (s: { count: number; min: number | null; max: number | null }) =>
     s.count ? (s.min === s.max ? usd(s.min) : `${usd(s.min)}–${usd(s.max)}`) : '—';
   const hideNote = tons <= 1.5
-    ? `<p class="small muted">At ${tons} tons this table shows the same two system types previously published: ducted heat pump and mini-split. The catalog also has AC + furnace and condenser-only listings in the table below; we do not publish a REMDB installed range for those two types at this size.</p>`
+    ? `<p class="small muted">At ${tons} tons the installed columns are the ducted heat pump and, where the catalog has them, the mini-split REMDB ranges. AC + furnace and condenser-only listings are in the table below; we do not publish a REMDB installed range for those two types at this size.</p>`
     : '';
   return `
 <h3>Installed-cost benchmark by system type and efficiency</h3>
@@ -142,7 +142,7 @@ export function foldedTonnageSize(tons: number): string {
   const list = parts.length ? `${parts.join(', ')} and ${last}` : last;
   return `
 <h2 id="1-5-ton">${tons}-ton equipment and installed cost</h2>
-<p>This guide covers every size from 1.5 to 5 tons, including ${tons} tons. We track ${all.length} ${tons}-ton systems: ${list}.${cheapestHp ? ` Lowest listed ducted ${tons}-ton heat pump: ${sysLink(cheapestHp)} at ${usd(lowestPrice(cheapestHp))}.` : ''}</p>
+<p>We track ${all.length} ${tons}-ton systems: ${list}.${cheapestHp ? ` Lowest listed ducted ${tons}-ton heat pump: ${sysLink(cheapestHp)} at ${usd(lowestPrice(cheapestHp))}.` : ''}</p>
 <p>The standard-efficiency installed benchmark for a ${tons}-ton ducted heat pump is ${rangeText(f)}; high-efficiency is ${rangeText(fh)}.</p>
 ${foldedInstalledBenchmarks(tons)}
 ${systemsTable(all, { showType: true, caption: `Public online retail prices for ${tons}-ton equipment only, ${asOf}.` })}`;
@@ -154,11 +154,12 @@ export function foldedRefrigerantBrandLists(): string {
   const r454b = SYSTEMS.filter((s) => refrigerantOf(s) === 'R-454B');
   const r32S = statsOf(r32);
   const r454bS = statsOf(r454b);
+  const r454bEs = r454b.filter((s) => s.energyStar).length;
   const r32Brands = [...new Set(r32.map((s) => s.brand))];
   const r454bBrands = [...new Set(r454b.map((s) => s.brand))];
   return `
 <ul>
 <li><b>R-32 (GWP 675 — ${r32.length} systems listed from ${usd(r32S.min)} to ${usd(r32S.max)}, median ${usd(r32S.median)}):</b> Used by ${r32Brands.map((b) => brandLink(b)).join(', ')}.</li>
-<li><b>R-454B (GWP 470, as published in the ENERGY STAR records we cite — ${r454b.length} systems listed from ${usd(r454bS.min)} to ${usd(r454bS.max)}, median ${usd(r454bS.median)}):</b> Used by ${r454bBrands.map((b) => brandLink(b)).join(', ')}. R-410A's GWP is 2,088 (${src('epaTechTransitions', 'EPA')}).</li>
+<li><b>R-454B (GWP 470, as published in the ENERGY STAR records we cite — ${r454b.length} listings (${r454bEs} with an ENERGY STAR record) listed from ${usd(r454bS.min)} to ${usd(r454bS.max)}, median ${usd(r454bS.median)}):</b> Used by ${r454bBrands.map((b) => brandLink(b)).join(', ')}. R-410A's GWP is 2,088 (${src('epaTechTransitions', 'EPA')}).</li>
 </ul>`;
 }

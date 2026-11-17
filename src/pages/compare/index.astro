@@ -25,6 +25,7 @@ const cond = systemsWhere({ type: 'heat-pump-only' });
 const hpMed = statsOf(hp).median!;
 const msMed = statsOf(ms).median!;
 const acfMean = meanOf(acf);
+const acfMed = statsOf(acf).median!;
 const condMed = statsOf(cond).median!;
 
 const folded = [
@@ -62,29 +63,34 @@ const jsonld = {
           <tr>
             <th>System type</th>
             <th class="r">Count</th>
-            <th class="r">Catalog figure (equipment only)</th>
+            <th class="r">Median listed (equipment only)</th>
+            <th class="r">Mean listed (equipment only)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Ducted heat pump, median listed</td>
+            <td>Ducted heat pump</td>
             <td class="r num">{hp.length}</td>
             <td class="r num">{moneyExact(hpMed)}</td>
+            <td class="r num">{moneyExact(meanOf(hp))}</td>
           </tr>
           <tr>
-            <td>Mini-split, median listed</td>
+            <td>Mini-split</td>
             <td class="r num">{ms.length}</td>
             <td class="r num">{moneyExact(msMed)}</td>
+            <td class="r num">{moneyExact(meanOf(ms))}</td>
           </tr>
           <tr>
-            <td>AC + furnace, mean listed</td>
+            <td>AC + furnace</td>
             <td class="r num">{acf.length}</td>
+            <td class="r num">{moneyExact(acfMed)}</td>
             <td class="r num">{moneyExact(acfMean)}</td>
           </tr>
           <tr>
-            <td>Condenser-only, median listed</td>
+            <td>Condenser-only</td>
             <td class="r num">{cond.length}</td>
             <td class="r num">{moneyExact(condMed)}</td>
+            <td class="r num">{moneyExact(meanOf(cond))}</td>
           </tr>
         </tbody>
       </table>

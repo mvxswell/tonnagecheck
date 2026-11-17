@@ -2,7 +2,7 @@
 // Every dollar figure is computed from src/lib/facts.ts or src/data/equipment.ts; non-price claims cite src/data/sources.ts.
 import { lowestPrice, median, TONNAGES } from '../equipment';
 import { fairRange, systemsWhere, equipmentStats, refrigerantOf, usd, fmtRange } from '../../lib/facts';
-import { today, src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
+import { src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
 import type { Guide } from './types';
 
 export const DIAGNOSTIC_GUIDES: Guide[] = [
@@ -19,7 +19,8 @@ export const DIAGNOSTIC_GUIDES: Guide[] = [
       const f = fairRange('ac-furnace', 3);
       return `Verify a cracked heat exchanger claim before paying ${fmtRange(f)} installed (${usd(s.min)}+ 3-ton AC + furnace equipment): CO ppm, camera tests & OEM warranties.`;
     },
-    updated: today,
+    // updated 2026-10-30: last source edit of diagnostics.ts
+    updated: '2026-10-30',
     related: { tons: [3, 4, 5], brands: ['Goodman', 'Trane'], systems: { type: 'ac-furnace', tons: [3, 4] } },
     audit: { systemType: 'ac-furnace', tons: 3 },
     body: () => {
@@ -72,7 +73,8 @@ ${afSys.length ? `<h3>Listed AC + gas furnace packages in our seed</h3>${systems
       const f3 = fairRange('central-heat-pump', 3);
       return `When a capacitor, contactor, or ECM blower fails, turnover techs push ${fmtRange(f3)} replacements. Compare against ${usd(lowestPrice(c3))} condenser & system costs.`;
     },
-    updated: today,
+    // updated 2026-10-30: last source edit of diagnostics.ts
+    updated: '2026-10-30',
     related: { tons: [3, 4, 5], brands: ['Goodman', 'Trane', 'LG'], systems: { type: 'heat-pump-only', tons: [3, 4, 5] } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -124,7 +126,8 @@ ${c4 ? `<tr><td>4-ton outdoor heat pump condenser only: ${sysLink(c4)} (${brandL
       const f = fairRange('central-heat-pump', 3);
       return `Diagnose a stuck TXV vs low refrigerant, check AHRI TXV rules, and compare repair quotes to ${usd(s.min)}–${usd(s.max)} 3-ton equipment (${fmtRange(f)} installed).`;
     },
-    updated: today,
+    // updated 2026-10-30: last source edit of diagnostics.ts
+    updated: '2026-10-30',
     related: { tons: [2.5, 3, 4], brands: ['Goodman', 'Trane', 'Bosch', 'Mitsubishi'], systems: { type: 'central-heat-pump', tons: 3 } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -175,7 +178,8 @@ ${bSys.slice(0, 1).map((s) => `<tr><td>${sysLink(s)} (${brandLink(s.brand)}, ${s
       const f3 = fairRange('central-heat-pump', 3);
       return `Leaking evaporator coil? Weigh a warranty coil swap against new 3-ton equipment (${usd(s3.min)}–${usd(s3.max)} listed, ${fmtRange(f3)} installed) and EPA R-454B/R-32 rules.`;
     },
-    updated: today,
+    // updated 2026-10-30: last source edit of diagnostics.ts
+    updated: '2026-10-30',
     related: { tons: [2.5, 3, 3.5, 4], brands: ['Goodman', 'Trane', 'Carrier', 'Bosch'], systems: { type: 'central-heat-pump', tons: [3, 4] } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {

@@ -75,3 +75,8 @@ export const listedSpan = (min: number | null | undefined, max: number | null | 
   min == null || max == null ? '—' : min === max ? usd(min) : `${usd(min)}–${usd(max)}`;
 export const pct = (n: number) => `${Math.round(n * 100)}%`;
 export { usd, isInverter };
+
+/** Always prints cents, so a computed mean can stay unique when the rounded dollar form already appears elsewhere. */
+export const moneyCents = (n: number) =>
+  `$${(Math.round(n * 100) / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+

@@ -6,7 +6,7 @@ import { comparisonsForBrand } from '../../data/comparisons';
 import { isCompareMerged, isCompareIndexed, sizeGuidePath, comparePath } from '../../data/prune';
 import { SYSTEM_TYPE_LABEL, lowestPrice } from '../../data/equipment';
 import { SOURCES } from '../../data/sources';
-import { usd, fmtRange, seedDateLabel } from '../../lib/facts';
+import { usd, fmtRange, seedDateLabel, fairRange } from '../../lib/facts';
 import { SITE } from '../../config';
 import { decoderForBrand } from '../../data/decoder/index';
 import { brandMeta, NEAR_PAGE1_GUIDES } from '../../data/seo';
@@ -34,11 +34,15 @@ const brandCmpCards = brandCmps.filter((c) => {
   return true;
 });
 const refRow = b.rows.find((r) => r.tons === 3) ?? b.rows[0];
-const seo = brandMeta(b, refRow.fair);
+const ductedStd3 = fairRange('central-heat-pump', 3, 'standard');
+const ductedHigh3 = fairRange('central-heat-pump', 3, 'high');
+const seo = brandMeta(b, ductedStd3);
+const article = /^[aeiou]/i.test(b.name) ? 'an' : 'a';
+
 const extra = brandExtra(b, refRow.fair);
 const brandGuides = NEAR_PAGE1_GUIDES.filter((g) => g.brand === b.name);
-const title = seo?.title ?? `${usd(b.priceMin)} Equip vs ${fmtRange(refRow.fair)} Installed: ${b.name} HVAC`;
-const description = seo?.description ?? `${b.systems.length} ${b.name} systems listed from ${usd(b.priceMin)} to ${usd(b.priceMax)} (${b.tonnages[0]}–${b.tonnages[b.tonnages.length - 1]}T) vs ${fmtRange(refRow.fair)} installed benchmark. Audit a ${b.name} quote free.`;
+const title = seo?.title ?? `${usd(b.priceMin)} Equip vs ${fmtRange(ductedStd3)} Installed: ${b.name} HVAC`;
+const description = seo?.description ?? `${b.systems.length} ${b.name} systems listed ${usd(b.priceMin)}–${usd(b.priceMax)} vs ${fmtRange(ductedStd3)} standard / ${fmtRange(ductedHigh3)} high-eff. 3-ton ducted installed. Audit ${article} ${b.name} quote free.`;
 const ld = [
   {
     '@context': 'https://schema.org', '@type': 'CollectionPage', name: `${b.name} HVAC equipment prices`, url: `${SITE.url}/brands/${b.slug}/`, description,
@@ -58,6 +62,7 @@ const ld = [
   <p class="crumbs"><a href="/">Home</a> / <a href="/brands/">Brands</a> / {b.name}</p>
   <h1>{seo?.h1 ?? `${b.name} HVAC prices: equipment vs installed`}</h1>
   <p class="lead">{b.systems.length} real {b.name} listings ({b.types.map((t) => shortType[t]).join(', ')}) with prices captured {seedDateLabel}, compared with the DOE national-lab installed-cost benchmark for the same size and efficiency.</p>
+  <p class="small muted">A 3-ton ducted heat pump, any brand, benchmarks at {fmtRange(ductedStd3)} standard and {fmtRange(ductedHigh3)} high-efficiency (REMDB national-lab estimate).</p>
 
   <div class="grid kp">
     <div class="card"><div class="small muted">Listed equipment price span</div><div class="v num">{usd(b.priceMin)}–{usd(b.priceMax)}</div><div class="small muted">Median {usd(b.priceMedian)} across {b.systems.length} systems</div></div>
@@ -65,13 +70,13 @@ const ld = [
     <div class="card"><div class="small muted">ENERGY STAR matched pairings</div><div class="v num">{b.energyStarCount} of {b.systems.length}</div><div class="small muted">{b.coldClimateCount} cold-climate certified</div></div>
   </div>
   {extra && <Fragment set:html={extra.summaryHtml} />}
-  <p><a class="btn" href={auditHref}>Audit a {b.name} quote</a> <a class="btn ghost" href="/auditor/#audit">Grade it, then request a second opinion</a></p>
+  <p><a class="btn" href={auditHref}>Audit {article} {b.name} quote</a> <a class="btn ghost" href="/auditor/#audit">Grade it, then request a second opinion</a></p>
   {seo && (
     <p class="small"><b>Before you sign a {b.name} quote:</b> {brandGuides.map((g) => <><a href={`/guides/${g.slug}/`}>{g.label}</a> · </>)}<a href="/guides/heat-pump-rebates-and-ahri-certificate-check/">check the AHRI certificate &amp; 2026 rebates</a> · <a href="/guides/independent-hvac-tech-vs-big-company/">independent tech vs big company</a></p>
   )}
 
   <h2>{extra?.sizeHeading ?? `${b.name} listed price vs installed benchmark, by size`}</h2>
-  <p class="small muted">Listed = lowest to highest public online price for {b.name} equipment at that size. Installed benchmark = REMDB (National Laboratory of the Rockies, formerly NREL) replacement-cost range for those systems' type and efficiency, restated in today's dollars; an estimate and a national average. <a href="/about/#benchmarks">Method</a></p>
+  <p class="small muted">Listed is the public online price span for {b.name} at that size. Installed is the REMDB national-lab range for the same type and efficiency. <a href="/about/#benchmarks">Method</a></p>
   <div class="tablewrap">
     <table>
       <thead><tr><th>Size &amp; type</th><th class="r">Listed equipment</th><th class="r">Installed benchmark <span class="badge b-est">est.</span></th><th class="r">Midpoint</th><th class="r">Non-equipment at mid</th></tr></thead>
@@ -88,13 +93,13 @@ const ld = [
       </tbody>
     </table>
   </div>
-  <p class="small muted">"Non-equipment at midpoint" is the benchmark midpoint minus the lowest listed {b.name} price at that size: roughly what a fairly priced install spends on labor, materials, permits, overhead and margin.</p>
+  <p class="small muted">Non-equipment at midpoint = installed mid minus the lowest listed {b.name} price at that size.</p>
   {extra && <Fragment set:html={extra.sectionsHtml} />}
 
   <h2>Specs: SEER2, HSPF2 and cold-climate performance</h2>
   {cold.length > 0 ? (
     <>
-      <p>{cold.length} {b.name} {cold.length === 1 ? 'pairing is' : 'pairings are'} certified by ENERGY STAR as cold climate, which requires at least 8.1 HSPF2 (ducted) or 8.5 HSPF2 (ductless), a COP of at least 1.75 at 5°F and at least 70% of rated heating capacity at 5°F (<a href={SOURCES.esCriteria.url}>ENERGY STAR criteria</a>).</p>
+      <p>{cold.length} {b.name} {cold.length === 1 ? 'pairing is' : 'pairings are'} in the ENERGY STAR cold-climate dataset. The 5°F COP and capacity-ratio thresholds are in the <a href={SOURCES.esCriteria.url}>ENERGY STAR criteria</a>; the table is the certified pairing.</p>
       <div class="tablewrap"><table>
         <thead><tr><th>System</th><th class="r">SEER2</th><th class="r">HSPF2</th><th class="r">COP at 5°F</th><th class="r">Capacity 5°F / 47°F</th><th class="r">AHRI #</th></tr></thead>
         <tbody>{cold.map((s) => (
@@ -107,11 +112,7 @@ const ld = [
   )}
 
   <h2>Tax credits and rebates for {b.name} equipment</h2>
-  <div class="rbx">
-    <div class="card"><b>Federal 25C tax credit</b> <span class="badge b-red">Not available</span><p class="small">The IRS lists the energy efficient home improvement credit as not allowed for property placed in service after Dec. 31, 2025, so no {b.name} system installed in 2026 qualifies, cold-climate or not. ({SOURCES.irs25c.note}) <a href={SOURCES.irsObbba.url}>IRS</a> · <a href={SOURCES.irs25c.url}>25C</a></p></div>
-    {b.types.some((t) => t !== 'ac-furnace') && <div class="card"><b>HEAR / HEEHR heat pump rebate</b> <span class="badge b-over">Check eligibility</span><p class="small">{SOURCES.hearStatute.note} Since DOE Program Notice 26-2 (May 2026) it no longer covers fuel switching: it pays to replace existing electric heating or cooling, not a gas, oil or propane furnace, and insulation and air sealing come first. Run by state energy offices. <a href={SOURCES.hearStatute.url}>Statute</a> · <a href={SOURCES.doePn262.url}>Program Notice 26-2</a> · <a href="/states/">Your state</a></p></div>}
-    <div class="card"><b>Utility and state programs</b> <span class="badge b-fair">Worth checking</span><p class="small">Some require ENERGY STAR or cold-climate certification for the exact pairing; ask for the AHRI certificate. <a href={SOURCES.esRebateFinder.url}>ENERGY STAR Rebate Finder</a> · <a href={SOURCES.dsire.url}>DSIRE</a></p></div>
-  </div>
+  <p class="small">The federal 25C credit is not allowed for property placed in service after Dec. 31, 2025 (<a href={SOURCES.irsObbba.url}>IRS</a>). Income-qualified HEAR rebates and utility programs may still apply; they are run by state offices and often need an AHRI certificate for the exact {b.name} pairing. <a href="/guides/heat-pump-rebates-and-ahri-certificate-check/">Rebates and the AHRI check</a> · <a href="/states/">Your state</a> · <a href={SOURCES.esRebateFinder.url}>ENERGY STAR Rebate Finder</a> · <a href={SOURCES.dsire.url}>DSIRE</a></p>
 
   {decoder && (
     <div class="card">
@@ -125,8 +126,8 @@ const ld = [
   <FilterableSystems systems={b.systems} label={`Search ${b.name} systems`} />
 
   <div class="cta card">
-    <h2>Got a {b.name} quote?</h2>
-    <p>Enter the size, efficiency and price, and we'll grade it A–F against these listings and the installed benchmark, highlighting {b.name} equipment.</p>
+    <h2>Got {article} {b.name} quote?</h2>
+    <p>Grade the size, efficiency and price against these {b.name} listings and the installed benchmark.</p>
     <a class="btn" href={auditHref}>Audit my {b.name} quote</a>
   </div>
 

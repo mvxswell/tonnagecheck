@@ -4,7 +4,7 @@ import { lowestPrice, median, TONNAGES } from '../equipment';
 import { BRANDS } from '../brands';
 import { fairRange, systemsWhere, adderRange, newCircuitAdder, refrigerantGwp, refrigerantOf, usd, fmtRange, pct } from '../../lib/facts';
 import { SOURCES } from '../sources';
-import { today, src, tonLink, brandLink, sysLink, auditLink, asOf, rangeText, remdbNote } from './helpers';
+import { src, tonLink, brandLink, sysLink, auditLink, asOf, rangeText, remdbNote } from './helpers';
 import { foldedMatchup, foldedRefrigerantBrandLists } from './fold-comparisons';
 import type { Guide } from './types';
 
@@ -14,7 +14,8 @@ export const TECHNICAL_GUIDES: Guide[] = [
     get title() { return `${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))} Equip vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: R-454B vs R-32`; },
     h1: 'R-410A vs R-454B vs R-32: what the refrigerant transition means for your quote',
     get description() { return `EPA refrigerant rules for R-410A, R-454B, and R-32: GWP limits, ${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))}+ 3-ton equipment prices, and ${fmtRange(fairRange('central-heat-pump', 3))} installed benchmarks.`; },
-    updated: today,
+    // updated 2026-11-17: dropped the leftover R-410A combined-price sum; clarified R-454B listing vs ENERGY STAR counts
+    updated: '2026-11-17',
     related: { tons: [3], systems: { type: 'central-heat-pump', tons: 3 } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -41,9 +42,8 @@ ${(() => {
   if (leftover.length < 2) return '';
   const priced = leftover.map((s) => ({ s, p: lowestPrice(s) })).sort((a, b) => a.p - b.p);
   const spread = priced[priced.length - 1].p - priced[0].p;
-  const combined = priced.reduce((a, x) => a + x.p, 0);
   const aciq = leftover.find((s) => s.brand === 'ACiQ');
-  return `<p>The ${leftover.length} leftover R-410A systems in this catalog are both 2.5-ton AC + furnace units: ${priced.map((x) => `${sysLink(x.s)} at ${usd(x.p)}`).join(' and ')}. The listed spread between them is ${usd(spread)}, and the two listings combined are ${usd(combined)}.${aciq && aciq.specs.eer2 != null ? ` The ${sysLink(aciq, 'ACiQ')} unit is listed at ${aciq.specs.seer2} SEER2 and ${aciq.specs.eer2} EER2.` : ''}</p>`;
+  return `<p>The ${leftover.length} leftover R-410A systems in this catalog are both 2.5-ton AC + furnace units: ${priced.map((x) => `${sysLink(x.s)} at ${usd(x.p)}`).join(' and ')}. The listed spread between them is ${usd(spread)}.${aciq && aciq.specs.eer2 != null ? ` The ${sysLink(aciq, 'ACiQ')} unit is listed at ${aciq.specs.seer2} SEER2 and ${aciq.specs.eer2} EER2.` : ''}</p>`;
 })()}
 
 <h2>Refrigerant claims to question on a quote</h2>
@@ -68,7 +68,8 @@ ${foldedMatchup('r32-vs-r454b-heat-pump-systems-compared')}
     get title() { return `${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))} Equip vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: Ductwork Add-On`; },
     h1: 'Ductwork replacement as a quote add-on: when it is needed and how to check it',
     get description() { return `How to verify ductwork add-ons on ${fmtRange(fairRange('central-heat-pump', 3))} 3-ton HVAC quotes (${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))}+ equipment): static pressure & leakage tests.`; },
-    updated: today,
+    // updated 2026-11-17: last source edit of technical.ts
+    updated: '2026-11-17',
     related: { tons: [3, 4], systems: { type: 'central-heat-pump', tons: [3, 4] } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -122,7 +123,8 @@ ${foldedMatchup('r32-vs-r454b-heat-pump-systems-compared')}
     get title() { return `${usd(adderRange('panel200A').mid)} Panel vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: 200A & Strips`; },
     h1: '200A panel upgrades and heat strips on a heat pump quote',
     get description() { return `When a heat pump needs a ${fmtRange(adderRange('panel200A'))} 200A panel upgrade or ${usd(newCircuitAdder())} circuit on ${fmtRange(fairRange('central-heat-pump', 3))} 3-ton quotes.`; },
-    updated: today,
+    // updated 2026-11-17: last source edit of technical.ts
+    updated: '2026-11-17',
     related: { tons: [3, 4, 5], systems: { type: 'central-heat-pump', coldClimate: true } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -169,7 +171,8 @@ ${foldedMatchup('r32-vs-r454b-heat-pump-systems-compared')}
     get title() { return `${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))} Equip vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: Manual J Sizing`; },
     h1: 'Manual J load calculation vs rule-of-thumb sizing',
     get description() { return `Why rule-of-thumb HVAC sizing fails, what ACCA Manual J includes, and what each extra half-ton adds to ${fmtRange(fairRange('central-heat-pump', 3))} (${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))}+ equip) quotes.`; },
-    updated: today,
+    // updated 2026-11-17: last source edit of technical.ts
+    updated: '2026-11-17',
     related: { tons: [2.5, 3, 3.5, 4], systems: { type: 'central-heat-pump', tons: [3, 3.5, 4] } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -220,7 +223,8 @@ ${steps.map((x) => `<tr><td>${tonLink(x.a, `${x.a}`)} → ${tonLink(x.b, `${x.b}
     get title() { return `${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))} Equip vs ${fmtRange(fairRange('central-heat-pump', 3, 'high'))} Installed: 2026 Rebates`; },
     h1: 'Heat pump tax credits and rebate stacking in 2026',
     get description() { return `2026 heat pump rebate stacking (HEEHRA/HEAR after DOE PN 26-2, HOMES, utility rebates & 25C expiration) on ${fmtRange(fairRange('central-heat-pump', 3, 'high'))} (${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))}+ equip) quotes.`; },
-    updated: today,
+    // updated 2026-11-17: last source edit of technical.ts
+    updated: '2026-11-17',
     related: { brands: BRANDS.filter((b) => b.coldClimateCount > 0).map((b) => b.name), systems: { coldClimate: true } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'high' },
     body: () => {

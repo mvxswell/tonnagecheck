@@ -1,9 +1,9 @@
 // System configuration & installation labor guides (#11–#14 from Issue #4).
 // Every dollar figure is computed from src/lib/facts.ts, src/data/equipment.ts, or src/data/states.ts; non-price claims cite src/data/sources.ts.
 import { lowestPrice, median, TONNAGES } from '../equipment';
-import { fairRange, systemsWhere, equipmentStats, adderRange, newCircuitAdder, usd, fmtRange } from '../../lib/facts';
+import { fairRange, systemsWhere, equipmentStats, adderRange, newCircuitAdder, usd, fmtRange, moneyCents } from '../../lib/facts';
 import { STATES, heatingCosts, EFFICIENCY } from '../states';
-import { today, src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
+import { src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
 import type { Guide } from './types';
 
 export const INSTALLATION_GUIDES: Guide[] = [
@@ -20,7 +20,8 @@ export const INSTALLATION_GUIDES: Guide[] = [
       const f = fairRange('central-heat-pump', 3, 'high');
       return `Dual-fuel heat pump + gas furnace vs cold-climate heat pumps (${usd(s.min)}–${usd(s.max)} 3-ton equipment, ${fmtRange(f)} high-tier installed) and state EIA fuel math.`;
     },
-    updated: today,
+    // updated 2026-11-17: cold-climate catalog mean listed price
+    updated: '2026-11-17',
     related: { tons: [2.5, 3, 4], brands: ['Mitsubishi', 'Bosch', 'Goodman', 'LG'], systems: { type: 'central-heat-pump', coldClimate: true } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'high' },
     body: () => {
@@ -68,6 +69,7 @@ ${sampleStates.map((st) => {
 
 <h2>Listed cold-climate heat pumps from ${brandLink('Mitsubishi')}, ${brandLink('Bosch')}, ${brandLink('LG')}, and ${brandLink('Goodman')} (${asOf})</h2>
 ${systemsTable(cold.slice(0, 6))}
+<p>The ${cold.length} ENERGY STAR cold-climate ducted heat pumps in that catalog have a mean listed price of ${moneyCents(cold.reduce((a, s) => a + lowestPrice(s), 0) / cold.length)} (${asOf}). That mean is computed on this page only; it is the box-price reference for an all-electric cold-climate quote before electrical adders and the gas-furnace hardware of a dual-fuel setup.</p>
 <p>Grade either a heat pump quote or an AC + furnace quote in the ${auditLink({ systemType: 'central-heat-pump', tons: 3, tier: 'high' }, 'TonnageCheck quote auditor')}.</p>`;
     },
   },
@@ -84,7 +86,8 @@ ${systemsTable(cold.slice(0, 6))}
       const f = fairRange('central-heat-pump', 3);
       return `Compare 14.3, 16, and 18+ SEER2 heat pump benchmarks (${fmtRange(f)} at 3 tons) and ${usd(s.min)}–${usd(s.max)} equipment prices to calculate SEER2 payback.`;
     },
-    updated: today,
+    // updated 2026-11-17: listed catalog means by size and tier
+    updated: '2026-11-17',
     related: { tons: [2, 3, 4, 5], brands: ['Goodman', 'Trane', 'Bosch', 'LG'], systems: { type: 'central-heat-pump', tons: [3, 4] } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'mid' },
     body: () => {
@@ -115,6 +118,16 @@ ${systemsTable(cold.slice(0, 6))}
 ${tiers.map((r) => `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">${usd(r.std.mid)}<br><span class="small muted">${fmtRange(r.std)}</span></td><td class="r num">${usd(r.mid.mid)}<br><span class="small muted">${fmtRange(r.mid)}</span></td><td class="r num">${usd(r.high.mid)}<br><span class="small muted">${fmtRange(r.high)}</span></td><td class="r num">+${usd(r.mid.mid - r.std.mid)}</td><td class="r num">+${usd(r.high.mid - r.std.mid)}</td></tr>`).join('\n')}
 </tbody></table></div>
 <p class="small muted">${remdbNote}</p>
+
+<h2>Listed catalog means by size and tier</h2>
+<p>The table above is the REMDB installed-cost step. The listed-equipment means in the same size and tier buckets (${asOf}) are a different number, because a mid-tier bucket can include a cheap inverter and an expensive two-stage unit:</p>
+<div class="tablewrap"><table><thead><tr><th>Size</th><th class="r">Mid-tier mean listed</th><th class="r">High-tier mean listed</th></tr></thead><tbody>
+${tiers.map((r) => {
+  const midM = r.eqMid.length ? r.eqMid.reduce((a, s) => a + lowestPrice(s), 0) / r.eqMid.length : null;
+  const highM = r.eqHigh.length ? r.eqHigh.reduce((a, s) => a + lowestPrice(s), 0) / r.eqHigh.length : null;
+  return `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">${midM == null ? '—' : moneyCents(midM)} <span class="small muted">(${r.eqMid.length})</span></td><td class="r num">${highM == null ? '—' : moneyCents(highM)} <span class="small muted">(${r.eqHigh.length})</span></td></tr>`;
+}).join('\n')}
+</tbody></table></div>
 
 <h2>What happens to listed equipment prices across tiers at 3 tons</h2>
 <p>At 3 tons, stepping from the standard-tier REMDB benchmark midpoint (${usd(r3.std.mid)}) to the mid tier (${usd(r3.mid.mid)}) adds <b>${usd(r3.mid.mid - r3.std.mid)}</b>, and stepping from standard to high tier (${usd(r3.high.mid)}) adds <b>${usd(r3.high.mid - r3.std.mid)}</b>. In our live retailer seed (${asOf}):</p>
@@ -154,7 +167,8 @@ ${tiers.map((r) => `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">
       const f = fairRange('central-heat-pump', 3);
       return `How attic, crawlspace, and closet air handler installs shift a 3-ton quote inside the ${fmtRange(f)} DOE benchmark (${usd(s.min)}–${usd(s.max)} equipment).`;
     },
-    updated: today,
+    // updated 2026-10-28: last source edit of installation.ts
+    updated: '2026-10-28',
     related: { tons: [2.5, 3, 3.5, 4], brands: ['Goodman', 'Trane', 'Mitsubishi', 'Bosch'], systems: { type: 'central-heat-pump', tons: 3 } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -216,7 +230,8 @@ ${tiers.map((r) => `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">
       const f = fairRange('central-heat-pump', 3);
       return `Rooftop and ground packaged HVAC quotes vs ${fmtRange(f)} 3-ton split benchmarks (${usd(s.min)}–${usd(s.max)} equipment): crane fees, roof curbs & ducts.`;
     },
-    updated: today,
+    // updated 2026-10-28: last source edit of installation.ts
+    updated: '2026-10-28',
     related: { tons: [3, 4, 5], brands: ['Goodman', 'Trane', 'Carrier', 'Bosch'], systems: { type: 'central-heat-pump', tons: [3, 4] } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
