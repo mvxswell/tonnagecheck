@@ -4,3 +4,20 @@
 /systems/lg-3-ton-19-seer2-heat-pump-system-kusxa422a/ /systems/lg-3-5-ton-19-seer2-heat-pump-system-kusxa422a/ 301
 /systems/lg-3-5-ton-18-2-seer2-heat-pump-system-kusxa361a /systems/lg-3-ton-18-2-seer2-heat-pump-system-kusxa361a/ 301
 /systems/lg-3-5-ton-18-2-seer2-heat-pump-system-kusxa361a/ /systems/lg-3-ton-18-2-seer2-heat-pump-system-kusxa361a/ 301
+
+# Sitemap alias: /sitemap.xml is the URL most crawlers and tools try first; Astro writes sitemap-index.xml.
+/sitemap.xml /sitemap-index.xml 301
+
+# Thin-page prune (Nov 17, 2026): comparisons folded into the matching guide (see src/data/prune.ts COMPARE_MERGED).
+/compare/single-stage-vs-inverter-3-ton-heat-pump-cost /guides/inverter-vs-single-stage-heat-pump-cost/ 301
+/compare/single-stage-vs-inverter-3-ton-heat-pump-cost/ /guides/inverter-vs-single-stage-heat-pump-cost/ 301
+/compare/single-stage-vs-inverter-4-ton-heat-pump-cost /guides/inverter-vs-single-stage-heat-pump-cost/ 301
+/compare/single-stage-vs-inverter-4-ton-heat-pump-cost/ /guides/inverter-vs-single-stage-heat-pump-cost/ 301
+/compare/single-stage-vs-inverter-5-ton-heat-pump-cost /guides/inverter-vs-single-stage-heat-pump-cost/ 301
+/compare/single-stage-vs-inverter-5-ton-heat-pump-cost/ /guides/inverter-vs-single-stage-heat-pump-cost/ 301
+/compare/3-ton-heat-pump-vs-ac-furnace-cost /guides/heat-pump-vs-ac-and-furnace-replacement-cost/ 301
+/compare/3-ton-heat-pump-vs-ac-furnace-cost/ /guides/heat-pump-vs-ac-and-furnace-replacement-cost/ 301
+/compare/4-ton-heat-pump-vs-ac-furnace-cost /guides/heat-pump-vs-ac-and-furnace-replacement-cost/ 301
+/compare/4-ton-heat-pump-vs-ac-furnace-cost/ /guides/heat-pump-vs-ac-and-furnace-replacement-cost/ 301
+/compare/5-ton-heat-pump-vs-ac-furnace-cost /guides/heat-pump-vs-ac-and-furnace-replacement-cost/ 301
+/compare/5-ton-heat-pump-vs-ac-furnace-cost/ /guides/heat-pump-vs-ac-and-furnace-replacement-cost/ 301

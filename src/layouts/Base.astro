@@ -1,7 +1,9 @@
 ---
 import { SITE } from '../config';
+import { isNoindexPath } from '../data/prune';
 interface Props { title: string; description: string; jsonld?: object | object[]; noindex?: boolean }
-const { title, description, jsonld, noindex = false } = Astro.props;
+const { title, description, jsonld, noindex: noindexProp = false } = Astro.props;
+const noindex = noindexProp || isNoindexPath(Astro.url.pathname);
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 // PNG, not SVG: X, iMessage and Facebook do not render SVG link previews. public/og-image.png is rendered from og-image.svg.
 const ogImage = new URL('/og-image.png', Astro.site).href;
