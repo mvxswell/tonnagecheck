@@ -1,7 +1,7 @@
 // Side-by-side cost comparisons. Every number is computed from the seed and REMDB at build time.
 import { lowestPrice, median, type System } from '../equipment';
 import { fairRange, systemsWhere, isInverter, usd, fmtRange, pct } from '../../lib/facts';
-import { today, src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
+import { today, src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, priceOf, remdbNote } from './helpers';
 import type { Guide } from './types';
 
 const med = (xs: System[]) => (xs.length ? usd(median(xs.map(lowestPrice))) : '—');
@@ -27,6 +27,16 @@ export const COMPARISON_GUIDES: Guide[] = [
 ${rows.map((r) => `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">${usd(r.hp.mid)}<br><span class="small muted">${fmtRange(r.hp)}</span></td><td class="r num">${usd(r.af.mid)}<br><span class="small muted">${fmtRange(r.af)}</span></td><td class="r num">${med(r.hpX)} <span class="small muted">(${r.hpX.length})</span></td><td class="r num">${med(r.afX)} <span class="small muted">(${r.afX.length})</span></td></tr>`).join('\n')}
 </tbody></table></div>
 <p class="small muted">Standard efficiency. The AC + furnace benchmark assumes an 80,000 BTU/h, 80% AFUE furnace; change it in the auditor. ${remdbNote}</p>
+<h3>High-efficiency tier and listed price range, 3 to 5 tons</h3>
+<div class="tablewrap"><table><thead><tr><th>Size</th><th class="r">Heat pump, high-eff. installed <span class="badge b-est">est.</span></th><th class="r">AC + furnace, high-eff. installed <span class="badge b-est">est.</span></th><th class="r">Listed HP equipment (range)</th><th class="r">Listed AC + furnace (range)</th></tr></thead><tbody>
+${rows.filter((r) => [3, 4, 5].includes(r.t)).map((r) => {
+  const hpH = fairRange('central-heat-pump', r.t, 'high');
+  const afH = fairRange('ac-furnace', r.t, 'high');
+  const span = (xs: System[]) => (xs.length ? `${usd(Math.min(...xs.map(lowestPrice)))}–${usd(Math.max(...xs.map(lowestPrice)))}` : '—');
+  return `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">${usd(hpH.mid)}<br><span class="small muted">${fmtRange(hpH)}</span></td><td class="r num">${usd(afH.mid)}<br><span class="small muted">${fmtRange(afH)}</span></td><td class="r num">${span(r.hpX)} <span class="small muted">(${r.hpX.length})</span></td><td class="r num">${span(r.afX)} <span class="small muted">(${r.afX.length})</span></td></tr>`;
+}).join('\n')}
+</tbody></table></div>
+<p class="small muted">High-efficiency tier (18+ SEER2 for heat pumps). Listed ranges are the lowest and highest listed equipment prices at that size in our data (${asOf}).</p>
 <p>At 3 tons the heat pump benchmark midpoint is ${usd(r3.hp.mid)} and the AC + furnace midpoint is ${usd(r3.af.mid)}. Which comes out cheaper installed depends on size and efficiency, and the gap is usually smaller than the spread between contractors' quotes for either.</p>
 
 <h2>What changes the comparison</h2>
@@ -160,6 +170,18 @@ ${rows.map((r) => `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">$
 
 <h2>Installed benchmark gap</h2>
 <p>REMDB's cost model scales with efficiency, and inverter units generally carry higher SEER2 ratings. At 3 tons: standard tier ${rangeText(fairRange('central-heat-pump', 3, 'standard'))}; mid tier ${rangeText(fairRange('central-heat-pump', 3, 'mid'))}; high tier ${rangeText(fairRange('central-heat-pump', 3, 'high'))}. ${remdbNote}</p>
+
+<h2>3, 4 and 5 tons: lowest listed system and installed tier gap</h2>
+<div class="tablewrap"><table><thead><tr><th>Size</th><th>Lowest listed single/two-stage</th><th>Lowest listed inverter</th><th class="r">Standard tier, installed <span class="badge b-est">est.</span></th><th class="r">High-eff. tier, installed <span class="badge b-est">est.</span></th><th class="r">Tier gap (midpoints)</th></tr></thead><tbody>
+${[3, 4, 5].map((t) => {
+  const f = cheapest(systemsWhere({ type: 'central-heat-pump', tons: t, staging: 'fixed' }));
+  const i = cheapest(systemsWhere({ type: 'central-heat-pump', tons: t, staging: 'inverter' }));
+  const std = fairRange('central-heat-pump', t, 'standard');
+  const high = fairRange('central-heat-pump', t, 'high');
+  return `<tr><td>${tonLink(t, `${t} ton`)}</td><td>${f ? `${sysLink(f, f.brand)} <span class="num">${priceOf(f)}</span>` : '—'}</td><td>${i ? `${sysLink(i, i.brand)} <span class="num">${priceOf(i)}</span>` : '—'}</td><td class="r num">${usd(std.mid)}<br><span class="small muted">${fmtRange(std)}</span></td><td class="r num">${usd(high.mid)}<br><span class="small muted">${fmtRange(high)}</span></td><td class="r num">+${usd(high.mid - std.mid)}</td></tr>`;
+}).join('\n')}
+</tbody></table></div>
+<p class="small muted">Lowest listed price among the ducted heat pump systems in our data at each size (${asOf}); each system page links to its listing. Many value-brand inverter lines (for example ACiQ, MRCOOL and Gree) run on a standard 24V thermostat, so the install labor is close to a single-stage swap: a quote's inverter step-up well above the tier gap here is mostly margin. Ratings and links for every system are on the ${tonLink(3, '3-ton')}, ${tonLink(4, '4-ton')} and ${tonLink(5, '5-ton')} pages. ${remdbNote}</p>
 
 <h2>What you get for the money</h2>
 <ul>

@@ -3,17 +3,21 @@ import Base from '../../layouts/Base.astro';
 import CompareWorkbench from '../../components/CompareWorkbench.astro';
 import Auditor from '../../components/Auditor.astro';
 import { COMPARISONS } from '../../data/comparisons';
+import { isCompareMerged, isCompareIndexed } from '../../data/prune';
 import { SYSTEMS } from '../../data/equipment';
 import { statsOf, usd, seedDateLabel } from '../../lib/facts';
 
 const allStats = statsOf(SYSTEMS)!;
-const brandComparisons = COMPARISONS.filter((c) => c.category === 'brand');
-const tonnageComparisons = COMPARISONS.filter((c) => c.category === 'tonnage');
-const typeComparisons = COMPARISONS.filter((c) => c.category === 'type');
-const modelComparisons = COMPARISONS.filter((c) => c.category === 'model');
+// Merged comparisons now live inside guides (301s in public/_redirects); noindexed ones are listed compactly at the end.
+const live = COMPARISONS.filter((c) => !isCompareMerged(c.slug));
+const featured = live.filter((c) => isCompareIndexed(c.slug));
+const more = live.filter((c) => !isCompareIndexed(c.slug));
+const brandComparisons = featured.filter((c) => c.category === 'brand');
+const typeComparisons = featured.filter((c) => c.category === 'type');
+const modelComparisons = featured.filter((c) => c.category === 'model');
 
 const title = `${usd(allStats.min)}–${usd(allStats.max)} HVAC Brand & Tonnage Comparisons`;
-const description = `Compare ${COMPARISONS.length} head-to-head HVAC brand, tonnage & model matchups (${usd(allStats.min)}–${usd(allStats.max)} equipment vs DOE installed costs).`;
+const description = `Compare ${live.length} head-to-head HVAC brand, tonnage & model matchups (${usd(allStats.min)}–${usd(allStats.max)} equipment vs DOE installed costs).`;
 
 const jsonld = {
   '@context': 'https://schema.org',
@@ -45,20 +49,8 @@ const jsonld = {
     ))}
   </div>
 
-  <h2>Tonnage &amp; compressor staging comparisons ({tonnageComparisons.length})</h2>
-  <p class="small muted">Compare adjacent heat pump sizes (1.5 ton through 5 ton) and single-stage vs variable-speed inverter cost steps.</p>
-  <div class="grid">
-    {tonnageComparisons.map((c) => (
-      <a class="card" href={`/compare/${c.slug}/`} style="text-decoration:none;color:inherit">
-        <div class="small muted">{c.shortLabel}</div>
-        <div style="font-weight:700;margin:4px 0;color:var(--acc)">{c.h1}</div>
-        <p class="small" style="margin:6px 0">
-          <b>{c.left.label}:</b> {usd(c.left.equipMin)}–{usd(c.left.equipMax)} equip · mid {usd(c.left.fair.mid)} installed<br />
-          <b>{c.right.label}:</b> {usd(c.right.equipMin)}–{usd(c.right.equipMax)} equip · mid {usd(c.right.fair.mid)} installed
-        </p>
-      </a>
-    ))}
-  </div>
+  <h2>Sizes and compressor staging</h2>
+  <p class="small muted">Size-by-size cost steps are on the <a href="/tonnage/">by-tonnage pages</a>. Single-stage vs inverter cost at 3, 4 and 5 tons is in the <a href="/guides/inverter-vs-single-stage-heat-pump-cost/">inverter vs single-stage guide</a>, and heat pump vs AC + furnace by size is in the <a href="/guides/heat-pump-vs-ac-and-furnace-replacement-cost/">heat pump vs AC + furnace guide</a>.</p>
 
   <h2>System-type &amp; A2L refrigerant comparisons ({typeComparisons.length})</h2>
   <p class="small muted">Compare central heat pumps against central AC + gas furnaces, ductless mini-splits, and R-32 vs R-454B systems.</p>
@@ -89,6 +81,13 @@ const jsonld = {
       </a>
     ))}
   </div>
+
+  {more.length > 0 && (
+    <>
+      <h2>More matchups</h2>
+      <p class="small muted">{more.map((c, i) => <>{i > 0 && ' · '}<a href={`/compare/${c.slug}/`}>{c.shortLabel}</a></>)}</p>
+    </>
+  )}
 
   <Auditor heading="Audit your contractor quote" />
 </Base>

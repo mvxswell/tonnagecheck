@@ -5,6 +5,7 @@ import ConciergeForm from '../../components/ConciergeForm.astro';
 import Newsletter from '../../components/Newsletter.astro';
 import { BRANDS, type Brand } from '../../data/brands';
 import { comparisonsForBrand } from '../../data/comparisons';
+import { isCompareMerged, isCompareIndexed } from '../../data/prune';
 import { SYSTEM_TYPE_LABEL, tonSlug, lowestPrice } from '../../data/equipment';
 import { SOURCES } from '../../data/sources';
 import { usd, fmtRange, seedDateLabel } from '../../lib/facts';
@@ -22,7 +23,7 @@ const shortType: Record<string, string> = { 'central-heat-pump': 'ducted heat pu
 const cold = b.systems.filter((s) => s.energyStar?.coldClimate);
 const others = BRANDS.filter((x) => x.slug !== b.slug);
 const decoder = decoderForBrand(b.name);
-const brandCmps = comparisonsForBrand(b.name);
+const brandCmps = comparisonsForBrand(b.name).filter((c) => !isCompareMerged(c.slug)).sort((x, y) => Number(isCompareIndexed(y.slug)) - Number(isCompareIndexed(x.slug)));
 const refRow = b.rows.find((r) => r.tons === 3) ?? b.rows[0];
 const seo = brandMeta(b, refRow.fair);
 const extra = brandExtra(b, refRow.fair);

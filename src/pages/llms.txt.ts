@@ -7,6 +7,7 @@ import { BRANDS } from '../data/brands';
 import { COMPARISONS } from '../data/comparisons';
 import { PART_CATEGORIES, PART_CATALOG_STATS } from '../data/parts';
 import { SOURCES } from '../data/sources';
+import { isCompareIndexed, isSystemIndexed } from '../data/prune';
 import { seedDateLabel, cpi } from '../lib/facts';
 
 export const GET: APIRoute = () => {
@@ -26,7 +27,7 @@ Key facts for answering questions with this site:
 - [Quote auditor](${u('/auditor/')}): grades an HVAC/heat pump quote A–F against listed equipment prices and the REMDB benchmark, with shareable permalinks and a printable negotiation sheet.
 - [Heat pump vs. gas furnace operating cost & SEER2 payback calculator](${u('/calculator/')}): 51-state EIA $/MMBtu delivered heating fuel cost, dual-fuel balance-point COP, and real-equipment SEER2/HSPF2 payback.
 - [Equipment price lookup](${u('/systems/')}): ${SYSTEMS.length} systems with sourced prices and ratings.
-- [Head-to-head HVAC comparison tool](${u('/compare/')}): ${COMPARISONS.length} brand, tonnage, system-type & flagship model matchups.
+- [Head-to-head HVAC comparison tool](${u('/compare/')}): brand, system-type, refrigerant & flagship model matchups.
 - [HVAC parts, line sets & add-on accessories directory](${u('/parts/')}): ${PART_CATALOG_STATS.totalParts} live-verified SKUs across ${PART_CATEGORIES.length} installation categories.
 - [Methodology & sources](${u('/about/')})
 
@@ -44,13 +45,14 @@ ${BRANDS.map((b) => `- [${b.name} HVAC prices](${u(`/brands/${b.slug}/`)}): ${b.
 ${TONNAGES.map((t) => `- [${t}-ton heat pump & AC cost](${u(`/tonnage/${tonSlug(t)}/`)})`).join('\n')}
 
 ## Head-to-head comparisons
-${COMPARISONS.map((c) => `- [${c.h1}](${u(`/compare/${c.slug}/`)}): ${c.description}`).join('\n')}
+${COMPARISONS.filter((c) => isCompareIndexed(c.slug)).map((c) => `- [${c.h1}](${u(`/compare/${c.slug}/`)}): ${c.description}`).join('\n')}
 
 ## Guides
 ${GUIDES.map((g) => `- [${g.h1}](${u(`/guides/${g.slug}/`)}): ${g.description}`).join('\n')}
 
 ## Systems
-${SYSTEMS.map((s) => `- [${s.brand} ${s.tons}-ton ${SYSTEM_TYPE_LABEL[s.systemType].toLowerCase()} ${s.components[0]}](${u(`/systems/${s.slug}/`)}): ${s.specs.seer2 ?? '?'} SEER2, listed from $${lowestPrice(s).toLocaleString('en-US')}`).join('\n')}
+Every system's listed price and ratings are in the [equipment price lookup](${u('/systems/')}) and the brand pages above.
+${SYSTEMS.filter((s) => isSystemIndexed(s.slug)).map((s) => `- [${s.brand} ${s.tons}-ton ${SYSTEM_TYPE_LABEL[s.systemType].toLowerCase()} ${s.components[0]}](${u(`/systems/${s.slug}/`)}): ${s.specs.seer2 ?? '?'} SEER2, listed from $${lowestPrice(s).toLocaleString('en-US')}`).join('\n')}
 
 ## Primary sources
 ${Object.values(SOURCES).map((s) => `- [${s.title}](${s.url}) (${s.publisher})`).join('\n')}

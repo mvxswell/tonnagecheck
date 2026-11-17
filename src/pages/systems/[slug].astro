@@ -7,6 +7,7 @@ import { decoderForBrand } from '../../data/decoder/index';
 import { SYSTEMS, SYSTEM_TYPE_LABEL, TIER_LABEL, tonSlug, lowestPrice, belowEnergyStarMinimum, certifiedCapacity, type System } from '../../data/equipment';
 import { brandSlug } from '../../data/brands';
 import { comparisonsForSystem } from '../../data/comparisons';
+import { isCompareMerged } from '../../data/prune';
 import { fairRange, usd, fmtRange } from '../../lib/facts';
 import { SOURCES } from '../../data/sources';
 import { SITE } from '../../config';
@@ -39,7 +40,7 @@ const normModel = (m: string) => m.toUpperCase().replace(/[^A-Z0-9]/g, '');
 const ahriOutdoor = es && !normModel(es.outdoorModel).startsWith(normModel(s.components[0])) && !normModel(s.components[0]).startsWith(normModel(es.outdoorModel)) ? es.outdoorModel.replace(/\*+$/, '') : null;
 const fetched = new Date(s.prices[0].fetchedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
 const related = SYSTEMS.filter((x) => x.slug !== s.slug && x.tons === s.tons).slice(0, 6);
-const sysCmps = comparisonsForSystem(s.slug, s.brand, s.tons);
+const sysCmps = comparisonsForSystem(s.slug, s.brand, s.tons).filter((c) => !isCompareMerged(c.slug));
 const ld = {
   '@context': 'https://schema.org', '@type': 'Product', name, brand: { '@type': 'Brand', name: s.brand }, mpn: s.components[0], model: s.components.join(' / '),
   url: `${SITE.url}/systems/${s.slug}/`,

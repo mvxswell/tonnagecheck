@@ -5,12 +5,14 @@ import CompareWorkbench from '../../components/CompareWorkbench.astro';
 import Auditor from '../../components/Auditor.astro';
 import ConciergeForm from '../../components/ConciergeForm.astro';
 import { COMPARISONS, type CompareEntry } from '../../data/comparisons';
+import { isCompareMerged, isCompareIndexed } from '../../data/prune';
 import { tonSlug } from '../../data/equipment';
 import { brandSlug } from '../../data/brands';
 import { usd, fmtRange, pct, seedDateLabel } from '../../lib/facts';
 
 export function getStaticPaths() {
-  return COMPARISONS.map((entry) => ({
+  // Merged comparisons are not built; public/_redirects 301s them to their guide.
+  return COMPARISONS.filter((entry) => !isCompareMerged(entry.slug)).map((entry) => ({
     params: { slug: entry.slug },
     props: { entry },
   }));
@@ -22,7 +24,7 @@ const { left, right } = entry;
 
 const combinedSystems = [...new Map([...entry.systemsLeft, ...entry.systemsRight].map((s) => [s.slug, s])).values()];
 const otherComparisons = COMPARISONS.filter(
-  (c) => c.slug !== entry.slug && (c.category === entry.category || c.relatedBrands.some((b) => entry.relatedBrands.includes(b))),
+  (c) => c.slug !== entry.slug && isCompareIndexed(c.slug) && (c.category === entry.category || c.relatedBrands.some((b) => entry.relatedBrands.includes(b))),
 ).slice(0, 6);
 
 const jsonld = [
