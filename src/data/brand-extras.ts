@@ -4,7 +4,7 @@
 import type { Brand } from './brands';
 import { lowestPrice, type System } from './equipment';
 import { SOURCES, type SourceId } from './sources';
-import { usd, fmtRange, seedDateLabel, type Range } from '../lib/facts';
+import { usd, fmtRange, captureDateLabel, type Range } from '../lib/facts';
 
 export interface BrandExtra {
   /** Replaces the "<brand> listed price vs installed benchmark, by size" heading. */
@@ -41,7 +41,7 @@ function trane(b: Brand, fair3: Range): BrandExtra {
 
   const summaryHtml = `
 <div class="card answer">
-<p><b>Short answer:</b> a new 3-ton Trane heat pump system benchmarks at <b>${fmtRange(fair3)} installed</b> (midpoint ${usd(fair3.mid)}), a national DOE-lab estimate for that size and efficiency range. The equipment is the smaller part of the bill: the ${b.systems.length} Trane-built systems with public online prices list <b>${usd(b.priceMin)}–${usd(b.priceMax)}</b> (${b.tonnages[0]}–${b.tonnages[b.tonnages.length - 1]} ton, captured ${seedDateLabel}). The rest of a fair quote is labor, materials, permits, overhead and margin.</p>
+<p><b>Short answer:</b> a new 3-ton Trane heat pump system benchmarks at <b>${fmtRange(fair3)} installed</b> (midpoint ${usd(fair3.mid)}), a national DOE-lab estimate for that size and efficiency range. The equipment is the smaller part of the bill: the ${b.systems.length} Trane-built systems with public online prices list <b>${usd(b.priceMin)}–${usd(b.priceMax)}</b> (${b.tonnages[0]}–${b.tonnages[b.tonnages.length - 1]} ton, captured ${captureDateLabel(b.systems)}). The rest of a fair quote is labor, materials, permits, overhead and margin.</p>
 ${allRunTru ? `<p class="small">All ${b.systems.length} of those listings are <b>RunTru by Trane</b> models (A5HP, A5HL and A5AC families), Trane's lower-priced line. We found no public prices for the Trane-branded Choice, Priority and Premier lines (5TW and 5TT model families), which are quoted by dealers, so compare a Trane-branded quote with the installed benchmark and the line it names, below.</p>` : ''}
 </div>`;
 
@@ -56,7 +56,7 @@ ${allRunTru ? `<p class="small">All ${b.systems.length} of those listings are <b
 <h2>Trane system cost by line: which one is on your quote?</h2>
 <p>The model number on the quote tells you which line you are being sold, and that matters more than the brand name. Trane's ${hb('2026 product handbook')} (effective Jan. 1, 2026) groups its heat pumps into Choice, Priority and Premier tiers and lists RunTru by Trane as a separate family; the first letter of the outdoor model is the giveaway ("A = RunTru by Trane", "T = Trane" in the 5T… models). SEER2 figures are the handbook's "up to" ceilings for each family; your exact pairing's rating is on its AHRI certificate.</p>
 <div class="tablewrap"><table>
-<thead><tr><th>Line</th><th>Outdoor model family</th><th class="r">SEER2 up to</th><th>Compressor</th><th>Registered limited warranty</th><th class="r">Listed equipment (${seedDateLabel})</th></tr></thead>
+<thead><tr><th>Line</th><th>Outdoor model family</th><th class="r">SEER2 up to</th><th>Compressor</th><th>Registered limited warranty</th><th class="r">Listed equipment (${captureDateLabel(b.systems)})</th></tr></thead>
 <tbody>
 ${row('RunTru by Trane', 'A5HP4', '14.3', 'Single-stage scroll', rtW, `${span(hp4)} <span class="small muted">(${hp4.length})</span>`)}
 ${row('RunTru by Trane', 'A5HP5', '16.0', 'Single-stage scroll', rtW, `${span(hp5)} <span class="small muted">(${hp5.length})</span>`)}

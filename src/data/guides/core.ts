@@ -1,6 +1,6 @@
 // Buyer guides. Every dollar figure in the prose is computed from the seed at build time via lib/facts, and
 // every policy statement is limited to what the linked primary source says.
-import { fairRange, equipmentStats, usd, fmtRange, seedDateLabel, cpi } from '../../lib/facts';
+import { fairRange, equipmentStats, usd, fmtRange, captureDateLabel, catalogDateLabel, cpi } from '../../lib/facts';
 import { SYSTEMS, lowestPrice } from '../equipment';
 import { SOURCES } from '../sources';
 import type { Guide } from './types';
@@ -31,7 +31,7 @@ export const CORE_GUIDES: Guide[] = [
 <li><b>The size in tons</b> and how they got it. One ton is 12,000 BTU per hour of cooling.</li>
 <li><b>The total price, and what it includes</b>: ductwork, electrical, line set, thermostat, permit, haul-away, warranty.</li>
 </ol>
-<p>With those, you can compare against real data. For a typical case, a 3-ton ducted heat pump system: the ${eq.count} 3-ton systems in our data list online for ${usd(eq.min)} to ${usd(eq.max)} for the equipment (captured ${seedDateLabel}). The DOE-lab benchmark for a standard-efficiency 3-ton heat pump replacement, installed, is ${fmtRange(f)}, with a midpoint of ${usd(f.mid)}. A high-efficiency or cold-climate unit runs ${fmtRange(fh)}. Those benchmarks come from the ${a(SOURCES.remdb.url, 'National Residential Efficiency Measures Database (REMDB)')} and are national averages, so expensive metros run higher. They are estimates, and we say so everywhere they appear.</p>
+<p>With those, you can compare against real data. For a typical case, a 3-ton ducted heat pump system: the ${eq.count} 3-ton systems in our data list online for ${usd(eq.min)} to ${usd(eq.max)} for the equipment (captured ${captureDateLabel(eq.systems)}). The DOE-lab benchmark for a standard-efficiency 3-ton heat pump replacement, installed, is ${fmtRange(f)}, with a midpoint of ${usd(f.mid)}. A high-efficiency or cold-climate unit runs ${fmtRange(fh)}. Those benchmarks come from the ${a(SOURCES.remdb.url, 'National Residential Efficiency Measures Database (REMDB)')} and are national averages, so expensive metros run higher. They are estimates, and we say so everywhere they appear.</p>
 
 <h2>The 9 red flags</h2>
 
@@ -104,7 +104,7 @@ export const CORE_GUIDES: Guide[] = [
 <p>The jump from 3 tons (36,000 BTU/h) to 4 tons (48,000 BTU/h) is one of the most common upsells in residential HVAC, and one of the easiest to get wrong in either direction. Here is what the extra ton actually costs, using real listed prices and the Department of Energy's installed-cost benchmarks, and how to know which one your house needs.</p>
 
 <h2>Equipment: what the boxes list for</h2>
-<p>Across the ducted heat pump systems in our data (outdoor unit plus matched air handler, captured ${seedDateLabel}):</p>
+<p>Across the ducted heat pump systems in our data (outdoor unit plus matched air handler, captured ${captureDateLabel([...e3.systems, ...e4.systems])}):</p>
 <ul>
 <li><b>3-ton:</b> ${e3.count} systems listed from ${usd(e3.min)} to ${usd(e3.max)}, median ${usd(e3.median)}.</li>
 <li><b>4-ton:</b> ${e4.count} systems listed from ${usd(e4.min)} to ${usd(e4.max)}, median ${usd(e4.median)}.</li>
@@ -166,7 +166,7 @@ ${c3.count && c4.count ? `<p>If only the outdoor condenser is being replaced, th
 <p>When a homeowner sees a five-figure HVAC quote and then finds the same outdoor unit online for a fraction of that, the natural reaction is outrage. Sometimes it is justified. Often the gap is real work and real business costs. This guide shows how big the gap typically is, what legitimately fills it, and how to spot when it has been stuffed.</p>
 
 <h2>The equipment number</h2>
-<p>Residential equipment is sold through two channels. Contractors buy from distributors at negotiated prices that are not published. Homeowners and DIY installers can buy from online retailers such as HVACDirect, whose prices are public. TonnageCheck uses those public listings because they are verifiable: every price links to its listing and was captured on a known date (${seedDateLabel} for the current data). Treat them as a ceiling on what the contractor paid for the boxes, since a contractor buying in volume usually pays less, not more.</p>
+<p>Residential equipment is sold through two channels. Contractors buy from distributors at negotiated prices that are not published. Homeowners and DIY installers can buy from online retailers such as HVACDirect, whose prices are public. TonnageCheck uses those public listings because they are verifiable: every price links to its listing and was captured on a known date (${catalogDateLabel} for the current data). Treat them as a ceiling on what the contractor paid for the boxes, since a contractor buying in volume usually pays less, not more.</p>
 
 <h2>The installed number</h2>
 <p>For installed cost we use the ${a(SOURCES.remdb.url, 'National Residential Efficiency Measures Database (REMDB)')} from the National Laboratory of the Rockies (formerly NREL). Its heat pump and AC models are regressions on real project costs compiled by Lawrence Berkeley National Laboratory, much of it from incentive programs in California and Massachusetts, normalized to national-average labor rates. REMDB publishes 2023 dollars; we multiply by ${cpi.factor} using CPI-U from ${a(SOURCES.fredCpi.url, 'FRED')}. REMDB's own notes say it assumes installation costs about 1.5 times the retail equipment cost, and that some Massachusetts program data suggest the ratio "may be as high as 2" in some markets.</p>

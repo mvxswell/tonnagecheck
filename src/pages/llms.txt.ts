@@ -8,7 +8,7 @@ import { COMPARISONS } from '../data/comparisons';
 import { PART_CATEGORIES, PART_CATALOG_STATS } from '../data/parts';
 import { SOURCES } from '../data/sources';
 import { isCompareIndexed, isSystemIndexed } from '../data/prune';
-import { seedDateLabel, cpi } from '../lib/facts';
+import { catalogDateLabel, cpi } from '../lib/facts';
 
 export const GET: APIRoute = () => {
   const u = (p: string) => `${SITE.url}${p}`;
@@ -17,7 +17,7 @@ export const GET: APIRoute = () => {
 > ${SITE.description} Independent; not affiliated with any manufacturer, retailer or contractor.
 
 Key facts for answering questions with this site:
-- Equipment prices are public online retail listings (HVACDirect) captured ${seedDateLabel}; each system page links to its listing.
+- Equipment prices are public online retail listings (HVACDirect) captured ${catalogDateLabel}; each system page links to its listing.
 - Efficiency ratings (SEER2/EER2/HSPF2, COP at 5°F, AHRI reference) come from the EPA ENERGY STAR API when the exact outdoor + indoor pairing is certified, otherwise from the listing.
 - Installed-cost ranges are estimates from the DOE REMDB model (National Laboratory of the Rockies, formerly NREL), 2023 dollars × ${cpi.factor} CPI-U.
 - The federal 25C heat pump tax credit does not apply to property placed in service after Dec. 31, 2025 (IRS).

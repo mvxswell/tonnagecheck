@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Newsletter from '../../components/Newsletter.astro';
 import { BRANDS } from '../../data/brands';
 import { SYSTEMS, SYSTEM_TYPE_LABEL, lowestPrice } from '../../data/equipment';
-import { fairRange, usd, fmtRange, seedDateLabel } from '../../lib/facts';
+import { fairRange, usd, fmtRange, catalogDateLabel } from '../../lib/facts';
 import { SITE } from '../../config';
 const shortType: Record<string, string> = { 'central-heat-pump': 'ducted heat pump', 'mini-split': 'mini-split', 'ac-furnace': 'AC + furnace', 'heat-pump-only': 'condenser' };
 const minEq = Math.min(...SYSTEMS.map(lowestPrice));
@@ -19,7 +19,7 @@ const ld = {
 <Base title={title} description={description} jsonld={ld}>
   <p class="crumbs"><a href="/">Home</a> / Brands</p>
   <h1>HVAC brands: listed prices vs installed benchmarks</h1>
-  <p class="lead">Every brand below has real listings with sourced prices (captured {seedDateLabel}). Pick a brand to see its equipment price span by size next to what installation should cost, then audit a quote for that brand.</p>
+  <p class="lead">Every brand below has real listings with sourced prices (captured {catalogDateLabel}). Pick a brand to see its equipment price span by size next to what installation should cost, then audit a quote for that brand.</p>
   <div class="tablewrap">
     <table>
       <thead><tr><th>Brand</th><th class="r">Systems</th><th>Sizes (tons)</th><th>Types</th><th class="r">Listed equipment</th><th class="r">SEER2</th><th class="r">ENERGY STAR matched</th></tr></thead>
