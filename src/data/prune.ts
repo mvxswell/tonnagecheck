@@ -10,10 +10,9 @@
 
 import { tonSlug } from './equipment';
 
-/** System detail pages that stay indexed (earned a Google click in the last 90 days). */
-export const SYSTEMS_INDEXED = new Set<string>([
-  'gree-4-ton-19-seer2-heat-pump-system-fxu60hp230v1r32ao',
-]);
+/** System detail pages that stay indexed (earned a Google click in the last 90 days).
+ *  The Gree FXU60 page was the only former member; it is in PR42_NOINDEX. */
+export const SYSTEMS_INDEXED = new Set<string>([]);
 
 /** State rebate pages that stay indexed (earned a Google click in the last 90 days). */
 export const STATES_INDEXED = new Set<string>(['district-of-columbia']);
@@ -74,8 +73,53 @@ const seg = (path: string, section: string) => {
   return m ? m[1] : null;
 };
 
+/** 38 thin or low-uniqueness pages approved for noindex on the PR #42 preview.
+ *  Homepage, the 12 fixable pages, the 4 utility pages, and the combined size guide stay indexed.
+ *  Paths are trailing-slash canonicals, matching `trailingSlash: 'always'`. */
+export const PR42_NOINDEX = new Set<string>([
+  '/guides/dual-fuel-heat-pump-gas-furnace-vs-cold-climate-heat-pump-cost/',
+  '/guides/txv-thermal-expansion-valve-vs-piston-replacement-quote/',
+  '/guides/condenser-pad-disconnect-box-whip-surge-protector-add-ons/',
+  '/systems/',
+  '/decoder/',
+  '/parts/',
+  '/guides/capacitor-contactor-blower-motor-failure-vs-full-hvac-replacement/',
+  '/guides/manual-j-load-calculation-vs-rule-of-thumb-sizing/',
+  '/guides/ductwork-replacement-cost-add-on/',
+  '/guides/flat-rate-price-books-and-pe-hvac-rollups/',
+  '/guides/heat-pump-tax-credit-and-rebate-stacking-2026/',
+  '/guides/hvac-permit-inspection-hers-manual-j-testing-fees-on-quote/',
+  '/guides/today-only-hvac-discount-tactic-how-to-counter-offer/',
+  '/guides/why-hvac-quotes-cost-more-than-equipment/',
+  '/guides/200a-panel-upgrade-and-heat-strip-adders/',
+  '/guides/condensate-pump-float-switch-secondary-drain-pan-quote/',
+  '/guides/cracked-heat-exchanger-scare-tactic-how-to-verify/',
+  '/guides/evaporator-coil-leak-replacement-cost-vs-full-system-swap/',
+  '/guides/how-to-tell-if-hvac-quote-is-ripoff/',
+  '/guides/hvac-line-set-flush-vs-copper-line-set-replacement-cost/',
+  '/guides/independent-hvac-tech-vs-big-company/',
+  '/guides/smart-thermostat-markup-communicating-vs-24v-hvac-quotes/',
+  '/brands/',
+  '/guides/',
+  '/guides/heat-pump-condenser-only-vs-full-system-replacement/',
+  '/systems/gree-4-ton-19-seer2-heat-pump-system-fxu60hp230v1r32ao/',
+  '/guides/rooftop-package-unit-vs-split-system-hvac-replacement-cost/',
+  '/guides/uv-light-air-scrubber-ionization-hvac-add-on-cost/',
+  '/guides/wholesale-hvac-equipment-cost-vs-installed-price/',
+  '/decoder/daikin/',
+  '/guides/attic-vs-crawlspace-vs-closet-air-handler-installation-cost/',
+  '/guides/goodman-vs-trane-vs-carrier-equipment-markup/',
+  '/guides/hvac-financing-zero-apr-dealer-fee-buydown-markup/',
+  '/guides/how-to-hire-independent-epa-608-hvac-tech-customer-supplied-equipment/',
+  '/guides/heat-pump-rebates-and-ahri-certificate-check/',
+  '/guides/hvac-labor-warranty-vs-oem-parts-warranty-registration/',
+  '/guides/multi-zone-mini-split-cost/',
+  '/guides/asbestos-old-flex-duct-removal-and-return-air-drop-sizing/',
+]);
+
 /** True when a built page should carry noindex and stay out of the sitemap. */
 export function isNoindexPath(path: string): boolean {
+  if (PR42_NOINDEX.has(path)) return true;
   const sys = seg(path, 'systems');
   if (sys) return !SYSTEMS_INDEXED.has(sys);
   const st = seg(path, 'states');
