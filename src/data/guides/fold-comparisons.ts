@@ -12,7 +12,7 @@ import {
   TIER_LABEL,
   SYSTEMS,
 } from '../equipment';
-import { fairRange, systemsWhere, usd, fmtRange, listedSpan, refrigerantOf, equipmentStats, statsOf } from '../../lib/facts';
+import { fairRange, systemsWhere, usd, fmtRange, listedSpan, refrigerantOf, equipmentStats, statsOf, captureDateLabel } from '../../lib/facts';
 import { asOf, remdbNote, src, sysLink, brandLink, systemsTable, rangeText, cheapest } from './helpers';
 
 function entry(slug: string) {
@@ -66,6 +66,8 @@ ${rows.join('\n')}
   const caveat = underNotes.length
     ? `<p class="note"><b>Below its nominal size:</b> ${underNotes.join('; ')}. The price comparison above is between systems sold as ${pair[0].tons}-ton, not between equal capacities. Compare quotes on the certified capacity of the exact pairing on the AHRI certificate, not on the label.</p>`
     : '';
+  const cited = [...c.systemsLeft, ...c.systemsRight, ...(c.modelLeft ? [c.modelLeft] : []), ...(c.modelRight ? [c.modelRight] : [])];
+  const pricesAsOf = `listed prices captured ${captureDateLabel(cited)}`;
   return `
 <h3 id="${slug}">${heading}</h3>
 <p>${c.lead}</p>
@@ -75,7 +77,7 @@ ${sideRow(right.label, right.href, right.count, right.equipMin, right.equipMax, 
 </tbody></table></div>
 ${pairTable}
 ${caveat}
-<p class="small muted">Figures computed from our catalog (${asOf}). ${remdbNote}</p>`;
+<p class="small muted">Figures computed from our catalog (${pricesAsOf}). ${remdbNote}</p>`;
 }
 
 /** All merged model-vs-model matchups at a given size, for the size guides. */
