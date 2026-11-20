@@ -3,13 +3,13 @@ import Base from '../layouts/Base.astro';
 import QuoteCta from '../components/QuoteCta.astro';
 import Newsletter from '../components/Newsletter.astro';
 import { SITE } from '../config';
-import { SYSTEMS, TONNAGES } from '../data/equipment';
+import { SYSTEMS, TONNAGES, lowestPrice } from '../data/equipment';
 import { GUIDES } from '../data/guides/index';
 import { BRANDS } from '../data/brands';
 import { sizeGuidePath } from '../data/prune';
 import { PART_CATEGORIES, PART_CATALOG_STATS } from '../data/parts';
 import { STATES } from '../data/states';
-import { fairRange, equipmentStats, seedDateLabel, usd, fmtRange } from '../lib/facts';
+import { fairRange, equipmentStats, seedDateLabel, usd, fmtRange, systemsWhere, statsOf } from '../lib/facts';
 
 const FEATURED_GUIDE_SLUGS = [
   '3-ton-heat-pump-ac-replacement-cost',
@@ -25,6 +25,19 @@ const featuredGuides = FEATURED_GUIDE_SLUGS.map((slug) => GUIDES.find((g) => g.s
 const esCount = SYSTEMS.filter((s) => s.energyStar).length;
 const three = equipmentStats('central-heat-pump', 3);
 const threeFair = fairRange('central-heat-pump', 3, 'standard');
+const typeRows = (
+  [
+    ['central-heat-pump', 'Ducted heat pump'],
+    ['mini-split', 'Mini-split'],
+    ['ac-furnace', 'AC + furnace'],
+    ['heat-pump-only', 'Condenser-only'],
+  ] as const
+).map(([type, label]) => {
+  const xs = systemsWhere({ type });
+  const mean = xs.length ? xs.reduce((a, s) => a + lowestPrice(s), 0) / xs.length : 0;
+  return { label, n: xs.length, mean, median: statsOf(xs).median };
+});
+const typeCell = (n: number, v: number | null) => n < 3 || v == null ? '—' : usd(v);
 const ld = [
   { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url, description: SITE.description },
   {
@@ -57,6 +70,32 @@ import { DECODER_BRANDS } from '../data/decoder/index';
     </div>
   </section>
 
+  <section>
+    <h2>Listed equipment prices by system type</h2>
+    <p class="muted small">Mean and median public listed prices in this catalog ({seedDateLabel}). Each row is a single system type. A cell is blank when that type has fewer than 3 listings.</p>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>System type</th>
+            <th class="r">Listings</th>
+            <th class="r">Mean listed</th>
+            <th class="r">Median listed</th>
+          </tr>
+        </thead>
+        <tbody>
+          {typeRows.map((r) => (
+            <tr>
+              <td>{r.label}</td>
+              <td class="r num">{r.n}</td>
+              <td class="r num">{typeCell(r.n, r.mean)}</td>
+              <td class="r num">{typeCell(r.n, r.median)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
 
   <section>
     <h2>How the audit works</h2>

@@ -14,7 +14,7 @@ export const TECHNICAL_GUIDES: Guide[] = [
     get title() { return `${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))} Equip vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: R-454B vs R-32`; },
     h1: 'R-410A vs R-454B vs R-32: what the refrigerant transition means for your quote',
     get description() { return `EPA refrigerant rules for R-410A, R-454B, and R-32: GWP limits, ${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))}+ 3-ton equipment prices, and ${fmtRange(fairRange('central-heat-pump', 3))} installed benchmarks.`; },
-    // updated 2026-11-17: dropped the leftover R-410A combined-price sum; clarified R-454B listing vs ENERGY STAR counts
+    // updated 2026-11-20: dropped the listed spread between the two leftover R-410A prices
     updated: '2026-11-17',
     related: { tons: [3], systems: { type: 'central-heat-pump', tons: 3 } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
@@ -41,9 +41,8 @@ ${(() => {
   const leftover = systemsWhere().filter((s) => refrigerantOf(s) === 'R-410A');
   if (leftover.length < 2) return '';
   const priced = leftover.map((s) => ({ s, p: lowestPrice(s) })).sort((a, b) => a.p - b.p);
-  const spread = priced[priced.length - 1].p - priced[0].p;
   const aciq = leftover.find((s) => s.brand === 'ACiQ');
-  return `<p>The ${leftover.length} leftover R-410A systems in this catalog are both 2.5-ton AC + furnace units: ${priced.map((x) => `${sysLink(x.s)} at ${usd(x.p)}`).join(' and ')}. The listed spread between them is ${usd(spread)}.${aciq && aciq.specs.eer2 != null ? ` The ${sysLink(aciq, 'ACiQ')} unit is listed at ${aciq.specs.seer2} SEER2 and ${aciq.specs.eer2} EER2.` : ''}</p>`;
+  return `<p>The ${leftover.length} leftover R-410A systems in this catalog are both 2.5-ton AC + furnace units: ${priced.map((x) => `${sysLink(x.s)} at ${usd(x.p)}`).join(' and ')}.${aciq && aciq.specs.eer2 != null ? ` The ${sysLink(aciq, 'ACiQ')} unit is listed at ${aciq.specs.seer2} SEER2 and ${aciq.specs.eer2} EER2.` : ''}</p>`;
 })()}
 
 <h2>Refrigerant claims to question on a quote</h2>

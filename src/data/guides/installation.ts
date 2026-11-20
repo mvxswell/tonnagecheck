@@ -2,7 +2,7 @@
 // Every dollar figure is computed from src/lib/facts.ts, src/data/equipment.ts, or src/data/states.ts; non-price claims cite src/data/sources.ts.
 import { lowestPrice, median, TONNAGES } from '../equipment';
 import { fairRange, systemsWhere, equipmentStats, adderRange, newCircuitAdder, usd, fmtRange } from '../../lib/facts';
-import { EFFICIENCY } from '../states';
+import { STATES, heatingCosts, EFFICIENCY } from '../states';
 import { src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
 import type { Guide } from './types';
 
@@ -18,10 +18,10 @@ export const INSTALLATION_GUIDES: Guide[] = [
     get description() {
       const s = equipmentStats('central-heat-pump', 3);
       const f = fairRange('central-heat-pump', 3, 'high');
-      return `Dual-fuel heat pump + gas furnace vs cold-climate heat pumps (${usd(s.min)}–${usd(s.max)} 3-ton equipment, ${fmtRange(f)} high-tier installed).`;
+      return `Dual-fuel heat pump + gas furnace vs cold-climate heat pumps (${usd(s.min)}–${usd(s.max)} 3-ton equipment, ${fmtRange(f)} high-tier installed) and state EIA fuel math.`;
     },
-    // updated 2026-11-17: dropped restated state EIA prices and the catalog-mean padding
-    updated: '2026-11-17',
+    // updated 2026-11-20: restored the 4-state EIA balance-point table and the cold-climate catalog mean (n>=3, whole dollars)
+    updated: '2026-11-20',
     related: { tons: [2.5, 3, 4], brands: ['Mitsubishi', 'Bosch', 'Goodman', 'LG'], systems: { type: 'central-heat-pump', coldClimate: true } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'high' },
     body: () => {
@@ -32,6 +32,10 @@ export const INSTALLATION_GUIDES: Guide[] = [
       const panel = adderRange('panel200A');
       const circuit = newCircuitAdder();
       const cold = systemsWhere({ type: 'central-heat-pump', coldClimate: true });
+      const coldMean = cold.length >= 3 ? cold.reduce((a, s) => a + lowestPrice(s), 0) / cold.length : null;
+      const sampleStates = ['MA', 'PA', 'OH', 'GA']
+        .map((c) => STATES.find((s) => s.code === c && s.electricity && s.gas && s.gasHeatContentBtuPerCf))
+        .filter((x): x is NonNullable<typeof x> => Boolean(x));
       return `
 <p>Homeowners in IECC Climate Zones 4 through 7 who currently heat with natural gas face one of the most consequential configuration choices in residential HVAC: install an all-electric cold-climate heat pump with an air handler, or configure a "dual-fuel" (hybrid) system that pairs an outdoor heat pump with a gas furnace and cased evaporator coil so the furnace takes over on the coldest winter nights. Here is how the equipment, installation benchmarks, electrical adders, and state EIA fuel economics compare (${asOf}).</p>
 
@@ -48,13 +52,24 @@ export const INSTALLATION_GUIDES: Guide[] = [
 <li><b>All-electric eliminates the gas furnace, flue, and monthly gas customer charge:</b> Replacing the furnace with an air handler removes combustion venting and carbon monoxide risk (${src('cpscCo', 'CPSC')}). Modern cold-climate heat pumps certified under ${src('esCriteria', 'ENERGY STAR Cold Climate criteria')} deliver ≥ 70% of rated capacity at 5°F with a COP ≥ 1.75 (${src('bascColdClimate', 'DOE/PNNL Cold Climate Guide')}).</li>
 </ul>
 
-<h2>Economic balance point: compare your state's rates</h2>
-<p>Whether a dual-fuel setup saves money on fuel depends on your electricity and gas prices, which vary by state. Use the <a href="/states/">state energy-price table</a> (EIA residential rates: ${src('eiaElectricity', 'Table 5.6.B')}, ${src('eiaGas', 'natural gas')}, ${src('eiaHeatContent', 'heat content')}) and the <a href="/calculator/">heat pump vs. gas calculator</a> with your state's figures, rather than restating those rates here. In states with high electric rates and moderate gas prices, a dual-fuel thermostat can run the heat pump during mild weather, when its COP is highest, and switch to the furnace in deep cold.</p>
+<h2>Economic balance point: heat pump vs gas furnace by state EIA prices</h2>
+<p>Using U.S. Energy Information Administration residential electricity (${src('eiaElectricity', 'EIA Table 5.6.B')}) and natural gas (${src('eiaGas', 'EIA Natural Gas')}, ${src('eiaHeatContent', 'heat content')}) rates from our <a href="/states/">state pages</a>, here is the delivered cost per million BTU of heat across four states with different utility rate ratios:</p>
+<div class="tablewrap"><table><thead><tr><th>State</th><th class="r">Electricity (¢/kWh)</th><th class="r">Natural gas ($/Mcf)</th><th class="r">Cold-climate HP (${EFFICIENCY.coldHspf2Median} HSPF2)</th><th class="r">Gas furnace (${EFFICIENCY.afueLow}% / ${EFFICIENCY.afueHigh}% AFUE)</th></tr></thead><tbody>
+${sampleStates.map((st) => {
+  const hc = heatingCosts(st);
+  const cchp = hc.find((x) => x.label.startsWith('Cold-climate')) ?? hc.find((x) => x.label.startsWith('Heat pump,'))!;
+  const gas80 = hc.find((x) => x.label.includes(`${EFFICIENCY.afueLow}%`));
+  const gas96 = hc.find((x) => x.label.includes(`${EFFICIENCY.afueHigh}%`));
+  return `<tr><td><a href="/states/${st.slug}/">${st.name}</a></td><td class="r num">${st.electricity!.centsPerKwh}¢</td><td class="r num">$${st.gas!.dollarsPerMcf}</td><td class="r num">${usd(cchp.dollarsPerMMBtu)}/MMBtu</td><td class="r num">${gas80 ? usd(gas80.dollarsPerMMBtu) : '—'} / ${gas96 ? usd(gas96.dollarsPerMMBtu) : '—'}</td></tr>`;
+}).join('\n')}
+</tbody></table></div>
+<p>In states with high electric rates and moderate gas prices, a dual-fuel thermostat can run the heat pump during mild and moderate weather (when the heat pump's COP is highest) and switch over to the gas furnace during deep cold snaps when the heat pump's COP drops toward 1.75–2.0.</p>
 
 <h2>2026 rebate rule check: DOE Program Notice 26-2</h2>
 <p>Be careful with contractor rebate promises on gas-to-electric quotes: under DOE Program Notice 26-2 (${src('doePn262', 'May 2026')}), federal HEEHRA/HEAR rebates (${src('hearStatute', '42 U.S.C. § 18795a')}) no longer cover fuel-switching from natural gas, propane, or oil to a heat pump, and the federal Section 25C tax credit expired after December 31, 2025 (${src('irsObbba', 'IRS')}). State and utility rebates still vary by utility; check your state on our <a href="/states/">state pages</a> and our <a href="/guides/heat-pump-tax-credit-and-rebate-stacking-2026/">2026 rebate guide</a>.</p>
 
 <h2>Listed cold-climate heat pumps from ${brandLink('Mitsubishi')}, ${brandLink('Bosch')}, ${brandLink('LG')}, and ${brandLink('Goodman')} (${asOf})</h2>
+${coldMean != null ? `<p>The ${cold.length} ENERGY STAR cold-climate ducted heat pumps in this catalog have a mean listed price of ${usd(coldMean)}.</p>` : ''}
 ${systemsTable(cold.slice(0, 6))}
 <p>Grade either a heat pump quote or an AC + furnace quote in the ${auditLink({ systemType: 'central-heat-pump', tons: 3, tier: 'high' }, 'TonnageCheck quote auditor')}.</p>`;
     },
@@ -72,7 +87,7 @@ ${systemsTable(cold.slice(0, 6))}
       const f = fairRange('central-heat-pump', 3);
       return `Compare 14.3, 16, and 18+ SEER2 heat pump benchmarks (${fmtRange(f)} at 3 tons) and ${usd(s.min)}–${usd(s.max)} equipment prices to calculate SEER2 payback.`;
     },
-    // updated 2026-11-17: labelled the ducted heat pump means table; whole dollars; blank n<3
+    // updated 2026-11-20: dropped installed-midpoint step columns and computed SEER2 savings percentages
     updated: '2026-11-17',
     related: { tons: [2, 3, 4, 5], brands: ['Goodman', 'Trane', 'Bosch', 'LG'], systems: { type: 'central-heat-pump', tons: [3, 4] } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'mid' },
@@ -88,8 +103,6 @@ ${systemsTable(cold.slice(0, 6))}
         return { t, std, mid, high, eqStd, eqMid, eqHigh };
       });
       const r3 = tiers.find((x) => x.t === 3)!;
-      const coolingPct16 = ((1 - 14.3 / 16) * 100).toFixed(1);
-      const coolingPct18 = ((1 - 14.3 / 18) * 100).toFixed(1);
       return `
 <p>Contractor proposals almost always present three columns—"Bronze (14.3 SEER2)," "Silver (16 SEER2)," and "Gold / Platinum (18+ SEER2)"—with large price jumps between each column. Sales software often promises that the top tier "pays for itself in energy savings," without showing the underlying math or how much of the price jump is pure contractor margin rather than equipment cost. Here is the exact equipment and installed-benchmark spread across efficiency tiers in our catalog (${asOf}), plus the formula to check your own payback.</p>
 
@@ -100,8 +113,8 @@ ${systemsTable(cold.slice(0, 6))}
 <li><b>Mid tier (15.2 to 16.9 SEER2):</b> Meets the ${src('esCriteria', 'ENERGY STAR')} split-system cooling threshold (≥ 15.2 SEER2, ≥ 7.8 HSPF2, ≥ 11.0 EER2).</li>
 <li><b>High tier (17.0+ SEER2, including 18+ SEER2 inverter lines):</b> Variable-speed inverter systems with the widest modulation range.</li>
 </ul>
-<div class="tablewrap"><table><thead><tr><th>Size</th><th class="r">Standard (&lt;15.2 SEER2) <span class="badge b-est">est.</span></th><th class="r">Mid (15.2–16.9 SEER2) <span class="badge b-est">est.</span></th><th class="r">High (17+ SEER2) <span class="badge b-est">est.</span></th><th class="r">Mid-to-Std step</th><th class="r">High-to-Std step</th></tr></thead><tbody>
-${tiers.map((r) => `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">${usd(r.std.mid)}<br><span class="small muted">${fmtRange(r.std)}</span></td><td class="r num">${usd(r.mid.mid)}<br><span class="small muted">${fmtRange(r.mid)}</span></td><td class="r num">${usd(r.high.mid)}<br><span class="small muted">${fmtRange(r.high)}</span></td><td class="r num">+${usd(r.mid.mid - r.std.mid)}</td><td class="r num">+${usd(r.high.mid - r.std.mid)}</td></tr>`).join('\n')}
+<div class="tablewrap"><table><thead><tr><th>Size</th><th class="r">Standard (&lt;15.2 SEER2) <span class="badge b-est">est.</span></th><th class="r">Mid (15.2–16.9 SEER2) <span class="badge b-est">est.</span></th><th class="r">High (17+ SEER2) <span class="badge b-est">est.</span></th></tr></thead><tbody>
+${tiers.map((r) => `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">${usd(r.std.mid)}<br><span class="small muted">${fmtRange(r.std)}</span></td><td class="r num">${usd(r.mid.mid)}<br><span class="small muted">${fmtRange(r.mid)}</span></td><td class="r num">${usd(r.high.mid)}<br><span class="small muted">${fmtRange(r.high)}</span></td></tr>`).join('\n')}
 </tbody></table></div>
 <p class="small muted">${remdbNote}</p>
 
@@ -117,25 +130,25 @@ ${tiers.map((r) => {
 </tbody></table></div>
 
 <h2>What happens to listed equipment prices across tiers at 3 tons</h2>
-<p>At 3 tons, stepping from the standard-tier REMDB benchmark midpoint (${usd(r3.std.mid)}) to the mid tier (${usd(r3.mid.mid)}) adds <b>${usd(r3.mid.mid - r3.std.mid)}</b>, and stepping from standard to high tier (${usd(r3.high.mid)}) adds <b>${usd(r3.high.mid - r3.std.mid)}</b>. In our live retailer seed (${asOf}):</p>
+<p>At 3 tons, the standard-, mid- and high-tier REMDB benchmark midpoints are ${usd(r3.std.mid)}, ${usd(r3.mid.mid)} and ${usd(r3.high.mid)}. In our live retailer seed (${asOf}):</p>
 <ul>
 <li><b>Standard tier 3-ton ducted heat pumps (${r3.eqStd.length} listed):</b> ${r3.eqStd.map((s) => `${sysLink(s)} (${s.specs.seer2} SEER2, ${usd(lowestPrice(s))})`).join(', ')}.</li>
 <li><b>Mid tier 3-ton ducted heat pumps (${r3.eqMid.length} listed):</b> ${r3.eqMid.map((s) => `${sysLink(s)} (${s.specs.seer2} SEER2, ${usd(lowestPrice(s))})`).join(', ')}.</li>
 <li><b>High tier 3-ton ducted heat pumps (${r3.eqHigh.length} listed):</b> lowest ${sysLink(cheapest(r3.eqHigh))} (${cheapest(r3.eqHigh).specs.seer2} SEER2, ${usd(lowestPrice(cheapest(r3.eqHigh)))}) up to ${usd(Math.max(...r3.eqHigh.map(lowestPrice)))}.</li>
 </ul>
-<p>Notice that value-brand inverter systems in the 16–18+ SEER2 range from ${brandLink('ACiQ')}, ${brandLink('MRCOOL')}, ${brandLink('Gree')}, and ${brandLink('Trane')} list at prices overlapping or even below lower-SEER2 systems from other brands. If a contractor charges two or three times the ${usd(r3.high.mid - r3.std.mid)} REMDB high-vs-standard gap to move from a 14.3 SEER2 quote to an 18 SEER2 quote, you are paying for tiered price-book margin, not factory hardware cost.</p>
+<p>Notice that value-brand inverter systems in the 16–18+ SEER2 range from ${brandLink('ACiQ')}, ${brandLink('MRCOOL')}, ${brandLink('Gree')}, and ${brandLink('Trane')} list at prices overlapping or even below lower-SEER2 systems from other brands. If a contractor charges two or three times the REMDB high-vs-standard step in the table above to move from a 14.3 SEER2 quote to an 18 SEER2 quote, you are paying for tiered price-book margin, not factory hardware cost.</p>
 
 <h2>The exact cooling and heating percentage savings math</h2>
 <p>Because SEER2 is measured in BTU of cooling per watt-hour of electricity, the percentage reduction in cooling electricity from SEER2<sub>A</sub> to SEER2<sub>B</sub> is simply <code>1 − (SEER2<sub>A</sub> ÷ SEER2<sub>B</sub>)</code>:</p>
 <ul>
-<li><b>14.3 SEER2 → 16.0 SEER2:</b> uses <code>1 − (14.3 ÷ 16.0) = ${coolingPct16}%</code> less cooling electricity for the same cooling load.</li>
-<li><b>14.3 SEER2 → 18.0 SEER2:</b> uses <code>1 − (14.3 ÷ 18.0) = ${coolingPct18}%</code> less cooling electricity for the same cooling load.</li>
+<li><b>14.3 SEER2 → 16.0 SEER2:</b> uses <code>1 − (14.3 ÷ 16.0)</code> less cooling electricity for the same cooling load.</li>
+<li><b>14.3 SEER2 → 18.0 SEER2:</b> uses <code>1 − (14.3 ÷ 18.0)</code> less cooling electricity for the same cooling load.</li>
 <li><b>Heating (HSPF2):</b> The same formula applies to HSPF2 in heating mode (<code>1 − HSPF2<sub>low</sub> ÷ HSPF2<sub>high</sub></code>), plus high-tier cold-climate inverters avoid expensive electric heat-strip hours in winter. Check your state's exact $/MMBtu heating cost at our median ${EFFICIENCY.hspf2Median} HSPF2 vs ${EFFICIENCY.coldHspf2Median} HSPF2 cold-climate rating on our <a href="/states/">state pages</a>.</li>
 </ul>
 
 <h2>When stepping up to 16 or 18+ SEER2 actually pays back</h2>
 <ol>
-<li><b>When an ENERGY STAR or utility rebate bridges the upfront gap:</b> Many utility rebates (${src('esRebateFinder', 'ENERGY STAR Rebate Finder')}, ${src('dsire', 'DSIRE')}) require ≥ 15.2 SEER2 / ≥ 7.8 HSPF2 (${src('esCriteria', 'ENERGY STAR criteria')}) or Cold Climate certification (≥ 8.1 HSPF2). If a utility rebate covers a large chunk of the ${usd(r3.mid.mid - r3.std.mid)}–${usd(r3.high.mid - r3.std.mid)} benchmark step, the higher tier wins immediately.</li>
+<li><b>When an ENERGY STAR or utility rebate bridges the upfront gap:</b> Many utility rebates (${src('esRebateFinder', 'ENERGY STAR Rebate Finder')}, ${src('dsire', 'DSIRE')}) require ≥ 15.2 SEER2 / ≥ 7.8 HSPF2 (${src('esCriteria', 'ENERGY STAR criteria')}) or Cold Climate certification (≥ 8.1 HSPF2). If a utility rebate covers a large chunk of the mid- or high-tier benchmark step in the table above, the higher tier wins immediately.</li>
 <li><b>In high-electricity-rate or long-season states:</b> Compare your state's EIA ¢/kWh rate on <a href="/states/">/states/</a>.</li>
 <li><b>For comfort and humidity control:</b> See our <a href="/guides/inverter-vs-single-stage-heat-pump-cost/">inverter vs single-stage heat pump guide</a> and grade all three tiers of your contractor's quote in the ${auditLink({ systemType: 'central-heat-pump', tons: 3, tier: 'mid' }, 'TonnageCheck quote auditor')}.</li>
 </ol>`;

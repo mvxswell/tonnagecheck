@@ -76,4 +76,8 @@ export const listedSpan = (min: number | null | undefined, max: number | null | 
 export const pct = (n: number) => `${Math.round(n * 100)}%`;
 export { usd, isInverter };
 
+/** "an" before names that start with a vowel sound, including ACiQ and LG. */
+export const articleFor = (name: string) =>
+  /^(aciq|lg|[aeiou])/i.test(name.trim()) ? 'an' : 'a';
+
 

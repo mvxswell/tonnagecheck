@@ -5,7 +5,7 @@ import { DECODER_BRANDS, type DecoderBrand } from '../../data/decoder/index';
 import { brandByName } from '../../data/brands';
 import { SYSTEMS, SYSTEM_TYPE_LABEL, lowestPrice } from '../../data/equipment';
 import { SOURCES, type SourceId } from '../../data/sources';
-import { usd, fmtRange, seedDateLabel, statsOf } from '../../lib/facts';
+import { usd, fmtRange, seedDateLabel, statsOf, articleFor } from '../../lib/facts';
 import { decodeModel, decodeSerial } from '../../lib/decode';
 import { SITE } from '../../config';
 import { sizeGuidePath } from '../../data/prune';
@@ -178,7 +178,7 @@ const ld = [
             <td class="r num">{fmtRange(r.fair)}</td></tr>
         ))}</tbody>
       </table></div>
-      <p><a class="btn" href={`/auditor/?brand=${encodeURIComponent(b.name)}`}>Audit a {b.name} quote</a> <a class="btn ghost" href={`/brands/${b.slug}/`}>All {b.name} prices</a></p>
+      <p><a class="btn" href={`/auditor/?brand=${encodeURIComponent(b.name)}`}>Audit {articleFor(b.name)} {b.name} quote</a> <a class="btn ghost" href={`/brands/${b.slug}/`}>All {b.name} prices</a></p>
     </>
   ))}
 

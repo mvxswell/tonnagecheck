@@ -106,6 +106,13 @@ function countCold(xs: System[]) {
 }
 const meanListed = (xs: System[]) => xs.reduce((a, s) => a + lowestPrice(s), 0) / xs.length;
 const meanUsd = (xs: System[]) => usd(Math.round(meanListed(xs)));
+const pctl = (xs: number[], p: number) => {
+  const ys = [...xs].sort((a, b) => a - b);
+  if (!ys.length) return 0;
+  const i = (ys.length - 1) * p;
+  const lo = Math.floor(i), hi = Math.ceil(i);
+  return lo === hi ? ys[lo] : ys[lo] * (hi - i) + ys[hi] * (i - lo);
+};
 const typeLabel: Record<string, string> = {
   'central-heat-pump': 'ducted heat pump',
   'mini-split': 'mini-split',
@@ -127,6 +134,10 @@ function daikin(b: Brand, fair3: Range): BrandExtra {
   const rxm = fam(b, ['RXM']);
   const mxm = b.systems.filter((s) => /^[34]MXM/.test(s.components[0]));
   const es = b.systems.filter((s) => s.energyStar);
+  const prices = b.systems.map(lowestPrice);
+  const t2 = b.systems.filter((s) => s.tons === 2);
+  const hspf = b.systems.map((s) => s.specs.hspf2).filter((n): n is number => n != null);
+  const meanHspf = hspf.length ? hspf.reduce((a, n) => a + n, 0) / hspf.length : null;
   const summaryHtml = `
 <div class="card answer">
 <p><b>What we can price:</b> every public Daikin listing in this catalog is a <b>ductless mini-split</b> (RXF, RXT, RXM and multi-zone MXM outdoor units), ${b.systems.length} systems from ${usd(b.priceMin)} to ${usd(b.priceMax)}, mean listed ${meanUsd(b.systems)} (${seedDateLabel}). We do not have public prices for Daikin's ducted R-32 splits (DH4SE, DH6VS, DH7TC, DH9VS and the matching air handlers in the ${a('daikinCatalog', 'residential R-32 catalog')}), so a ducted Daikin quote has to be checked against the installed benchmark, not against a Daikin box price we can link to.</p>
@@ -145,6 +156,7 @@ ${catalogRows([
     { label: 'MXM multi-zone (3MXM / 4MXM)', xs: mxm },
   ])}
 </tbody></table></div>
+${b.systems.length >= 3 ? `<p>Across those ${b.systems.length} mini-split listings, the 25th-percentile listed price is ${usd(pctl(prices, 0.25))}.${t2.length >= 3 ? ` The ${t2.length} 2-ton units have a mean listed price of ${meanUsd(t2)}.` : ''}${meanHspf != null && hspf.length >= 3 ? ` The mean HSPF2 across the ${hspf.length} outdoor units that publish a rating is ${meanHspf.toFixed(2)}.` : ''}</p>` : ''}
 <p>Specification sheets for the ducted R-32 families (${a('daikinDh4se', 'DH4SE')}, ${a('daikinDh6vs', 'DH6VS')}, ${a('daikinDh7tc', 'DH7TC')}, ${a('daikinDh9vs', 'DH9VS')}) and air handlers (${a('daikinDmvt', 'DMVT')}, ${a('daikinDfve', 'DFVE')}) are cited on our <a href="/decoder/daikin/">Daikin model decoder</a>. Those documents do not include a retail price, so they are not in the table.</p>
 <h2>Warranty documents, not a term we inferred</h2>
 <p>Daikin publishes separate limited-warranty PDFs for ducted R-32 single-phase equipment (${a('daikinWarrantyBeo', 'PWDACHPR3BEO')}, ${a('daikinWarrantyBeob', 'PWDACHPR3BEOB')}) and for ductless systems (${a('daikinWarrantyDms', 'PWDDMSTWZS')}). The first four digits of the serial number (YYMM) are the manufacture date (${a('daikinWarrantyBeo', 'PWDACHPR3BEO')}). Read the PDF that matches the model on your quote, and register the system at ${a('daikinRegistration', 'Daikin product registration')}. ${a('daikinWarrantyInfo', 'Registration and transfer rules')} vary by state; look a policy up at ${a('daikinWarrantyLookup', 'Daikin warranty lookup')}.</p>`;

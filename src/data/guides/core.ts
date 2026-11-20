@@ -1,7 +1,7 @@
 // Buyer guides. Every dollar figure in the prose is computed from the seed at build time via lib/facts, and
 // every policy statement is limited to what the linked primary source says.
-import { fairRange, equipmentStats, usd, fmtRange, seedDateLabel, cpi } from '../../lib/facts';
-import { SYSTEMS, lowestPrice } from '../equipment';
+import { fairRange, equipmentStats, usd, fmtRange, seedDateLabel, cpi, systemsWhere } from '../../lib/facts';
+import { SYSTEMS, lowestPrice, median } from '../equipment';
 import { SOURCES } from '../sources';
 import type { Guide } from './types';
 import { sizeGuidePath } from '../prune';
@@ -85,7 +85,7 @@ export const CORE_GUIDES: Guide[] = [
     get title() { return `${usd(equipmentStats('central-heat-pump', 3).min)} Equip vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: 3T vs 4T Cost`; },
     h1: '3-ton vs 4-ton heat pump: what the extra ton costs',
     get description() { return `Side-by-side 3-ton (${usd(equipmentStats('central-heat-pump', 3).min)}+ equip, ${fmtRange(fairRange('central-heat-pump', 3))} installed) and 4-ton (${fmtRange(fairRange('central-heat-pump', 4))} installed) heat pump costs.`; },
-    // updated 2026-11-17: catalog means and 3-vs-4 listed steps
+    // updated 2026-11-20: restored type-level means and median steps (n>=3, whole dollars, one type per row)
     updated: '2026-11-17',
     body: () => {
       const e3 = equipmentStats('central-heat-pump', 3);
@@ -96,6 +96,20 @@ export const CORE_GUIDES: Guide[] = [
       const h4 = fairRange('central-heat-pump', 4, 'high');
       const g3 = SYSTEMS.filter((s) => s.systemType === 'heat-pump-only' && s.brand === 'Goodman' && s.tons === 3 && s.components[0].startsWith('GLZS4')).sort((x, y) => lowestPrice(x) - lowestPrice(y))[0];
       const g4 = SYSTEMS.filter((s) => s.systemType === 'heat-pump-only' && s.brand === 'Goodman' && s.tons === 4 && s.components[0].startsWith('GLZS4')).sort((x, y) => lowestPrice(x) - lowestPrice(y))[0];
+      const typeMean = (type: 'central-heat-pump' | 'ac-furnace' | 'mini-split', tons: number) => {
+        const xs = systemsWhere({ type, tons });
+        const prices = xs.map(lowestPrice);
+        return { n: xs.length, mean: xs.length ? prices.reduce((a, n) => a + n, 0) / xs.length : null, median: prices.length ? median(prices) : null };
+      };
+      const typeCell = (v: number | null, n: number) => n < 3 || v == null ? `— <span class="small muted">(${n})</span>` : `${usd(v)} <span class="small muted">(${n})</span>`;
+      const stepCell = (a: { n: number; mean: number | null; median: number | null }, b: { n: number; mean: number | null; median: number | null }, key: 'mean' | 'median') =>
+        a.n >= 3 && b.n >= 3 && a[key] != null && b[key] != null ? usd((b[key] as number) - (a[key] as number)) : '—';
+      const hp3m = typeMean('central-heat-pump', 3);
+      const hp4m = typeMean('central-heat-pump', 4);
+      const af3m = typeMean('ac-furnace', 3);
+      const af4m = typeMean('ac-furnace', 4);
+      const ms3m = typeMean('mini-split', 3);
+      const ms4m = typeMean('mini-split', 4);
       const pairs = ['Goodman', 'Trane', 'LG'].map((b) => {
         const x3 = SYSTEMS.filter((s) => s.systemType === 'central-heat-pump' && s.brand === b && s.tons === 3).sort((x, y) => lowestPrice(x) - lowestPrice(y))[0];
         const x4 = SYSTEMS.filter((s) => s.systemType === 'central-heat-pump' && s.brand === b && s.tons === 4).sort((x, y) => lowestPrice(x) - lowestPrice(y))[0];
@@ -110,6 +124,13 @@ export const CORE_GUIDES: Guide[] = [
 <li><b>3-ton:</b> ${e3.count} systems listed from ${usd(e3.min)} to ${usd(e3.max)}, median ${usd(e3.median)}.</li>
 <li><b>4-ton:</b> ${e4.count} systems listed from ${usd(e4.min)} to ${usd(e4.max)}, median ${usd(e4.median)}.</li>
 </ul>
+<h2>Catalog means and medians by system type</h2>
+<p>Mean and median listed prices at 3 tons and 4 tons, each row a single system type, in whole dollars (${seedDateLabel}). A cell is blank when that type and size has fewer than 3 listings. The step is the 4-ton figure minus the 3-ton figure for the same type.</p>
+<div class="tablewrap"><table><thead><tr><th>System type</th><th class="r">3-ton mean</th><th class="r">4-ton mean</th><th class="r">Mean step</th><th class="r">3-ton median</th><th class="r">4-ton median</th><th class="r">Median step</th></tr></thead><tbody>
+<tr><td>Ducted heat pump</td><td class="r num">${typeCell(hp3m.mean, hp3m.n)}</td><td class="r num">${typeCell(hp4m.mean, hp4m.n)}</td><td class="r num">${stepCell(hp3m, hp4m, 'mean')}</td><td class="r num">${typeCell(hp3m.median, hp3m.n)}</td><td class="r num">${typeCell(hp4m.median, hp4m.n)}</td><td class="r num">${stepCell(hp3m, hp4m, 'median')}</td></tr>
+<tr><td>AC + furnace</td><td class="r num">${typeCell(af3m.mean, af3m.n)}</td><td class="r num">${typeCell(af4m.mean, af4m.n)}</td><td class="r num">${stepCell(af3m, af4m, 'mean')}</td><td class="r num">${typeCell(af3m.median, af3m.n)}</td><td class="r num">${typeCell(af4m.median, af4m.n)}</td><td class="r num">${stepCell(af3m, af4m, 'median')}</td></tr>
+<tr><td>Mini-split</td><td class="r num">${typeCell(ms3m.mean, ms3m.n)}</td><td class="r num">${typeCell(ms4m.mean, ms4m.n)}</td><td class="r num">${stepCell(ms3m, ms4m, 'mean')}</td><td class="r num">${typeCell(ms3m.median, ms3m.n)}</td><td class="r num">${typeCell(ms4m.median, ms4m.n)}</td><td class="r num">${stepCell(ms3m, ms4m, 'median')}</td></tr>
+</tbody></table></div>
 ${pairs.length ? `<p>Within the same brand and product line the step is clearer:</p>
 <div class="tablewrap"><table><thead><tr><th>Brand</th><th class="r">3-ton</th><th class="r">4-ton</th><th class="r">Difference</th></tr></thead><tbody>
 ${pairs.map((p) => `<tr><td>${p.b}</td><td class="r num"><a href="/systems/${p.x3.slug}/">${usd(lowestPrice(p.x3))}</a> <span class="small muted">${p.x3.specs.seer2} SEER2</span></td><td class="r num"><a href="/systems/${p.x4.slug}/">${usd(lowestPrice(p.x4))}</a> <span class="small muted">${p.x4.specs.seer2} SEER2</span></td><td class="r num">${usd(lowestPrice(p.x4) - lowestPrice(p.x3))}</td></tr>`).join('')}

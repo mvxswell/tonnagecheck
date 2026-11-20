@@ -6,7 +6,7 @@ import { comparisonsForBrand } from '../../data/comparisons';
 import { isCompareMerged, isCompareIndexed, sizeGuidePath, comparePath } from '../../data/prune';
 import { SYSTEM_TYPE_LABEL, lowestPrice } from '../../data/equipment';
 import { SOURCES } from '../../data/sources';
-import { usd, fmtRange, seedDateLabel, fairRange } from '../../lib/facts';
+import { usd, fmtRange, seedDateLabel, fairRange, articleFor } from '../../lib/facts';
 import { SITE } from '../../config';
 import { decoderForBrand } from '../../data/decoder/index';
 import { brandMeta, NEAR_PAGE1_GUIDES } from '../../data/seo';
@@ -37,7 +37,7 @@ const refRow = b.rows.find((r) => r.tons === 3) ?? b.rows[0];
 const ductedStd3 = fairRange('central-heat-pump', 3, 'standard');
 const ductedHigh3 = fairRange('central-heat-pump', 3, 'high');
 const seo = brandMeta(b, ductedStd3);
-const article = /^[aeiou]/i.test(b.name) ? 'an' : 'a';
+const article = articleFor(b.name);
 
 const extra = brandExtra(b, refRow.fair);
 const brandGuides = NEAR_PAGE1_GUIDES.filter((g) => g.brand === b.name);
@@ -91,7 +91,7 @@ const ld = [
       </tbody>
     </table>
   </div>
-  <p class="small muted">A 3-ton ducted heat pump of any brand benchmarks at {fmtRange(ductedStd3)} standard and {fmtRange(ductedHigh3)} high-efficiency (REMDB). <a href="/about/#benchmarks">Method</a></p>
+  <p class="small muted">Listed is the public online price span for {b.name} at that size; installed is the REMDB range for the same type and efficiency; midpoint is the middle of that range; non-equipment at mid is the midpoint minus the lowest listed {b.name} price at that size. A 3-ton ducted heat pump of any brand benchmarks at {fmtRange(ductedStd3)} standard and {fmtRange(ductedHigh3)} high-efficiency (REMDB). <a href="/about/#benchmarks">Method</a></p>
   {extra && <Fragment set:html={extra.sectionsHtml} />}
 
   <h2>Specs: SEER2, HSPF2 and cold-climate performance</h2>
@@ -109,11 +109,11 @@ const ld = [
     <p>None of the {b.name} listings in our data is matched to an ENERGY STAR cold-climate record. Ratings below come from the ENERGY STAR database where the exact pairing is certified ({b.energyStarCount} of {b.systems.length}) and from the retailer listing otherwise.</p>
   )}
 
-  <p class="small"><a href="/guides/heat-pump-rebates-and-ahri-certificate-check/">2026 tax credits, rebates and the AHRI check</a> that may apply to a {b.name} install.</p>
+  <p class="small"><a href="/guides/heat-pump-rebates-and-ahri-certificate-check/">2026 tax credits, rebates and the AHRI check</a> that may apply to {article} {b.name} install.</p>
 
   {decoder && (
     <div class="card">
-      <b>Read a {b.name} model or serial number</b>
+      <b>Read {article} {b.name} model or serial number</b>
       <p class="small">Find the size, refrigerant and build date of an existing {b.name} unit, or check that a quoted model is the size you were promised.</p>
       <a class="btn ghost" href={`/decoder/${decoder.slug}/`}>{decoder.name} decoder</a>
     </div>
