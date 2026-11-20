@@ -13,8 +13,8 @@ export const COMPARISON_GUIDES: Guide[] = [
     get title() { return `${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))} Equip vs ${fmtRange(fairRange('ac-furnace', 3))} Installed: HP vs AC+Furnace`; },
     h1: 'Heat pump vs AC + gas furnace: replacement cost compared',
     get description() { return `Compare heat pump (${fmtRange(fairRange('central-heat-pump', 3))}) vs AC + gas furnace (${fmtRange(fairRange('ac-furnace', 3))}) installed benchmarks and ${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))}+ equipment by size.`; },
-    // updated 2026-11-20: dropped listed and installed-midpoint delta tables
-    updated: '2026-11-17',
+    // updated 2026-11-20: restored per-size listed and installed comparison tables; 1.5-ton row blank when n<3
+    updated: '2026-11-20',
     related: { tons: [2, 3, 4, 5], systems: { type: ['central-heat-pump', 'ac-furnace'], tons: [3, 4] } },
     audit: { systemType: 'ac-furnace', tons: 3 },
     body: () => {
@@ -22,7 +22,34 @@ export const COMPARISON_GUIDES: Guide[] = [
       const rows = sizes.map((t) => ({ t, hp: fairRange('central-heat-pump', t), af: fairRange('ac-furnace', t), hpX: systemsWhere({ type: 'central-heat-pump', tons: t }), afX: systemsWhere({ type: 'ac-furnace', tons: t }) }));
       const r3 = rows.find((r) => r.t === 3)!;
       return `
-<p>When an air conditioner and furnace both need replacing, the quote often comes in two flavors: a like-for-like AC plus gas furnace, or a heat pump that does both jobs. Absolute listed prices and installed benchmarks for each system type live in the <a href="/guides/3-ton-heat-pump-ac-replacement-cost/">replacement-cost-by-size guide</a>. Here is what changes the comparison, and the lowest listed 3-ton systems in this catalog (${asOf}).</p>
+<p>When an air conditioner and furnace both need replacing, the quote often comes in two flavors: a like-for-like AC plus gas furnace, or a heat pump that does both jobs. Here is how they compare on listed equipment price and installed cost at each size (${asOf}), and what changes the math. Absolute listed prices and installed ranges for each system type also live in the <a href="/guides/3-ton-heat-pump-ac-replacement-cost/">replacement-cost-by-size guide</a>.</p>
+
+<h2>Heat pump vs AC + furnace at each size</h2>
+<p>The table shows the difference at the same size: ducted heat pump minus AC + furnace, in whole dollars. A positive number means the heat pump side is higher. A listed-median cell is blank when either side has fewer than 3 listings. The 1.5-ton installed cell is blank because we do not publish an AC + furnace installed range at that size.</p>
+${(() => {
+  const signed = (n: number) => `${n >= 0 ? '+' : '−'}${usd(Math.abs(n))}`;
+  const listedRows = rows.map((r) => {
+    const hpMed = r.hpX.length >= 3 ? median(r.hpX.map(lowestPrice)) : null;
+    const afMed = r.afX.length >= 3 ? median(r.afX.map(lowestPrice)) : null;
+    const listed = hpMed != null && afMed != null ? signed(hpMed - afMed) : '—';
+    const installed = r.t <= 1.5 ? '—' : signed(r.hp.mid - r.af.mid);
+    return `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">${listed} <span class="small muted">(${r.hpX.length} vs ${r.afX.length})</span></td><td class="r num">${installed}</td></tr>`;
+  }).join('\n');
+  const highRows = rows.filter((r) => [3, 4, 5].includes(r.t)).map((r) => {
+    const hpH = fairRange('central-heat-pump', r.t, 'high');
+    const afH = fairRange('ac-furnace', r.t, 'high');
+    return `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">${signed(hpH.mid - afH.mid)}</td></tr>`;
+  }).join('\n');
+  return `<div class="tablewrap"><table><thead><tr><th>Size</th><th class="r">Listed-median difference (HP − AC + furnace)</th><th class="r">Installed-midpoint difference, standard <span class="badge b-est">est.</span></th></tr></thead><tbody>
+${listedRows}
+</tbody></table></div>
+<p class="small muted">Standard-efficiency installed difference. The AC + furnace benchmark assumes an 80,000 BTU/h, 80% AFUE furnace. ${remdbNote}</p>
+<h3>High-efficiency installed-midpoint difference, 3 to 5 tons</h3>
+<div class="tablewrap"><table><thead><tr><th>Size</th><th class="r">Installed-midpoint difference, high-eff. (HP − AC + furnace) <span class="badge b-est">est.</span></th></tr></thead><tbody>
+${highRows}
+</tbody></table></div>
+<p class="small muted">High-efficiency tier (18+ SEER2 for heat pumps). Which option comes out cheaper installed depends on size and efficiency, and the gap is usually smaller than the spread between contractors' quotes for either.</p>`;
+})()}
 
 <h2>What changes the comparison</h2>
 <ul>
@@ -140,8 +167,8 @@ ${cond.some((s) => s.prices.length > 1) ? `<p>Several condensers are listed at t
     get title() { return `${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))} Equip vs ${fmtRange(fairRange('central-heat-pump', 3, 'mid'))} Installed: Inverter Cost`; },
     h1: 'Inverter vs single-stage heat pump: what the upgrade costs',
     get description() { return `Variable-speed inverter vs single-stage heat pump prices (${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))}+ 3-ton equipment vs ${fmtRange(fairRange('central-heat-pump', 3, 'mid'))} mid-tier installed).`; },
-    // updated 2026-11-20: dropped difference and tier-gap columns and the mean-to-mean gap sentence
-    updated: '2026-11-17',
+    // updated 2026-11-20: blanked median cells with fewer than 3 listings
+    updated: '2026-11-20',
     related: { tons: [2, 3, 4], systems: { type: 'central-heat-pump', staging: 'inverter' } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'mid' },
     body: () => {
@@ -155,7 +182,10 @@ ${cond.some((s) => s.prices.length > 1) ? `<p>Several condensers are listed at t
 
 <h2>Listed price: inverter vs fixed-speed, same size</h2>
 <div class="tablewrap"><table><thead><tr><th>Size</th><th class="r">Inverter, median listed</th><th class="r">Single/two-stage, median listed</th></tr></thead><tbody>
-${rows.map((r) => `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">${med(r.inv)} <span class="small muted">(${r.inv.length})</span></td><td class="r num">${med(r.fix)} <span class="small muted">(${r.fix.length})</span></td></tr>`).join('\n')}
+${rows.map((r) => {
+  const cell = (xs: System[]) => xs.length < 3 ? `— <span class="small muted">(${xs.length})</span>` : `${med(xs)} <span class="small muted">(${xs.length})</span>`;
+  return `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">${cell(r.inv)}</td><td class="r num">${cell(r.fix)}</td></tr>`;
+}).join('\n')}
 </tbody></table></div>
 <p class="small muted">Ducted heat pump systems. "Inverter" means the ENERGY STAR record lists a continuously variable compressor, or the listing says variable-speed or inverter. Brand mix differs by size, so the two columns are a rough guide, not a matched pair of the same product line.</p>
 <p>Across all sizes, ${inv.length} inverter systems list at a median of ${med(inv)} and ${fix.length} fixed-speed systems at ${med(fix)}. The mean listed inverter price is ${usd(inv.reduce((a, s) => a + lowestPrice(s), 0) / inv.length)} and the mean listed fixed-speed price is ${usd(fix.reduce((a, s) => a + lowestPrice(s), 0) / fix.length)}. Some inverter lines from value brands list below fixed-speed systems from premium brands, so "inverter" alone does not explain a large price difference on a quote.</p>

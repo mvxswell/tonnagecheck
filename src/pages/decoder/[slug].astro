@@ -81,7 +81,7 @@ const ld = [
   )}
   <p class="small muted">Updated {d.updated} · Every code below is transcribed from the manufacturer documents listed under <a href="#sources">Sources</a>. Where a document did not define something, we leave it out.</p>
 
-  <ModelSerialDecoder brands={[d]} examples={examples} heading={`Decode a ${d.name} model or serial number`} />
+  <ModelSerialDecoder brands={[d]} examples={examples} heading={`Decode ${articleFor(d.name)} ${d.name} model or serial number`} />
 
   <div class="prose">
     {d.intro.map((p) => <p>{p}</p>)}

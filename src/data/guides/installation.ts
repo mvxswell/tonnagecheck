@@ -87,7 +87,7 @@ ${systemsTable(cold.slice(0, 6))}
       const f = fairRange('central-heat-pump', 3);
       return `Compare 14.3, 16, and 18+ SEER2 heat pump benchmarks (${fmtRange(f)} at 3 tons) and ${usd(s.min)}–${usd(s.max)} equipment prices to calculate SEER2 payback.`;
     },
-    // updated 2026-11-20: dropped installed-midpoint step columns and computed SEER2 savings percentages
+    // updated 2026-11-20: restored formula savings percentages; reworded midpoint-difference references
     updated: '2026-11-17',
     related: { tons: [2, 3, 4, 5], brands: ['Goodman', 'Trane', 'Bosch', 'LG'], systems: { type: 'central-heat-pump', tons: [3, 4] } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'mid' },
@@ -103,6 +103,8 @@ ${systemsTable(cold.slice(0, 6))}
         return { t, std, mid, high, eqStd, eqMid, eqHigh };
       });
       const r3 = tiers.find((x) => x.t === 3)!;
+      const coolingPct16 = ((1 - 14.3 / 16) * 100).toFixed(1);
+      const coolingPct18 = ((1 - 14.3 / 18) * 100).toFixed(1);
       return `
 <p>Contractor proposals almost always present three columns—"Bronze (14.3 SEER2)," "Silver (16 SEER2)," and "Gold / Platinum (18+ SEER2)"—with large price jumps between each column. Sales software often promises that the top tier "pays for itself in energy savings," without showing the underlying math or how much of the price jump is pure contractor margin rather than equipment cost. Here is the exact equipment and installed-benchmark spread across efficiency tiers in our catalog (${asOf}), plus the formula to check your own payback.</p>
 
@@ -119,7 +121,7 @@ ${tiers.map((r) => `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">
 <p class="small muted">${remdbNote}</p>
 
 <h2>Listed ducted heat pump catalog means by size and tier</h2>
-<p>The table above is the REMDB installed-cost step. Mean listed prices of the ducted heat pumps in the same size and tier buckets (${asOf}), in whole dollars. A cell is blank when that bucket has fewer than 3 listings; a mid-tier bucket can include a cheap inverter and an expensive two-stage unit:</p>
+<p>The table above shows the REMDB installed-cost midpoints by size and tier. Mean listed prices of the ducted heat pumps in the same size and tier buckets (${asOf}), in whole dollars. A cell is blank when that bucket has fewer than 3 listings; a mid-tier bucket can include a cheap inverter and an expensive two-stage unit:</p>
 <div class="tablewrap"><table><thead><tr><th>Size (ducted heat pump)</th><th class="r">Mid-tier mean listed</th><th class="r">High-tier mean listed</th></tr></thead><tbody>
 ${tiers.map((r) => {
   const midM = r.eqMid.length >= 3 ? r.eqMid.reduce((a, s) => a + lowestPrice(s), 0) / r.eqMid.length : null;
@@ -136,19 +138,19 @@ ${tiers.map((r) => {
 <li><b>Mid tier 3-ton ducted heat pumps (${r3.eqMid.length} listed):</b> ${r3.eqMid.map((s) => `${sysLink(s)} (${s.specs.seer2} SEER2, ${usd(lowestPrice(s))})`).join(', ')}.</li>
 <li><b>High tier 3-ton ducted heat pumps (${r3.eqHigh.length} listed):</b> lowest ${sysLink(cheapest(r3.eqHigh))} (${cheapest(r3.eqHigh).specs.seer2} SEER2, ${usd(lowestPrice(cheapest(r3.eqHigh)))}) up to ${usd(Math.max(...r3.eqHigh.map(lowestPrice)))}.</li>
 </ul>
-<p>Notice that value-brand inverter systems in the 16–18+ SEER2 range from ${brandLink('ACiQ')}, ${brandLink('MRCOOL')}, ${brandLink('Gree')}, and ${brandLink('Trane')} list at prices overlapping or even below lower-SEER2 systems from other brands. If a contractor charges two or three times the REMDB high-vs-standard step in the table above to move from a 14.3 SEER2 quote to an 18 SEER2 quote, you are paying for tiered price-book margin, not factory hardware cost.</p>
+<p>Notice that value-brand inverter systems in the 16–18+ SEER2 range from ${brandLink('ACiQ')}, ${brandLink('MRCOOL')}, ${brandLink('Gree')}, and ${brandLink('Trane')} list at prices overlapping or even below lower-SEER2 systems from other brands. If a contractor charges two or three times the difference between the high-tier and standard midpoints in the table above to move from a 14.3 SEER2 quote to an 18 SEER2 quote, you are paying for tiered price-book margin, not factory hardware cost.</p>
 
 <h2>The exact cooling and heating percentage savings math</h2>
 <p>Because SEER2 is measured in BTU of cooling per watt-hour of electricity, the percentage reduction in cooling electricity from SEER2<sub>A</sub> to SEER2<sub>B</sub> is simply <code>1 − (SEER2<sub>A</sub> ÷ SEER2<sub>B</sub>)</code>:</p>
 <ul>
-<li><b>14.3 SEER2 → 16.0 SEER2:</b> uses <code>1 − (14.3 ÷ 16.0)</code> less cooling electricity for the same cooling load.</li>
-<li><b>14.3 SEER2 → 18.0 SEER2:</b> uses <code>1 − (14.3 ÷ 18.0)</code> less cooling electricity for the same cooling load.</li>
+<li><b>14.3 SEER2 → 16.0 SEER2:</b> uses <code>1 − (14.3 ÷ 16.0) = ${coolingPct16}%</code> less cooling electricity for the same cooling load.</li>
+<li><b>14.3 SEER2 → 18.0 SEER2:</b> uses <code>1 − (14.3 ÷ 18.0) = ${coolingPct18}%</code> less cooling electricity for the same cooling load.</li>
 <li><b>Heating (HSPF2):</b> The same formula applies to HSPF2 in heating mode (<code>1 − HSPF2<sub>low</sub> ÷ HSPF2<sub>high</sub></code>), plus high-tier cold-climate inverters avoid expensive electric heat-strip hours in winter. Check your state's exact $/MMBtu heating cost at our median ${EFFICIENCY.hspf2Median} HSPF2 vs ${EFFICIENCY.coldHspf2Median} HSPF2 cold-climate rating on our <a href="/states/">state pages</a>.</li>
 </ul>
 
 <h2>When stepping up to 16 or 18+ SEER2 actually pays back</h2>
 <ol>
-<li><b>When an ENERGY STAR or utility rebate bridges the upfront gap:</b> Many utility rebates (${src('esRebateFinder', 'ENERGY STAR Rebate Finder')}, ${src('dsire', 'DSIRE')}) require ≥ 15.2 SEER2 / ≥ 7.8 HSPF2 (${src('esCriteria', 'ENERGY STAR criteria')}) or Cold Climate certification (≥ 8.1 HSPF2). If a utility rebate covers a large chunk of the mid- or high-tier benchmark step in the table above, the higher tier wins immediately.</li>
+<li><b>When an ENERGY STAR or utility rebate bridges the upfront gap:</b> Many utility rebates (${src('esRebateFinder', 'ENERGY STAR Rebate Finder')}, ${src('dsire', 'DSIRE')}) require ≥ 15.2 SEER2 / ≥ 7.8 HSPF2 (${src('esCriteria', 'ENERGY STAR criteria')}) or Cold Climate certification (≥ 8.1 HSPF2). If a utility rebate covers a large chunk of the difference between the mid- or high-tier midpoint and the standard midpoint in the table above, the higher tier wins immediately.</li>
 <li><b>In high-electricity-rate or long-season states:</b> Compare your state's EIA ¢/kWh rate on <a href="/states/">/states/</a>.</li>
 <li><b>For comfort and humidity control:</b> See our <a href="/guides/inverter-vs-single-stage-heat-pump-cost/">inverter vs single-stage heat pump guide</a> and grade all three tiers of your contractor's quote in the ${auditLink({ systemType: 'central-heat-pump', tons: 3, tier: 'mid' }, 'TonnageCheck quote auditor')}.</li>
 </ol>`;

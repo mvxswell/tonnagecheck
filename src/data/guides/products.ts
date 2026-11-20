@@ -13,7 +13,7 @@ export const PRODUCT_GUIDES: Guide[] = [
     get title() { return `${usd(brandByName('Goodman')!.priceMin)} Equip vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: Goodman vs Trane`; },
     h1: 'Goodman vs Trane vs Carrier: what the equipment costs and how much is markup',
     get description() { return `Goodman (${usd(brandByName('Goodman')!.priceMin)}+), Trane (${usd(brandByName('Trane')!.priceMin)}+) & Carrier equipment prices vs ${fmtRange(fairRange('central-heat-pump', 3))} 3-ton installed benchmarks.`; },
-    // updated 2026-11-20: restored cheapest-listing cells with n; no leftover subtractions
+    // updated 2026-11-20: named standard midpoints in the intro sentence
     updated: '2026-11-20',
     related: { brands: ['Goodman', 'Trane', 'Carrier'], tons: [3], systems: { brand: ['Goodman', 'Trane', 'Carrier'] } },
     audit: { systemType: 'central-heat-pump', tons: 3, brand: 'Trane' },
@@ -44,7 +44,8 @@ ${(() => {
   const both = rows.filter((r) => r.gs && r.ts);
   const gaps = both.map((r) => Math.abs(lowestPrice(r.gs!) - lowestPrice(r.ts!)));
   const nonEq = both.map((r) => r.f.mid - Math.max(lowestPrice(r.gs!), lowestPrice(r.ts!)));
-  return both.length ? `<p>Two things stand out. First, at the ${both.length} sizes where both brands are listed, the gap between the cheapest Goodman and cheapest Trane is ${usd(Math.min(...gaps))} to ${usd(Math.max(...gaps))}, partly because of efficiency differences. Second, the installed benchmark midpoint sits ${usd(Math.min(...nonEq))} to ${usd(Math.max(...nonEq))} above even the pricier of the two. A quote that is thousands of dollars more for "the better brand" is mostly not paying for the brand.</p>` : '';
+  const mids = both.map((r) => r.f.mid);
+  return both.length ? `<p>Two things stand out. First, at the ${both.length} sizes where both brands are listed, the gap between the cheapest Goodman and cheapest Trane is ${usd(Math.min(...gaps))} to ${usd(Math.max(...gaps))}, partly because of efficiency differences. Second, the standard installed midpoints (${usd(Math.min(...mids))}–${usd(Math.max(...mids))}) sit ${usd(Math.min(...nonEq))} to ${usd(Math.max(...nonEq))} above even the pricier of the two. A quote that is thousands of dollars more for "the better brand" is mostly not paying for the brand.</p>` : '';
 })()}
 
 ${(() => {
