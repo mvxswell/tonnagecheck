@@ -1,6 +1,6 @@
 // Buyer guides. Every dollar figure in the prose is computed from the seed at build time via lib/facts, and
 // every policy statement is limited to what the linked primary source says.
-import { fairRange, equipmentStats, usd, fmtRange, seedDateLabel, cpi, moneyCents } from '../../lib/facts';
+import { fairRange, equipmentStats, usd, fmtRange, seedDateLabel, cpi } from '../../lib/facts';
 import { SYSTEMS, lowestPrice } from '../equipment';
 import { SOURCES } from '../sources';
 import type { Guide } from './types';
@@ -15,8 +15,8 @@ export const CORE_GUIDES: Guide[] = [
     get title() { return `${usd(equipmentStats('central-heat-pump', 3).min)} Equip vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: 9 Quote Red Flags`; },
     h1: 'How to tell if your HVAC quote is a rip-off',
     get description() { return `Nine red flags in AC, furnace and heat pump quotes (${usd(equipmentStats('central-heat-pump', 3).min)}–${usd(equipmentStats('central-heat-pump', 3).max)} 3-ton equipment vs ${fmtRange(fairRange('central-heat-pump', 3))} installed benchmark).`; },
-    // updated 2026-11-17: already-graded second-opinion link target
-    updated: '2026-11-17',
+    // updated 2026-10-28: last substantial body edit (git); Nov 17 only changed a link target / the date line
+    updated: '2026-10-28',
     body: () => {
       const eq = equipmentStats('central-heat-pump', 3);
       const f = fairRange('central-heat-pump', 3, 'standard');
@@ -94,19 +94,8 @@ export const CORE_GUIDES: Guide[] = [
       const s4 = fairRange('central-heat-pump', 4, 'standard');
       const h3 = fairRange('central-heat-pump', 3, 'high');
       const h4 = fairRange('central-heat-pump', 4, 'high');
-      const c3 = equipmentStats('heat-pump-only', 3);
-      const c4 = equipmentStats('heat-pump-only', 4);
-      const meanOf = (type: (typeof SYSTEMS)[number]['systemType'], tons: number) => {
-        const xs = SYSTEMS.filter((s) => s.systemType === type && s.tons === tons);
-        return xs.reduce((a, s) => a + lowestPrice(s), 0) / xs.length;
-      };
-      const medOf = (type: (typeof SYSTEMS)[number]['systemType'], tons: number) => equipmentStats(type, tons).median!;
-      const hpMean3 = meanOf('central-heat-pump', 3);
-      const hpMean4 = meanOf('central-heat-pump', 4);
-      const acMean3 = meanOf('ac-furnace', 3);
-      const acMean4 = meanOf('ac-furnace', 4);
-      const msMed3 = medOf('mini-split', 3);
-      const msMed4 = medOf('mini-split', 4);
+      const g3 = SYSTEMS.filter((s) => s.systemType === 'heat-pump-only' && s.brand === 'Goodman' && s.tons === 3 && s.components[0].startsWith('GLZS4')).sort((x, y) => lowestPrice(x) - lowestPrice(y))[0];
+      const g4 = SYSTEMS.filter((s) => s.systemType === 'heat-pump-only' && s.brand === 'Goodman' && s.tons === 4 && s.components[0].startsWith('GLZS4')).sort((x, y) => lowestPrice(x) - lowestPrice(y))[0];
       const pairs = ['Goodman', 'Trane', 'LG'].map((b) => {
         const x3 = SYSTEMS.filter((s) => s.systemType === 'central-heat-pump' && s.brand === b && s.tons === 3).sort((x, y) => lowestPrice(x) - lowestPrice(y))[0];
         const x4 = SYSTEMS.filter((s) => s.systemType === 'central-heat-pump' && s.brand === b && s.tons === 4).sort((x, y) => lowestPrice(x) - lowestPrice(y))[0];
@@ -126,15 +115,7 @@ ${pairs.length ? `<p>Within the same brand and product line the step is clearer:
 ${pairs.map((p) => `<tr><td>${p.b}</td><td class="r num"><a href="/systems/${p.x3.slug}/">${usd(lowestPrice(p.x3))}</a> <span class="small muted">${p.x3.specs.seer2} SEER2</span></td><td class="r num"><a href="/systems/${p.x4.slug}/">${usd(lowestPrice(p.x4))}</a> <span class="small muted">${p.x4.specs.seer2} SEER2</span></td><td class="r num">${usd(lowestPrice(p.x4) - lowestPrice(p.x3))}</td></tr>`).join('')}
 </tbody></table></div>
 <p class="small muted">Lowest listed price per brand and size in our data; efficiency differs between some pairs, which explains part of the gap.</p>` : ''}
-${c3.count && c4.count ? `<p>If only the outdoor condenser is being replaced, the Goodman heat pump condensers in our data list at ${usd(c3.min)} for 3 tons and ${usd(c4.min)} for 4 tons, a ${usd(c4.min! - c3.min!)} step at the cheapest condenser-only listing.</p>` : ''}
-
-<h2>Catalog means, not just the cheapest and the median</h2>
-<p>The figures above are the min, max and median of the listed ducted heat pumps. The catalog means and the same-size step in other system types (${seedDateLabel}) are:</p>
-<ul>
-<li><b>Ducted heat pump mean listed:</b> ${moneyCents(hpMean3)} at 3 tons and ${moneyCents(hpMean4)} at 4 tons, a ${moneyCents(hpMean4 - hpMean3)} step. The median step is ${usd(medOf('central-heat-pump', 4) - medOf('central-heat-pump', 3))}, or ${(((medOf('central-heat-pump', 4) / medOf('central-heat-pump', 3)) - 1) * 100).toFixed(1)}% of the 3-ton median.</li>
-<li><b>AC + furnace mean listed:</b> a ${moneyCents(acMean4 - acMean3)} step from 3 tons to 4 tons (the 4-ton median is ${moneyCents(medOf('ac-furnace', 4) - medOf('ac-furnace', 3))} above the 3-ton median).</li>
-<li><b>Mini-split median listed:</b> the 4-ton median is ${moneyCents(msMed4 - msMed3)} relative to the 3-ton median — in this catalog the 4-ton mini-split median is slightly cheaper, so a 4-ton mini-split quote is not automatically a more expensive box.</li>
-</ul>
+${g3 && g4 ? `<p>If only the outdoor condenser is being replaced, Goodman GLZS4 condensers list at ${usd(lowestPrice(g3))} (${g3.components[0]}, 3-ton) vs ${usd(lowestPrice(g4))} (${g4.components[0]}, 4-ton), a ${usd(lowestPrice(g4) - lowestPrice(g3))} step.</p>` : ''}
 
 <h2>Installed: the DOE-lab benchmark</h2>
 <p>The ${a(SOURCES.remdb.url, 'REMDB')} cost model from the National Laboratory of the Rockies (formerly NREL) scales installed cost with both capacity and efficiency. Restated from 2023 dollars into today's using CPI-U (×${cpi.factor}):</p>
@@ -177,8 +158,8 @@ ${c3.count && c4.count ? `<p>If only the outdoor condenser is being replaced, th
     get title() { return `${usd(equipmentStats('central-heat-pump', 3).min)} Equip vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: Equip vs Labor`; },
     h1: 'HVAC equipment cost vs installed price: where your money goes',
     get description() { return `How much of an HVAC quote is equipment (${usd(equipmentStats('central-heat-pump', 3).min)}–${usd(equipmentStats('central-heat-pump', 3).max)} at 3 tons) vs labor and margin (${fmtRange(fairRange('central-heat-pump', 3))} installed).`; },
-    // updated 2026-11-17: last source edit of core.ts
-    updated: '2026-11-17',
+    // updated 2026-11-12: last substantial body edit (git); Nov 17 edits changed link labels and the date line only
+    updated: '2026-11-12',
     body: () => {
       const sizes = [2, 3, 4, 5];
       const rows = sizes.map((t) => ({ t, e: equipmentStats('central-heat-pump', t), f: fairRange('central-heat-pump', t, 'standard') })).filter((r) => r.e.count);
@@ -298,8 +279,8 @@ ${r3 ? `<p>At 3 tons, then, roughly ${usd(r3.f.mid - (r3.e.median ?? 0))} of a b
     get title() { const s = equipmentStats('central-heat-pump', 3); return `AHRI Tax Credit Check: ${usd(s.min)}–${usd(s.max)} Heat Pumps`; },
     h1: 'Heat pump rebates after 25C, and how to check the AHRI certificate',
     get description() { return `The 25C heat pump tax credit ended after 2025. See which HEAR and utility rebates still apply and how to match the AHRI certificate to the models on a quote.`; },
-    // updated 2026-11-17: last source edit of core.ts
-    updated: '2026-11-17',
+    // updated 2026-11-09: last substantial body edit (git); Nov 17 only changed the date line
+    updated: '2026-11-09',
     related: { tons: [2, 3, 4], systems: { type: 'central-heat-pump', energyStar: true, coldClimate: true } },
     body: () => {
       const ex = SYSTEMS.find((s) => s.energyStar?.coldClimate && s.energyStar.ahriReferenceNumber && s.systemType === 'central-heat-pump');

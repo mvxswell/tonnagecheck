@@ -51,20 +51,24 @@ ${(() => {
   const sizes = [1.5, 2, 2.5, 3, 3.5, 4, 5];
   const rowFor = (brand: 'Goodman' | 'Trane', t: number) => {
     const xs = systemsWhere({ brand, type: 'central-heat-pump', tons: t });
-    if (!xs.length) return null;
+    if (xs.length < 3) return { t, n: xs.length, listed: null as number | null, leftover: null as number | null };
     const listed = lowestPrice(cheapest(xs));
     const mid = fairRange('central-heat-pump', t).mid;
-    return { t, n: xs.length, listed, mid, leftover: mid - listed };
+    return { t, n: xs.length, listed, leftover: mid - listed };
   };
   const body = sizes.map((t) => {
     const g = rowFor('Goodman', t);
     const tr = rowFor('Trane', t);
     if (!g && !tr) return '';
-    const cell = (r: NonNullable<ReturnType<typeof rowFor>> | null) => r ? `${usd(r.listed)} listed, ${usd(r.leftover)} leftover <span class="small muted">(${r.n})</span>` : '—';
+    const cell = (r: NonNullable<ReturnType<typeof rowFor>> | null) => {
+      if (!r) return '—';
+      if (r.listed == null || r.leftover == null) return `— <span class="small muted">(${r.n})</span>`;
+      return `${usd(r.listed)} listed, ${usd(r.leftover)} leftover <span class="small muted">(${r.n})</span>`;
+    };
     return `<tr><td>${tonLink(t, `${t} ton`)}</td><td class="r num">${cell(g)}</td><td class="r num">${cell(tr)}</td></tr>`;
   }).join('\n');
-  return `<h2>Goodman vs Trane leftover at the 3-ton-style midpoint, size by size</h2>
-<p>Each cell is the cheapest listed ducted heat pump of that brand and size, subtracted from the REMDB standard-tier midpoint for a ducted heat pump of the same size. These leftovers are computed only on this page (${asOf}), in whole dollars. Carrier is not in this table: every Carrier listing we have is a ductless mini-split, and comparing those leftovers with ducted midpoints would mix system types.</p>
+  return `<h2>Goodman vs Trane: cheapest listed ducted heat pump vs the standard installed midpoint, by size</h2>
+<p>Each cell is the cheapest listed ducted heat pump of that brand and size, set next to how much of the REMDB standard-tier midpoint for a ducted heat pump of the same size is left after that box price (${asOf}, whole dollars). A cell is blank when that brand and size has fewer than 3 listings. Carrier is not in this table: every Carrier listing we have is a ductless mini-split, and comparing those leftovers with ducted midpoints would mix system types.</p>
 <div class="tablewrap"><table><thead><tr><th>Size</th><th class="r">Goodman ducted heat pump</th><th class="r">Trane ducted heat pump</th></tr></thead><tbody>
 ${body}
 </tbody></table></div>`;

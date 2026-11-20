@@ -1,8 +1,8 @@
 // System configuration & installation labor guides (#11–#14 from Issue #4).
 // Every dollar figure is computed from src/lib/facts.ts, src/data/equipment.ts, or src/data/states.ts; non-price claims cite src/data/sources.ts.
 import { lowestPrice, median, TONNAGES } from '../equipment';
-import { fairRange, systemsWhere, equipmentStats, adderRange, newCircuitAdder, usd, fmtRange, moneyCents } from '../../lib/facts';
-import { STATES, heatingCosts, EFFICIENCY } from '../states';
+import { fairRange, systemsWhere, equipmentStats, adderRange, newCircuitAdder, usd, fmtRange } from '../../lib/facts';
+import { EFFICIENCY } from '../states';
 import { src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
 import type { Guide } from './types';
 
@@ -18,9 +18,9 @@ export const INSTALLATION_GUIDES: Guide[] = [
     get description() {
       const s = equipmentStats('central-heat-pump', 3);
       const f = fairRange('central-heat-pump', 3, 'high');
-      return `Dual-fuel heat pump + gas furnace vs cold-climate heat pumps (${usd(s.min)}–${usd(s.max)} 3-ton equipment, ${fmtRange(f)} high-tier installed) and state EIA fuel math.`;
+      return `Dual-fuel heat pump + gas furnace vs cold-climate heat pumps (${usd(s.min)}–${usd(s.max)} 3-ton equipment, ${fmtRange(f)} high-tier installed).`;
     },
-    // updated 2026-11-17: cold-climate catalog mean listed price
+    // updated 2026-11-17: dropped restated state EIA prices and the catalog-mean padding
     updated: '2026-11-17',
     related: { tons: [2.5, 3, 4], brands: ['Mitsubishi', 'Bosch', 'Goodman', 'LG'], systems: { type: 'central-heat-pump', coldClimate: true } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'high' },
@@ -32,9 +32,6 @@ export const INSTALLATION_GUIDES: Guide[] = [
       const panel = adderRange('panel200A');
       const circuit = newCircuitAdder();
       const cold = systemsWhere({ type: 'central-heat-pump', coldClimate: true });
-      const sampleStates = ['MA', 'PA', 'OH', 'GA']
-        .map((c) => STATES.find((s) => s.code === c && s.electricity && s.gas && s.gasHeatContentBtuPerCf))
-        .filter((x): x is NonNullable<typeof x> => Boolean(x));
       return `
 <p>Homeowners in IECC Climate Zones 4 through 7 who currently heat with natural gas face one of the most consequential configuration choices in residential HVAC: install an all-electric cold-climate heat pump with an air handler, or configure a "dual-fuel" (hybrid) system that pairs an outdoor heat pump with a gas furnace and cased evaporator coil so the furnace takes over on the coldest winter nights. Here is how the equipment, installation benchmarks, electrical adders, and state EIA fuel economics compare (${asOf}).</p>
 
@@ -51,25 +48,14 @@ export const INSTALLATION_GUIDES: Guide[] = [
 <li><b>All-electric eliminates the gas furnace, flue, and monthly gas customer charge:</b> Replacing the furnace with an air handler removes combustion venting and carbon monoxide risk (${src('cpscCo', 'CPSC')}). Modern cold-climate heat pumps certified under ${src('esCriteria', 'ENERGY STAR Cold Climate criteria')} deliver ≥ 70% of rated capacity at 5°F with a COP ≥ 1.75 (${src('bascColdClimate', 'DOE/PNNL Cold Climate Guide')}).</li>
 </ul>
 
-<h2>Economic balance point: heat pump vs gas furnace by state EIA prices</h2>
-<p>Using live U.S. Energy Information Administration residential electricity (${src('eiaElectricity', 'EIA Table 5.6.B')}) and natural gas (${src('eiaGas', 'EIA Natural Gas')}, ${src('eiaHeatContent', 'heat content')}) rates from our <a href="/states/">state pages</a>, here is the delivered cost per million BTU of heat across four states with different utility rate ratios:</p>
-<div class="tablewrap"><table><thead><tr><th>State</th><th class="r">Electricity (¢/kWh)</th><th class="r">Natural gas ($/Mcf)</th><th class="r">Cold-climate HP (${EFFICIENCY.coldHspf2Median} HSPF2)</th><th class="r">Gas furnace (${EFFICIENCY.afueLow}% / ${EFFICIENCY.afueHigh}% AFUE)</th></tr></thead><tbody>
-${sampleStates.map((st) => {
-  const hc = heatingCosts(st);
-  const cchp = hc.find((x) => x.label.startsWith('Cold-climate')) ?? hc.find((x) => x.label.startsWith('Heat pump,'))!;
-  const gas80 = hc.find((x) => x.label.includes(`${EFFICIENCY.afueLow}%`));
-  const gas96 = hc.find((x) => x.label.includes(`${EFFICIENCY.afueHigh}%`));
-  return `<tr><td><a href="/states/${st.slug}/">${st.name}</a></td><td class="r num">${st.electricity!.centsPerKwh}¢</td><td class="r num">$${st.gas!.dollarsPerMcf}</td><td class="r num">${usd(cchp.dollarsPerMMBtu)}/MMBtu</td><td class="r num">${gas80 ? usd(gas80.dollarsPerMMBtu) : '—'} / ${gas96 ? usd(gas96.dollarsPerMMBtu) : '—'}</td></tr>`;
-}).join('\n')}
-</tbody></table></div>
-<p>In states with high electric rates and moderate gas prices, a dual-fuel thermostat can run the heat pump during mild and moderate weather (when the heat pump's COP is highest) and switch over to the gas furnace during deep cold snaps when the heat pump's COP drops toward 1.75–2.0.</p>
+<h2>Economic balance point: compare your state's rates</h2>
+<p>Whether a dual-fuel setup saves money on fuel depends on your electricity and gas prices, which vary by state. Use the <a href="/states/">state energy-price table</a> (EIA residential rates: ${src('eiaElectricity', 'Table 5.6.B')}, ${src('eiaGas', 'natural gas')}, ${src('eiaHeatContent', 'heat content')}) and the <a href="/calculator/">heat pump vs. gas calculator</a> with your state's figures, rather than restating those rates here. In states with high electric rates and moderate gas prices, a dual-fuel thermostat can run the heat pump during mild weather, when its COP is highest, and switch to the furnace in deep cold.</p>
 
 <h2>2026 rebate rule check: DOE Program Notice 26-2</h2>
 <p>Be careful with contractor rebate promises on gas-to-electric quotes: under DOE Program Notice 26-2 (${src('doePn262', 'May 2026')}), federal HEEHRA/HEAR rebates (${src('hearStatute', '42 U.S.C. § 18795a')}) no longer cover fuel-switching from natural gas, propane, or oil to a heat pump, and the federal Section 25C tax credit expired after December 31, 2025 (${src('irsObbba', 'IRS')}). State and utility rebates still vary by utility; check your state on our <a href="/states/">state pages</a> and our <a href="/guides/heat-pump-tax-credit-and-rebate-stacking-2026/">2026 rebate guide</a>.</p>
 
 <h2>Listed cold-climate heat pumps from ${brandLink('Mitsubishi')}, ${brandLink('Bosch')}, ${brandLink('LG')}, and ${brandLink('Goodman')} (${asOf})</h2>
 ${systemsTable(cold.slice(0, 6))}
-<p>The ${cold.length} ENERGY STAR cold-climate ducted heat pumps in that catalog have a mean listed price of ${moneyCents(cold.reduce((a, s) => a + lowestPrice(s), 0) / cold.length)} (${asOf}). That mean is computed on this page only; it is the box-price reference for an all-electric cold-climate quote before electrical adders and the gas-furnace hardware of a dual-fuel setup.</p>
 <p>Grade either a heat pump quote or an AC + furnace quote in the ${auditLink({ systemType: 'central-heat-pump', tons: 3, tier: 'high' }, 'TonnageCheck quote auditor')}.</p>`;
     },
   },
@@ -86,7 +72,7 @@ ${systemsTable(cold.slice(0, 6))}
       const f = fairRange('central-heat-pump', 3);
       return `Compare 14.3, 16, and 18+ SEER2 heat pump benchmarks (${fmtRange(f)} at 3 tons) and ${usd(s.min)}–${usd(s.max)} equipment prices to calculate SEER2 payback.`;
     },
-    // updated 2026-11-17: listed catalog means by size and tier
+    // updated 2026-11-17: labelled the ducted heat pump means table; whole dollars; blank n<3
     updated: '2026-11-17',
     related: { tons: [2, 3, 4, 5], brands: ['Goodman', 'Trane', 'Bosch', 'LG'], systems: { type: 'central-heat-pump', tons: [3, 4] } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'mid' },
@@ -119,13 +105,14 @@ ${tiers.map((r) => `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">
 </tbody></table></div>
 <p class="small muted">${remdbNote}</p>
 
-<h2>Listed catalog means by size and tier</h2>
-<p>The table above is the REMDB installed-cost step. The listed-equipment means in the same size and tier buckets (${asOf}) are a different number, because a mid-tier bucket can include a cheap inverter and an expensive two-stage unit:</p>
-<div class="tablewrap"><table><thead><tr><th>Size</th><th class="r">Mid-tier mean listed</th><th class="r">High-tier mean listed</th></tr></thead><tbody>
+<h2>Listed ducted heat pump catalog means by size and tier</h2>
+<p>The table above is the REMDB installed-cost step. Mean listed prices of the ducted heat pumps in the same size and tier buckets (${asOf}), in whole dollars. A cell is blank when that bucket has fewer than 3 listings; a mid-tier bucket can include a cheap inverter and an expensive two-stage unit:</p>
+<div class="tablewrap"><table><thead><tr><th>Size (ducted heat pump)</th><th class="r">Mid-tier mean listed</th><th class="r">High-tier mean listed</th></tr></thead><tbody>
 ${tiers.map((r) => {
-  const midM = r.eqMid.length ? r.eqMid.reduce((a, s) => a + lowestPrice(s), 0) / r.eqMid.length : null;
-  const highM = r.eqHigh.length ? r.eqHigh.reduce((a, s) => a + lowestPrice(s), 0) / r.eqHigh.length : null;
-  return `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">${midM == null ? '—' : moneyCents(midM)} <span class="small muted">(${r.eqMid.length})</span></td><td class="r num">${highM == null ? '—' : moneyCents(highM)} <span class="small muted">(${r.eqHigh.length})</span></td></tr>`;
+  const midM = r.eqMid.length >= 3 ? r.eqMid.reduce((a, s) => a + lowestPrice(s), 0) / r.eqMid.length : null;
+  const highM = r.eqHigh.length >= 3 ? r.eqHigh.reduce((a, s) => a + lowestPrice(s), 0) / r.eqHigh.length : null;
+  const cell = (m: number | null, n: number) => m == null ? `— <span class="small muted">(${n})</span>` : `${usd(m)} <span class="small muted">(${n})</span>`;
+  return `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">${cell(midM, r.eqMid.length)}</td><td class="r num">${cell(highM, r.eqHigh.length)}</td></tr>`;
 }).join('\n')}
 </tbody></table></div>
 

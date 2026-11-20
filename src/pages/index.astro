@@ -3,13 +3,13 @@ import Base from '../layouts/Base.astro';
 import QuoteCta from '../components/QuoteCta.astro';
 import Newsletter from '../components/Newsletter.astro';
 import { SITE } from '../config';
-import { SYSTEMS, TONNAGES, lowestPrice, median } from '../data/equipment';
+import { SYSTEMS, TONNAGES } from '../data/equipment';
 import { GUIDES } from '../data/guides/index';
 import { BRANDS } from '../data/brands';
 import { sizeGuidePath } from '../data/prune';
 import { PART_CATEGORIES, PART_CATALOG_STATS } from '../data/parts';
 import { STATES } from '../data/states';
-import { fairRange, equipmentStats, seedDateLabel, usd, fmtRange, moneyCents } from '../lib/facts';
+import { fairRange, equipmentStats, seedDateLabel, usd, fmtRange } from '../lib/facts';
 
 const FEATURED_GUIDE_SLUGS = [
   '3-ton-heat-pump-ac-replacement-cost',
@@ -25,24 +25,6 @@ const featuredGuides = FEATURED_GUIDE_SLUGS.map((slug) => GUIDES.find((g) => g.s
 const esCount = SYSTEMS.filter((s) => s.energyStar).length;
 const three = equipmentStats('central-heat-pump', 3);
 const threeFair = fairRange('central-heat-pump', 3, 'standard');
-const catalogPrices = SYSTEMS.map(lowestPrice);
-const catalogMean = catalogPrices.reduce((a, n) => a + n, 0) / catalogPrices.length;
-const catalogSorted = [...catalogPrices].sort((a, b) => a - b);
-const pctile = (xs: number[], p: number) => {
-  const i = (xs.length - 1) * p;
-  const lo = Math.floor(i), hi = Math.ceil(i);
-  return lo === hi ? xs[lo] : xs[lo] * (hi - i) + xs[hi] * (i - lo);
-};
-const catalogIqr = pctile(catalogSorted, 0.75) - pctile(catalogSorted, 0.25);
-const esShare = (esCount / SYSTEMS.length) * 100;
-const coldCount = SYSTEMS.filter((s) => s.energyStar?.coldClimate).length;
-const coldShare = (coldCount / SYSTEMS.length) * 100;
-const seerVals = SYSTEMS.map((s) => s.specs.seer2).filter((n): n is number => n != null);
-const meanSeer2 = seerVals.reduce((a, n) => a + n, 0) / seerVals.length;
-const allTypeBySize = TONNAGES.map((t) => {
-  const xs = SYSTEMS.filter((s) => s.tons === t).map(lowestPrice);
-  return { t, n: xs.length, mean: xs.reduce((a, n) => a + n, 0) / xs.length, median: median(xs) };
-});
 const ld = [
   { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url, description: SITE.description },
   {
@@ -75,25 +57,6 @@ import { DECODER_BRANDS } from '../data/decoder/index';
     </div>
   </section>
 
-  <section>
-    <h2>Listed prices across the whole catalog</h2>
-    <p class="small muted">These figures are computed from all {SYSTEMS.length} public listings on this site and are shown only here — not on a brand, size, or compare page. Captured {seedDateLabel}.</p>
-    <div class="grid">
-      <div class="card"><div class="muted small">Mean listed price, all system types and sizes</div><div class="big num">{moneyCents(catalogMean)}</div><p class="small muted">The interquartile range of those listings is {usd(catalogIqr)}.</p></div>
-      <div class="card"><div class="muted small">ENERGY STAR share of the catalog</div><div class="big num">{esShare.toFixed(1)}%</div><p class="small muted">{esCount} of {SYSTEMS.length} listings have a matched ENERGY STAR / AHRI record; {coldShare.toFixed(1)}% ({coldCount} systems) are flagged cold-climate.</p></div>
-      <div class="card"><div class="muted small">Mean SEER2 of listed systems</div><div class="big num">{meanSeer2.toFixed(2)}</div><p class="small muted">Simple mean of the {seerVals.length} listings that publish a SEER2 rating.</p></div>
-    </div>
-    <div class="tablewrap">
-      <table>
-        <thead><tr><th>Size, all system types</th><th class="r">Listings</th><th class="r">Mean listed</th></tr></thead>
-        <tbody>
-          {allTypeBySize.map((r) => (
-            <tr><td><a href={sizeGuidePath(r.t)}>{r.t} ton</a></td><td class="r num">{r.n}</td><td class="r num">{moneyCents(r.mean)}</td></tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  </section>
 
   <section>
     <h2>How the audit works</h2>

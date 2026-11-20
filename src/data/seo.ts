@@ -22,17 +22,17 @@ export function brandMeta(b: Brand, fair: Range): Meta | undefined {
     case 'mitsubishi':
       return {
         title: `Mitsubishi Heating & Cooling Prices: ${span}`,
-        description: `Mitsubishi heating and cooling unit costs: ${b.systems.length} systems listed ${span} (${sizes}) vs ${fmtRange(fair)} installed. Audit a Mitsubishi quote free.`,
+        description: `Mitsubishi heating and cooling unit costs: ${b.systems.length} systems listed ${span} (${sizes}) vs ${fmtRange(fair)} ducted installed. Audit a Mitsubishi quote free.`,
       };
     case 'gree':
       return {
         title: `Gree Flexx & Livo Heat Pump Prices: ${span}`,
-        description: `Gree heat pump prices: ${b.systems.length} Flexx and Livo systems listed ${span} (${sizes}) vs ${fmtRange(fair)} installed benchmark. Audit a Gree quote free.`,
+        description: `Gree heat pump prices: ${b.systems.length} Flexx and Livo systems listed ${span} (${sizes}) vs ${fmtRange(fair)} ducted installed benchmark. Audit a Gree quote free.`,
       };
     case 'daikin':
       return {
         title: `Daikin Mini-Split Prices: ${span} Listed`,
-        description: `Daikin mini-split prices: ${b.systems.length} Oterra, Aurora, Atmosphera and MXM systems listed ${span} (${sizes}) vs ${fmtRange(fair)} installed. Audit a quote free.`,
+        description: `Daikin mini-split prices: ${b.systems.length} Oterra, Aurora, Atmosphera and MXM systems listed ${span} (${sizes}) vs ${fmtRange(fair)} ducted installed. Audit a quote free.`,
       };
   }
   return undefined;

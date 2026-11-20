@@ -68,8 +68,8 @@ ${foldedMatchup('r32-vs-r454b-heat-pump-systems-compared')}
     get title() { return `${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))} Equip vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: Ductwork Add-On`; },
     h1: 'Ductwork replacement as a quote add-on: when it is needed and how to check it',
     get description() { return `How to verify ductwork add-ons on ${fmtRange(fairRange('central-heat-pump', 3))} 3-ton HVAC quotes (${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))}+ equipment): static pressure & leakage tests.`; },
-    // updated 2026-11-17: last source edit of technical.ts
-    updated: '2026-11-17',
+    // updated 2026-10-28: last substantial body edit (git); Nov 17 only changed the date line
+    updated: '2026-10-28',
     related: { tons: [3, 4], systems: { type: 'central-heat-pump', tons: [3, 4] } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -123,8 +123,8 @@ ${foldedMatchup('r32-vs-r454b-heat-pump-systems-compared')}
     get title() { return `${usd(adderRange('panel200A').mid)} Panel vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: 200A & Strips`; },
     h1: '200A panel upgrades and heat strips on a heat pump quote',
     get description() { return `When a heat pump needs a ${fmtRange(adderRange('panel200A'))} 200A panel upgrade or ${usd(newCircuitAdder())} circuit on ${fmtRange(fairRange('central-heat-pump', 3))} 3-ton quotes.`; },
-    // updated 2026-11-17: last source edit of technical.ts
-    updated: '2026-11-17',
+    // updated 2026-10-28: last substantial body edit (git); Nov 17 only changed the date line
+    updated: '2026-10-28',
     related: { tons: [3, 4, 5], systems: { type: 'central-heat-pump', coldClimate: true } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -171,8 +171,8 @@ ${foldedMatchup('r32-vs-r454b-heat-pump-systems-compared')}
     get title() { return `${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))} Equip vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: Manual J Sizing`; },
     h1: 'Manual J load calculation vs rule-of-thumb sizing',
     get description() { return `Why rule-of-thumb HVAC sizing fails, what ACCA Manual J includes, and what each extra half-ton adds to ${fmtRange(fairRange('central-heat-pump', 3))} (${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))}+ equip) quotes.`; },
-    // updated 2026-11-17: last source edit of technical.ts
-    updated: '2026-11-17',
+    // updated 2026-10-28: last substantial body edit (git); Nov 17 only changed the date line
+    updated: '2026-10-28',
     related: { tons: [2.5, 3, 3.5, 4], systems: { type: 'central-heat-pump', tons: [3, 3.5, 4] } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -223,8 +223,8 @@ ${steps.map((x) => `<tr><td>${tonLink(x.a, `${x.a}`)} → ${tonLink(x.b, `${x.b}
     get title() { return `${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))} Equip vs ${fmtRange(fairRange('central-heat-pump', 3, 'high'))} Installed: 2026 Rebates`; },
     h1: 'Heat pump tax credits and rebate stacking in 2026',
     get description() { return `2026 heat pump rebate stacking (HEEHRA/HEAR after DOE PN 26-2, HOMES, utility rebates & 25C expiration) on ${fmtRange(fairRange('central-heat-pump', 3, 'high'))} (${usd(lowestPrice(systemsWhere({ type: 'central-heat-pump', tons: 3 })[0]))}+ equip) quotes.`; },
-    // updated 2026-11-17: last source edit of technical.ts
-    updated: '2026-11-17',
+    // updated 2026-10-28: last substantial body edit (git); Nov 17 only changed the date line
+    updated: '2026-10-28',
     related: { brands: BRANDS.filter((b) => b.coldClimateCount > 0).map((b) => b.name), systems: { coldClimate: true } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'high' },
     body: () => {

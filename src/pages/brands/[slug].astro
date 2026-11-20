@@ -61,11 +61,10 @@ const ld = [
 <Base title={title} description={description} jsonld={ld}>
   <p class="crumbs"><a href="/">Home</a> / <a href="/brands/">Brands</a> / {b.name}</p>
   <h1>{seo?.h1 ?? `${b.name} HVAC prices: equipment vs installed`}</h1>
-  <p class="lead">{b.systems.length} real {b.name} listings ({b.types.map((t) => shortType[t]).join(', ')}) with prices captured {seedDateLabel}, compared with the DOE national-lab installed-cost benchmark for the same size and efficiency.</p>
-  <p class="small muted">A 3-ton ducted heat pump, any brand, benchmarks at {fmtRange(ductedStd3)} standard and {fmtRange(ductedHigh3)} high-efficiency (REMDB national-lab estimate).</p>
+  <p class="lead">{b.systems.length} real {b.name} listings ({b.types.map((t) => shortType[t]).join(', ')}) with prices captured {seedDateLabel}.</p>
 
   <div class="grid kp">
-    <div class="card"><div class="small muted">Listed equipment price span</div><div class="v num">{usd(b.priceMin)}–{usd(b.priceMax)}</div><div class="small muted">Median {usd(b.priceMedian)} across {b.systems.length} systems</div></div>
+    <div class="card"><div class="small muted">Listed equipment price span</div><div class="v num">{usd(b.priceMin)}–{usd(b.priceMax)}</div><div class="small muted">{b.systems.length} systems, prices captured {seedDateLabel}</div></div>
     <div class="card"><div class="small muted">Efficiency range</div><div class="v num">{b.seer2Min === b.seer2Max ? b.seer2Min : `${b.seer2Min}–${b.seer2Max}`} SEER2</div><div class="small muted">{b.hspf2Max ? `Up to ${b.hspf2Max} HSPF2` : 'Heating rating not listed'}</div></div>
     <div class="card"><div class="small muted">ENERGY STAR matched pairings</div><div class="v num">{b.energyStarCount} of {b.systems.length}</div><div class="small muted">{b.coldClimateCount} cold-climate certified</div></div>
   </div>
@@ -76,7 +75,6 @@ const ld = [
   )}
 
   <h2>{extra?.sizeHeading ?? `${b.name} listed price vs installed benchmark, by size`}</h2>
-  <p class="small muted">Listed is the public online price span for {b.name} at that size. Installed is the REMDB national-lab range for the same type and efficiency. <a href="/about/#benchmarks">Method</a></p>
   <div class="tablewrap">
     <table>
       <thead><tr><th>Size &amp; type</th><th class="r">Listed equipment</th><th class="r">Installed benchmark <span class="badge b-est">est.</span></th><th class="r">Midpoint</th><th class="r">Non-equipment at mid</th></tr></thead>
@@ -93,7 +91,7 @@ const ld = [
       </tbody>
     </table>
   </div>
-  <p class="small muted">Non-equipment at midpoint = installed mid minus the lowest listed {b.name} price at that size.</p>
+  <p class="small muted">A 3-ton ducted heat pump of any brand benchmarks at {fmtRange(ductedStd3)} standard and {fmtRange(ductedHigh3)} high-efficiency (REMDB). <a href="/about/#benchmarks">Method</a></p>
   {extra && <Fragment set:html={extra.sectionsHtml} />}
 
   <h2>Specs: SEER2, HSPF2 and cold-climate performance</h2>
@@ -111,8 +109,7 @@ const ld = [
     <p>None of the {b.name} listings in our data is matched to an ENERGY STAR cold-climate record. Ratings below come from the ENERGY STAR database where the exact pairing is certified ({b.energyStarCount} of {b.systems.length}) and from the retailer listing otherwise.</p>
   )}
 
-  <h2>Tax credits and rebates for {b.name} equipment</h2>
-  <p class="small">The federal 25C credit is not allowed for property placed in service after Dec. 31, 2025 (<a href={SOURCES.irsObbba.url}>IRS</a>). Income-qualified HEAR rebates and utility programs may still apply; they are run by state offices and often need an AHRI certificate for the exact {b.name} pairing. <a href="/guides/heat-pump-rebates-and-ahri-certificate-check/">Rebates and the AHRI check</a> · <a href="/states/">Your state</a> · <a href={SOURCES.esRebateFinder.url}>ENERGY STAR Rebate Finder</a> · <a href={SOURCES.dsire.url}>DSIRE</a></p>
+  <p class="small"><a href="/guides/heat-pump-rebates-and-ahri-certificate-check/">2026 tax credits, rebates and the AHRI check</a> that may apply to a {b.name} install.</p>
 
   {decoder && (
     <div class="card">
@@ -125,11 +122,6 @@ const ld = [
   <h2>All {b.name} systems</h2>
   <FilterableSystems systems={b.systems} label={`Search ${b.name} systems`} />
 
-  <div class="cta card">
-    <h2>Got {article} {b.name} quote?</h2>
-    <p>Grade the size, efficiency and price against these {b.name} listings and the installed benchmark.</p>
-    <a class="btn" href={auditHref}>Audit my {b.name} quote</a>
-  </div>
 
 {brandCmpCards.length > 0 && (
     <>

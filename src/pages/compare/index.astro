@@ -11,12 +11,8 @@ const allStats = statsOf(SYSTEMS)!;
 const live = COMPARISONS.filter((c) => !isCompareMerged(c.slug));
 const more = live.filter((c) => !isCompareIndexed(c.slug));
 
-const moneyExact = (n: number) => {
-  const cents = Math.round(n * 100) / 100;
-  const hasCents = !Number.isInteger(cents);
-  return `$${cents.toLocaleString('en-US', { minimumFractionDigits: hasCents ? 2 : 0, maximumFractionDigits: 2 })}`;
-};
 const meanOf = (xs: typeof SYSTEMS) => xs.reduce((sum, s) => sum + lowestPrice(s), 0) / xs.length;
+const cell = (xs: typeof SYSTEMS, value: number) => xs.length < 3 ? '—' : usd(value);
 
 const hp = systemsWhere({ type: 'central-heat-pump' });
 const ms = systemsWhere({ type: 'mini-split' });
@@ -56,7 +52,7 @@ const jsonld = {
 
   <div class="card" style="margin:18px 0">
     <h2 style="margin-top:0">Listed-price snapshot of this catalog</h2>
-    <p class="small muted">These catalog-wide figures are computed from the {SYSTEMS.length} public listings on this page ({seedDateLabel}) and are shown only here. The workbench below can pair any two of them.</p>
+    <p class="small muted">Median and mean listed equipment prices by system type, from the {SYSTEMS.length} public listings on this page ({seedDateLabel}). A cell is blank when that type has fewer than 3 listings. The workbench below can pair any two of them.</p>
     <div class="tablewrap">
       <table>
         <thead>
@@ -71,26 +67,26 @@ const jsonld = {
           <tr>
             <td>Ducted heat pump</td>
             <td class="r num">{hp.length}</td>
-            <td class="r num">{moneyExact(hpMed)}</td>
-            <td class="r num">{moneyExact(meanOf(hp))}</td>
+            <td class="r num">{cell(hp, hpMed)}</td>
+            <td class="r num">{cell(hp, meanOf(hp))}</td>
           </tr>
           <tr>
             <td>Mini-split</td>
             <td class="r num">{ms.length}</td>
-            <td class="r num">{moneyExact(msMed)}</td>
-            <td class="r num">{moneyExact(meanOf(ms))}</td>
+            <td class="r num">{cell(ms, msMed)}</td>
+            <td class="r num">{cell(ms, meanOf(ms))}</td>
           </tr>
           <tr>
             <td>AC + furnace</td>
             <td class="r num">{acf.length}</td>
-            <td class="r num">{moneyExact(acfMed)}</td>
-            <td class="r num">{moneyExact(acfMean)}</td>
+            <td class="r num">{cell(acf, acfMed)}</td>
+            <td class="r num">{cell(acf, acfMean)}</td>
           </tr>
           <tr>
             <td>Condenser-only</td>
             <td class="r num">{cond.length}</td>
-            <td class="r num">{moneyExact(condMed)}</td>
-            <td class="r num">{moneyExact(meanOf(cond))}</td>
+            <td class="r num">{cell(cond, condMed)}</td>
+            <td class="r num">{cell(cond, meanOf(cond))}</td>
           </tr>
         </tbody>
       </table>
