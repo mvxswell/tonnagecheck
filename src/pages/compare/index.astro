@@ -1,83 +1,107 @@
 ---
 import Base from '../../layouts/Base.astro';
 import CompareWorkbench from '../../components/CompareWorkbench.astro';
-import Auditor from '../../components/Auditor.astro';
 import { COMPARISONS } from '../../data/comparisons';
-import { isCompareMerged, isCompareIndexed } from '../../data/prune';
-import { SYSTEMS } from '../../data/equipment';
-import { statsOf, usd, catalogDateLabel } from '../../lib/facts';
+import { isCompareMerged, isCompareIndexed, COMPARE_MERGED } from '../../data/prune';
+import { SYSTEMS, lowestPrice } from '../../data/equipment';
+import { statsOf, systemsWhere, usd, catalogDateLabel } from '../../lib/facts';
+import QuoteCta from '../../components/QuoteCta.astro';
 
 const allStats = statsOf(SYSTEMS)!;
-// Merged comparisons now live inside guides (301s in public/_redirects); noindexed ones are listed compactly at the end.
 const live = COMPARISONS.filter((c) => !isCompareMerged(c.slug));
-const featured = live.filter((c) => isCompareIndexed(c.slug));
 const more = live.filter((c) => !isCompareIndexed(c.slug));
-const brandComparisons = featured.filter((c) => c.category === 'brand');
-const typeComparisons = featured.filter((c) => c.category === 'type');
-const modelComparisons = featured.filter((c) => c.category === 'model');
 
-const title = `${usd(allStats.min)}–${usd(allStats.max)} HVAC Brand & Tonnage Comparisons`;
-const description = `Compare ${live.length} head-to-head HVAC brand, tonnage & model matchups (${usd(allStats.min)}–${usd(allStats.max)} equipment vs DOE installed costs).`;
+const meanOf = (xs: typeof SYSTEMS) => xs.reduce((sum, s) => sum + lowestPrice(s), 0) / xs.length;
+const cell = (xs: typeof SYSTEMS, value: number) => xs.length < 3 ? '—' : usd(value);
+
+const hp = systemsWhere({ type: 'central-heat-pump' });
+const ms = systemsWhere({ type: 'mini-split' });
+const acf = systemsWhere({ type: 'ac-furnace' });
+const cond = systemsWhere({ type: 'heat-pump-only' });
+const hpMed = statsOf(hp).median!;
+const msMed = statsOf(ms).median!;
+const acfMean = meanOf(acf);
+const acfMed = statsOf(acf).median!;
+const condMed = statsOf(cond).median!;
+
+const folded = [
+  { href: '/guides/bosch-ids-inverter-heat-pump-cost/', label: 'Bosch vs Mitsubishi', note: 'Bosch IDS inverter cost guide' },
+  { href: '/guides/mitsubishi-hyper-heat-cost/', label: 'LG vs Mitsubishi', note: 'Mitsubishi Hyper-Heat guide' },
+  { href: '/guides/goodman-vs-trane-vs-carrier-equipment-markup/', label: 'LG vs Trane', note: 'Goodman vs Trane vs Carrier markup guide' },
+  { href: '/guides/inverter-vs-single-stage-heat-pump-cost/', label: 'ACiQ vs MRCOOL and inverter vs single-stage', note: 'Inverter vs single-stage guide' },
+  { href: '/guides/heat-pump-vs-ac-and-furnace-replacement-cost/', label: 'Heat pump vs AC + furnace, Trane vs Goodman furnaces', note: 'Heat pump vs AC + furnace guide' },
+  { href: '/guides/r410a-vs-r454b-r32-refrigerant-transition-quotes/', label: 'R-32 vs R-454B systems', note: 'Refrigerant transition guide' },
+  { href: '/guides/3-ton-heat-pump-ac-replacement-cost/', label: 'Cost by size, 1.5 to 5 tons (model matchups included)', note: 'Combined size guide, every size from 1.5 to 5 tons' },
+];
+
+const title = `${usd(allStats.min)}–${usd(allStats.max)} HVAC Comparison Workbench`;
+const description = `Pick any two of ${SYSTEMS.length} listed HVAC systems and compare equipment prices, SEER2 and DOE installed-cost benchmarks. Saved brand matchups now live in the guides.`;
 
 const jsonld = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  name: 'Head-to-Head HVAC Brand, Tonnage & System Comparisons',
+  name: 'HVAC equipment comparison workbench',
   description,
   url: 'https://tonnagechecker.com/compare/',
 };
 ---
 <Base title={title} description={description} jsonld={jsonld}>
   <p class="crumbs"><a href="/">Home</a> / Comparisons</p>
-  <h1>Head-to-head HVAC brand, tonnage &amp; system comparisons</h1>
-  <p class="lead">Compare public distributor equipment prices ({usd(allStats.min)}–{usd(allStats.max)} across {SYSTEMS.length} systems as of {catalogDateLabel}), DOE national-lab installed replacement benchmarks, SEER2/HSPF2 efficiency, refrigerant (R-32 vs R-454B), and contractor markup spreads side by side.</p>
+  <h1>HVAC equipment comparison workbench ({SYSTEMS.length} systems)</h1>
+  <p class="lead">This page is the comparison tool: pick any two of the {SYSTEMS.length} listed systems in the workbench below ({catalogDateLabel}). It starts on two 3-ton ducted heat pumps that both have ENERGY STAR / AHRI records: the Goodman GLZS5BA3610, certified at 35,400 BTU/h (AHRI #215381162), and the Trane A5HL5036A1000A, certified at 34,000 BTU/h (AHRI #216439108). Saved brand, refrigerant and model matchups now live in the guides listed after the tool.</p>
+
+  <div class="card" style="margin:18px 0">
+    <h2 style="margin-top:0">Listed-price snapshot of this catalog</h2>
+    <p class="small muted">Median and mean listed equipment prices by system type, from the {SYSTEMS.length} public listings on this page ({catalogDateLabel}). A cell is blank when that type has fewer than 3 listings. The workbench below can pair any two of them.</p>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>System type</th>
+            <th class="r">Count</th>
+            <th class="r">Median listed (equipment only)</th>
+            <th class="r">Mean listed (equipment only)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Ducted heat pump</td>
+            <td class="r num">{hp.length}</td>
+            <td class="r num">{cell(hp, hpMed)}</td>
+            <td class="r num">{cell(hp, meanOf(hp))}</td>
+          </tr>
+          <tr>
+            <td>Mini-split</td>
+            <td class="r num">{ms.length}</td>
+            <td class="r num">{cell(ms, msMed)}</td>
+            <td class="r num">{cell(ms, meanOf(ms))}</td>
+          </tr>
+          <tr>
+            <td>AC + furnace</td>
+            <td class="r num">{acf.length}</td>
+            <td class="r num">{cell(acf, acfMed)}</td>
+            <td class="r num">{cell(acf, acfMean)}</td>
+          </tr>
+          <tr>
+            <td>Condenser-only</td>
+            <td class="r num">{cond.length}</td>
+            <td class="r num">{cell(cond, condMed)}</td>
+            <td class="r num">{cell(cond, meanOf(cond))}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
   <CompareWorkbench />
 
-  <h2>Brand-vs-brand HVAC cost &amp; spec comparisons ({brandComparisons.length})</h2>
-  <p class="small muted">See how much two brands actually differ in wholesale/online equipment price versus what contractors charge on tiered proposals.</p>
+  <h2>Head-to-head matchups, now in the guides</h2>
+  <p class="small muted">The brand, refrigerant and flagship model comparisons now sit inside the guide that answers the same question, with the same sourced prices and ratings. Size-by-size cost and the flagship model matchups live in the <a href="/guides/3-ton-heat-pump-ac-replacement-cost/">combined size guide</a>; the <a href="/tonnage/">tonnage index</a> has the step-up cost from one size to the next.</p>
   <div class="grid">
-    {brandComparisons.map((c) => (
-      <a class="card" href={`/compare/${c.slug}/`} style="text-decoration:none;color:inherit">
-        <div class="small muted">{c.shortLabel}</div>
-        <div style="font-weight:700;margin:4px 0;color:var(--acc)">{c.h1}</div>
-        <p class="small" style="margin:6px 0">
-          <b>{c.left.label}:</b> {usd(c.left.equipMin)}–{usd(c.left.equipMax)} (med {usd(c.left.equipMedian)}) · {c.left.seer2Span}<br />
-          <b>{c.right.label}:</b> {usd(c.right.equipMin)}–{usd(c.right.equipMax)} (med {usd(c.right.equipMedian)}) · {c.right.seer2Span}
-        </p>
-      </a>
-    ))}
-  </div>
-
-  <h2>Sizes and compressor staging</h2>
-  <p class="small muted">Size-by-size cost steps are on the <a href="/tonnage/">by-tonnage pages</a>. Single-stage vs inverter cost at 3, 4 and 5 tons is in the <a href="/guides/inverter-vs-single-stage-heat-pump-cost/">inverter vs single-stage guide</a>, and heat pump vs AC + furnace by size is in the <a href="/guides/heat-pump-vs-ac-and-furnace-replacement-cost/">heat pump vs AC + furnace guide</a>.</p>
-
-  <h2>System-type &amp; A2L refrigerant comparisons ({typeComparisons.length})</h2>
-  <p class="small muted">R-32 vs R-454B systems compared. Heat pump vs AC + furnace by size is in the <a href="/guides/heat-pump-vs-ac-and-furnace-replacement-cost/">heat pump vs AC + furnace guide</a>; 2-ton ducted vs mini-split is under More matchups.</p>
-  <div class="grid">
-    {typeComparisons.map((c) => (
-      <a class="card" href={`/compare/${c.slug}/`} style="text-decoration:none;color:inherit">
-        <div class="small muted">{c.shortLabel}</div>
-        <div style="font-weight:700;margin:4px 0;color:var(--acc)">{c.h1}</div>
-        <p class="small" style="margin:6px 0">
-          <b>{c.left.label}:</b> {usd(c.left.equipMin)}–{usd(c.left.equipMax)} ({c.left.count} systems)<br />
-          <b>{c.right.label}:</b> {usd(c.right.equipMin)}–{usd(c.right.equipMax)} ({c.right.count} systems)
-        </p>
-      </a>
-    ))}
-  </div>
-
-  <h2>Flagship model-vs-model comparisons ({modelComparisons.length})</h2>
-  <p class="small muted">Exact outdoor + indoor model number matchups across 2-ton, 3-ton, 4-ton, and 5-ton heat pumps and mini-splits.</p>
-  <div class="grid">
-    {modelComparisons.map((c) => (
-      <a class="card" href={`/compare/${c.slug}/`} style="text-decoration:none;color:inherit">
-        <div class="small muted">{c.shortLabel}</div>
-        <div style="font-weight:700;margin:4px 0;color:var(--acc)">{c.h1}</div>
-        <p class="small" style="margin:6px 0">
-          <b>{c.left.label}:</b> {usd(c.left.equipMin)} · {c.left.seer2Span} · {c.left.refrigerants}<br />
-          <b>{c.right.label}:</b> {usd(c.right.equipMin)} · {c.right.seer2Span} · {c.right.refrigerants}
-        </p>
+    {folded.map((f) => (
+      <a class="card" href={f.href} style="text-decoration:none;color:inherit">
+        <div style="font-weight:700;margin:4px 0;color:var(--acc)">{f.label}</div>
+        <div class="small muted">{f.note}</div>
       </a>
     ))}
   </div>
@@ -89,5 +113,5 @@ const jsonld = {
     </>
   )}
 
-  <Auditor heading="Audit your contractor quote" />
+  <QuoteCta />
 </Base>

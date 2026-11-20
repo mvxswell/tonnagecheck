@@ -3,7 +3,7 @@
 import { lowestPrice, median, TONNAGES } from '../equipment';
 import { fairRange, systemsWhere, equipmentStats, adderRange, newCircuitAdder, usd, fmtRange } from '../../lib/facts';
 import { STATES, heatingCosts, EFFICIENCY } from '../states';
-import { today, src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
+import { src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
 import type { Guide } from './types';
 
 export const INSTALLATION_GUIDES: Guide[] = [
@@ -20,7 +20,8 @@ export const INSTALLATION_GUIDES: Guide[] = [
       const f = fairRange('central-heat-pump', 3, 'high');
       return `Dual-fuel heat pump + gas furnace vs cold-climate heat pumps (${usd(s.min)}–${usd(s.max)} 3-ton equipment, ${fmtRange(f)} high-tier installed) and state EIA fuel math.`;
     },
-    updated: today,
+    // updated 2026-11-20: dual-fuel body restored to main (EIA table, no catalog mean)
+    updated: '2026-11-20',
     related: { tons: [2.5, 3, 4], brands: ['Mitsubishi', 'Bosch', 'Goodman', 'LG'], systems: { type: 'central-heat-pump', coldClimate: true } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'high' },
     body: () => {
@@ -84,7 +85,8 @@ ${systemsTable(cold.slice(0, 6))}
       const f = fairRange('central-heat-pump', 3);
       return `Compare 14.3, 16, and 18+ SEER2 heat pump benchmarks (${fmtRange(f)} at 3 tons) and ${usd(s.min)}–${usd(s.max)} equipment prices to calculate SEER2 payback.`;
     },
-    updated: today,
+    // updated 2026-11-20: restored formula savings percentages; reworded midpoint-difference references
+    updated: '2026-11-17',
     related: { tons: [2, 3, 4, 5], brands: ['Goodman', 'Trane', 'Bosch', 'LG'], systems: { type: 'central-heat-pump', tons: [3, 4] } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'mid' },
     body: () => {
@@ -111,19 +113,30 @@ ${systemsTable(cold.slice(0, 6))}
 <li><b>Mid tier (15.2 to 16.9 SEER2):</b> Meets the ${src('esCriteria', 'ENERGY STAR')} split-system cooling threshold (≥ 15.2 SEER2, ≥ 7.8 HSPF2, ≥ 11.0 EER2).</li>
 <li><b>High tier (17.0+ SEER2, including 18+ SEER2 inverter lines):</b> Variable-speed inverter systems with the widest modulation range.</li>
 </ul>
-<div class="tablewrap"><table><thead><tr><th>Size</th><th class="r">Standard (&lt;15.2 SEER2) <span class="badge b-est">est.</span></th><th class="r">Mid (15.2–16.9 SEER2) <span class="badge b-est">est.</span></th><th class="r">High (17+ SEER2) <span class="badge b-est">est.</span></th><th class="r">Mid-to-Std step</th><th class="r">High-to-Std step</th></tr></thead><tbody>
-${tiers.map((r) => `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">${usd(r.std.mid)}<br><span class="small muted">${fmtRange(r.std)}</span></td><td class="r num">${usd(r.mid.mid)}<br><span class="small muted">${fmtRange(r.mid)}</span></td><td class="r num">${usd(r.high.mid)}<br><span class="small muted">${fmtRange(r.high)}</span></td><td class="r num">+${usd(r.mid.mid - r.std.mid)}</td><td class="r num">+${usd(r.high.mid - r.std.mid)}</td></tr>`).join('\n')}
+<div class="tablewrap"><table><thead><tr><th>Size</th><th class="r">Standard (&lt;15.2 SEER2) <span class="badge b-est">est.</span></th><th class="r">Mid (15.2–16.9 SEER2) <span class="badge b-est">est.</span></th><th class="r">High (17+ SEER2) <span class="badge b-est">est.</span></th></tr></thead><tbody>
+${tiers.map((r) => `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">${usd(r.std.mid)}<br><span class="small muted">${fmtRange(r.std)}</span></td><td class="r num">${usd(r.mid.mid)}<br><span class="small muted">${fmtRange(r.mid)}</span></td><td class="r num">${usd(r.high.mid)}<br><span class="small muted">${fmtRange(r.high)}</span></td></tr>`).join('\n')}
 </tbody></table></div>
 <p class="small muted">${remdbNote}</p>
 
+<h2>Listed ducted heat pump catalog means by size and tier</h2>
+<p>The table above shows the REMDB installed-cost midpoints by size and tier. Mean listed prices of the ducted heat pumps in the same size and tier buckets (${asOf}), in whole dollars. A cell is blank when that bucket has fewer than 3 listings; a mid-tier bucket can include a cheap inverter and an expensive two-stage unit:</p>
+<div class="tablewrap"><table><thead><tr><th>Size (ducted heat pump)</th><th class="r">Mid-tier mean listed</th><th class="r">High-tier mean listed</th></tr></thead><tbody>
+${tiers.map((r) => {
+  const midM = r.eqMid.length >= 3 ? r.eqMid.reduce((a, s) => a + lowestPrice(s), 0) / r.eqMid.length : null;
+  const highM = r.eqHigh.length >= 3 ? r.eqHigh.reduce((a, s) => a + lowestPrice(s), 0) / r.eqHigh.length : null;
+  const cell = (m: number | null, n: number) => m == null ? `— <span class="small muted">(${n})</span>` : `${usd(m)} <span class="small muted">(${n})</span>`;
+  return `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">${cell(midM, r.eqMid.length)}</td><td class="r num">${cell(highM, r.eqHigh.length)}</td></tr>`;
+}).join('\n')}
+</tbody></table></div>
+
 <h2>What happens to listed equipment prices across tiers at 3 tons</h2>
-<p>At 3 tons, stepping from the standard-tier REMDB benchmark midpoint (${usd(r3.std.mid)}) to the mid tier (${usd(r3.mid.mid)}) adds <b>${usd(r3.mid.mid - r3.std.mid)}</b>, and stepping from standard to high tier (${usd(r3.high.mid)}) adds <b>${usd(r3.high.mid - r3.std.mid)}</b>. In our live retailer seed (${asOf}):</p>
+<p>At 3 tons, the standard-, mid- and high-tier REMDB benchmark midpoints are ${usd(r3.std.mid)}, ${usd(r3.mid.mid)} and ${usd(r3.high.mid)}. In our live retailer seed (${asOf}):</p>
 <ul>
 <li><b>Standard tier 3-ton ducted heat pumps (${r3.eqStd.length} listed):</b> ${r3.eqStd.map((s) => `${sysLink(s)} (${s.specs.seer2} SEER2, ${usd(lowestPrice(s))})`).join(', ')}.</li>
 <li><b>Mid tier 3-ton ducted heat pumps (${r3.eqMid.length} listed):</b> ${r3.eqMid.map((s) => `${sysLink(s)} (${s.specs.seer2} SEER2, ${usd(lowestPrice(s))})`).join(', ')}.</li>
 <li><b>High tier 3-ton ducted heat pumps (${r3.eqHigh.length} listed):</b> lowest ${sysLink(cheapest(r3.eqHigh))} (${cheapest(r3.eqHigh).specs.seer2} SEER2, ${usd(lowestPrice(cheapest(r3.eqHigh)))}) up to ${usd(Math.max(...r3.eqHigh.map(lowestPrice)))}.</li>
 </ul>
-<p>Notice that value-brand inverter systems in the 16–18+ SEER2 range from ${brandLink('ACiQ')}, ${brandLink('MRCOOL')}, ${brandLink('Gree')}, and ${brandLink('Trane')} list at prices overlapping or even below lower-SEER2 systems from other brands. If a contractor charges two or three times the ${usd(r3.high.mid - r3.std.mid)} REMDB high-vs-standard gap to move from a 14.3 SEER2 quote to an 18 SEER2 quote, you are paying for tiered price-book margin, not factory hardware cost.</p>
+<p>Notice that value-brand inverter systems in the 16–18+ SEER2 range from ${brandLink('ACiQ')}, ${brandLink('MRCOOL')}, ${brandLink('Gree')}, and ${brandLink('Trane')} list at prices overlapping or even below lower-SEER2 systems from other brands. If a contractor charges two or three times the difference between the high-tier and standard midpoints in the table above to move from a 14.3 SEER2 quote to an 18 SEER2 quote, you are paying for tiered price-book margin, not factory hardware cost.</p>
 
 <h2>The exact cooling and heating percentage savings math</h2>
 <p>Because SEER2 is measured in BTU of cooling per watt-hour of electricity, the percentage reduction in cooling electricity from SEER2<sub>A</sub> to SEER2<sub>B</sub> is simply <code>1 − (SEER2<sub>A</sub> ÷ SEER2<sub>B</sub>)</code>:</p>
@@ -135,7 +148,7 @@ ${tiers.map((r) => `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">
 
 <h2>When stepping up to 16 or 18+ SEER2 actually pays back</h2>
 <ol>
-<li><b>When an ENERGY STAR or utility rebate bridges the upfront gap:</b> Many utility rebates (${src('esRebateFinder', 'ENERGY STAR Rebate Finder')}, ${src('dsire', 'DSIRE')}) require ≥ 15.2 SEER2 / ≥ 7.8 HSPF2 (${src('esCriteria', 'ENERGY STAR criteria')}) or Cold Climate certification (≥ 8.1 HSPF2). If a utility rebate covers a large chunk of the ${usd(r3.mid.mid - r3.std.mid)}–${usd(r3.high.mid - r3.std.mid)} benchmark step, the higher tier wins immediately.</li>
+<li><b>When an ENERGY STAR or utility rebate bridges the upfront gap:</b> Many utility rebates (${src('esRebateFinder', 'ENERGY STAR Rebate Finder')}, ${src('dsire', 'DSIRE')}) require ≥ 15.2 SEER2 / ≥ 7.8 HSPF2 (${src('esCriteria', 'ENERGY STAR criteria')}) or Cold Climate certification (≥ 8.1 HSPF2). If a utility rebate covers a large chunk of the difference between the mid- or high-tier midpoint and the standard midpoint in the table above, the higher tier wins immediately.</li>
 <li><b>In high-electricity-rate or long-season states:</b> Compare your state's EIA ¢/kWh rate on <a href="/states/">/states/</a>.</li>
 <li><b>For comfort and humidity control:</b> See our <a href="/guides/inverter-vs-single-stage-heat-pump-cost/">inverter vs single-stage heat pump guide</a> and grade all three tiers of your contractor's quote in the ${auditLink({ systemType: 'central-heat-pump', tons: 3, tier: 'mid' }, 'TonnageCheck quote auditor')}.</li>
 </ol>`;
@@ -154,7 +167,8 @@ ${tiers.map((r) => `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">
       const f = fairRange('central-heat-pump', 3);
       return `How attic, crawlspace, and closet air handler installs shift a 3-ton quote inside the ${fmtRange(f)} DOE benchmark (${usd(s.min)}–${usd(s.max)} equipment).`;
     },
-    updated: today,
+    // updated 2026-10-28: last source edit of installation.ts
+    updated: '2026-10-28',
     related: { tons: [2.5, 3, 3.5, 4], brands: ['Goodman', 'Trane', 'Mitsubishi', 'Bosch'], systems: { type: 'central-heat-pump', tons: 3 } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {
@@ -216,7 +230,8 @@ ${tiers.map((r) => `<tr><td>${tonLink(r.t, `${r.t} ton`)}</td><td class="r num">
       const f = fairRange('central-heat-pump', 3);
       return `Rooftop and ground packaged HVAC quotes vs ${fmtRange(f)} 3-ton split benchmarks (${usd(s.min)}–${usd(s.max)} equipment): crane fees, roof curbs & ducts.`;
     },
-    updated: today,
+    // updated 2026-10-28: last source edit of installation.ts
+    updated: '2026-10-28',
     related: { tons: [3, 4, 5], brands: ['Goodman', 'Trane', 'Carrier', 'Bosch'], systems: { type: 'central-heat-pump', tons: [3, 4] } },
     audit: { systemType: 'central-heat-pump', tons: 3 },
     body: () => {

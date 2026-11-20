@@ -1,14 +1,15 @@
 // HTML snippets shared by the guides. Every number they print comes from a System or a Range passed in,
 // i.e. from the seed or the REMDB benchmark; nothing here holds a figure of its own.
-import { lowestPrice, tonSlug, SYSTEM_TYPE_LABEL, type System, type SystemType, type Tier } from '../equipment';
+import { lowestPrice, SYSTEM_TYPE_LABEL, type System, type SystemType, type Tier } from '../equipment';
+import { sizeGuidePath } from '../prune';
 import { brandSlug } from '../brands';
 import { fairRange, usd, fmtRange, catalogDateLabel, type Range } from '../../lib/facts';
 import { SOURCES, type SourceId } from '../sources';
 
-export const today = new Date().toISOString().slice(0, 10);
+// Guide `updated` / dateModified must be a hand-set literal on each guide, not the build date.
 export const a = (url: string, text: string) => `<a href="${url}" rel="noopener" target="_blank">${text}</a>`;
 export const src = (id: SourceId, text?: string) => a(SOURCES[id].url, text ?? SOURCES[id].title);
-export const tonLink = (t: number, text?: string) => `<a href="/tonnage/${tonSlug(t)}/">${text ?? `${t}-ton`}</a>`;
+export const tonLink = (t: number, text?: string) => `<a href="${sizeGuidePath(t)}">${text ?? `${t}-ton`}</a>`;
 export const brandLink = (b: string, text?: string) => `<a href="/brands/${brandSlug(b)}/">${text ?? b}</a>`;
 export const sysLink = (s: System, text?: string) => `<a href="/systems/${s.slug}/">${text ?? `${s.brand} ${s.tons}-ton ${s.components[0]}`}</a>`;
 export const auditLink = (q: Record<string, string | number> = {}, text = 'TonnageCheck quote auditor') => {

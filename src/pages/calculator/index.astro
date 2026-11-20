@@ -1,12 +1,11 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Auditor from '../../components/Auditor.astro';
-import Newsletter from '../../components/Newsletter.astro';
 import { SITE } from '../../config';
 import { STATES, STATE_SEED_DATE, EFFICIENCY, heatingCosts, climateSummary } from '../../data/states';
 import { SYSTEMS, TONNAGES, SYSTEM_TYPE_LABEL, lowestPrice } from '../../data/equipment';
 import { SOURCES } from '../../data/sources';
 import { fairRange, usd, fmtRange, catalogDateLabel } from '../../lib/facts';
+import QuoteCta from '../../components/QuoteCta.astro';
 
 const allCosts = STATES.flatMap((s) => heatingCosts(s).map((c) => ({ state: s.name, code: s.code, ...c })));
 const hpCosts = allCosts.filter((c) => c.label.startsWith('Heat pump,')).sort((a, b) => a.dollarsPerMMBtu - b.dollarsPerMMBtu);
@@ -366,8 +365,7 @@ const ld = [
     </div>
   </section>
 
-  <Auditor heading="Have a contractor quote? Grade it A–F &amp; print an audit sheet" />
-  <Newsletter />
+  <QuoteCta />
 </Base>
 
 <script type="application/json" id="calc-states-json" set:html={JSON.stringify(statePayload)} />

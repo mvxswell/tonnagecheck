@@ -2,8 +2,9 @@
 // records show; where a product line the homeowner may be quoted is not in our data, the guide says so.
 import { lowestPrice, median, TIER_LABEL } from '../equipment';
 import { brandByName } from '../brands';
-import { fairRange, systemsWhere, usd, fmtRange, pct } from '../../lib/facts';
-import { today, src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
+import { fairRange, systemsWhere, usd, fmtRange, pct, captureDateLabel } from '../../lib/facts';
+import { src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
+import { foldedMatchup } from './fold-comparisons';
 import type { Guide } from './types';
 
 export const PRODUCT_GUIDES: Guide[] = [
@@ -12,7 +13,8 @@ export const PRODUCT_GUIDES: Guide[] = [
     get title() { return `${usd(brandByName('Goodman')!.priceMin)} Equip vs ${fmtRange(fairRange('central-heat-pump', 3))} Installed: Goodman vs Trane`; },
     h1: 'Goodman vs Trane vs Carrier: what the equipment costs and how much is markup',
     get description() { return `Goodman (${usd(brandByName('Goodman')!.priceMin)}+), Trane (${usd(brandByName('Trane')!.priceMin)}+) & Carrier equipment prices vs ${fmtRange(fairRange('central-heat-pump', 3))} 3-ton installed benchmarks.`; },
-    updated: today,
+    // updated 2026-11-20: named standard midpoints in the intro sentence
+    updated: '2026-11-20',
     related: { brands: ['Goodman', 'Trane', 'Carrier'], tons: [3], systems: { brand: ['Goodman', 'Trane', 'Carrier'] } },
     audit: { systemType: 'central-heat-pump', tons: 3, brand: 'Trane' },
     body: () => {
@@ -42,7 +44,29 @@ ${(() => {
   const both = rows.filter((r) => r.gs && r.ts);
   const gaps = both.map((r) => Math.abs(lowestPrice(r.gs!) - lowestPrice(r.ts!)));
   const nonEq = both.map((r) => r.f.mid - Math.max(lowestPrice(r.gs!), lowestPrice(r.ts!)));
-  return both.length ? `<p>Two things stand out. First, at the ${both.length} sizes where both brands are listed, the gap between the cheapest Goodman and cheapest Trane is ${usd(Math.min(...gaps))} to ${usd(Math.max(...gaps))}, partly because of efficiency differences. Second, the installed benchmark midpoint sits ${usd(Math.min(...nonEq))} to ${usd(Math.max(...nonEq))} above even the pricier of the two. A quote that is thousands of dollars more for "the better brand" is mostly not paying for the brand.</p>` : '';
+  const mids = both.map((r) => r.f.mid);
+  return both.length ? `<p>Two things stand out. First, at the ${both.length} sizes where both brands are listed, the gap between the cheapest Goodman and cheapest Trane is ${usd(Math.min(...gaps))} to ${usd(Math.max(...gaps))}, partly because of efficiency differences. Second, the standard installed midpoints (${usd(Math.min(...mids))}–${usd(Math.max(...mids))}) sit ${usd(Math.min(...nonEq))} to ${usd(Math.max(...nonEq))} above even the pricier of the two. A quote that is thousands of dollars more for "the better brand" is mostly not paying for the brand.</p>` : '';
+})()}
+
+${(() => {
+  const sizes = [1.5, 2, 2.5, 3, 3.5, 4, 5];
+  const rowFor = (brand: 'Goodman' | 'Trane', t: number) => {
+    const xs = systemsWhere({ brand, type: 'central-heat-pump', tons: t });
+    if (!xs.length) return null;
+    return { t, n: xs.length, listed: lowestPrice(cheapest(xs)) };
+  };
+  const body = sizes.map((t) => {
+    const g = rowFor('Goodman', t);
+    const tr = rowFor('Trane', t);
+    if (!g && !tr) return '';
+    const cell = (r: NonNullable<ReturnType<typeof rowFor>> | null) => r ? `${usd(r.listed)} <span class="small muted">(${r.n})</span>` : '—';
+    return `<tr><td>${tonLink(t, `${t} ton`)}</td><td class="r num">${cell(g)}</td><td class="r num">${cell(tr)}</td></tr>`;
+  }).join('\n');
+  return `<h2>Goodman vs Trane cheapest listed ducted heat pump, by size</h2>
+<p>Each cell is the cheapest single listed ducted heat pump of that brand and size in this catalog (${asOf}), in whole dollars, with the number of listings in parentheses. Carrier is not in this table: every Carrier listing we have is a ductless mini-split.</p>
+<div class="tablewrap"><table><thead><tr><th>Size</th><th class="r">Cheapest Goodman listing</th><th class="r">Cheapest Trane listing</th></tr></thead><tbody>
+${body}
+</tbody></table></div>`;
 })()}
 
 <h2>Where brand-name markup comes from</h2>
@@ -63,7 +87,10 @@ ${systemsTable([...carrierMs, ...otherMs].sort((x, y) => x.tons - y.tons || lowe
 <li>Subtract it from your quote. That remainder is labor, materials, overhead and margin.</li>
 <li>Compare the total with the benchmark range. A brand-name quote within the range is reasonable; one far above it is paying for something other than the equipment.</li>
 </ol>
-<p>Run it in the ${auditLink({ brand: 'Trane', tons: 3 })} (it highlights the brand you enter), or browse ${brandLink('Goodman', 'Goodman')}, ${brandLink('Trane', 'Trane')} and ${brandLink('Carrier', 'Carrier')} prices by size.</p>`;
+<h2>LG vs Trane heat pump cost</h2>
+<p>LG vs Trane is the other brand pairing in this catalog with a full listed-price table. Figures are the same listed prices and ratings (${asOf}).</p>
+${foldedMatchup('lg-vs-trane-heat-pump-cost')}
+<p>Run it in the ${auditLink({ brand: 'Trane', tons: 3 })} (it highlights the brand you enter), or browse ${brandLink('Goodman', 'Goodman')}, ${brandLink('Trane', 'Trane')}, ${brandLink('LG', 'LG')} and ${brandLink('Carrier', 'Carrier')} prices by size.</p>`;
     },
   },
   {
@@ -71,7 +98,8 @@ ${systemsTable([...carrierMs, ...otherMs].sort((x, y) => x.tons - y.tons || lowe
     get title() { return `Bosch IDS Heat Pump Cost: ${usd(brandByName('Bosch')!.priceMin)}–${usd(brandByName('Bosch')!.priceMax)} Listed`; },
     h1: 'Bosch IDS inverter heat pump cost',
     get description() { return `What a Bosch IDS inverter heat pump should cost: equipment lists ${usd(brandByName('Bosch')!.priceMin)}–${usd(brandByName('Bosch')!.priceMax)} vs a ${fmtRange(fairRange('central-heat-pump', 3, 'high'))} 3-ton installed benchmark. Check your quote free.`; },
-    updated: today,
+    // updated 2026-11-17: Sold as vs certified cooling columns on the 5°F table
+    updated: '2026-11-17',
     related: { brands: ['Bosch'], tons: [2, 3, 5], systems: { brand: 'Bosch' } },
     audit: { systemType: 'central-heat-pump', tons: 3, tier: 'high', brand: 'Bosch' },
     body: () => {
@@ -113,6 +141,28 @@ ${(() => {
 </ul>
 
 <h2>Is the premium worth it?</h2>
+<p>One reason a quote puts a premium on an inverter IDS system is cold-weather heating. For Bosch complete systems that have an ENERGY STAR record with a 5°F test, here is the certified heating capacity and COP at 5°F, the capacity at 47°F, and how much of the 47°F capacity remains at 5°F. These 5°F figures come from the same ENERGY STAR fields (${src('esApi', 'ENERGY STAR dataset')}) and appear only in this guide.</p>
+${(() => {
+  const rows = bosch.filter((s) => s.systemType !== 'heat-pump-only' && s.energyStar?.heatingCapacity5F != null && s.energyStar?.heatingCapacity47F != null);
+  if (!rows.length) return '';
+  const soldAs = (s: typeof rows[number]) => {
+    const m = s.title.match(/(\d+(?:\.\d+)?)\s*Ton/i);
+    return m ? Number(m[1]) : s.tons;
+  };
+  const body = rows.map((s) => {
+    const es = s.energyStar!;
+    const retain = Math.round((es.heatingCapacity5F! / es.heatingCapacity47F!) * 1000) / 10;
+    const cool = es.coolingCapacity;
+    return `<tr><td>${sysLink(s, `${s.components[0]}`)}</td><td class="r num">${soldAs(s)}</td><td class="r num">${cool != null ? cool.toLocaleString('en-US') : '—'}</td><td class="r num">${es.heatingCapacity5F!.toLocaleString('en-US')}</td><td class="r num">${es.heatingCapacity47F!.toLocaleString('en-US')}</td><td class="r num">${es.copAt5F ?? '—'}</td><td class="r num">${retain}%</td><td>AHRI #${es.ahriReferenceNumber}</td></tr>`;
+  }).join('\n');
+  return `<div class="tablewrap"><table><thead><tr><th>Bosch complete system</th><th class="r">Sold as</th><th class="r">Certified cooling (BTU/h)</th><th class="r">Heating at 5°F (BTU/h)</th><th class="r">Heating at 47°F (BTU/h)</th><th class="r">COP at 5°F</th><th class="r">5°F as % of 47°F</th><th>AHRI</th></tr></thead><tbody>
+${body}
+</tbody></table></div>`;
+})()}
+<p class="small muted">Complete systems only (condenser-only pairings are omitted). "Sold as" is the tonnage in the retailer title; "Certified cooling" is the ENERGY STAR cooling capacity for the matched pair, which can be well below the nameplate. The BOVB-60RXB-M15S is sold as a 5-ton system but is certified at 34,200 BTU/h of cooling (AHRI #217895321), about 2.85 tons, so its 100% 5°F heating retention is relative to that smaller certified pairing. Compare these 5°F numbers with the Mitsubishi figures on the <a href="/guides/mitsubishi-hyper-heat-cost/">Hyper-Heat guide</a>; the two catalogs are not interchangeable at a given nameplate size. Several Bosch pairings sold as 3-ton are also certified well below 36,000 BTU/h of cooling, which is noted on the <a href="/guides/3-ton-heat-pump-ac-replacement-cost/#3-ton">size guide</a>.</p>
+<h2>Bosch IDS vs Mitsubishi Hyper-Heat</h2>
+<p>Bosch IDS and Mitsubishi Hyper-Heat are the two inverter lines compared below. Figures are the same listed prices and ratings (${asOf}).</p>
+${foldedMatchup('bosch-vs-mitsubishi-heat-pump-cost')}
 <p>Inverter systems run at variable speed, which usually means better comfort and part-load efficiency. Whether that pays back depends on your climate and electricity prices. What you should not pay is a premium that is mostly dealer margin. Compare the listed Bosch price with the ${brandLink('Bosch', 'Bosch brand page')} and other inverter options in <a href="/guides/inverter-vs-single-stage-heat-pump-cost/">inverter vs single-stage cost</a>, then grade your quote in the ${auditLink({ brand: 'Bosch', tons: 3, tier: 'high' })}.</p>`;
     },
   },
@@ -123,7 +173,8 @@ ${(() => {
     get title() { return `Mitsubishi Heat Pump Cost (Hyper-Heat): ${usd(brandByName('Mitsubishi')!.priceMin)}–${usd(brandByName('Mitsubishi')!.priceMax)}`; },
     h1: 'Mitsubishi Hyper-Heat (H2i) heat pump cost',
     get description() { return `Mitsubishi Hyper-Heat heat pump cost: ducted and ductless systems list ${usd(brandByName('Mitsubishi')!.priceMin)}–${usd(brandByName('Mitsubishi')!.priceMax)} vs installed benchmarks. SEER2, HSPF2 and AHRI ratings.`; },
-    updated: today,
+    // updated 2026-11-17: last source edit of products.ts
+    updated: '2026-11-17',
     related: { brands: ['Mitsubishi'], tons: [2, 2.5, 3], systems: { brand: 'Mitsubishi' } },
     audit: { systemType: 'mini-split', tons: 2, tier: 'high', brand: 'Mitsubishi' },
     body: () => {
@@ -158,7 +209,7 @@ ${(() => {
       const fair3 = fairRange('mini-split', 3, 'high');
       return `
 <div class="card answer" style="border-left:4px solid var(--acc);margin:14px 0">
-<p><b>Short answer:</b> the ${mit.length} Mitsubishi heat pump systems with public prices list <b>${usd(mb.priceMin)}–${usd(mb.priceMax)}</b> for the equipment (${tonsOf(mit)}, ${asOf}). Ducted systems (air handler on your existing ducts) list ${spanOf(ducted)} and ductless multi-zone systems ${spanOf(ductless)}. Installed, a high-efficiency mini-split benchmarks at ${fmtRange(fair2)} for 2 tons and ${fmtRange(fair3)} for 3 tons (national DOE-lab estimate). ENERGY STAR certifies ${cold.length} of the ${mit.length} as cold climate.</p>
+<p><b>Short answer:</b> the ${mit.length} Mitsubishi heat pump systems with public prices list <b>${usd(mb.priceMin)}–${usd(mb.priceMax)}</b> for the equipment (${tonsOf(mit)}, listed prices captured ${captureDateLabel(mit)}). Ducted systems (air handler on your existing ducts) list ${spanOf(ducted)} and ductless multi-zone systems ${spanOf(ductless)}. Installed, a high-efficiency mini-split benchmarks at ${fmtRange(fair2)} for 2 tons and ${fmtRange(fair3)} for 3 tons (national DOE-lab estimate). ENERGY STAR certifies ${cold.length} of the ${mit.length} as cold climate.</p>
 </div>
 <p>Mitsubishi's Hyper-Heat (H2i) heat pumps are designed to keep heating in deep cold, and they are often quoted in cold climates as a furnace replacement. Here is what the Mitsubishi systems with public prices list for, how ducted and ductless setups compare, what the cold-weather ratings say model by model, and what installing them should cost.</p>
 
@@ -186,7 +237,7 @@ ${(() => {
   if (!hz.length || !non.length) return '';
   return `<p>The pattern in the records: every H2i (HZ) pairing here keeps at least ${pct(Math.min(...hz.map(ret)))} of its 47°F heating output at 5°F, while the non-HZ ${sysLink(non[0], non[0].components[0])} keeps ${pct(ret(non[0]))}. If you heat through real winters, ask for an HZ outdoor unit and its 5°F number, not just the SEER2.</p>`;
 })()}
-${otherCold.length ? `<p>Other brands with cold-climate certified pairings in our data include ${[...new Set(otherCold.map((s) => s.brand))].map((b) => brandLink(b)).join(', ')}. If cold-weather performance is the reason you were quoted Mitsubishi, compare those records before paying a brand premium; our <a href="/compare/bosch-vs-mitsubishi-heat-pump-cost/">Bosch vs Mitsubishi heat pump comparison</a> puts the two side by side.</p>` : ''}
+${otherCold.length ? `<p>Other brands with cold-climate certified pairings in our data include ${[...new Set(otherCold.map((s) => s.brand))].map((b) => brandLink(b)).join(', ')}. If cold-weather performance is the reason you were quoted Mitsubishi, compare those records before paying a brand premium; our <a href="/guides/bosch-ids-inverter-heat-pump-cost/">Bosch vs Mitsubishi heat pump comparison</a> puts the two side by side.</p>` : ''}
 
 <h2>Installed cost</h2>
 <p>Mitsubishi's ducted H2i systems are mini-split heat pumps with a ducted air handler, so we benchmark them with REMDB's mini-split class at the high-efficiency tier:</p>
@@ -212,7 +263,10 @@ ${[...new Set(mit.map((s) => s.tons))].sort((a, b) => a - b).map((t) => { const 
 <li>For multi-zone systems: how many indoor heads, which sizes, and how long are the line sets?</li>
 <li>Are you a Diamond Contractor, and who registers the system for the 10- or 12-year warranty?</li>
 </ul>
-<p>See all ${brandLink('Mitsubishi', 'Mitsubishi prices')}, the <a href="/compare/bosch-vs-mitsubishi-heat-pump-cost/">Bosch vs Mitsubishi cost comparison</a>, our <a href="/guides/multi-zone-mini-split-cost/">multi-zone mini-split guide</a>, and grade your quote in the ${auditLink({ type: 'mini-split', brand: 'Mitsubishi' })}.</p>`;
+<h2>LG RED vs Mitsubishi Hyper-Heat</h2>
+<p>LG and Mitsubishi are the other cold-climate mini-split pairing in this catalog. Figures are the same listed prices and ratings (listed prices captured ${captureDateLabel([...mit, ...systemsWhere({ brand: 'LG' })])}). For Bosch IDS vs Mitsubishi, see the <a href="/guides/bosch-ids-inverter-heat-pump-cost/">Bosch IDS cost guide</a>.</p>
+${foldedMatchup('lg-vs-mitsubishi-heat-pump-cost')}
+<p>See all ${brandLink('Mitsubishi', 'Mitsubishi prices')}, our <a href="/guides/multi-zone-mini-split-cost/">multi-zone mini-split guide</a>, and grade your quote in the ${auditLink({ type: 'mini-split', brand: 'Mitsubishi' })}.</p>`;
     },
   },
 ];

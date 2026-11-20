@@ -98,6 +98,14 @@ export const lineSet = payload.lineSet;
 export const seedDateLabel = dateLabel(SEED_DATE);
 export const catalogDateLabel = captureDateLabel(SYSTEMS);
 export const cpi = BENCHMARKS.cpi;
-export const fmtRange = (r: Range) => `${usd(r.low)}–${usd(r.high)}`;
+export const fmtRange = (r: Range) => r.low === r.high ? usd(r.low) : `${usd(r.low)}–${usd(r.high)}`;
+export const listedSpan = (min: number | null | undefined, max: number | null | undefined) =>
+  min == null || max == null ? '—' : min === max ? usd(min) : `${usd(min)}–${usd(max)}`;
 export const pct = (n: number) => `${Math.round(n * 100)}%`;
 export { usd, isInverter };
+
+/** "an" before names that start with a vowel sound, including ACiQ and LG. */
+export const articleFor = (name: string) =>
+  /^(aciq|lg|[aeiou])/i.test(name.trim()) ? 'an' : 'a';
+
+

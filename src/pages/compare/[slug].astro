@@ -2,13 +2,11 @@
 import Base from '../../layouts/Base.astro';
 import SystemTable from '../../components/SystemTable.astro';
 import CompareWorkbench from '../../components/CompareWorkbench.astro';
-import Auditor from '../../components/Auditor.astro';
-import ConciergeForm from '../../components/ConciergeForm.astro';
 import { COMPARISONS, type CompareEntry } from '../../data/comparisons';
-import { isCompareMerged, isCompareIndexed } from '../../data/prune';
-import { tonSlug } from '../../data/equipment';
+import { isCompareMerged, isCompareIndexed, sizeGuidePath, comparePath } from '../../data/prune';
 import { brandSlug } from '../../data/brands';
 import { usd, fmtRange, pct, captureDateLabel } from '../../lib/facts';
+import QuoteCta from '../../components/QuoteCta.astro';
 
 export function getStaticPaths() {
   // Merged comparisons are not built; public/_redirects 301s them to their guide.
@@ -134,17 +132,8 @@ const jsonld = [
     defaultRightSlug={entry.modelRight?.slug ?? right.sampleSystem.slug}
   />
 
-  <Auditor
-    systemType={entry.auditDefaults.systemType}
-    tons={entry.auditDefaults.tons}
-    tier={entry.auditDefaults.tier}
-    brand={entry.auditDefaults.brand}
-    heading={`Audit a quote for ${entry.shortLabel}`}
-  />
-
-  <section class="card" style="margin-top:20px;border:2px solid var(--acc)">
-    <ConciergeForm standalone idp="cmp" brandModel={entry.conciergeBrandModel} />
-  </section>
+<section class="card" style="margin-top:20px;border:2px solid var(--acc)">
+</section>
 
   <h2>Related brand, tonnage &amp; head-to-head hubs</h2>
   <div class="grid">
@@ -155,7 +144,7 @@ const jsonld = [
       </a>
     ))}
     {entry.relatedTonnages.map((t) => (
-      <a class="card" href={`/tonnage/${tonSlug(t)}/`} style="text-decoration:none;color:inherit">
+      <a class="card" href={sizeGuidePath(t)} style="text-decoration:none;color:inherit">
         <div class="small muted">Tonnage hub</div>
         <div style="font-weight:700;margin:4px 0">{t}-Ton Heat Pump &amp; AC Cost</div>
       </a>
@@ -167,7 +156,7 @@ const jsonld = [
       <h3>More head-to-head matchups</h3>
       <div class="grid">
         {otherComparisons.map((c) => (
-          <a class="card" href={`/compare/${c.slug}/`} style="text-decoration:none;color:inherit">
+          <a class="card" href={comparePath(c.slug)} style="text-decoration:none;color:inherit">
             <div class="small muted">{c.shortLabel}</div>
             <div style="font-weight:700;margin:4px 0">{c.h1}</div>
             <div class="small muted">{usd(c.left.equipMin)} vs {usd(c.right.equipMin)} lowest listed</div>
@@ -176,6 +165,7 @@ const jsonld = [
       </div>
     </>
   )}
+  <QuoteCta />
 </Base>
 
 <style>

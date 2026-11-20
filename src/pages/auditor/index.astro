@@ -1,9 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Auditor from '../../components/Auditor.astro';
-import Newsletter from '../../components/Newsletter.astro';
+import ConciergeForm from '../../components/ConciergeForm.astro';
 import { SITE } from '../../config';
 import { catalogDateLabel, cpi } from '../../lib/facts';
+import QuoteCta from '../../components/QuoteCta.astro';
 
 const faq = [
   ['Where do the equipment prices come from?', `Public online listings at HVACDirect, captured ${catalogDateLabel}. Each system page links to the listing. Contractor distributor pricing is not published and is usually lower.`],
@@ -19,10 +20,14 @@ const ld = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: f
   <h1>HVAC &amp; heat pump quote auditor</h1>
   <p class="lead">A grade, the equipment's real listed price, the benchmark installed cost and the markup in your quote. Takes about 30 seconds and needs no email. If you are overcharged, we can connect you with an independent master tech for a second quote.</p>
   <Auditor />
+  <section class="card" id="second-opinion" aria-labelledby="second-opinion-h" style="margin:28px 0">
+    <p id="second-opinion-h" class="muted" style="margin-top:0">Already graded your quote, or want a second look before you sign? Request a second opinion below. The form is the same one that opens after a grade in the auditor above.</p>
+    <ConciergeForm standalone idp="so" />
+  </section>
   <section class="prose">
     <h2>Questions</h2>
     {faq.map(([q, a]) => <><h3>{q}</h3><p>{a}</p></>)}
     <p><a href="/calculator/">Heat pump vs. gas furnace operating cost &amp; SEER2 payback calculator</a> · <a href="/parts/">HVAC installation parts, line sets &amp; add-on wholesale price directory</a> · <a href="/states/">Electricity, gas prices and rebate rules by state</a> · <a href="/about/">Full methodology and source list</a> · <a href="/guides/how-to-tell-if-hvac-quote-is-ripoff/">How to tell if an HVAC quote is a rip-off</a></p>
   </section>
-  <Newsletter />
+  <QuoteCta />
 </Base>

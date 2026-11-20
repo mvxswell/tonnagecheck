@@ -1,9 +1,9 @@
 # Audit S3-4 / S1-1: 301 old size-mismatched LG system slugs to the corrected URLs.
 # Trailing-slash and bare paths both included so either request form lands on the canonical URL.
-/systems/lg-3-ton-19-seer2-heat-pump-system-kusxa422a /systems/lg-3-5-ton-19-seer2-heat-pump-system-kusxa422a/ 301
-/systems/lg-3-ton-19-seer2-heat-pump-system-kusxa422a/ /systems/lg-3-5-ton-19-seer2-heat-pump-system-kusxa422a/ 301
-/systems/lg-3-5-ton-18-2-seer2-heat-pump-system-kusxa361a /systems/lg-3-ton-18-2-seer2-heat-pump-system-kusxa361a/ 301
-/systems/lg-3-5-ton-18-2-seer2-heat-pump-system-kusxa361a/ /systems/lg-3-ton-18-2-seer2-heat-pump-system-kusxa361a/ 301
+/systems/lg-3-ton-19-seer2-heat-pump-system-kusxa422a /brands/lg/ 301
+/systems/lg-3-ton-19-seer2-heat-pump-system-kusxa422a/ /brands/lg/ 301
+/systems/lg-3-5-ton-18-2-seer2-heat-pump-system-kusxa361a /brands/lg/ 301
+/systems/lg-3-5-ton-18-2-seer2-heat-pump-system-kusxa361a/ /brands/lg/ 301
 
 # Sitemap alias: /sitemap.xml is the URL most crawlers and tools try first; Astro writes sitemap-index.xml.
 /sitemap.xml /sitemap-index.xml 301
@@ -21,3 +21,58 @@
 /compare/4-ton-heat-pump-vs-ac-furnace-cost/ /guides/heat-pump-vs-ac-and-furnace-replacement-cost/ 301
 /compare/5-ton-heat-pump-vs-ac-furnace-cost /guides/heat-pump-vs-ac-and-furnace-replacement-cost/ 301
 /compare/5-ton-heat-pump-vs-ac-furnace-cost/ /guides/heat-pump-vs-ac-and-furnace-replacement-cost/ 301
+
+# Preview-merge (Nov 17, 2026): remaining indexable /compare/ pages and /tonnage/{size}/ pages
+# folded into guides (see src/data/prune.ts COMPARE_MERGED and TONNAGE_MERGED).
+/compare/bosch-vs-mitsubishi-heat-pump-cost /guides/bosch-ids-inverter-heat-pump-cost/ 301
+/compare/bosch-vs-mitsubishi-heat-pump-cost/ /guides/bosch-ids-inverter-heat-pump-cost/ 301
+/compare/lg-vs-mitsubishi-heat-pump-cost /guides/mitsubishi-hyper-heat-cost/ 301
+/compare/lg-vs-mitsubishi-heat-pump-cost/ /guides/mitsubishi-hyper-heat-cost/ 301
+# The markup guide is in the approved 38 noindex set, so this pair cannot 301 there (v1.1 A7).
+# /compare/ is the closest indexable page: it is the comparison hub and still lists other brand matchups.
+/compare/lg-vs-trane-heat-pump-cost /compare/ 301
+/compare/lg-vs-trane-heat-pump-cost/ /compare/ 301
+/compare/aciq-vs-mrcool-heat-pump-cost /guides/inverter-vs-single-stage-heat-pump-cost/ 301
+/compare/aciq-vs-mrcool-heat-pump-cost/ /guides/inverter-vs-single-stage-heat-pump-cost/ 301
+/compare/trane-vs-goodman-ac-furnace-cost /guides/heat-pump-vs-ac-and-furnace-replacement-cost/ 301
+/compare/trane-vs-goodman-ac-furnace-cost/ /guides/heat-pump-vs-ac-and-furnace-replacement-cost/ 301
+/compare/r32-vs-r454b-heat-pump-systems-compared /guides/r410a-vs-r454b-r32-refrigerant-transition-quotes/ 301
+/compare/r32-vs-r454b-heat-pump-systems-compared/ /guides/r410a-vs-r454b-r32-refrigerant-transition-quotes/ 301
+/compare/mitsubishi-suz-ak24nlhz-vs-daikin-rxm24wvju9-2-ton /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/compare/mitsubishi-suz-ak24nlhz-vs-daikin-rxm24wvju9-2-ton/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/compare/bosch-bovb-36rxb-vs-trane-a5hl5036a-3-ton /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/compare/bosch-bovb-36rxb-vs-trane-a5hl5036a-3-ton/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/compare/goodman-glzt7ca3610-vs-bosch-bovb-36rxb-3-ton /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/compare/goodman-glzt7ca3610-vs-bosch-bovb-36rxb-3-ton/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/compare/gree-fxu36hp-vs-mrcool-central-36-3-ton /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/compare/gree-fxu36hp-vs-mrcool-central-36-3-ton/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/compare/goodman-glzs4ba4810-vs-trane-a5hl5048a-4-ton /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/compare/goodman-glzs4ba4810-vs-trane-a5hl5048a-4-ton/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/compare/goodman-glzs5ba6010-vs-bosch-bovb-60rxb-5-ton /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/compare/goodman-glzs5ba6010-vs-bosch-bovb-60rxb-5-ton/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/1-5-ton /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/1-5-ton/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/2-ton /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/2-ton/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/2-5-ton /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/2-5-ton/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/3-ton /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/3-ton/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/3-5-ton /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/3-5-ton/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/4-ton /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/4-ton/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/5-ton /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/tonnage/5-ton/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+
+# Combined size guide (Nov 17 fix round): 2 / 2.5 / 3.5 / 4 / 5-ton guides fold into the 3-ton URL.
+/guides/2-ton-heat-pump-ac-replacement-cost /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/guides/2-ton-heat-pump-ac-replacement-cost/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/guides/2-5-ton-heat-pump-ac-replacement-cost /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/guides/2-5-ton-heat-pump-ac-replacement-cost/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/guides/3-5-ton-heat-pump-ac-replacement-cost /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/guides/3-5-ton-heat-pump-ac-replacement-cost/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/guides/4-ton-heat-pump-ac-replacement-cost /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/guides/4-ton-heat-pump-ac-replacement-cost/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/guides/5-ton-heat-pump-ac-replacement-cost /guides/3-ton-heat-pump-ac-replacement-cost/ 301
+/guides/5-ton-heat-pump-ac-replacement-cost/ /guides/3-ton-heat-pump-ac-replacement-cost/ 301

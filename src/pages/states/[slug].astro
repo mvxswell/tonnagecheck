@@ -1,13 +1,12 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Auditor from '../../components/Auditor.astro';
-import ConciergeForm from '../../components/ConciergeForm.astro';
-import Newsletter from '../../components/Newsletter.astro';
 import { STATES, STATE_SEED_DATE, EFFICIENCY, heatingCosts, climateSummary, recommendedSystems, type StateRecord } from '../../data/states';
-import { TONNAGES, tonSlug, lowestPrice } from '../../data/equipment';
+import { TONNAGES, lowestPrice } from '../../data/equipment';
 import { SOURCES } from '../../data/sources';
 import { fairRange, usd, fmtRange } from '../../lib/facts';
 import { SITE } from '../../config';
+import { sizeGuidePath } from '../../data/prune';
+import QuoteCta from '../../components/QuoteCta.astro';
 
 export function getStaticPaths() {
   return STATES.map((s) => ({ params: { slug: s.slug }, props: { s } }));
@@ -52,7 +51,15 @@ const coldSentence = clim.kind === 'heating'
   ? (allCold ? `All of ${s.name}'s listed counties (${clim.coldCounties}) are in climate zone 4 or colder.` : `Most of ${s.name} (${clim.coldCounties} of ${s.climate.countiesListed} counties) is in climate zone 4 or colder.`)
   : `Part of ${s.name} (${clim.coldCounties} of ${s.climate.countiesListed} counties) is in climate zone 4 or colder.`;
 const checkedOn = new Date(STATE_SEED_DATE).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
-const pctChange = (a: number, b: number | null) => (b ? `${a >= b ? '+' : ''}${Math.round(((a - b) / b) * 100)}%` : '');
+const elecRates = STATES.map((x) => x.electricity?.centsPerKwh).filter((n): n is number => n != null).sort((a, b) => a - b);
+const gasRates = STATES.map((x) => x.gas?.dollarsPerMcf).filter((n): n is number => n != null).sort((a, b) => a - b);
+const midOf = (xs: number[]) => {
+  const i = (xs.length - 1) / 2;
+  const lo = Math.floor(i), hi = Math.ceil(i);
+  return lo === hi ? xs[lo] : (xs[lo] + xs[hi]) / 2;
+};
+const elecMedian = midOf(elecRates);
+const gasMedian = midOf(gasRates);
 ---
 <Base title={title} description={description} jsonld={ld} noindex={!s.complete}>
   <p class="crumbs"><a href="/">Home</a> / <a href="/states/">States</a> / {s.name}</p>
@@ -64,10 +71,12 @@ const pctChange = (a: number, b: number | null) => (b ? `${a >= b ? '+' : ''}${M
 
   <div class="grid kp">
     <div class="card"><div class="small muted">3-ton heat pump, installed <span class="badge b-est">US benchmark</span></div><div class="v num">{range}</div><div class="small muted">Midpoint {usd(f3.mid)}. National average; no state adjustment.</div></div>
-    <div class="card"><div class="small muted">Residential electricity</div><div class="v num">{e ? `${e.centsPerKwh}¢/kWh` : '—'}</div><div class="small muted">{e ? <>{e.period?.split(' (')[0]}{e.priorCentsPerKwh ? `, ${pctChange(e.centsPerKwh, e.priorCentsPerKwh)} vs a year earlier` : ''}. <a href={SOURCES.eiaElectricity.url}>EIA</a></> : 'Not reported'}</div></div>
-    <div class="card"><div class="small muted">Residential natural gas</div><div class="v num">{g ? `$${g.dollarsPerMcf}/Mcf` : '—'}</div><div class="small muted">{g ? <>{g.year} average{g.priorDollarsPerMcf ? `, ${pctChange(g.dollarsPerMcf, g.priorDollarsPerMcf)} vs prior year` : ''}. <a href={SOURCES.eiaGas.url}>EIA</a></> : 'Not reported'}</div></div>
+    <div class="card"><div class="small muted">Residential electricity</div><div class="v num">{e ? `${e.centsPerKwh}¢/kWh` : '—'}</div><div class="small muted">{e ? <>{e.period?.split(' (')[0]}{e.priorCentsPerKwh != null ? <>; a year earlier {e.priorCentsPerKwh}¢/kWh</> : ''}. <a href={SOURCES.eiaElectricity.url}>EIA</a></> : 'Not reported'}</div></div>
+    <div class="card"><div class="small muted">Residential natural gas</div><div class="v num">{g ? `$${g.dollarsPerMcf}/Mcf` : '—'}</div><div class="small muted">{g ? <>{g.year} average{g.priorDollarsPerMcf != null ? <>; prior year ${g.priorDollarsPerMcf}/Mcf</> : ''}. <a href={SOURCES.eiaGas.url}>EIA</a></> : 'Not reported'}</div></div>
     <div class="card"><div class="small muted">IECC climate zones</div><div class="v num">{clim.zoneList || '—'}</div><div class="small muted">{s.climate.countiesListed} counties listed by <a href={SOURCES.pnnlClimateZones.url}>PNNL</a></div></div>
   </div>
+
+  <p class="small muted">Across all 51 jurisdictions (50 states + DC) in this seed, the median residential electricity rate is {elecMedian}¢/kWh and the median residential natural gas rate is ${gasMedian}/Mcf. Those medians are also on the <a href="/states/">state comparison table</a>.</p>
 
   <h2>Installed cost by size in {s.name}</h2>
   <p class="small muted">REMDB (National Laboratory of the Rockies, formerly NREL) replacement-cost benchmark, restated from 2023 dollars with CPI-U. It is a national average: there is no public, citable state adjustment, so expect higher-cost metros to run above the midpoint. <a href="/about/#benchmarks">Method</a></p>
@@ -76,7 +85,7 @@ const pctChange = (a: number, b: number | null) => (b ? `${a >= b ? '+' : ''}${M
       <thead><tr><th>Size</th><th class="r">Heat pump, standard <span class="badge b-est">est.</span></th><th class="r">Heat pump, high-eff. / cold-climate <span class="badge b-est">est.</span></th><th class="r">AC + gas furnace <span class="badge b-est">est.</span></th></tr></thead>
       <tbody>
         {TONNAGES.map((t) => { const a = fairRange('central-heat-pump', t, 'standard'); const b = fairRange('central-heat-pump', t, 'high'); const c = fairRange('ac-furnace', t, 'standard'); return (
-          <tr><td><a href={`/tonnage/${tonSlug(t)}/`}><b>{t} ton</b></a></td><td class="r num">{usd(a.mid)}<br /><span class="small muted">{fmtRange(a)}</span></td><td class="r num">{usd(b.mid)}<br /><span class="small muted">{fmtRange(b)}</span></td><td class="r num">{usd(c.mid)}<br /><span class="small muted">{fmtRange(c)}</span></td></tr>
+          <tr><td><a href={sizeGuidePath(t)}><b>{t} ton</b></a></td><td class="r num">{usd(a.mid)}<br /><span class="small muted">{fmtRange(a)}</span></td><td class="r num">{usd(b.mid)}<br /><span class="small muted">{fmtRange(b)}</span></td><td class="r num">{usd(c.mid)}<br /><span class="small muted">{fmtRange(c)}</span></td></tr>
         ); })}
       </tbody>
     </table>
@@ -130,15 +139,9 @@ const pctChange = (a: number, b: number | null) => (b ? `${a >= b ? '+' : ''}${M
     <div class="card"><b>{s.name} state energy office</b><p class="small">{s.energyOffice.website ? <><a href={s.energyOffice.website} rel="noopener">{new URL(s.energyOffice.website).host}</a> (listed in the NASEO directory; link checked {checkedOn}). </> : <>We could not verify the office's website automatically. </>}{s.energyOffice.naseoProfile && <><a href={s.energyOffice.naseoProfile} rel="noopener">NASEO contact profile</a>. </>}For utility and local programs: <a href={`${SOURCES.dsire.url}`} rel="noopener">DSIRE</a> · <a href={SOURCES.esRebateFinder.url} rel="noopener">ENERGY STAR Rebate Finder</a>.</p></div>
   </div>
 
-  <Auditor tier={clim.kind === 'heating' ? 'high' : 'standard'} heading={`Audit a ${s.name} HVAC quote`} />
-
-  <section class="card second" id="second-opinion">
-    <ConciergeForm idp="s" />
-  </section>
-
-  <h2>Other states</h2>
+<h2>Other states</h2>
   <p>{nearby.map((n, i) => <>{i > 0 && ' · '}<a href={`/states/${n.slug}/`}>{n.name}</a></>)} · <a href="/states/">All states</a></p>
-  <Newsletter />
+  <QuoteCta />
 </Base>
 
 <style>

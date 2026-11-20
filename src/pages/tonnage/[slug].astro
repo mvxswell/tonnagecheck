@@ -1,15 +1,16 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Auditor from '../../components/Auditor.astro';
-import Newsletter from '../../components/Newsletter.astro';
 import SystemTable from '../../components/SystemTable.astro';
 import { TONNAGES, tonSlug, systemsFor, SYSTEM_TYPE_LABEL, TIER_LABEL, type SystemType, type Tier } from '../../data/equipment';
 import { comparisonsForTonnage } from '../../data/comparisons';
+import { isTonnageMerged } from '../../data/prune';
 import { fairRange, equipmentStats, usd, fmtRange, seedDateLabel } from '../../lib/facts';
 import { SITE } from '../../config';
+import QuoteCta from '../../components/QuoteCta.astro';
 
 export function getStaticPaths() {
-  return TONNAGES.map((t) => ({ params: { slug: tonSlug(t) }, props: { tons: t } }));
+  // Merged size pages are not built; public/_redirects 301s them to the size guide.
+  return TONNAGES.filter((t) => !isTonnageMerged(tonSlug(t))).map((t) => ({ params: { slug: tonSlug(t) }, props: { tons: t } }));
 }
 const { tons } = Astro.props as { tons: number };
 const btu = tons * 12000;
@@ -88,13 +89,11 @@ const ld = {
   )}
 
   <p class="small muted" style="margin:18px 0 6px">Comparing standard vs. high-efficiency {tons}-ton systems? <a href={`/calculator/?tons=${tons}`}><b>Calculate {tons}-ton SEER2 / HSPF2 electricity savings &amp; payback in your state →</b></a></p>
-  <Auditor tons={tons} heading={`Audit a ${tons}-ton quote`} />
-
-  <p class="pager">
+<p class="pager">
     {prev && <a href={`/tonnage/${tonSlug(prev)}/`}>← {prev} ton</a>}
     {next && <a href={`/tonnage/${tonSlug(next)}/`}>{next} ton →</a>}
   </p>
-  <Newsletter />
+  <QuoteCta />
 </Base>
 
 <style>

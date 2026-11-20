@@ -1,17 +1,27 @@
 ---
 import Base from '../layouts/Base.astro';
-import Auditor from '../components/Auditor.astro';
+import QuoteCta from '../components/QuoteCta.astro';
 import Newsletter from '../components/Newsletter.astro';
 import { SITE } from '../config';
-import { SYSTEMS, TONNAGES, tonSlug } from '../data/equipment';
+import { SYSTEMS, TONNAGES } from '../data/equipment';
 import { GUIDES } from '../data/guides/index';
 import { BRANDS } from '../data/brands';
-import { COMPARISONS } from '../data/comparisons';
-import { isCompareIndexed } from '../data/prune';
+import { sizeGuidePath } from '../data/prune';
 import { PART_CATEGORIES, PART_CATALOG_STATS } from '../data/parts';
 import { STATES } from '../data/states';
 import { fairRange, equipmentStats, catalogDateLabel, usd, fmtRange } from '../lib/facts';
 
+const FEATURED_GUIDE_SLUGS = [
+  '3-ton-heat-pump-ac-replacement-cost',
+  '3-ton-vs-4-ton-heat-pump-cost',
+  'inverter-vs-single-stage-heat-pump-cost',
+  'heat-pump-vs-ac-and-furnace-replacement-cost',
+  'r410a-vs-r454b-r32-refrigerant-transition-quotes',
+  '14-3-seer2-vs-16-seer2-vs-18-seer2-heat-pump-payback-math',
+  'mitsubishi-hyper-heat-cost',
+  'bosch-ids-inverter-heat-pump-cost',
+];
+const featuredGuides = FEATURED_GUIDE_SLUGS.map((slug) => GUIDES.find((g) => g.slug === slug)).filter((g): g is NonNullable<typeof g> => !!g);
 const esCount = SYSTEMS.filter((s) => s.energyStar).length;
 const three = equipmentStats('central-heat-pump', 3);
 const threeFair = fairRange('central-heat-pump', 3, 'standard');
@@ -35,17 +45,21 @@ import { DECODER_BRANDS } from '../data/decoder/index';
       <li><b class="num">{esCount}</b> matched to their EPA ENERGY STAR / AHRI record</li>
       <li><b>0</b> made-up numbers. Every figure links to its source.</li>
     </ul>
+    <p><a class="btn" href="/auditor/#audit">Grade my quote</a> <a class="btn ghost" href="/auditor/#audit">Grade it, then request a second opinion</a></p>
   </section>
 
-  <Auditor heading="Grade my quote" />
-
-  <section>
+<section>
     <h2>What a 3-ton heat pump really costs</h2>
     <div class="grid">
-      <div class="card"><div class="muted small">Listed equipment price, 3-ton ducted heat pump systems</div><div class="big num">{usd(three.min)}–{usd(three.max)}</div><p class="small muted">{three.count} systems in our data. <a href="/tonnage/3-ton/">See them all</a></p></div>
+      <div class="card"><div class="muted small">Listed equipment price, 3-ton ducted heat pump systems</div><div class="big num">{usd(three.min)}–{usd(three.max)}</div><p class="small muted">{three.count} systems in our data. <a href={sizeGuidePath(3)}>See them all</a></p></div>
       <div class="card"><div class="muted small">Installed benchmark, standard efficiency <span class="badge b-est">estimate</span></div><div class="big num">{fmtRange(threeFair)}</div><p class="small muted">REMDB midpoint {usd(threeFair.mid)}, restated in today's dollars. <a href="/about/#benchmarks">How</a></p></div>
       <div class="card"><div class="muted small">Federal 25C tax credit for a 2026 install</div><div class="big num">$0</div><p class="small muted">Ended for systems placed in service after Dec. 31, 2025. <a href="/guides/heat-pump-rebates-and-ahri-certificate-check/">What's still available</a></p></div>
     </div>
+  </section>
+
+  <section>
+    <h2>Listed equipment prices by system type</h2>
+    <p>Mean and median listed prices for ducted heat pumps, mini-splits, AC + furnace systems, and condenser-only units are in the <a href="/compare/">comparison workbench</a> catalog snapshot.</p>
   </section>
 
   <section>
@@ -61,7 +75,7 @@ import { DECODER_BRANDS } from '../data/decoder/index';
   <section>
     <h2>Prices by system size</h2>
     <div class="tons">
-      {TONNAGES.map((t) => <a class="card tonlink" href={`/tonnage/${tonSlug(t)}/`}><span class="num">{t}</span> ton<small>{(t * 12000).toLocaleString('en-US')} BTU/h</small></a>)}
+      {TONNAGES.map((t) => <a class="card tonlink" href={sizeGuidePath(t)}><span class="num">{t}</span> ton<small>{(t * 12000).toLocaleString('en-US')} BTU/h</small></a>)}
     </div>
   </section>
 
@@ -77,7 +91,7 @@ import { DECODER_BRANDS } from '../data/decoder/index';
   <section>
     <h2>Prices by brand</h2>
     <div class="tons">
-      {BRANDS.map((b) => <a class="card tonlink" href={`/brands/${b.slug}/`}>{b.name}<small>{b.systems.length} systems · {usd(b.priceMin)}+</small></a>)}
+      {BRANDS.map((b) => <a class="card tonlink" href={`/brands/${b.slug}/`}>{b.name}<small>{b.systems.length} systems</small></a>)}
     </div>
   </section>
 
@@ -91,7 +105,7 @@ import { DECODER_BRANDS } from '../data/decoder/index';
     <h2>Installation parts, line sets &amp; add-on accessories</h2>
     <p class="muted small">Compare contractor quote add-ons against {PART_CATALOG_STATS.totalParts} live-sourced HVAC parts and accessories. <a href="/parts/">View all {PART_CATALOG_STATS.totalParts} verified part SKUs →</a></p>
     <div class="grid">
-      {PART_CATEGORIES.map((c) => <a class="card glink" href={`/parts/${c.slug}/`}><b>{c.name}</b><span class="small muted">{c.count} SKUs · ${c.minPrice.toFixed(0)}–${c.maxPrice.toFixed(0)} listed</span></a>)}
+      {PART_CATEGORIES.map((c) => <a class="card glink" href={`/parts/${c.slug}/`}><b>{c.name}</b><span class="small muted">{c.count} SKUs</span></a>)}
     </div>
   </section>
 
@@ -99,18 +113,25 @@ import { DECODER_BRANDS } from '../data/decoder/index';
     <h2>Head-to-head HVAC comparisons</h2>
     <p class="muted small">Compare brands, adjacent tonnages, system types, and R-32 vs R-454B models side by side. <a href="/compare/">Interactive comparison tool &amp; all matchups →</a></p>
     <div class="grid">
-      {COMPARISONS.filter((c) => isCompareIndexed(c.slug)).slice(0, 6).map((c) => <a class="card glink" href={`/compare/${c.slug}/`}><b>{c.shortLabel}</b><span class="small muted">{c.description}</span></a>)}
+      <a class="card glink" href="/guides/bosch-ids-inverter-heat-pump-cost/"><b>Bosch vs Mitsubishi</b><span class="small muted">IDS inverter cost, with the Bosch vs Mitsubishi table folded in.</span></a>
+      <a class="card glink" href="/guides/heat-pump-vs-ac-and-furnace-replacement-cost/"><b>Heat pump vs AC + furnace</b><span class="small muted">Installed and listed prices by size, plus the Trane vs Goodman furnace matchup.</span></a>
+      <a class="card glink" href="/guides/inverter-vs-single-stage-heat-pump-cost/"><b>Inverter vs single-stage</b><span class="small muted">Upgrade cost by size, plus ACiQ vs MRCOOL.</span></a>
+      <a class="card glink" href="/guides/r410a-vs-r454b-r32-refrigerant-transition-quotes/"><b>R-32 vs R-454B</b><span class="small muted">What the refrigerant transition means, with the catalog comparison folded in.</span></a>
+      <a class="card glink" href={sizeGuidePath(3)}><b>3-ton replacement cost</b><span class="small muted">Line-item 3-ton prices and flagship model matchups.</span></a>
+      <a class="card glink" href="/compare/"><b>Comparison workbench</b><span class="small muted">Pick two systems or brands and compare listed prices side by side.</span></a>
     </div>
   </section>
 
   <section>
-    <h2>Buyer guides</h2>
+    <h2>Featured buyer guides</h2>
     <div class="grid">
-      {GUIDES.map((g) => <a class="card glink" href={`/guides/${g.slug}/`}><b>{g.h1}</b><span class="small muted">{g.description}</span></a>)}
+      {featuredGuides.map((g) => <a class="card glink" href={`/guides/${g.slug}/`}><b>{g.h1}</b></a>)}
     </div>
+    <p><a href="/guides/"><b>All {GUIDES.length} guides →</b></a></p>
   </section>
 
   <Newsletter />
+  <QuoteCta />
 </Base>
 
 <style>

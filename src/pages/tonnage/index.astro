@@ -1,24 +1,50 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { TONNAGES, tonSlug } from '../../data/equipment';
-import { fairRange, equipmentStats, usd, fmtRange } from '../../lib/facts';
-const rows = TONNAGES.map((t) => ({ t, hp: equipmentStats('central-heat-pump', t), fair: fairRange('central-heat-pump', t, 'standard'), fairHi: fairRange('central-heat-pump', t, 'high') }));
+import { TONNAGES } from '../../data/equipment';
+import { fairRange, equipmentStats, usd, fmtRange, listedSpan } from '../../lib/facts';
+import { sizeGuidePath, COMBINED_SIZE_GUIDE_PATH } from '../../data/prune';
+
+const rows = TONNAGES.map((t) => ({ t, hp: equipmentStats('central-heat-pump', t), ac: equipmentStats('ac-furnace', t), ms: equipmentStats('mini-split', t), fair: fairRange('central-heat-pump', t, 'standard'), fairHi: fairRange('central-heat-pump', t, 'high') }));
 const r3 = rows.find((r) => r.t === 3)!;
 const title = `${usd(r3.hp.min)} Equip vs ${fmtRange(r3.fair)} Installed: 1.5–5 Ton HVAC`;
 const description = `Compare 1.5 to 5-ton heat pump & AC costs (${usd(r3.hp.min)}–${usd(r3.hp.max)} 3-ton equipment vs ${fmtRange(r3.fair)} installed benchmark) with sourced prices by size.`;
+
+const signed = (n: number | null) => {
+  if (n == null || !Number.isFinite(n)) return '—';
+  return `${n >= 0 ? '+' : '−'}${usd(Math.abs(n))}`;
+};
+const steps = rows.slice(0, -1).map((from, i) => {
+  const to = rows[i + 1];
+  const listed = from.hp.median != null && to.hp.median != null ? to.hp.median - from.hp.median : null;
+  const acListed = from.ac.median != null && to.ac.median != null ? to.ac.median - from.ac.median : null;
+  const msListed = from.ms.median != null && to.ms.median != null ? to.ms.median - from.ms.median : null;
+  const std = to.fair.mid - from.fair.mid;
+  const high = to.fairHi.mid - from.fairHi.mid;
+  return {
+    from: from.t, to: to.t, listed, acListed, msListed, std, high,
+    hpN: [from.hp.count, to.hp.count] as [number, number],
+    acN: [from.ac.count, to.ac.count] as [number, number],
+    msN: [from.ms.count, to.ms.count] as [number, number],
+  };
+});
+const listedStep = (delta: number | null, n: [number, number]) => {
+  const counts = `<span class="small muted">(${n[0]}→${n[1]})</span>`;
+  if (n[0] < 3 || n[1] < 3 || delta == null) return `— ${counts}`;
+  return `${signed(delta)} ${counts}`;
+};
 ---
 <Base title={title} description={description}>
   <p class="crumbs"><a href="/">Home</a> / By tonnage</p>
   <h1>HVAC &amp; heat pump cost by tonnage</h1>
-  <p class="lead">One ton of cooling is 12,000 BTU per hour. Pick a size to see real listed systems and the installed-cost benchmark.</p>
+  <p class="lead">One ton of cooling is 12,000 BTU per hour. Each size links to its section of the <a href={COMBINED_SIZE_GUIDE_PATH}>combined 1.5-to-5-ton replacement-cost guide</a>. The table below is the listed range and the DOE installed-cost benchmark at that size. The second table is the dollar step from one size to the next — those step-up figures appear only on this page.</p>
   <div class="tablewrap">
     <table>
       <thead><tr><th>Size</th><th class="r">Listed ducted heat pump systems</th><th class="r">Installed, standard <span class="badge b-est">est.</span></th><th class="r">Installed, high-eff. <span class="badge b-est">est.</span></th></tr></thead>
       <tbody>
         {rows.map((r) => (
           <tr>
-            <td><a href={`/tonnage/${tonSlug(r.t)}/`}><b>{r.t} ton</b></a> <span class="small muted">{(r.t * 12000).toLocaleString('en-US')} BTU/h</span></td>
-            <td class="r num">{r.hp.count ? `${usd(r.hp.min)}–${usd(r.hp.max)}` : '—'} <span class="small muted">({r.hp.count})</span></td>
+            <td><a href={sizeGuidePath(r.t)}><b>{r.t} ton</b></a> <span class="small muted">{(r.t * 12000).toLocaleString('en-US')} BTU/h</span></td>
+            <td class="r num">{r.hp.count ? listedSpan(r.hp.min, r.hp.max) : '—'} <span class="small muted">({r.hp.count})</span></td>
             <td class="r num">{fmtRange(r.fair)}</td>
             <td class="r num">{fmtRange(r.fairHi)}</td>
           </tr>
@@ -26,5 +52,25 @@ const description = `Compare 1.5 to 5-ton heat pump & AC costs (${usd(r3.hp.min)
       </tbody>
     </table>
   </div>
-  <p class="small muted">Installed ranges: REMDB ducted air-source heat pump replacement regression, restated in today's dollars. <a href="/about/#benchmarks">Method</a>. Listed prices link to retailers on each size page.</p>
+  <p class="small muted">Installed ranges: REMDB ducted air-source heat pump replacement regression, restated in today's dollars. <a href="/about/#benchmarks">Method</a>.</p>
+
+  <h2>What it costs to step up one size</h2>
+  <p>Each row is the adjacent-size difference, not the absolute price. Listed-median columns are the change in the median public online retail price (equipment only) for a ducted heat pump, an AC + furnace system, and a mini-split; the listing counts for the two sizes are in each cell. A listed step is shown only when both sizes have at least 3 listings — thinner cells are blanked so a two-listing median cannot look like a market step. Installed figures are the change in the REMDB midpoint for a ducted heat pump. A negative listed step means the median listing at the larger size is cheaper than at the smaller size in our current catalog — listings are not a smooth curve.</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Step</th><th class="r">Listed median, ducted heat pump</th><th class="r">Listed median, AC + furnace</th><th class="r">Listed median, mini-split</th><th class="r">Installed midpoint, ducted heat pump, standard <span class="badge b-est">est.</span></th><th class="r">Installed midpoint, ducted heat pump, high-eff. <span class="badge b-est">est.</span></th></tr></thead>
+      <tbody>
+        {steps.map((s) => (
+          <tr>
+            <td>{s.from} → {s.to} ton</td>
+            <td class="r num" set:html={listedStep(s.listed, s.hpN)} />
+            <td class="r num" set:html={listedStep(s.acListed, s.acN)} />
+            <td class="r num" set:html={listedStep(s.msListed, s.msN)} />
+            <td class="r num">{signed(s.std)}</td>
+            <td class="r num">{signed(s.high)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
 </Base>

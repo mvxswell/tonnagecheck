@@ -294,8 +294,8 @@ const CATEGORY_DEFINITIONS: PartCategoryDefinition[] = [
     whatItDoes: 'During cooling and dehumidification, an evaporator coil condenses gallons of water per day. Drain pans, float safety switches, and condensate pumps collect and discharge that water safely — and automatically cut 24V thermostat power if a drain line clogs before water overflows onto ceilings or floors.',
     whenNeededVsPadded: [
       'Float switch hardware vs quote markups: A Beckett clip-on float switch ($22.95) or RectorSeal Safe-T-Switch SS1/SS3 ($29.95–$38.49) splices into the 24V R or Y thermostat wire at the air handler in 10 minutes. Quotes charging $250–$450 for a single float switch are charging 7×–12× the part cost.',
-      'Basement & crawlspace condensate pumps: Standard 15–20 ft lift condensate removal pumps list at $49.95–$98.00 (including models with 20 ft of vinyl tubing). Mini-split under-mount pumps (such as the Aspen Mini White) list at $332.16 because of their ultra-quiet compact sensor/pump assembly.',
-      'Attic secondary drain pans: When an air handler sits above a finished ceiling, code requires a secondary auxiliary drain pan ($99.95–$143.00 hardware cost) plus an auxiliary pan float switch or secondary drain line.',
+      'Basement & crawlspace condensate pumps: Standard 15–20 ft lift condensate removal pumps list at $49.95–$98 (including models with 20 ft of vinyl tubing). Mini-split under-mount pumps (such as the Aspen Mini White) list at $332.16 because of their ultra-quiet compact sensor/pump assembly.',
+      'Attic secondary drain pans: When an air handler sits above a finished ceiling, code requires a secondary auxiliary drain pan ($99.95–$143 hardware cost) plus an auxiliary pan float switch or secondary drain line.',
     ],
     auditChecklist: [
       'For any attic or upper-floor air handler, confirm that a new secondary drain pan and a 24V float safety switch are included in writing.',

@@ -1,15 +1,15 @@
 ---
 import Base from '../../layouts/Base.astro';
 import ModelSerialDecoder from '../../components/ModelSerialDecoder.astro';
-import ConciergeForm from '../../components/ConciergeForm.astro';
-import Newsletter from '../../components/Newsletter.astro';
 import { DECODER_BRANDS, type DecoderBrand } from '../../data/decoder/index';
 import { brandByName } from '../../data/brands';
-import { SYSTEMS, SYSTEM_TYPE_LABEL, tonSlug, lowestPrice } from '../../data/equipment';
+import { SYSTEMS, SYSTEM_TYPE_LABEL, lowestPrice } from '../../data/equipment';
 import { SOURCES, type SourceId } from '../../data/sources';
-import { usd, fmtRange, captureDateLabel } from '../../lib/facts';
+import { usd, fmtRange, captureDateLabel, statsOf, articleFor } from '../../lib/facts';
 import { decodeModel, decodeSerial } from '../../lib/decode';
 import { SITE } from '../../config';
+import { sizeGuidePath } from '../../data/prune';
+import QuoteCta from '../../components/QuoteCta.astro';
 
 export function getStaticPaths() {
   return DECODER_BRANDS.map((d) => ({ params: { slug: d.slug }, props: { d } }));
@@ -19,6 +19,7 @@ const url = `${SITE.url}/decoder/${d.slug}/`;
 
 // Every model in our price data for these brands, decoded at build time with the same code the browser uses.
 const seedSystems = SYSTEMS.filter((s) => d.seedBrands.includes(s.brand));
+const catalogForBrand = SYSTEMS.filter((s) => s.brand === d.name);
 const seen = new Set<string>();
 const decodedSeed = seedSystems.flatMap((s) => s.components.map((c) => ({ c, s }))).filter(({ c }) => !seen.has(c) && seen.add(c))
   .map(({ c, s }) => ({ model: c, s, r: decodeModel(c, d.families)[0] }))
@@ -75,9 +76,12 @@ const ld = [
   <p class="crumbs"><a href="/">Home</a> / <a href="/decoder/">Model &amp; serial decoder</a> / {d.name}</p>
   <h1>{d.h1}</h1>
   <p class="lead">{d.lead}</p>
+  {d.slug === 'lg' && catalogForBrand.length > 0 && (
+    <p>Listed LG equipment in our catalog ({captureDateLabel(catalogForBrand)}), by system type — these are separate medians, not a mixed all-types average: ducted heat pumps {usd(statsOf(catalogForBrand.filter((s) => s.systemType === 'central-heat-pump')).median)} ({catalogForBrand.filter((s) => s.systemType === 'central-heat-pump').length} listings), mini-splits {usd(statsOf(catalogForBrand.filter((s) => s.systemType === 'mini-split')).median)} ({catalogForBrand.filter((s) => s.systemType === 'mini-split').length} listings).</p>
+  )}
   <p class="small muted">Updated {d.updated} · Every code below is transcribed from the manufacturer documents listed under <a href="#sources">Sources</a>. Where a document did not define something, we leave it out.</p>
 
-  <ModelSerialDecoder brands={[d]} examples={examples} heading={`Decode a ${d.name} model or serial number`} />
+  <ModelSerialDecoder brands={[d]} examples={examples} heading={`Decode ${articleFor(d.name)} ${d.name} model or serial number`} />
 
   <div class="prose">
     {d.intro.map((p) => <p>{p}</p>)}
@@ -169,12 +173,12 @@ const ld = [
       <div class="tablewrap"><table>
         <thead><tr><th>Size &amp; type</th><th class="r">Listed equipment</th><th class="r">Installed benchmark <span class="badge b-est">est.</span></th></tr></thead>
         <tbody>{b.rows.map((r) => (
-          <tr><td><a href={`/tonnage/${tonSlug(r.tons)}/`}><b>{r.tons} ton</b></a> <span class="small muted">{SYSTEM_TYPE_LABEL[r.type].toLowerCase()}</span></td>
+          <tr><td><a href={sizeGuidePath(r.tons)}><b>{r.tons} ton</b></a> <span class="small muted">{SYSTEM_TYPE_LABEL[r.type].toLowerCase()}</span></td>
             <td class="r num">{r.min === r.max ? usd(r.min) : `${usd(r.min)}–${usd(r.max)}`} <span class="small muted">({r.count})</span></td>
             <td class="r num">{fmtRange(r.fair)}</td></tr>
         ))}</tbody>
       </table></div>
-      <p><a class="btn" href={`/auditor/?brand=${encodeURIComponent(b.name)}`}>Audit a {b.name} quote</a> <a class="btn ghost" href={`/brands/${b.slug}/`}>All {b.name} prices</a></p>
+      <p><a class="btn" href={`/auditor/?brand=${encodeURIComponent(b.name)}`}>Audit {articleFor(b.name)} {b.name} quote</a> <a class="btn ghost" href={`/brands/${b.slug}/`}>All {b.name} prices</a></p>
     </>
   ))}
 
@@ -186,16 +190,12 @@ const ld = [
     {d.faqs.map((f) => (<><h3>{f.q}</h3><p>{f.a}</p></>))}
   </div>
 
-  <section class="card second" id="second-opinion">
-    <ConciergeForm brandModel={d.brands[0]} />
-  </section>
-
-  <h2 id="sources">Sources</h2>
+<h2 id="sources">Sources</h2>
   <ol class="small srcs">{sourceList.map((s) => <li><a href={s.url}>{s.title}</a>: {s.publisher}{s.note ? <> · <span class="muted">{s.note}</span></> : ''}</li>)}</ol>
 
   <h2>Other decoders</h2>
   <p><a href="/decoder/">All brands: model &amp; serial decoder</a>{others.map((o) => <> · <a href={`/decoder/${o.slug}/`}>{o.name}</a></>)}</p>
-  <Newsletter />
+  <QuoteCta />
 </Base>
 
 <style>

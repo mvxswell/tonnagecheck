@@ -1,10 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Newsletter from '../../components/Newsletter.astro';
 import { BRANDS } from '../../data/brands';
 import { SYSTEMS, SYSTEM_TYPE_LABEL, lowestPrice } from '../../data/equipment';
 import { fairRange, usd, fmtRange, catalogDateLabel } from '../../lib/facts';
 import { SITE } from '../../config';
+import QuoteCta from '../../components/QuoteCta.astro';
 const shortType: Record<string, string> = { 'central-heat-pump': 'ducted heat pump', 'mini-split': 'mini-split', 'ac-furnace': 'AC + furnace', 'heat-pump-only': 'condenser' };
 const minEq = Math.min(...SYSTEMS.map(lowestPrice));
 const maxEq = Math.max(...SYSTEMS.map(lowestPrice));
@@ -40,5 +40,5 @@ const ld = {
   </div>
   <p class="small muted">Only brands with live, verifiable listings appear. Listed prices are public online retail for the equipment only. Types: {Object.values(SYSTEM_TYPE_LABEL).join(' · ')}.</p>
   <p><a class="btn" href="/auditor/">Audit a quote for any brand</a></p>
-  <Newsletter />
+  <QuoteCta />
 </Base>

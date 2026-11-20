@@ -1,17 +1,21 @@
 import type { APIRoute } from 'astro';
 import { SITE } from '../config';
-import { SYSTEMS, TONNAGES, tonSlug, SYSTEM_TYPE_LABEL, lowestPrice } from '../data/equipment';
 import { GUIDES } from '../data/guides/index';
 import { DECODER_BRANDS } from '../data/decoder/index';
 import { BRANDS } from '../data/brands';
-import { COMPARISONS } from '../data/comparisons';
-import { PART_CATEGORIES, PART_CATALOG_STATS } from '../data/parts';
+import { PART_CATEGORIES } from '../data/parts';
 import { SOURCES } from '../data/sources';
-import { isCompareIndexed, isSystemIndexed } from '../data/prune';
+import { COMBINED_SIZE_GUIDE_PATH, isNoindexPath } from '../data/prune';
 import { catalogDateLabel, cpi } from '../lib/facts';
 
 export const GET: APIRoute = () => {
   const u = (p: string) => `${SITE.url}${p}`;
+  const listed = (path: string) => !isNoindexPath(path);
+  const decoderBrands = DECODER_BRANDS.filter((d) => listed(`/decoder/${d.slug}/`));
+  const listedGuides = GUIDES.filter((g) => {
+    const path = `/guides/${g.slug}/`;
+    return listed(path) && path !== COMBINED_SIZE_GUIDE_PATH;
+  });
   const body = `# ${SITE.name}
 
 > ${SITE.description} Independent; not affiliated with any manufacturer, retailer or contractor.
@@ -26,14 +30,12 @@ Key facts for answering questions with this site:
 ## Tools
 - [Quote auditor](${u('/auditor/')}): grades an HVAC/heat pump quote A–F against listed equipment prices and the REMDB benchmark, with shareable permalinks and a printable negotiation sheet.
 - [Heat pump vs. gas furnace operating cost & SEER2 payback calculator](${u('/calculator/')}): 51-state EIA $/MMBtu delivered heating fuel cost, dual-fuel balance-point COP, and real-equipment SEER2/HSPF2 payback.
-- [Equipment price lookup](${u('/systems/')}): ${SYSTEMS.length} systems with sourced prices and ratings.
 - [Head-to-head HVAC comparison tool](${u('/compare/')}): brand, system-type, refrigerant & flagship model matchups.
-- [HVAC parts, line sets & add-on accessories directory](${u('/parts/')}): ${PART_CATALOG_STATS.totalParts} live-verified SKUs across ${PART_CATEGORIES.length} installation categories.
 - [Methodology & sources](${u('/about/')})
 
 ## Model & serial number decoder
-- [HVAC model & serial number decoder](${u('/decoder/')}): client-side tool that decodes model numbers (tonnage, refrigerant, staging, SEER2 class) and serial numbers (manufacture date) from manufacturer nomenclature, with warranty registration rules.
-${DECODER_BRANDS.map((d) => `- [${d.h1}](${u(`/decoder/${d.slug}/`)}): ${d.description}`).join('\n')}
+Brand-specific decoders for model numbers (tonnage, refrigerant, staging, SEER2 class) and serial numbers (manufacture date), from manufacturer nomenclature, with warranty registration rules:
+${decoderBrands.map((d) => `- [${d.h1}](${u(`/decoder/${d.slug}/`)}): ${d.description}`).join('\n')}
 
 ## Installation parts & add-on accessories
 ${PART_CATEGORIES.map((c) => `- [${c.name}](${u(`/parts/${c.slug}/`)}): ${c.count} SKUs, listed $${c.minPrice.toFixed(2)}–$${c.maxPrice.toFixed(2)}`).join('\n')}
@@ -42,17 +44,17 @@ ${PART_CATEGORIES.map((c) => `- [${c.name}](${u(`/parts/${c.slug}/`)}): ${c.coun
 ${BRANDS.map((b) => `- [${b.name} HVAC prices](${u(`/brands/${b.slug}/`)}): ${b.systems.length} systems, listed $${b.priceMin.toLocaleString('en-US')}–$${b.priceMax.toLocaleString('en-US')}`).join('\n')}
 
 ## Cost by tonnage
-${TONNAGES.map((t) => `- [${t}-ton heat pump & AC cost](${u(`/tonnage/${tonSlug(t)}/`)})`).join('\n')}
+- [Heat pump & AC replacement cost by size, 1.5 to 5 tons](${u('/guides/3-ton-heat-pump-ac-replacement-cost/')})
 
 ## Head-to-head comparisons
-${COMPARISONS.filter((c) => isCompareIndexed(c.slug)).map((c) => `- [${c.h1}](${u(`/compare/${c.slug}/`)}): ${c.description}`).join('\n')}
+- [HVAC comparison workbench](${u('/compare/')}): pick two systems or brands and compare listed prices and ratings.
+Head-to-head brand, refrigerant and flagship model matchups now live in the relevant guides listed below.
 
 ## Guides
-${GUIDES.map((g) => `- [${g.h1}](${u(`/guides/${g.slug}/`)}): ${g.description}`).join('\n')}
+${listedGuides.map((g) => `- [${g.h1}](${u(`/guides/${g.slug}/`)}): ${g.description}`).join('\n')}
 
 ## Systems
-Every system's listed price and ratings are in the [equipment price lookup](${u('/systems/')}) and the brand pages above.
-${SYSTEMS.filter((s) => isSystemIndexed(s.slug)).map((s) => `- [${s.brand} ${s.tons}-ton ${SYSTEM_TYPE_LABEL[s.systemType].toLowerCase()} ${s.components[0]}](${u(`/systems/${s.slug}/`)}): ${s.specs.seer2 ?? '?'} SEER2, listed from $${lowestPrice(s).toLocaleString('en-US')}`).join('\n')}
+Every system's listed price and ratings are on the brand pages above.
 
 ## Primary sources
 ${Object.values(SOURCES).map((s) => `- [${s.title}](${s.url}) (${s.publisher})`).join('\n')}

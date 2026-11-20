@@ -1,6 +1,5 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Newsletter from '../../components/Newsletter.astro';
 import {
   ALL_PART_LISTINGS,
   PART_CATEGORIES,
@@ -11,6 +10,7 @@ import {
 } from '../../data/parts';
 import { usd, seedDateLabel } from '../../lib/facts';
 import { SITE } from '../../config';
+import QuoteCta from '../../components/QuoteCta.astro';
 
 const fmtExact = (n: number) =>
   Number.isInteger(n)
@@ -282,5 +282,5 @@ const ld = [
     </a>
   </div>
 
-  <Newsletter />
+  <QuoteCta />
 </Base>
