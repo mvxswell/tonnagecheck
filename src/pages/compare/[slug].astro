@@ -5,7 +5,7 @@ import CompareWorkbench from '../../components/CompareWorkbench.astro';
 import { COMPARISONS, type CompareEntry } from '../../data/comparisons';
 import { isCompareMerged, isCompareIndexed, sizeGuidePath, comparePath } from '../../data/prune';
 import { brandSlug } from '../../data/brands';
-import { usd, fmtRange, pct, seedDateLabel } from '../../lib/facts';
+import { usd, fmtRange, pct, captureDateLabel } from '../../lib/facts';
 import QuoteCta from '../../components/QuoteCta.astro';
 
 export function getStaticPaths() {
@@ -71,7 +71,7 @@ const jsonld = [
     <table>
       <thead>
         <tr>
-          <th>Metric ({seedDateLabel})</th>
+          <th>Metric ({captureDateLabel(combinedSystems)})</th>
           <th class="r">{left.href ? <a href={left.href}>{left.label}</a> : left.label}</th>
           <th class="r">{right.href ? <a href={right.href}>{right.label}</a> : right.label}</th>
         </tr>

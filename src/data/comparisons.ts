@@ -5,7 +5,7 @@ import { SYSTEMS, TONNAGES, SYSTEM_TYPE_LABEL, TIER_LABEL, tonSlug, lowestPrice,
 import { BRANDS, brandByName, brandSlug } from './brands';
 import { SOURCES } from './sources';
 type SourceKey = keyof typeof SOURCES;
-import { fairRange, systemsWhere, statsOf, refrigerantOf, isInverter, seedDateLabel, cpi, usd, fmtRange, pct, type Range } from '../lib/facts';
+import { fairRange, systemsWhere, statsOf, refrigerantOf, isInverter, captureDateLabel, dateLabel, cpi, usd, fmtRange, pct, type Range } from '../lib/facts';
 import { sizeGuidePath } from './prune';
 
 export type CompareCategory = 'brand' | 'tonnage' | 'type' | 'model';
@@ -109,6 +109,7 @@ function buildBrandComparison(
   const xsB = filterType ? bB.systems.filter((s) => s.systemType === filterType) : bB.systems;
   const useA = xsA.length ? xsA : bA.systems;
   const useB = xsB.length ? xsB : bB.systems;
+  const asOf = captureDateLabel([...useA, ...useB]);
 
   const left = summarizeSystems(bA.name, `${useA.length} seeded systems`, useA, `/brands/${bA.slug}/`);
   const right = summarizeSystems(bB.name, `${useB.length} seeded systems`, useB, `/brands/${bB.slug}/`);
@@ -129,7 +130,7 @@ function buildBrandComparison(
 
   const bodyHtml = `
 <h2>Equipment price &amp; contractor markup spread: ${bA.name} vs ${bB.name}</h2>
-<p>Across our verified distributor catalog captured ${seedDateLabel} (${src('hvacdirect', 'HVACDirect')}), ${brandLink(bA.name)} lists ${left.count} systems from <b>${usd(left.equipMin)} to ${usd(left.equipMax)}</b> (median <b>${usd(left.equipMedian)}</b>), while ${brandLink(bB.name)} lists ${right.count} systems from <b>${usd(right.equipMin)} to ${usd(right.equipMax)}</b> (median <b>${usd(right.equipMedian)}</b>). That puts ${cheaperMedBrand}'s median listed hardware price <b>${usd(diffMed)} lower</b> before installation labor is added.</p>
+<p>Across our verified distributor catalog captured ${asOf} (${src('hvacdirect', 'HVACDirect')}), ${brandLink(bA.name)} lists ${left.count} systems from <b>${usd(left.equipMin)} to ${usd(left.equipMax)}</b> (median <b>${usd(left.equipMedian)}</b>), while ${brandLink(bB.name)} lists ${right.count} systems from <b>${usd(right.equipMin)} to ${usd(right.equipMax)}</b> (median <b>${usd(right.equipMedian)}</b>). That puts ${cheaperMedBrand}'s median listed hardware price <b>${usd(diffMed)} lower</b> before installation labor is added.</p>
 <p>When a contractor quotes both brands, compare the gap on your proposal against the actual hardware gap by tonnage below:</p>
 <div class="tablewrap"><table><thead><tr><th>System size</th><th class="r">${bA.name} lowest listed</th><th class="r">${bB.name} lowest listed</th><th class="r">Hardware difference</th><th class="r">DOE installed benchmark <span class="badge b-est">est.</span></th></tr></thead><tbody>
 ${overlapRows}
@@ -156,7 +157,7 @@ ${overlapRows}
     title,
     h1,
     description,
-    lead: `Side-by-side comparison of ${bA.name} (${left.count} listings, ${usd(left.equipMin)}–${usd(left.equipMax)}) and ${bB.name} (${right.count} listings, ${usd(right.equipMin)}–${usd(right.equipMax)}) equipment prices, DOE REMDB installed benchmarks, SEER2/HSPF2 ratings, and contractor markup spread as of ${seedDateLabel}.`,
+    lead: `Side-by-side comparison of ${bA.name} (${left.count} listings, ${usd(left.equipMin)}–${usd(left.equipMax)}) and ${bB.name} (${right.count} listings, ${usd(right.equipMin)}–${usd(right.equipMax)}) equipment prices, DOE REMDB installed benchmarks, SEER2/HSPF2 ratings, and contractor markup spread as of ${asOf}.`,
     left,
     right,
     auditDefaults: { systemType: primaryType, tons: primaryTons, tier: 'mid', brand: bA.name },
@@ -177,6 +178,7 @@ function buildTonnageComparison(tonsA: number, tonsB: number): CompareEntry {
   const allB = systemsWhere({ tons: tonsB });
   const left = summarizeSystems(`${tonsA}-Ton Heat Pump`, `${(tonsA * 12000).toLocaleString('en-US')} BTU/h`, xsA.length ? xsA : allA, sizeGuidePath(tonsA), 'central-heat-pump', tonsA);
   const right = summarizeSystems(`${tonsB}-Ton Heat Pump`, `${(tonsB * 12000).toLocaleString('en-US')} BTU/h`, xsB.length ? xsB : allB, sizeGuidePath(tonsB), 'central-heat-pump', tonsB);
+  const asOf = captureDateLabel([...(xsA.length ? xsA : allA), ...(xsB.length ? xsB : allB)]);
   const fairAStd = fairRange('central-heat-pump', tonsA, 'standard');
   const fairBStd = fairRange('central-heat-pump', tonsB, 'standard');
   const fairAMid = fairRange('central-heat-pump', tonsA, 'mid');
@@ -205,7 +207,7 @@ function buildTonnageComparison(tonsA: number, tonsB: number): CompareEntry {
 <tr><td>Standard (&lt;15.2 SEER2)</td><td class="r num">${fmtRange(fairAStd)} (mid ${usd(fairAStd.mid)})</td><td class="r num">${fmtRange(fairBStd)} (mid ${usd(fairBStd.mid)})</td><td class="r num">+${usd(fairBStd.mid - fairAStd.mid)}</td></tr>
 <tr><td>Mid-tier (15.2–16.9 SEER2)</td><td class="r num">${fmtRange(fairAMid)} (mid ${usd(fairAMid.mid)})</td><td class="r num">${fmtRange(fairBMid)} (mid ${usd(fairBMid.mid)})</td><td class="r num">+${usd(fairBMid.mid - fairAMid.mid)}</td></tr>
 <tr><td>High-tier (17+ SEER2)</td><td class="r num">${fmtRange(fairAHigh)} (mid ${usd(fairAHigh.mid)})</td><td class="r num">${fmtRange(fairBHigh)} (mid ${usd(fairBHigh.mid)})</td><td class="r num">+${usd(fairBHigh.mid - fairAHigh.mid)}</td></tr>
-<tr><td>Listed ducted heat pump hardware (${seedDateLabel})</td><td class="r num">${usd(left.equipMin)}–${usd(left.equipMax)} (med ${usd(left.equipMedian)})</td><td class="r num">${usd(right.equipMin)}–${usd(right.equipMax)} (med ${usd(right.equipMedian)})</td><td class="r num">${right.equipMedian >= left.equipMedian ? '+' : '−'}${usd(Math.abs(right.equipMedian - left.equipMedian))} med</td></tr>
+<tr><td>Listed ducted heat pump hardware (${asOf})</td><td class="r num">${usd(left.equipMin)}–${usd(left.equipMax)} (med ${usd(left.equipMedian)})</td><td class="r num">${usd(right.equipMin)}–${usd(right.equipMax)} (med ${usd(right.equipMedian)})</td><td class="r num">${right.equipMedian >= left.equipMedian ? '+' : '−'}${usd(Math.abs(right.equipMedian - left.equipMedian))} med</td></tr>
 </tbody></table></div>
 <p class="small muted">${remdbNote}</p>
 
@@ -223,7 +225,7 @@ function buildTonnageComparison(tonsA: number, tonsB: number): CompareEntry {
     title,
     h1,
     description,
-    lead: `Direct cost and capacity comparison between ${tonsA}-ton (${(tonsA * 12000).toLocaleString('en-US')} BTU/h) and ${tonsB}-ton (${(tonsB * 12000).toLocaleString('en-US')} BTU/h) heat pump systems: listed distributor prices (${seedDateLabel}), DOE REMDB installed ranges across all three efficiency tiers, and duct CFM requirements.`,
+    lead: `Direct cost and capacity comparison between ${tonsA}-ton (${(tonsA * 12000).toLocaleString('en-US')} BTU/h) and ${tonsB}-ton (${(tonsB * 12000).toLocaleString('en-US')} BTU/h) heat pump systems: listed distributor prices (${asOf}), DOE REMDB installed ranges across all three efficiency tiers, and duct CFM requirements.`,
     left,
     right,
     auditDefaults: { systemType: 'central-heat-pump', tons: tonsB, tier: 'standard' },
@@ -254,6 +256,7 @@ function buildSystemTypeComparison(
   const fairBHigh = fairRange(typeB, tons, 'high');
   const left = summarizeSystems(`${tons}-Ton ${SYSTEM_TYPE_LABEL[typeA].split(' (')[0]}`, `${(tons * 12000).toLocaleString('en-US')} BTU/h`, fallbackA, sizeGuidePath(tons), typeA, tons);
   const right = summarizeSystems(`${tons}-Ton ${SYSTEM_TYPE_LABEL[typeB].split(' (')[0]}`, `${(tons * 12000).toLocaleString('en-US')} BTU/h`, fallbackB, sizeGuidePath(tons), typeB, tons);
+  const asOf = captureDateLabel([...fallbackA, ...fallbackB]);
   left.fair = fairA;
   right.fair = fairB;
   left.markupMid = fairA.mid - left.equipMedian;
@@ -264,9 +267,9 @@ function buildSystemTypeComparison(
 
   const bodyHtml = `
 <h2>${tons}-ton ${SYSTEM_TYPE_LABEL[typeA]} vs ${SYSTEM_TYPE_LABEL[typeB]}: equipment &amp; installed benchmarks</h2>
-<p>At ${tonLink(tons, `${tons} tons`)} (${(tons * 12000).toLocaleString('en-US')} BTU/h), homeowners comparing a <b>${SYSTEM_TYPE_LABEL[typeA].toLowerCase()}</b> against a <b>${SYSTEM_TYPE_LABEL[typeB].toLowerCase()}</b> see two distinct hardware and labor profiles in our seed data (${seedDateLabel}) and the DOE ${src('remdb', 'REMDB')} cost regressions:</p>
+<p>At ${tonLink(tons, `${tons} tons`)} (${(tons * 12000).toLocaleString('en-US')} BTU/h), homeowners comparing a <b>${SYSTEM_TYPE_LABEL[typeA].toLowerCase()}</b> against a <b>${SYSTEM_TYPE_LABEL[typeB].toLowerCase()}</b> see two distinct hardware and labor profiles in our seed data (${asOf}) and the DOE ${src('remdb', 'REMDB')} cost regressions:</p>
 <div class="tablewrap"><table><thead><tr><th>Metric (${tons}-ton nominal capacity)</th><th class="r">${SYSTEM_TYPE_LABEL[typeA]}</th><th class="r">${SYSTEM_TYPE_LABEL[typeB]}</th></tr></thead><tbody>
-<tr><td>Listed equipment range (${seedDateLabel})</td><td class="r num">${usd(left.equipMin)}–${usd(left.equipMax)} (med ${usd(left.equipMedian)})</td><td class="r num">${usd(right.equipMin)}–${usd(right.equipMax)} (med ${usd(right.equipMedian)})</td></tr>
+<tr><td>Listed equipment range (${asOf})</td><td class="r num">${usd(left.equipMin)}–${usd(left.equipMax)} (med ${usd(left.equipMedian)})</td><td class="r num">${usd(right.equipMin)}–${usd(right.equipMax)} (med ${usd(right.equipMedian)})</td></tr>
 <tr><td>Standard-tier installed benchmark <span class="badge b-est">est.</span></td><td class="r num">${fmtRange(fairA)} (mid ${usd(fairA.mid)})</td><td class="r num">${fmtRange(fairB)} (mid ${usd(fairB.mid)})</td></tr>
 <tr><td>High-efficiency installed benchmark <span class="badge b-est">est.</span></td><td class="r num">${fmtRange(fairAHigh)} (mid ${usd(fairAHigh.mid)})</td><td class="r num">${fmtRange(fairBHigh)} (mid ${usd(fairBHigh.mid)})</td></tr>
 <tr><td>Efficiency span in seed</td><td class="r num">${left.seer2Span}</td><td class="r num">${right.seer2Span}</td></tr>
@@ -288,7 +291,7 @@ function buildSystemTypeComparison(
     title,
     h1,
     description,
-    lead: `Head-to-head comparison of ${tons}-ton ${SYSTEM_TYPE_LABEL[typeA].toLowerCase()} vs ${SYSTEM_TYPE_LABEL[typeB].toLowerCase()} equipment prices (${seedDateLabel}) and DOE national-lab installed replacement benchmarks.`,
+    lead: `Head-to-head comparison of ${tons}-ton ${SYSTEM_TYPE_LABEL[typeA].toLowerCase()} vs ${SYSTEM_TYPE_LABEL[typeB].toLowerCase()} equipment prices (${asOf}) and DOE national-lab installed replacement benchmarks.`,
     left,
     right,
     auditDefaults: { systemType: typeA, tons, tier: 'standard' },
@@ -304,6 +307,7 @@ function buildSystemTypeComparison(
 function buildRefrigerantComparison(): CompareEntry {
   const r32 = SYSTEMS.filter((s) => refrigerantOf(s) === 'R-32');
   const r454b = SYSTEMS.filter((s) => refrigerantOf(s) === 'R-454B');
+  const asOf = captureDateLabel([...r32, ...r454b]);
   const left = summarizeSystems('R-32 Systems (GWP 675)', `${r32.length} seeded systems`, r32, '/guides/r410a-vs-r454b-r32-refrigerant-transition-quotes/');
   const right = summarizeSystems('R-454B Systems (GWP 470)', `${r454b.length} seeded systems`, r454b, '/guides/r410a-vs-r454b-r32-refrigerant-transition-quotes/');
   const f3 = fairRange('central-heat-pump', 3, 'standard');
@@ -321,7 +325,7 @@ function buildRefrigerantComparison(): CompareEntry {
 
   const bodyHtml = `
 <h2>Which brands use R-32 vs R-454B in our ${SYSTEMS.length}-system catalog?</h2>
-<p>Under the EPA's AIM Act Technology Transitions rule (${src('epaTechTransitions', 'EPA HFC restrictions')}), residential split and packaged HVAC systems manufactured from January 1, 2025 must use refrigerants with a Global Warming Potential (GWP) below 700, replacing legacy R-410A (GWP 2,088). Manufacturers split into two ASHRAE A2L refrigerant camps across our catalog (${seedDateLabel}):</p>
+<p>Under the EPA's AIM Act Technology Transitions rule (${src('epaTechTransitions', 'EPA HFC restrictions')}), residential split and packaged HVAC systems manufactured from January 1, 2025 must use refrigerants with a Global Warming Potential (GWP) below 700, replacing legacy R-410A (GWP 2,088). Manufacturers split into two ASHRAE A2L refrigerant camps across our catalog (${asOf}):</p>
 <ul>
 <li><b>R-32 (single-component HFC, GWP 675 — ${r32.length} systems listed from ${usd(left.equipMin)} to ${usd(left.equipMax)}, median ${usd(left.equipMedian)}):</b> Used by ${r32Brands.map((b) => brandLink(b)).join(', ')}. Because R-32 is a single-component refrigerant rather than a blend, it has zero temperature glide and can be topped off in either liquid or vapor state without fractionation. Sample system: ${sysLink(left.sampleSystem)} (${usd(lowestPrice(left.sampleSystem))}).</li>
 <li><b>R-454B (zeotropic blend of 68.9% R-32 and 31.1% R-1234yf, GWP 470 — ${r454b.length} systems listed from ${usd(right.equipMin)} to ${usd(right.equipMax)}, median ${usd(right.equipMedian)}):</b> Used by ${r454bBrands.map((b) => brandLink(b)).join(', ')}. Sample system: ${sysLink(right.sampleSystem)} (${usd(lowestPrice(right.sampleSystem))}).</li>
@@ -337,7 +341,7 @@ function buildRefrigerantComparison(): CompareEntry {
     title,
     h1,
     description,
-    lead: `Side-by-side comparison of all ${r32.length} R-32 systems and ${r454b.length} R-454B systems in our catalog (${seedDateLabel}): which brands use each A2L refrigerant, listed hardware prices, GWP ratings, and how to spot inflated refrigerant-transition surcharges.`,
+    lead: `Side-by-side comparison of all ${r32.length} R-32 systems and ${r454b.length} R-454B systems in our catalog (${asOf}): which brands use each A2L refrigerant, listed hardware prices, GWP ratings, and how to spot inflated refrigerant-transition surcharges.`,
     left,
     right,
     auditDefaults: { systemType: 'central-heat-pump', tons: 3, tier: 'mid' },
@@ -354,6 +358,7 @@ function buildStagingComparison(tons: number): CompareEntry {
   const slug = `single-stage-vs-inverter-${tonSlug(tons)}-heat-pump-cost`;
   const fixed = systemsWhere({ type: 'central-heat-pump', tons, staging: 'fixed' });
   const inv = systemsWhere({ type: 'central-heat-pump', tons, staging: 'inverter' });
+  const asOf = captureDateLabel([...fixed, ...inv]);
   const fairStd = fairRange('central-heat-pump', tons, 'standard');
   const fairHigh = fairRange('central-heat-pump', tons, 'high');
   const left = summarizeSystems(`${tons}-Ton Single / Two-Stage`, `${fixed.length} fixed-stage systems`, fixed, sizeGuidePath(tons), 'central-heat-pump', tons, 'standard');
@@ -364,7 +369,7 @@ function buildStagingComparison(tons: number): CompareEntry {
   right.markupMid = fairHigh.mid - right.equipMedian;
 
   const title = `${usd(left.equipMin)} vs ${usd(right.equipMin)} Equip: ${tons}T Fixed vs Inverter`;
-  const h1 = `Single-stage / two-stage vs inverter ${tons}-ton heat pump cost (${seedDateLabel})`;
+  const h1 = `Single-stage / two-stage vs inverter ${tons}-ton heat pump cost (${asOf})`;
   const description = `${tons}-ton fixed-stage (${usd(left.equipMin)}–${usd(left.equipMax)} equip, ${fmtRange(fairStd)} installed) vs inverter (${usd(right.equipMin)}–${usd(right.equipMax)} equip, ${fmtRange(fairHigh)} installed) heat pumps.`;
 
   const benchDiff = fairHigh.mid - fairStd.mid;
@@ -372,9 +377,9 @@ function buildStagingComparison(tons: number): CompareEntry {
 
   const bodyHtml = `
 <h2>${tons}-ton fixed-stage vs variable-speed inverter: hardware &amp; installed spread</h2>
-<p>At ${tonLink(tons, `${tons} tons`)} (${(tons * 12000).toLocaleString('en-US')} BTU/h), our catalog (${seedDateLabel}) lists <b>${fixed.length} fixed-speed (single- or two-stage)</b> ducted heat pumps from <b>${usd(left.equipMin)} to ${usd(left.equipMax)}</b> (median <b>${usd(left.equipMedian)}</b>) and <b>${inv.length} variable-speed inverter</b> ducted heat pumps from <b>${usd(right.equipMin)} to ${usd(right.equipMax)}</b> (median <b>${usd(right.equipMedian)}</b>):</p>
+<p>At ${tonLink(tons, `${tons} tons`)} (${(tons * 12000).toLocaleString('en-US')} BTU/h), our catalog (${asOf}) lists <b>${fixed.length} fixed-speed (single- or two-stage)</b> ducted heat pumps from <b>${usd(left.equipMin)} to ${usd(left.equipMax)}</b> (median <b>${usd(left.equipMedian)}</b>) and <b>${inv.length} variable-speed inverter</b> ducted heat pumps from <b>${usd(right.equipMin)} to ${usd(right.equipMax)}</b> (median <b>${usd(right.equipMedian)}</b>):</p>
 <div class="tablewrap"><table><thead><tr><th>${tons}-ton comparison metric</th><th class="r">Single / two-stage (${fixed.length})</th><th class="r">Variable-speed inverter (${inv.length})</th><th class="r">Difference</th></tr></thead><tbody>
-<tr><td>Lowest listed equipment (${seedDateLabel})</td><td class="r num">${usd(left.equipMin)} (${sysLink(left.sampleSystem, left.sampleSystem.brand)})</td><td class="r num">${usd(right.equipMin)} (${sysLink(right.sampleSystem, right.sampleSystem.brand)})</td><td class="r num">${right.equipMin >= left.equipMin ? '+' : '−'}${usd(Math.abs(right.equipMin - left.equipMin))}</td></tr>
+<tr><td>Lowest listed equipment (${asOf})</td><td class="r num">${usd(left.equipMin)} (${sysLink(left.sampleSystem, left.sampleSystem.brand)})</td><td class="r num">${usd(right.equipMin)} (${sysLink(right.sampleSystem, right.sampleSystem.brand)})</td><td class="r num">${right.equipMin >= left.equipMin ? '+' : '−'}${usd(Math.abs(right.equipMin - left.equipMin))}</td></tr>
 <tr><td>Median listed equipment</td><td class="r num">${usd(left.equipMedian)}</td><td class="r num">${usd(right.equipMedian)}</td><td class="r num">${equipMedDiff >= 0 ? '+' : '−'}${usd(Math.abs(equipMedDiff))}</td></tr>
 <tr><td>DOE REMDB installed benchmark <span class="badge b-est">est.</span></td><td class="r num">${fmtRange(fairStd)} (mid ${usd(fairStd.mid)})</td><td class="r num">${fmtRange(fairHigh)} (mid ${usd(fairHigh.mid)})</td><td class="r num">+${usd(benchDiff)} mid</td></tr>
 <tr><td>SEER2 / HSPF2 range</td><td class="r num">${left.seer2Span} / ${left.hspf2Span}</td><td class="r num">${right.seer2Span} / ${right.hspf2Span}</td><td class="r num">${right.coldClimateCount} Cold Climate</td></tr>
@@ -391,7 +396,7 @@ function buildStagingComparison(tons: number): CompareEntry {
     title,
     h1,
     description,
-    lead: `At ${tons} tons, how much extra does a variable-speed inverter heat pump actually cost at the distributor vs on a contractor's "Good / Better / Best" quote sheet? Here is the exact hardware and DOE REMDB spread across all ${fixed.length + inv.length} ${tons}-ton ducted heat pumps (${seedDateLabel}).`,
+    lead: `At ${tons} tons, how much extra does a variable-speed inverter heat pump actually cost at the distributor vs on a contractor's "Good / Better / Best" quote sheet? Here is the exact hardware and DOE REMDB spread across all ${fixed.length + inv.length} ${tons}-ton ducted heat pumps (${asOf}).`,
     left,
     right,
     auditDefaults: { systemType: 'central-heat-pump', tons, tier: 'high' },
@@ -418,6 +423,7 @@ function buildModelComparison(
   const fB = fairRange(sB.systemType, sB.tons, sB.tier);
   const left = summarizeSystems(`${sA.brand} ${sA.components[0]}`, `${sA.tons}-ton · ${sA.specs.seer2 ?? '?'} SEER2`, [sA], `/systems/${sA.slug}/`, sA.systemType, sA.tons, sA.tier);
   const right = summarizeSystems(`${sB.brand} ${sB.components[0]}`, `${sB.tons}-ton · ${sB.specs.seer2 ?? '?'} SEER2`, [sB], `/systems/${sB.slug}/`, sB.systemType, sB.tons, sB.tier);
+  const asOf = captureDateLabel([sA, sB]);
 
   const title = `${usd(pA)} vs ${usd(pB)} Equip: ${shortTitleSuffix}`;
   const h1 = `${sA.brand} ${sA.components[0]} vs ${sB.brand} ${sB.components[0]} (${sA.tons}-ton comparison)`;
@@ -435,11 +441,11 @@ function buildModelComparison(
   const underNotes = ([[sA, cA], [sB, cB]] as const).flatMap(([x, c]) => (c?.under ? [`the ${sysLink(x, `${x.brand} ${x.components.join(' + ')}`)} is certified at <b>${c.cap.toLocaleString('en-US')} BTU/h</b> of cooling (AHRI #${x.energyStar!.ahriReferenceNumber}), about ${Math.round((c.cap / 12000) * 10) / 10} tons, versus the ${c.nominal.toLocaleString('en-US')} BTU/h a ${x.tons}-ton label implies`] : []));
 
   const bodyHtml = `
-<h2>Direct model-vs-model spec &amp; price sheet (${seedDateLabel})</h2>
+<h2>Direct model-vs-model spec &amp; price sheet (${asOf})</h2>
 <p>This head-to-head comparison pairs two ${anyUnder ? `systems sold as ${tonLink(sA.tons, `${sA.tons}-ton`)}` : `verified ${tonLink(sA.tons, `${sA.tons}-ton`)} systems`} from our catalog: the ${sysLink(sA, `${sA.brand} ${sA.components.join(' + ')}`)} listed at <b>${usd(pA)}</b> (${src('hvacdirect', sA.prices[0].retailer)}) and the ${sysLink(sB, `${sB.brand} ${sB.components.join(' + ')}`)} listed at <b>${usd(pB)}</b> (${src('hvacdirect', sB.prices[0].retailer)}). In public online distributor pricing, ${cheaperSys.brand}'s ${cheaperSys.components[0]} lists <b>${usd(priceDiff)} lower</b> (${pct(priceDiff / lowestPrice(pricierSys))} less) than ${pricierSys.brand}'s ${pricierSys.components[0]}:</p>
 <div class="tablewrap"><table><thead><tr><th>Specification</th><th class="r">${sA.brand} ${sA.components[0]}</th><th class="r">${sB.brand} ${sB.components[0]}</th></tr></thead><tbody>
 <tr><td>Full model pairing</td><td class="r num"><a href="/systems/${sA.slug}/">${sA.components.join(' + ')}</a></td><td class="r num"><a href="/systems/${sB.slug}/">${sB.components.join(' + ')}</a></td></tr>
-<tr><td>Public listed equipment price (${seedDateLabel})</td><td class="r num"><b>${usd(pA)}</b> (<a href="${sA.prices[0].url}" rel="nofollow noopener" target="_blank">${sA.prices[0].retailer}</a>)</td><td class="r num"><b>${usd(pB)}</b> (<a href="${sB.prices[0].url}" rel="nofollow noopener" target="_blank">${sB.prices[0].retailer}</a>)</td></tr>
+<tr><td>Public listed equipment price</td><td class="r num"><b>${usd(pA)}</b> (${dateLabel(sA.prices[0].fetchedAt)}; <a href="${sA.prices[0].url}" rel="nofollow noopener" target="_blank">${sA.prices[0].retailer}</a>)</td><td class="r num"><b>${usd(pB)}</b> (${dateLabel(sB.prices[0].fetchedAt)}; <a href="${sB.prices[0].url}" rel="nofollow noopener" target="_blank">${sB.prices[0].retailer}</a>)</td></tr>
 <tr><td>DOE installed benchmark (${TIER_LABEL[sA.tier].split(' (')[0]} / ${TIER_LABEL[sB.tier].split(' (')[0]}) <span class="badge b-est">est.</span></td><td class="r num">${fmtRange(fA)} (mid ${usd(fA.mid)})</td><td class="r num">${fmtRange(fB)} (mid ${usd(fB.mid)})</td></tr>
 <tr><td>Non-equipment share at benchmark midpoint</td><td class="r num">${usd(fA.mid - pA)} (${pct((fA.mid - pA) / fA.mid)})</td><td class="r num">${usd(fB.mid - pB)} (${pct((fB.mid - pB) / fB.mid)})</td></tr>
 <tr><td>Nominal capacity</td><td class="r num">${sA.tons} ton (${(sA.tons * 12000).toLocaleString('en-US')} BTU/h)</td><td class="r num">${sB.tons} ton (${(sB.tons * 12000).toLocaleString('en-US')} BTU/h)</td></tr>

@@ -6,7 +6,7 @@ import { comparisonsForBrand } from '../../data/comparisons';
 import { isCompareMerged, isCompareIndexed, sizeGuidePath, comparePath } from '../../data/prune';
 import { SYSTEM_TYPE_LABEL, lowestPrice } from '../../data/equipment';
 import { SOURCES } from '../../data/sources';
-import { usd, fmtRange, seedDateLabel, fairRange, articleFor } from '../../lib/facts';
+import { usd, fmtRange, captureDateLabel, fairRange, articleFor } from '../../lib/facts';
 import { SITE } from '../../config';
 import { decoderForBrand } from '../../data/decoder/index';
 import { brandMeta, NEAR_PAGE1_GUIDES } from '../../data/seo';
@@ -17,6 +17,7 @@ export function getStaticPaths() {
   return BRANDS.map((b) => ({ params: { slug: b.slug }, props: { b } }));
 }
 const { b } = Astro.props as { b: Brand };
+const asOf = captureDateLabel(b.systems);
 const auditHref = `/auditor/?brand=${encodeURIComponent(b.name)}`;
 const shortType: Record<string, string> = { 'central-heat-pump': 'ducted heat pumps', 'mini-split': 'mini-splits', 'ac-furnace': 'AC + furnace systems', 'heat-pump-only': 'heat pump condensers' };
 const cold = b.systems.filter((s) => s.energyStar?.coldClimate);
@@ -61,10 +62,10 @@ const ld = [
 <Base title={title} description={description} jsonld={ld}>
   <p class="crumbs"><a href="/">Home</a> / <a href="/brands/">Brands</a> / {b.name}</p>
   <h1>{seo?.h1 ?? `${b.name} HVAC prices: equipment vs installed`}</h1>
-  <p class="lead">{b.systems.length} real {b.name} listings ({b.types.map((t) => shortType[t]).join(', ')}) with prices captured {seedDateLabel}.</p>
+  <p class="lead">{b.systems.length} real {b.name} listings ({b.types.map((t) => shortType[t]).join(', ')}) with prices captured {captureDateLabel(b.systems)}.</p>
 
   <div class="grid kp">
-    <div class="card"><div class="small muted">Listed equipment price span</div><div class="v num">{usd(b.priceMin)}–{usd(b.priceMax)}</div><div class="small muted">{b.systems.length} systems, prices captured {seedDateLabel}</div></div>
+    <div class="card"><div class="small muted">Listed equipment price span</div><div class="v num">{usd(b.priceMin)}–{usd(b.priceMax)}</div><div class="small muted">{b.systems.length} systems, prices captured {captureDateLabel(b.systems)}</div></div>
     <div class="card"><div class="small muted">Efficiency range</div><div class="v num">{b.seer2Min === b.seer2Max ? b.seer2Min : `${b.seer2Min}–${b.seer2Max}`} SEER2</div><div class="small muted">{b.hspf2Max ? `Up to ${b.hspf2Max} HSPF2` : 'Heating rating not listed'}</div></div>
     <div class="card"><div class="small muted">ENERGY STAR matched pairings</div><div class="v num">{b.energyStarCount} of {b.systems.length}</div><div class="small muted">{b.coldClimateCount} cold-climate certified</div></div>
   </div>

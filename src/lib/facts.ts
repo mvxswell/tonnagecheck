@@ -67,8 +67,36 @@ export function refrigerantOf(s: System): string | null {
   return m ? `R-${m[1].toUpperCase()}` : null;
 }
 
+const DATE_FMT: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
+
+/** Format a seed/listing ISO timestamp in UTC, e.g. "November 17, 2026". */
+export function dateLabel(iso: string): string {
+  return new Date(iso).toLocaleDateString('en-US', DATE_FMT);
+}
+
+export function priceFetchedAt(s: System): string {
+  return s.prices[0]?.fetchedAt ?? SEED_DATE;
+}
+
+/** Date, or a min–max range, of the listing capture times for the systems shown. */
+export function captureDateLabel(systems: readonly System[]): string {
+  if (!systems.length) return seedDateLabel;
+  const times = systems.map((s) => new Date(priceFetchedAt(s)).getTime());
+  const min = new Date(Math.min(...times));
+  const max = new Date(Math.max(...times));
+  const minL = min.toLocaleDateString('en-US', DATE_FMT);
+  const maxL = max.toLocaleDateString('en-US', DATE_FMT);
+  if (minL === maxL) return minL;
+  if (min.getUTCFullYear() === max.getUTCFullYear()) {
+    const minShort = min.toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' });
+    return `${minShort}–${maxL}`;
+  }
+  return `${minL}–${maxL}`;
+}
+
 export const lineSet = payload.lineSet;
-export const seedDateLabel = new Date(SEED_DATE).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+export const seedDateLabel = dateLabel(SEED_DATE);
+export const catalogDateLabel = captureDateLabel(SYSTEMS);
 export const cpi = BENCHMARKS.cpi;
 export const fmtRange = (r: Range) => r.low === r.high ? usd(r.low) : `${usd(r.low)}–${usd(r.high)}`;
 export const listedSpan = (min: number | null | undefined, max: number | null | undefined) =>

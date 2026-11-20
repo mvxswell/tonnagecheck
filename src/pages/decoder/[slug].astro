@@ -5,7 +5,7 @@ import { DECODER_BRANDS, type DecoderBrand } from '../../data/decoder/index';
 import { brandByName } from '../../data/brands';
 import { SYSTEMS, SYSTEM_TYPE_LABEL, lowestPrice } from '../../data/equipment';
 import { SOURCES, type SourceId } from '../../data/sources';
-import { usd, fmtRange, seedDateLabel, statsOf, articleFor } from '../../lib/facts';
+import { usd, fmtRange, captureDateLabel, statsOf, articleFor } from '../../lib/facts';
 import { decodeModel, decodeSerial } from '../../lib/decode';
 import { SITE } from '../../config';
 import { sizeGuidePath } from '../../data/prune';
@@ -77,7 +77,7 @@ const ld = [
   <h1>{d.h1}</h1>
   <p class="lead">{d.lead}</p>
   {d.slug === 'lg' && catalogForBrand.length > 0 && (
-    <p>Listed LG equipment in our catalog ({seedDateLabel}), by system type — these are separate medians, not a mixed all-types average: ducted heat pumps {usd(statsOf(catalogForBrand.filter((s) => s.systemType === 'central-heat-pump')).median)} ({catalogForBrand.filter((s) => s.systemType === 'central-heat-pump').length} listings), mini-splits {usd(statsOf(catalogForBrand.filter((s) => s.systemType === 'mini-split')).median)} ({catalogForBrand.filter((s) => s.systemType === 'mini-split').length} listings).</p>
+    <p>Listed LG equipment in our catalog ({captureDateLabel(catalogForBrand)}), by system type — these are separate medians, not a mixed all-types average: ducted heat pumps {usd(statsOf(catalogForBrand.filter((s) => s.systemType === 'central-heat-pump')).median)} ({catalogForBrand.filter((s) => s.systemType === 'central-heat-pump').length} listings), mini-splits {usd(statsOf(catalogForBrand.filter((s) => s.systemType === 'mini-split')).median)} ({catalogForBrand.filter((s) => s.systemType === 'mini-split').length} listings).</p>
   )}
   <p class="small muted">Updated {d.updated} · Every code below is transcribed from the manufacturer documents listed under <a href="#sources">Sources</a>. Where a document did not define something, we leave it out.</p>
 
@@ -149,7 +149,7 @@ const ld = [
   {decodedSeed.length > 0 && (
     <>
       <h2>Every {d.seedBrands.join(' / ')} model in our price data, decoded</h2>
-      <p class="small muted">These are the {d.seedBrands.join(' / ')} model numbers in our listed-equipment data (prices captured {seedDateLabel}), run through the decoder above. "Decoded size" comes from the model number. "Listed as" is the system size on the retailer listing.</p>
+      <p class="small muted">These are the {d.seedBrands.join(' / ')} model numbers in our listed-equipment data (prices captured {captureDateLabel(seedSystems)}), run through the decoder above. "Decoded size" comes from the model number. "Listed as" is the system size on the retailer listing.</p>
       <div class="tablewrap"><table>
         <thead><tr><th>Model</th><th>Layout</th><th class="r">Decoded size</th><th>Listed as</th><th class="r">Lowest listed price</th></tr></thead>
         <tbody>{decodedSeed.map(({ model, s, r }) => (

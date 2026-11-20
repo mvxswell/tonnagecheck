@@ -4,7 +4,7 @@ import CompareWorkbench from '../../components/CompareWorkbench.astro';
 import { COMPARISONS } from '../../data/comparisons';
 import { isCompareMerged, isCompareIndexed, COMPARE_MERGED } from '../../data/prune';
 import { SYSTEMS, lowestPrice } from '../../data/equipment';
-import { statsOf, systemsWhere, usd, seedDateLabel } from '../../lib/facts';
+import { statsOf, systemsWhere, usd, catalogDateLabel } from '../../lib/facts';
 import QuoteCta from '../../components/QuoteCta.astro';
 
 const allStats = statsOf(SYSTEMS)!;
@@ -48,11 +48,11 @@ const jsonld = {
 <Base title={title} description={description} jsonld={jsonld}>
   <p class="crumbs"><a href="/">Home</a> / Comparisons</p>
   <h1>HVAC equipment comparison workbench ({SYSTEMS.length} systems)</h1>
-  <p class="lead">This page is the comparison tool: pick any two of the {SYSTEMS.length} listed systems in the workbench below ({seedDateLabel}). It starts on two 3-ton ducted heat pumps that both have ENERGY STAR / AHRI records: the Goodman GLZS5BA3610, certified at 35,400 BTU/h (AHRI #215381162), and the Trane A5HL5036A1000A, certified at 34,000 BTU/h (AHRI #216439108). Saved brand, refrigerant and model matchups now live in the guides listed after the tool.</p>
+  <p class="lead">This page is the comparison tool: pick any two of the {SYSTEMS.length} listed systems in the workbench below ({catalogDateLabel}). It starts on two 3-ton ducted heat pumps that both have ENERGY STAR / AHRI records: the Goodman GLZS5BA3610, certified at 35,400 BTU/h (AHRI #215381162), and the Trane A5HL5036A1000A, certified at 34,000 BTU/h (AHRI #216439108). Saved brand, refrigerant and model matchups now live in the guides listed after the tool.</p>
 
   <div class="card" style="margin:18px 0">
     <h2 style="margin-top:0">Listed-price snapshot of this catalog</h2>
-    <p class="small muted">Median and mean listed equipment prices by system type, from the {SYSTEMS.length} public listings on this page ({seedDateLabel}). A cell is blank when that type has fewer than 3 listings. The workbench below can pair any two of them.</p>
+    <p class="small muted">Median and mean listed equipment prices by system type, from the {SYSTEMS.length} public listings on this page ({catalogDateLabel}). A cell is blank when that type has fewer than 3 listings. The workbench below can pair any two of them.</p>
     <div class="tablewrap">
       <table>
         <thead>

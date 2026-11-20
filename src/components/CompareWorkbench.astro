@@ -1,6 +1,6 @@
 ---
 import { SYSTEMS, SYSTEM_TYPE_LABEL, TIER_LABEL, lowestPrice, type System } from '../data/equipment';
-import { fairRange, refrigerantOf, isInverter, usd, fmtRange, seedDateLabel } from '../lib/facts';
+import { fairRange, refrigerantOf, isInverter, usd, fmtRange, catalogDateLabel, dateLabel } from '../lib/facts';
 
 interface Props {
   defaultLeftSlug?: string;
@@ -40,6 +40,7 @@ const serialized = SYSTEMS.map((s) => {
     equipFmt: usd(equip),
     retailer: s.prices[0].retailer,
     retailerUrl: s.prices[0].url,
+    fetchedLabel: dateLabel(s.prices[0].fetchedAt),
     fairLow: fair.low,
     fairMid: fair.mid,
     fairHigh: fair.high,
@@ -55,7 +56,7 @@ const types = [...new Set(SYSTEMS.map((s) => s.systemType))];
 ---
 <section class="card" data-compare-wb style="margin:18px 0">
   <h2 style="margin-top:0">Interactive side-by-side system comparison tool</h2>
-  <p class="small muted">Filter by tonnage or system type and pick any two of our {SYSTEMS.length} verified systems ({seedDateLabel}) to compare public wholesale/online equipment prices, DOE REMDB installed benchmarks, SEER2/HSPF2, refrigerant, and AHRI / ENERGY STAR status.</p>
+  <p class="small muted">Filter by tonnage or system type and pick any two of our {SYSTEMS.length} verified systems ({catalogDateLabel}) to compare public wholesale/online equipment prices, DOE REMDB installed benchmarks, SEER2/HSPF2, refrigerant, and AHRI / ENERGY STAR status.</p>
 
   <div class="wb-filters">
     <div>
@@ -108,9 +109,9 @@ const types = [...new Set(SYSTEMS.map((s) => s.systemType))];
       </thead>
       <tbody>
         <tr>
-          <td><b>Listed equipment price ({seedDateLabel})</b></td>
-          <td class="r num" data-a-equip><b>{leftInit.equipFmt}</b> ({leftInit.retailer})</td>
-          <td class="r num" data-b-equip><b>{rightInit.equipFmt}</b> ({rightInit.retailer})</td>
+          <td><b>Listed equipment price</b></td>
+          <td class="r num" data-a-equip><b>{leftInit.equipFmt}</b> ({leftInit.fetchedLabel}; {leftInit.retailer})</td>
+          <td class="r num" data-b-equip><b>{rightInit.equipFmt}</b> ({rightInit.fetchedLabel}; {rightInit.retailer})</td>
         </tr>
         <tr>
           <td><b>DOE installed quote range</b> <span class="badge b-est">est.</span></td>
@@ -210,8 +211,8 @@ const types = [...new Set(SYSTEMS.map((s) => s.systemType))];
       if (!a || !b) return;
       setLinkCell('[data-col-a]', `/systems/${a.slug}/`, `${a.brand} ${a.tons}T (${a.model})`);
       setLinkCell('[data-col-b]', `/systems/${b.slug}/`, `${b.brand} ${b.tons}T (${b.model})`);
-      setCell('[data-a-equip]', `${a.equipFmt} (${a.retailer})`);
-      setCell('[data-b-equip]', `${b.equipFmt} (${b.retailer})`);
+      setCell('[data-a-equip]', `${a.equipFmt} (${a.fetchedLabel}; ${a.retailer})`);
+      setCell('[data-b-equip]', `${b.equipFmt} (${b.fetchedLabel}; ${b.retailer})`);
       setCell('[data-a-fair]', `${a.fairFmt} (mid ${a.fairMidFmt})`);
       setCell('[data-b-fair]', `${b.fairFmt} (mid ${b.fairMidFmt})`);
       setCell('[data-a-cap]', `${a.typeLabel} · ${a.tons} ton (${a.btu} BTU/h)`);

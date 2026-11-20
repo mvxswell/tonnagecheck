@@ -4,7 +4,7 @@
 import { BRANDS, type Brand } from './brands';
 import { lowestPrice, type System } from './equipment';
 import { SOURCES, type SourceId } from './sources';
-import { usd, seedDateLabel, type Range } from '../lib/facts';
+import { usd, captureDateLabel, type Range } from '../lib/facts';
 
 export interface BrandExtra {
   /** Replaces the "<brand> listed price vs installed benchmark, by size" heading. */
@@ -41,7 +41,7 @@ function trane(b: Brand, fair3: Range): BrandExtra {
 
   const summaryHtml = `
 <div class="card answer">
-<p><b>Short answer:</b> the equipment is the smaller part of a fair installed quote. ${hp.length + acf.length} complete Trane-built systems with public online prices list <b>${span([...hp, ...acf])}</b> (${b.tonnages[0]}–${b.tonnages[b.tonnages.length - 1]} ton, captured ${seedDateLabel})${condOnly.length ? `, plus ${condOnly.length} condenser-only unit at ${usd(lowestPrice(condOnly[0]))}` : ''}. The rest of a fair quote is labor, materials, permits, overhead and margin.</p>
+<p><b>Short answer:</b> the equipment is the smaller part of a fair installed quote. ${hp.length + acf.length} complete Trane-built systems with public online prices list <b>${span([...hp, ...acf])}</b> (${b.tonnages[0]}–${b.tonnages[b.tonnages.length - 1]} ton, captured ${captureDateLabel(b.systems)})${condOnly.length ? `, plus ${condOnly.length} condenser-only unit at ${usd(lowestPrice(condOnly[0]))}` : ''}. The rest of a fair quote is labor, materials, permits, overhead and margin.</p>
 ${allRunTru ? `<p class="small">All ${b.systems.length} of those listings are <b>RunTru by Trane</b> models (A5HP, A5HL and A5AC families), Trane's lower-priced line. We found no public prices for the Trane-branded Choice, Priority and Premier lines (5TW and 5TT model families), which are quoted by dealers, so compare a Trane-branded quote with the installed benchmark and the line it names, below.</p>` : ''}
 </div>`;
 
@@ -56,7 +56,7 @@ ${allRunTru ? `<p class="small">All ${b.systems.length} of those listings are <b
 <h2>Trane system cost by line: which one is on your quote?</h2>
 <p>The model number on the quote tells you which line you are being sold, and that matters more than the brand name. Trane's ${hb('2026 product handbook')} (effective Jan. 1, 2026) groups its heat pumps into Choice, Priority and Premier tiers and lists RunTru by Trane as a separate family; the first letter of the outdoor model is the giveaway ("A = RunTru by Trane", "T = Trane" in the 5T… models). SEER2 figures are the handbook's "up to" ceilings for each family; your exact pairing's rating is on its AHRI certificate.</p>
 <div class="tablewrap"><table>
-<thead><tr><th>Line</th><th>Outdoor model family</th><th class="r">SEER2 up to</th><th>Compressor</th><th>Registered limited warranty</th><th class="r">Listed equipment (${seedDateLabel})</th></tr></thead>
+<thead><tr><th>Line</th><th>Outdoor model family</th><th class="r">SEER2 up to</th><th>Compressor</th><th>Registered limited warranty</th><th class="r">Listed equipment (${captureDateLabel(b.systems)})</th></tr></thead>
 <tbody>
 ${row('RunTru by Trane', 'A5HP4', '14.3', 'Single-stage scroll', rtW, `${span(hp4)} <span class="small muted">(${hp4.length})</span>`)}
 ${row('RunTru by Trane', 'A5HP5', '16.0', 'Single-stage scroll', rtW, `${span(hp5)} <span class="small muted">(${hp5.length})</span>`)}
@@ -140,7 +140,7 @@ function daikin(b: Brand, fair3: Range): BrandExtra {
   const meanHspf = hspf.length ? hspf.reduce((a, n) => a + n, 0) / hspf.length : null;
   const summaryHtml = `
 <div class="card answer">
-<p><b>What we can price:</b> every public Daikin listing in this catalog is a <b>ductless mini-split</b> (RXF, RXT, RXM and multi-zone MXM outdoor units), ${b.systems.length} systems from ${usd(b.priceMin)} to ${usd(b.priceMax)}, mean listed ${meanUsd(b.systems)} (${seedDateLabel}). We do not have public prices for Daikin's ducted R-32 splits (DH4SE, DH6VS, DH7TC, DH9VS and the matching air handlers in the ${a('daikinCatalog', 'residential R-32 catalog')}), so a ducted Daikin quote has to be checked against the installed benchmark, not against a Daikin box price we can link to.</p>
+<p><b>What we can price:</b> every public Daikin listing in this catalog is a <b>ductless mini-split</b> (RXF, RXT, RXM and multi-zone MXM outdoor units), ${b.systems.length} systems from ${usd(b.priceMin)} to ${usd(b.priceMax)}, mean listed ${meanUsd(b.systems)} (${captureDateLabel(b.systems)}). We do not have public prices for Daikin's ducted R-32 splits (DH4SE, DH6VS, DH7TC, DH9VS and the matching air handlers in the ${a('daikinCatalog', 'residential R-32 catalog')}), so a ducted Daikin quote has to be checked against the installed benchmark, not against a Daikin box price we can link to.</p>
 <p>${es.length} of the ${b.systems.length} Daikin listings have an ENERGY STAR / AHRI record.</p>
 </div>`;
   const sectionsHtml = `
@@ -180,7 +180,7 @@ function mitsubishi(b: Brand, fair3: Range): BrandExtra {
   const hyper = b.systems.filter((s) => /NLHZ|Hyper/i.test(`${s.components[0]} ${s.title}`));
   const summaryHtml = `
 <div class="card answer">
-<p><b>What we can price:</b> all ${b.systems.length} Mitsubishi listings in this catalog are ductless (SUZ, PUZ and MXZ outdoor units), listed ${usd(b.priceMin)}–${usd(b.priceMax)}, mean ${meanUsd(b.systems)} (${seedDateLabel}). ${hyper.length} of them are Hyper-Heating (H2i) models — the catalog marks that with a <b>Z</b> in the nomenclature (${a('mitsuCatalog', 'M- and P-Series catalog, ME_RS_2762')}). ${countEs(b.systems)} have an ENERGY STAR record; ${countCold(b.systems)} are flagged cold-climate.</p>
+<p><b>What we can price:</b> all ${b.systems.length} Mitsubishi listings in this catalog are ductless (SUZ, PUZ and MXZ outdoor units), listed ${usd(b.priceMin)}–${usd(b.priceMax)}, mean ${meanUsd(b.systems)} (${captureDateLabel(b.systems)}). ${hyper.length} of them are Hyper-Heating (H2i) models — the catalog marks that with a <b>Z</b> in the nomenclature (${a('mitsuCatalog', 'M- and P-Series catalog, ME_RS_2762')}). ${countEs(b.systems)} have an ENERGY STAR record; ${countCold(b.systems)} are flagged cold-climate.</p>
 <p>Mitsubishi does not sell a 3-ton ducted split through the retailers we track, so the 3-ton ducted installed benchmark on this page is a comparison point for a ducted quote, not a box price for these mini-splits. Cold-climate cost for the Hyper-Heat line is in the <a href="/guides/mitsubishi-hyper-heat-cost/">Hyper-Heat guide</a>.</p>
 </div>`;
   const sectionsHtml = `
@@ -217,7 +217,7 @@ function carrier(b: Brand, fair3: Range): BrandExtra {
   const greeShare = gree ? `${countCold(gree.systems)}/${gree.systems.length}` : 'all';
   const summaryHtml = `
 <div class="card answer">
-<p><b>What we can price:</b> Carrier appears in this catalog only as ductless systems — ${b.systems.length} outdoor units in the 37MAHA and 37MPRA families, all R-454B, all ENERGY STAR cold-climate pairings, listed ${usd(b.priceMin)}–${usd(b.priceMax)}, mean ${meanUsd(b.systems)} (${seedDateLabel}). The ${a('carrier37maha', '37MAHA product data')} is the document for the single-zone line we list.</p>
+<p><b>What we can price:</b> Carrier appears in this catalog only as ductless systems — ${b.systems.length} outdoor units in the 37MAHA and 37MPRA families, all R-454B, all ENERGY STAR cold-climate pairings, listed ${usd(b.priceMin)}–${usd(b.priceMax)}, mean ${meanUsd(b.systems)} (${captureDateLabel(b.systems)}). The ${a('carrier37maha', '37MAHA product data')} is the document for the single-zone line we list.</p>
 <p>We have no public price for Carrier or Bryant ducted splits (27SCA5, 26SCA5 and related families). A ducted Carrier quote should be graded against the 3-ton ducted installed benchmark on this page and the model numbers on the quote, not against these mini-split listings.</p>
 </div>`;
   const sectionsHtml = `
@@ -256,7 +256,7 @@ function lg(b: Brand, fair3: Range): BrandExtra {
   const kusx = [...kusxa, ...kusxe, ...kusxb];
   const summaryHtml = `
 <div class="card answer">
-<p><b>What we can price:</b> LG listings in this catalog are R-32 ducted (KUSX) and multi-zone (KUMX) outdoor units, ${b.systems.length} systems from ${usd(b.priceMin)} to ${usd(b.priceMax)} (${seedDateLabel}). The ${kusx.length} ducted outdoor units have a mean listed price of ${meanUsd(kusx)}; the ${kumx.length} multi-zone units average ${meanUsd(kumx)}. ${countEs(b.systems)} have an ENERGY STAR record and ${countCold(b.systems)} are flagged cold-climate.</p>
+<p><b>What we can price:</b> LG listings in this catalog are R-32 ducted (KUSX) and multi-zone (KUMX) outdoor units, ${b.systems.length} systems from ${usd(b.priceMin)} to ${usd(b.priceMax)} (${captureDateLabel(b.systems)}). The ${kusx.length} ducted outdoor units have a mean listed price of ${meanUsd(kusx)}; the ${kumx.length} multi-zone units average ${meanUsd(kumx)}. ${countEs(b.systems)} have an ENERGY STAR record and ${countCold(b.systems)} are flagged cold-climate.</p>
 <p>LG's ${a('lgR32ModelMap', 'R-410A to R-32 model map')} is the document that matches older LSU / LUU / LV / LMU models to the KUSA / KUSX / KUMX replacements we list. The current R-32 limited warranty card (${a('lgWarrantyR32', 'WD_LG_Res_Lgt_Comm_LTD_EXT_R32_12_2025')}) names those KUS* / KUM* families and is valid for systems installed from September 1, 2024.</p>
 </div>`;
   const sectionsHtml = `
@@ -298,7 +298,7 @@ function aciq(b: Brand, fair3: Range): BrandExtra {
   const leftover = r410[0];
   const summaryHtml = `
 <div class="card answer">
-<p><b>A mixed catalog, not a single product line:</b> ACiQ is the only brand on this site with ducted heat pumps, mini-splits, an AC + furnace and a condenser-only listing in the same public-price set — ${b.systems.length} systems from ${usd(b.priceMin)} to ${usd(b.priceMax)} (${seedDateLabel}). The ${ducted.length} complete ducted heat pumps average ${meanUsd(ducted)}; the ${mini.length} mini-splits average ${meanUsd(mini)}.</p>
+<p><b>A mixed catalog, not a single product line:</b> ACiQ is the only brand on this site with ducted heat pumps, mini-splits, an AC + furnace and a condenser-only listing in the same public-price set — ${b.systems.length} systems from ${usd(b.priceMin)} to ${usd(b.priceMax)} (${captureDateLabel(b.systems)}). The ${ducted.length} complete ducted heat pumps average ${meanUsd(ducted)}; the ${mini.length} mini-splits average ${meanUsd(mini)}.</p>
 <p>${countEs(b.systems)} of the ${b.systems.length} ACiQ listings have an ENERGY STAR record; ${countCold(b.systems)} are flagged cold-climate.</p>
 </div>`;
   const sectionsHtml = `
@@ -322,7 +322,7 @@ ${catalogRows([
     },
     {
       q: 'Why is there an R-410A ACiQ system next to R-32 and R-454B units?',
-      a: `Because it still has a public listed price in the catalog we captured on ${seedDateLabel}. New equipment built from newer components uses R-32 or R-454B under the EPA GWP limit. Treat that R-410A row as a leftover listing, not as the going replacement.`,
+      a: `Because it still has a public listed price in the catalog we captured on ${captureDateLabel(b.systems)}. New equipment built from newer components uses R-32 or R-454B under the EPA GWP limit. Treat that R-410A row as a leftover listing, not as the going replacement.`,
     },
   ];
   return { sizeHeading: 'ACiQ listed prices vs the installed benchmark by size', summaryHtml, sectionsHtml, faq };
@@ -333,7 +333,7 @@ function gree(b: Brand, fair3: Range): BrandExtra {
   const mul = fam(b, ['MUL']);
   const summaryHtml = `
 <div class="card answer">
-<p><b>What we can price:</b> every Gree system in this catalog is an R-32 unit with an ENERGY STAR record, and every one is flagged cold-climate — ${b.systems.length} systems (FXU ducted and MUL mini-split) listed ${usd(b.priceMin)}–${usd(b.priceMax)} (${seedDateLabel}).</p>
+<p><b>What we can price:</b> every Gree system in this catalog is an R-32 unit with an ENERGY STAR record, and every one is flagged cold-climate — ${b.systems.length} systems (FXU ducted and MUL mini-split) listed ${usd(b.priceMin)}–${usd(b.priceMax)} (${captureDateLabel(b.systems)}).</p>
 <p>The ${fxu.length} FXU ducted pairings average ${meanUsd(fxu)} listed; the ${mul.length} MUL mini-splits average ${meanUsd(mul)}. That is a ${usd(Math.abs(Math.round(meanListed(fxu)) - Math.round(meanListed(mul))))} gap between the two Gree families in this catalog.</p>
 </div>`;
   const sectionsHtml = `
@@ -368,7 +368,7 @@ function mrcool(b: Brand, fair3: Range): BrandExtra {
   const aLine = fam(b, ['A-']);
   const summaryHtml = `
 <div class="card answer">
-<p><b>What we can price:</b> MRCOOL listings in this catalog span several outdoor-unit families — UHP and CENTRAL ducted heat pumps, DIY multi-zone, MDPH and a single-zone A- line — ${b.systems.length} systems from ${usd(b.priceMin)} to ${usd(b.priceMax)} (${seedDateLabel}). The ${uhp.length + central.length + mdph.length} ducted systems (UHP, CENTRAL and the MDPH package unit) average ${meanUsd([...uhp, ...central, ...mdph])} listed; the ductless DIY and A- listings are in the family table below. ${countEs(b.systems)} have an ENERGY STAR record; ${countCold(b.systems)} are flagged cold-climate.</p>
+<p><b>What we can price:</b> MRCOOL listings in this catalog span several outdoor-unit families — UHP and CENTRAL ducted heat pumps, DIY multi-zone, MDPH and a single-zone A- line — ${b.systems.length} systems from ${usd(b.priceMin)} to ${usd(b.priceMax)} (${captureDateLabel(b.systems)}). The ${uhp.length + central.length + mdph.length} ducted systems (UHP, CENTRAL and the MDPH package unit) average ${meanUsd([...uhp, ...central, ...mdph])} listed; the ductless DIY and A- listings are in the family table below. ${countEs(b.systems)} have an ENERGY STAR record; ${countCold(b.systems)} are flagged cold-climate.</p>
 <p>We do not have an official MRCOOL limited-warranty PDF in our source list, so this page does not state a warranty term. DIY and professionally installed families can carry different documents; get the one that names the model on your quote.</p>
 </div>`;
   const sectionsHtml = `
@@ -405,7 +405,7 @@ function bosch(b: Brand, fair3: Range): BrandExtra {
   const meanBovb = bovb.length ? meanListed(bovb) : 0;
   const summaryHtml = `
 <div class="card answer">
-<p><b>What we can price:</b> Bosch appears in this catalog as the <b>IDS inverter</b> family — BOVB matched systems and BOVA condenser-only outdoor units, ${b.systems.length} listings from ${usd(b.priceMin)} to ${usd(b.priceMax)} (${seedDateLabel}). ${countEs(b.systems)} have an ENERGY STAR record; ${countCold(b.systems)} are flagged cold-climate.</p>
+<p><b>What we can price:</b> Bosch appears in this catalog as the <b>IDS inverter</b> family — BOVB matched systems and BOVA condenser-only outdoor units, ${b.systems.length} listings from ${usd(b.priceMin)} to ${usd(b.priceMax)} (${captureDateLabel(b.systems)}). ${countEs(b.systems)} have an ENERGY STAR record; ${countCold(b.systems)} are flagged cold-climate.</p>
 <p>The ${bovb.length} BOVB matched systems average ${meanUsd(bovb)} listed. Condenser-only BOVA rows are not mixed into that average, because a bare outdoor unit is not a matched system price.</p>
 </div>`;
   const sectionsHtml = `
@@ -445,7 +445,7 @@ function goodman(b: Brand, fair3: Range): BrandExtra {
   const hp = b.systems.filter((s) => s.systemType === 'central-heat-pump');
   const summaryHtml = `
 <div class="card answer">
-<p><b>What we can price:</b> Goodman is the largest public-price catalog on this site — ${b.systems.length} systems (${hp.length} matched ducted heat pumps, ${acf.length} AC + furnace, ${cond.length} condenser-only) from ${usd(b.priceMin)} to ${usd(b.priceMax)} (${seedDateLabel}). ${countEs(b.systems)} have an ENERGY STAR record; none of the Goodman listings in this catalog is flagged as an ENERGY STAR cold-climate pairing.</p>
+<p><b>What we can price:</b> Goodman is the largest public-price catalog on this site — ${b.systems.length} systems (${hp.length} matched ducted heat pumps, ${acf.length} AC + furnace, ${cond.length} condenser-only) from ${usd(b.priceMin)} to ${usd(b.priceMax)} (${captureDateLabel(b.systems)}). ${countEs(b.systems)} have an ENERGY STAR record; none of the Goodman listings in this catalog is flagged as an ENERGY STAR cold-climate pairing.</p>
 <p>The ${hp.length} matched ducted heat pumps average ${meanUsd(hp)} listed; the ${acf.length} AC + furnace systems average ${meanUsd(acf)}; the ${cond.length} condenser-only rows average ${meanUsd(cond)}.</p>
 </div>`;
   const sectionsHtml = `

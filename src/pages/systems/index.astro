@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import FilterableSystems from '../../components/FilterableSystems.astro';
 import { SYSTEMS, lowestPrice } from '../../data/equipment';
-import { fairRange, usd, fmtRange, seedDateLabel } from '../../lib/facts';
+import { fairRange, usd, fmtRange, catalogDateLabel } from '../../lib/facts';
 const systems = [...SYSTEMS].sort((a, b) => a.tons - b.tons || lowestPrice(a) - lowestPrice(b));
 const minEq = Math.min(...systems.map(lowestPrice));
 const maxEq = Math.max(...systems.map(lowestPrice));
@@ -13,7 +13,7 @@ const description = `Search ${SYSTEMS.length} HVAC systems (${usd(minEq)}–${us
 <Base title={title} description={description}>
   <p class="crumbs"><a href="/">Home</a> / Equipment prices</p>
   <h1>Equipment price lookup</h1>
-  <p class="lead">Every system below is a real listing with its price captured {seedDateLabel}. Ratings come from the EPA ENERGY STAR database where the exact outdoor + indoor pairing is certified, and from the listing otherwise.</p>
+  <p class="lead">Every system below is a real listing with its price captured {catalogDateLabel}. Ratings come from the EPA ENERGY STAR database where the exact outdoor + indoor pairing is certified, and from the listing otherwise.</p>
   <FilterableSystems systems={systems} />
   <p class="small muted">Browse by brand: <a href="/brands/">all brands</a>.</p>
   <p class="small muted">Prices are public online retail prices, not contractor distributor pricing. They change; click through for today's price. Missing a system you were quoted? <a href="/auditor/">The auditor</a> still works with the nearest match.</p>

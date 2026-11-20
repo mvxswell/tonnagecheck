@@ -3,7 +3,7 @@
 import { lowestPrice, SYSTEM_TYPE_LABEL, type System, type SystemType, type Tier } from '../equipment';
 import { sizeGuidePath } from '../prune';
 import { brandSlug } from '../brands';
-import { fairRange, usd, fmtRange, seedDateLabel, type Range } from '../../lib/facts';
+import { fairRange, usd, fmtRange, catalogDateLabel, type Range } from '../../lib/facts';
 import { SOURCES, type SourceId } from '../sources';
 
 // Guide `updated` / dateModified must be a hand-set literal on each guide, not the build date.
@@ -16,7 +16,7 @@ export const auditLink = (q: Record<string, string | number> = {}, text = 'Tonna
   const qs = new URLSearchParams(Object.entries(q).map(([k, v]) => [k, String(v)])).toString();
   return `<a href="/auditor/${qs ? `?${qs}` : ''}">${text}</a>`;
 };
-export const asOf = `listed prices captured ${seedDateLabel}`;
+export const asOf = `listed prices captured ${catalogDateLabel}`;
 
 const shortType: Record<SystemType, string> = { 'central-heat-pump': 'Ducted heat pump', 'mini-split': 'Mini-split', 'ac-furnace': 'AC + furnace', 'heat-pump-only': 'Condenser only' };
 
