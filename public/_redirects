@@ -28,8 +28,10 @@
 /compare/bosch-vs-mitsubishi-heat-pump-cost/ /guides/bosch-ids-inverter-heat-pump-cost/ 301
 /compare/lg-vs-mitsubishi-heat-pump-cost /guides/mitsubishi-hyper-heat-cost/ 301
 /compare/lg-vs-mitsubishi-heat-pump-cost/ /guides/mitsubishi-hyper-heat-cost/ 301
-/compare/lg-vs-trane-heat-pump-cost /guides/goodman-vs-trane-vs-carrier-equipment-markup/ 301
-/compare/lg-vs-trane-heat-pump-cost/ /guides/goodman-vs-trane-vs-carrier-equipment-markup/ 301
+# The markup guide is in the approved 38 noindex set, so this pair cannot 301 there (v1.1 A7).
+# /compare/ is the closest indexable page: it is the comparison hub and still lists other brand matchups.
+/compare/lg-vs-trane-heat-pump-cost /compare/ 301
+/compare/lg-vs-trane-heat-pump-cost/ /compare/ 301
 /compare/aciq-vs-mrcool-heat-pump-cost /guides/inverter-vs-single-stage-heat-pump-cost/ 301
 /compare/aciq-vs-mrcool-heat-pump-cost/ /guides/inverter-vs-single-stage-heat-pump-cost/ 301
 /compare/trane-vs-goodman-ac-furnace-cost /guides/heat-pump-vs-ac-and-furnace-replacement-cost/ 301

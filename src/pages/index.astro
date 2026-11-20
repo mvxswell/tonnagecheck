@@ -13,12 +13,12 @@ import { fairRange, equipmentStats, catalogDateLabel, usd, fmtRange } from '../l
 
 const FEATURED_GUIDE_SLUGS = [
   '3-ton-heat-pump-ac-replacement-cost',
-  'manual-j-load-calculation-vs-rule-of-thumb-sizing',
+  '3-ton-vs-4-ton-heat-pump-cost',
   'inverter-vs-single-stage-heat-pump-cost',
   'heat-pump-vs-ac-and-furnace-replacement-cost',
   'r410a-vs-r454b-r32-refrigerant-transition-quotes',
-  'how-to-tell-if-hvac-quote-is-ripoff',
-  'heat-pump-rebates-and-ahri-certificate-check',
+  '14-3-seer2-vs-16-seer2-vs-18-seer2-heat-pump-payback-math',
+  'mitsubishi-hyper-heat-cost',
   'bosch-ids-inverter-heat-pump-cost',
 ];
 const featuredGuides = FEATURED_GUIDE_SLUGS.map((slug) => GUIDES.find((g) => g.slug === slug)).filter((g): g is NonNullable<typeof g> => !!g);
