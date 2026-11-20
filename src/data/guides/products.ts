@@ -2,7 +2,7 @@
 // records show; where a product line the homeowner may be quoted is not in our data, the guide says so.
 import { lowestPrice, median, TIER_LABEL } from '../equipment';
 import { brandByName } from '../brands';
-import { fairRange, systemsWhere, usd, fmtRange, pct } from '../../lib/facts';
+import { fairRange, systemsWhere, usd, fmtRange, pct, captureDateLabel } from '../../lib/facts';
 import { src, tonLink, brandLink, sysLink, auditLink, asOf, systemsTable, rangeText, cheapest, remdbNote } from './helpers';
 import { foldedMatchup } from './fold-comparisons';
 import type { Guide } from './types';
@@ -209,7 +209,7 @@ ${foldedMatchup('bosch-vs-mitsubishi-heat-pump-cost')}
       const fair3 = fairRange('mini-split', 3, 'high');
       return `
 <div class="card answer" style="border-left:4px solid var(--acc);margin:14px 0">
-<p><b>Short answer:</b> the ${mit.length} Mitsubishi heat pump systems with public prices list <b>${usd(mb.priceMin)}–${usd(mb.priceMax)}</b> for the equipment (${tonsOf(mit)}, ${asOf}). Ducted systems (air handler on your existing ducts) list ${spanOf(ducted)} and ductless multi-zone systems ${spanOf(ductless)}. Installed, a high-efficiency mini-split benchmarks at ${fmtRange(fair2)} for 2 tons and ${fmtRange(fair3)} for 3 tons (national DOE-lab estimate). ENERGY STAR certifies ${cold.length} of the ${mit.length} as cold climate.</p>
+<p><b>Short answer:</b> the ${mit.length} Mitsubishi heat pump systems with public prices list <b>${usd(mb.priceMin)}–${usd(mb.priceMax)}</b> for the equipment (${tonsOf(mit)}, listed prices captured ${captureDateLabel(mit)}). Ducted systems (air handler on your existing ducts) list ${spanOf(ducted)} and ductless multi-zone systems ${spanOf(ductless)}. Installed, a high-efficiency mini-split benchmarks at ${fmtRange(fair2)} for 2 tons and ${fmtRange(fair3)} for 3 tons (national DOE-lab estimate). ENERGY STAR certifies ${cold.length} of the ${mit.length} as cold climate.</p>
 </div>
 <p>Mitsubishi's Hyper-Heat (H2i) heat pumps are designed to keep heating in deep cold, and they are often quoted in cold climates as a furnace replacement. Here is what the Mitsubishi systems with public prices list for, how ducted and ductless setups compare, what the cold-weather ratings say model by model, and what installing them should cost.</p>
 
@@ -264,7 +264,7 @@ ${[...new Set(mit.map((s) => s.tons))].sort((a, b) => a - b).map((t) => { const 
 <li>Are you a Diamond Contractor, and who registers the system for the 10- or 12-year warranty?</li>
 </ul>
 <h2>LG RED vs Mitsubishi Hyper-Heat</h2>
-<p>LG and Mitsubishi are the other cold-climate mini-split pairing in this catalog. Figures are the same listed prices and ratings (${asOf}). For Bosch IDS vs Mitsubishi, see the <a href="/guides/bosch-ids-inverter-heat-pump-cost/">Bosch IDS cost guide</a>.</p>
+<p>LG and Mitsubishi are the other cold-climate mini-split pairing in this catalog. Figures are the same listed prices and ratings (listed prices captured ${captureDateLabel([...mit, ...systemsWhere({ brand: 'LG' })])}). For Bosch IDS vs Mitsubishi, see the <a href="/guides/bosch-ids-inverter-heat-pump-cost/">Bosch IDS cost guide</a>.</p>
 ${foldedMatchup('lg-vs-mitsubishi-heat-pump-cost')}
 <p>See all ${brandLink('Mitsubishi', 'Mitsubishi prices')}, our <a href="/guides/multi-zone-mini-split-cost/">multi-zone mini-split guide</a>, and grade your quote in the ${auditLink({ type: 'mini-split', brand: 'Mitsubishi' })}.</p>`;
     },

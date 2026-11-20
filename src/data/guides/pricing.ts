@@ -1,8 +1,8 @@
 // Pricing-practice guides. Dollar figures, including the headline numbers in the title, are computed from the
 // seed and REMDB at build time. Statements about business practices are descriptive and carry no statistics.
 import { lowestPrice, median } from '../equipment';
-import { fairRange, systemsWhere, usd, fmtRange, pct } from '../../lib/facts';
-import { src, tonLink, auditLink, asOf, rangeText, cheapest, remdbNote } from './helpers';
+import { fairRange, systemsWhere, usd, fmtRange, pct, captureDateLabel } from '../../lib/facts';
+import { src, tonLink, auditLink, rangeText, cheapest, remdbNote } from './helpers';
 import type { Guide } from './types';
 
 const threeHp = () => systemsWhere({ type: 'central-heat-pump', tons: 3 });
@@ -23,13 +23,16 @@ export const PRICING_GUIDES: Guide[] = [
       const lo3 = lowestPrice(cheapest(hp3));
       const f3 = threeStd();
       const sizes = [2, 2.5, 3, 3.5, 4, 5];
+      const bySize = sizes.map((t) => systemsWhere({ type: 'central-heat-pump', tons: t }));
+      const tableSystems = bySize.flat();
       return `
-<p>The cheapest 3-ton ducted heat pump system in our data lists online for ${usd(lo3)} (${asOf}). The Department of Energy's national-lab benchmark for installing a standard-efficiency 3-ton heat pump is ${rangeText(f3)}. So a quote at the benchmark midpoint is about ${(f3.mid / lo3).toFixed(1)} times the cheapest listed equipment, and one at the top of the range is about ${(f3.high / lo3).toFixed(1)} times. Is that a rip-off? Sometimes. Usually it is mostly real cost, and the part that is not is what you can negotiate.</p>
+<p>The cheapest 3-ton ducted heat pump system in our data lists online for ${usd(lo3)} (listed prices captured ${captureDateLabel(hp3)}). The Department of Energy's national-lab benchmark for installing a standard-efficiency 3-ton heat pump is ${rangeText(f3)}. So a quote at the benchmark midpoint is about ${(f3.mid / lo3).toFixed(1)} times the cheapest listed equipment, and one at the top of the range is about ${(f3.high / lo3).toFixed(1)} times. Is that a rip-off? Sometimes. Usually it is mostly real cost, and the part that is not is what you can negotiate.</p>
 
 <h2>The multiple, size by size</h2>
 <div class="tablewrap"><table><thead><tr><th>Ducted heat pump</th><th class="r">Cheapest listed</th><th class="r">Median listed</th><th class="r">Benchmark mid</th><th class="r">Benchmark high</th><th class="r">Mid ÷ median</th></tr></thead><tbody>
-${sizes.map((t) => { const xs = systemsWhere({ type: 'central-heat-pump', tons: t }); if (!xs.length) return ''; const m = median(xs.map(lowestPrice)); const f = fairRange('central-heat-pump', t); return `<tr><td>${tonLink(t, `${t} ton`)}</td><td class="r num">${usd(lowestPrice(xs[0]))}</td><td class="r num">${usd(m)}</td><td class="r num">${usd(f.mid)}</td><td class="r num">${usd(f.high)}</td><td class="r num">${(f.mid / m).toFixed(1)}×</td></tr>`; }).join('\n')}
+${bySize.map((xs, i) => { if (!xs.length) return ''; const t = sizes[i]; const m = median(xs.map(lowestPrice)); const f = fairRange('central-heat-pump', t); return `<tr><td>${tonLink(t, `${t} ton`)}</td><td class="r num">${usd(lowestPrice(xs[0]))}</td><td class="r num">${usd(m)}</td><td class="r num">${usd(f.mid)}</td><td class="r num">${usd(f.high)}</td><td class="r num">${(f.mid / m).toFixed(1)}×</td></tr>`; }).join('\n')}
 </tbody></table></div>
+<p class="small muted">Listed prices captured ${captureDateLabel(tableSystems)}.</p>
 <p class="small muted">${remdbNote} REMDB's own notes assume installation costs about 1.5 times the retail equipment cost, and say some Massachusetts program data suggest up to 2 times.</p>
 
 
